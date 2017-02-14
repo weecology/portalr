@@ -4,11 +4,11 @@
 
 library(dplyr)
 
-#setwd('C:/Users/EC/Desktop/git/PortalData')
+#setwd('C:/Users/EC/Desktop/git')
 
 
 # read file of rodent census periods and dates
-trappingdat = read.csv('~/PortalData/Rodents/Portal_rodent_trapping.csv')   
+trappingdat = read.csv('./PortalData/Rodents/Portal_rodent_trapping.csv')   
 trappingdat$CensusDate = as.Date(paste(trappingdat$Year,trappingdat$Month,trappingdat$Day,sep='-'))
 
 
@@ -43,4 +43,4 @@ moon_dates = merge(newmoon,census_dates,all.x=T,by=('Period')) %>% arrange(NewMo
 
 # ============================================================================================================
 # write to csv
-write.csv(moon_dates,file='Rodents/moon_dates.csv',row.names=F)
+write.csv(moon_dates,file='PortalData/Rodents/moon_dates.csv',row.names=F)
