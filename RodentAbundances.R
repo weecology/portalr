@@ -1,21 +1,34 @@
-#A function to summarize monthly species abundance
-#with options to summarize by "Plot", "Treatment", or "Site" (level)
-#to use all plots or only plots that have had the same treatment over the entire time series
-#length="all' or Longterm"
-#to include all "Rodents" or only "Granivores" (type)
-#to include unknowns in an additional column (unknowns=F/T)
-#to include numbers from incomplete trapping sessions incomplete = F/T
-#and to specify shape of data (shape="crosstab" or "flat")
+################### A function to summarize monthly Portal rodent species abundance ################
+###################
+#level summarizes by "Plot", "Treatment", or "Site"
+###################
+#type uses all "Rodents" species or only "Granivores"
+###################
+#length uses "All" plots or only "Longterm" plots (plots that have had the same treatment over the entire time series)
+###################
+#unknowns either removes all individuals not identified to species (unknowns=F) or sums them in an additional column (unknowns=T)
+###################
+#incomplete either removes all data from incomplete trapping sessions (incomplete = F) or includes them (incomplete=T) 
+#(note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete)
+###################
+#shape returns data as a "crosstab" or "flat" list
+###################
+#time returns data using the complete "newmoon" numbers or the original "period" numbers
+###################
 
+library(RCurl)
 library(dplyr)
 library(tidyr)
 
-abundance <- function(level="Site",type="Rodents",length="all",unknowns=F,incomplete=F,shape="crosstab") {
+abundance <- function(level="Site",type="Rodents",length="all",unknowns=F,incomplete=F,shape="crosstab",time="period") {
 
-rodents=read.csv('~/PortalData/Rodents/Portal_rodent.csv', na.strings=c(""), colClasses=c('tag'='character'), stringsAsFactors = FALSE)
-species=read.csv('~/PortalData/Rodents/Portal_rodent_species.csv',na.strings=c(""))
-trapping=read.csv('~/PortalData/Rodents/Portal_rodent_trapping.csv',na.strings=c(""))
-plots=read.csv('~/PortalData/SiteandMethods/Portal_plots.csv')
+##########Get Data
+rodents=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
+                 na.strings=c(""), colClasses=c('tag'='character'), stringsAsFactors = FALSE)
+species=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),na.strings=c(""))
+trapping=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
+newmoons=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
+plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
 colnames(species)[1]="species"
   
 
@@ -59,9 +72,10 @@ if(incomplete == F) {
   trapping = filter(trapping, !Period %in% incompsampling$Period)
   }
 
-
 ###########Use only Long-term treatments --------------
-if(length %in% c("Longterm","longterm")) {rodents = rodents %>% filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))}
+if(length %in% c("Longterm","longterm")) {
+  rodents = rodents %>% filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+  }
 
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
@@ -98,6 +112,20 @@ if(level %in% c("Site","site")){
   do(data.frame(x = table(.$species))) %>% 
   ungroup() %>% 
   select(period,species=x.Var1, abundance=x.Freq) 
+}
+
+###########Switch to new moon number-----------------------
+if(time %in% c("NewMoon","Newmoon","newmoon")){
+  
+  if(incomplete == T){
+    abundances = left_join(newmoons,abundances,by=c("Period"="period")) %>% filter(Period <= max(Period,na.rm=T)) %>% 
+      select(-NewMoonDate,-Period,-CensusDate)
+  }
+  
+  if(incomplete == F){
+  abundances = right_join(newmoons,abundances,by=c("Period"="period")) %>% filter(Period <= max(Period,na.rm=T)) %>% 
+    select(-NewMoonDate,-Period,-CensusDate)
+  }
 }
 
 ##########Convert data to crosstab ----------------------
