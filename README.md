@@ -1,21 +1,21 @@
-##A collection of basic functions to summarize the Portal data
+## A collection of basic functions to summarize the Portal data
 
-###RodentAbundances 
+### RodentAbundances 
 
 abundance - function to summarize total rodent captures 
 
-###RodentBiomass
+### RodentBiomass
 
 biomass - function to convert total rodent captures into biomass or energy
 
-###RodentYearly
+### RodentYearly
 
 yearly - function to convert monthly totals to seasonal or yearly totals 
 
-###Weather
+### Weather
 
 weather - function to summarize all environmental data by day, month or year, and fill in gaps in data
 
-###RasterPlotSpeciesByStake
+### RasterPlotSpeciesByStake
 
 Code to visualize individual stake-level rodent captures
