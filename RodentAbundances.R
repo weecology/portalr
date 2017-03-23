@@ -66,7 +66,8 @@ if(type %in% c("Granivores","granivores")){
 
 ###########Remove incomplete trapping sessions----------
 if(incomplete == F) {
-  incompsampling=trapping %>% filter(Sampled==0) %>% distinct(Period)
+  incompsampling=trapping %>% filter(Sampled==0 ) %>% 
+    filter(Period > 26) %>% distinct(Period)
   rodents = filter(rodents, !period %in% incompsampling$Period)
   #reduce size of trapping table (in case of plot-level summary)
   trapping = filter(trapping, !Period %in% incompsampling$Period)
