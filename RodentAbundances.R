@@ -94,7 +94,10 @@ abundances = rodents %>%
 
 ##########Summarise by plot ----------------------------
 if(level %in% c("Plot","plot")){
-
+  if (length %in% c('Longterm', 'longterm')){
+    trapping = trapping %>% 
+      filter(Plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+  }
   abundances = right_join(rodents,trapping,by=c("period"="Period","plot"="Plot")) %>% 
   mutate(species = factor(species)) %>% 
   group_by(period,plot,Sampled) %>%                       
