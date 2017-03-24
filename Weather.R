@@ -10,11 +10,11 @@ weather <- function(level) {
   
   weather_new=read.csv('~/PortalData/Weather/Portal_weather.csv', na.strings=c(""), stringsAsFactors = FALSE)
   weather_old=read.csv('~/PortalData/Weather/Portal_weather_19801989.csv', na.strings=c("-99"), stringsAsFactors = FALSE)
-  #NDVI=read.csv('~/PortalData/NDVI/NDVI.csv', na.strings=c("-99"), stringsAsFactors = FALSE)
+  NDVI=read.csv('~/PortalData/NDVI/monthly_NDVI.csv', na.strings=c("-99"), stringsAsFactors = FALSE)
   
   # Data cleanup
   
-
+  NDVI$Month=as.numeric(gsub( ".*-", "", NDVI$Date )); NDVI$Year=as.numeric(gsub( "-.*$", "", NDVI$Date ))
   
   
   ###########Summarise by Day ----------------------
@@ -31,7 +31,10 @@ if (level=='Monthly') {
   weather = weather %>% 
     group_by(Year, Month) %>%
     summarize(MinTemp=min(MinTemp,na.rm=T),MaxTemp=max(MaxTemp,na.rm=T),MeanTemp=mean(MeanTemp,na.rm=T),Precipitation=sum(Precipitation,na.rm=T))
-}
+  
+  weather=full_join(weather,NDVI) %>% select(-Date, -X) %>% arrange(Year,Month)
+  weather$NDVI=as.numeric(weather$NDVI)
+  }
 
   
   return(weather)
