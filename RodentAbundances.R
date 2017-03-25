@@ -27,6 +27,7 @@ species=read.csv("~/PortalData/Rodents/Portal_rodent_species.csv",na.strings=c("
 trapping=read.csv("~/PortalData/Rodents/Portal_rodent_trapping.csv")
 newmoons=read.csv("~/PortalData/Rodents/moon_dates.csv")
 plots=read.csv("~/PortalData/SiteandMethods/Portal_plots.csv")
+
 colnames(species)[1]="species"
   
 
@@ -79,8 +80,13 @@ if(length %in% c("Longterm","longterm")) {
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
 #Name plot treatments in each time period
-
-rodents = left_join(rodents,plots)
+  if (length %in% c('Longterm', 'longterm')){
+    plots = plots %>% 
+      filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+  }
+  plots = plots %>% group_by(yr,plot) %>% 
+    select(yr,month, plot,treatment)
+  rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="month","plot"="plot"))
   
 abundances = rodents %>%
   mutate(species = factor(species)) %>% 
