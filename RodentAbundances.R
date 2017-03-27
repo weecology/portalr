@@ -81,9 +81,14 @@ if(length %in% c("Longterm","longterm")) {
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
 #Name plot treatments in each time period
+if (length %in% c('Longterm', 'longterm')){
+  trapping = trapping %>% 
+    filter(Plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+}
 
-rodents = left_join(rodents,plots)
-  
+plots = plots %>% group_by(yr,plot) %>% 
+    select(yr,month, plot,treatment)
+rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="month","plot"="plot"))
 abundances = rodents %>%
   mutate(species = factor(species)) %>% 
   group_by(period,treatment) %>%
