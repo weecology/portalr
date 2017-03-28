@@ -80,6 +80,7 @@ if(length %in% c("Longterm","longterm")) {
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
 #Name plot treatments in each time period
+
   if (length %in% c('Longterm', 'longterm')){
     plots = plots %>% 
       filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))

@@ -26,12 +26,12 @@ library(zoo)
 #'       in date column (e.g. "%Y-%m-%d)
 #'       @return data.frame containing 2 columns: newdate and value     
 
-make_timeseries = function(data, date_format="%m/%d/%Y"){
+make_timeseries = function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series
   
   data$date = as.Date(data$date, format=date_format)
-  data$newdate = as.Date(paste(data$yr,"-",data$mo,"-15", sep=""))
-  
+  data$newdate = as.Date(paste(year(data$date),month(data$date),"15", sep="-"))
+
   # How many months between subsequent trapping sessions?
   # Calc_diff determines number of months between periods.
   # if diff > 1, then one or more months is skipped after that session
@@ -40,7 +40,7 @@ make_timeseries = function(data, date_format="%m/%d/%Y"){
   # adjusted in calc_diff to represent the actual number of months.
   
   data = calc_diff(data)
-  
+
   # Adjusting months:
   #   Sometimes a census is conducted late or early in the monthly
   #   cycle. This results in 2 censuses in the same month and in the time
@@ -95,7 +95,7 @@ make_timeseries = function(data, date_format="%m/%d/%Y"){
 
 
 #####################################
-# Functions
+# SUPPORTING Functions
 #####################################
 
 filter_diffs = function(data, diff_value){
@@ -128,7 +128,13 @@ shift_current_month = function(data){
   for(i in diffs){
     prev_period = data %>% filter(period == i - 1)
     next_period = data %>% filter(period == i + 1)
-    if(prev_period$mo_diff == 2 & next_period$mo_diff == 1){
+    if (nrow(prev_period) == 0){
+      prev_period = data %>% filter(period == i - 2)
+    }
+    if (nrow(next_period) == 0){
+      next_period = data %>% filter(period == i + 2)
+    }
+    if(prev_period$mo_diff == 2 && next_period$mo_diff == 1){
       data = fix_period(data, i, -1)
       }
   }
@@ -145,12 +151,19 @@ shift_next_month = function(data){
   for(i in diffs){
     prev_period = data %>% filter(period == i - 1)
     next_period = data %>% filter(period == i + 1)
-    if(prev_period$mo_diff == 1 & next_period$mo_diff == 2){
-      data = fix_period(data, i+1, 1)
+      if (nrow(prev_period) == 0){
+        prev_period = data %>% filter(period == i - 2)
+      }
+      if (nrow(next_period) == 0){
+        next_period = data %>% filter(period == i + 2)
+      }
+      if(prev_period$mo_diff == 1 && next_period$mo_diff == 2){
+        data = fix_period(data, i+1, 1)
+      }
     }
-  }
   data = calc_diff(data)
-}
+  }
+
 
 shift_current_next = function(data){
   # Adjusts month for a diff pattern of:
@@ -160,9 +173,16 @@ shift_current_next = function(data){
   #   In this scenario, the February census was conducted in early March and
   #   March census was conducted in early April.
   diffs = filter_diffs(data, 1)
+  print(diffs)
   for(i in diffs){
     prev_period = data %>% filter(period == i - 1)
     next_period = data %>% filter(period == i + 1)
+    if (nrow(prev_period) == 0){
+      prev_period = data %>% filter(period == i - 2)
+    }
+    if (nrow(next_period) == 0){
+      next_period = data %>% filter(period == i + 2)
+    }
     if(prev_period$mo_diff == 2 && next_period$mo_diff == 0){
       data = fix_period(data, i+1, -1)
       data = fix_period(data, i, -1)
@@ -191,8 +211,6 @@ insert_missing_months = function(data, i_period){
   }
   data = rbind(data, new_records)
 }
-######################################
 
-# Master Function
 
 
