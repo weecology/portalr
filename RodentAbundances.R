@@ -45,7 +45,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
                               sep=""))
     newmoons = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv", 
                               sep=""))
-    plots = read.csv(paste(path, "PortalData/SiteandMethods/Portal_plots.csv", 
+    plots = read.csv(paste(path, "PortalData/SiteandMethods/new_Portal_plots.csv", 
                            sep=""))
   }
   
