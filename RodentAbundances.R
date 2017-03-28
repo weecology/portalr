@@ -16,19 +16,18 @@
 #time returns data using the complete "newmoon" numbers or the original "period" numbers
 ###################
 
-library(RCurl)
 library(dplyr)
 library(tidyr)
 
 abundance <- function(level="Site",type="Rodents",length="all",unknowns=F,incomplete=F,shape="crosstab",time="period") {
 
 ##########Get Data
-rodents=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
-                 na.strings=c(""), colClasses=c('tag'='character'), stringsAsFactors = FALSE)
-species=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),na.strings=c(""))
-trapping=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
-newmoons=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
-plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
+rodents=read.csv("~/PortalData/Rodents/Portal_rodent.csv",na.strings=c(""), colClasses=c('tag'='character'), stringsAsFactors = FALSE)
+species=read.csv("~/PortalData/Rodents/Portal_rodent_species.csv",na.strings=c(""))
+trapping=read.csv("~/PortalData/Rodents/Portal_rodent_trapping.csv")
+newmoons=read.csv("~/PortalData/Rodents/moon_dates.csv")
+plots=read.csv("~/PortalData/SiteandMethods/Portal_plots.csv")
+
 colnames(species)[1]="species"
   
 
@@ -81,14 +80,15 @@ if(length %in% c("Longterm","longterm")) {
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
 #Name plot treatments in each time period
-if (length %in% c('Longterm', 'longterm')){
-  trapping = trapping %>% 
-    filter(Plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
-}
 
-plots = plots %>% group_by(yr,plot) %>% 
+  if (length %in% c('Longterm', 'longterm')){
+    plots = plots %>% 
+      filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+  }
+  plots = plots %>% group_by(yr,plot) %>% 
     select(yr,month, plot,treatment)
-rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="month","plot"="plot"))
+  rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="month","plot"="plot"))
+  
 abundances = rodents %>%
   mutate(species = factor(species)) %>% 
   group_by(period,treatment) %>%
