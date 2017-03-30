@@ -1,84 +1,116 @@
 library(RCurl)
+library(dplyr)
+library(tidyr)
 
+
+#' @title Loads Portal rodent data files. 
+#' 
+#' @description Loads main Portal rodent data files from either
+#' a user defined path or the online Github repository.
+#' 
+#' @param path string Containing path to PortalData folder
+#'              should include ending /; if path = 'repo', 
+#'              data is pulled from PortalData GitHub repository.
+#'              
+#' @return       List of 5 dataframes:
+#' \itemize{
+#' \item rodent_data. raw data on rodent captures
+#' \item species_table. species code, names, types
+#' \item trapping_table. when each plot was trapped
+#' \item newmoons_table. pairs census periods with newmoons
+#' \item plots_table. rodent treatment assignments for each plot.
+#' }
+#' 
+#' @examples 
+#' loadData('repo')
+#' loadData('../PortalData')
+#' 
 loadData = function(path) {
   if (path == 'repo') {
     rodent_data = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"
-      ),
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
       na.strings = c(""),
       colClasses = c('tag' = 'character'),
-      stringsAsFactors = FALSE
-    )
+      stringsAsFactors = FALSE)
     species_table = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"
-      ),
-      na.strings = c("")
-    )
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
+      na.strings = c(""))
     trapping_table = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"
-      )
-    )
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
     newmoons_table = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"
-      )
-    )
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
     plots_table = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"
-      )
-    )
+        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
   } else {
     rodent_data = read.csv(
       paste(path, "PortalData/Rodents/Portal_rodent.csv",
             sep = ""),
       na.strings = c(""),
       colClasses = c('tag' = 'character'),
-      stringsAsFactors = FALSE
-    )
+      stringsAsFactors = FALSE)
     species_table = read.csv(
       paste(
         path,
         "PortalData/Rodents/Portal_rodent_species.csv",
-        sep = ""
-      ),
-      na.strings = c("")
-    )
-    trapping = read.csv(paste(
+        sep = ""), na.strings = c(""))
+    trapping_table = read.csv(paste(
       path,
       "PortalData/Rodents/Portal_rodent_trapping.csv",
-      sep = ""
-    ))
-    newmoons = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv",
+      sep = ""))
+    newmoons_table = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv",
                               sep = ""))
-    plots = read.csv(paste(
+    plots_table = read.csv(paste(
       path,
       "PortalData/SiteandMethods/new_Portal_plots.csv",
-      sep = ""
-    ))
+      sep = ""))
   }
   colnames(species_table)[1] = "species"
-  return(list(rodent_data, species_table, trapping, newmoons, plots))
+  return(list(rodent_data, 
+              species_table, 
+              trapping_table, 
+              newmoons_table, 
+              plots_table))
 }
 
+#' @title Remove suspect trapping periods and unknown plots.
+#' 
+#' @description 
+#' Removes records with negative period code or 
+#' with missing plot numbers.
+#'   
+#' @param rodent_data Data.table of raw rodent data.
+#' 
+#' @return Data.table with suspect data removed.
+#' 
 remove_suspect_entries = function(rodent_data) {
-  #Remove suspect trapping periods
   rodent_data = rodent_data[rodent_data$period > 0,]
-  
-  #Remove unknown plots
   rodent_data = rodent_data[!is.na(rodent_data$plot),]
 }
 
+#' @title Processes unknown species.
+#' 
+#' @description 
+#' Removes any records for unidentified species if unknowns=FALSE. 
+#' If unknowns=TRUE, then their designation in the output file is
+#' given as 'other'.
+#' 
+#' @param rodent_data Data.table with raw rodent data.
+#' @param species_table Data.table with species info.
+#' @param unknowns String. If unknowns=False, unknown species removed.
+#' 
+#' @return Data.table with species info added and unknown species processed
+#' according to the argument unknowns.
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
     rodent_species_merge = rodent_data %>%
       left_join(species_table, rodent_data, by = "species") %>%
       filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
-  
   #Rename all unknowns and non-target rodents to "Other"
   if (unknowns == T) {
     rodent_species_merge =
@@ -90,6 +122,12 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
   return(rodent_species_merge)
 }
 
+#' @title Filters out non-granivores
+#' 
+#' @param rodent_species_merge Data table with rodent and species data
+#' @param type String. If type=Granivores', non-granivores removed
+#' 
+#' @return data.table with granivores processed according to argument 'type'
 process_granivores = function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data = rodent_species_merge %>%
