@@ -25,7 +25,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
                       shape="crosstab",time="period") {
 
 ##########Get Data
-  data_tables = loadData("../")
+  data_tables = loadData(path)
   rodents = data_tables[[1]]
   species = data_tables[[2]]
   trapping = data_tables[[3]]
