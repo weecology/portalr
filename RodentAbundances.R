@@ -34,24 +34,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
   
 ##########Data cleanup --------------------------------
 rodents = remove_suspect_entries(rodents)
-
-######Remove bad species IDs and non-target animals, 
-######or throw in unknown column-----------------------
-#Just remove unknowns and non-target animals
-if(unknowns == F) {
-  rodents = rodents %>%             
-  left_join(species,rodents, by="species") %>%
-  filter(Rodent==1, Unidentified==0, Census.Target==1) 
-}
-
-#Rename all unknowns and non-target rodents to "Other"
-if(unknowns == T) {
-  rodents =             
-  left_join(species,rodents, by="species") %>% 
-  filter(Rodent==1) %>% 
-  mutate(species=replace(species,Unidentified==1,"Other")) %>% 
-  mutate(species=replace(species,Census.Target==0,"Other"))
-}
+rodents = process_unknownsp(rodents,species, unknowns)
 
 ###########Exclude non-granivores-----------------------
 if(type %in% c("Granivores","granivores")){
