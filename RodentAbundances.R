@@ -37,10 +37,7 @@ rodents = remove_suspect_entries(rodents)
 rodents = process_unknownsp(rodents,species, unknowns)
 
 ###########Exclude non-granivores-----------------------
-if(type %in% c("Granivores","granivores")){
-  rodents = rodents %>%
-    filter(Granivore==1)
-}
+rodents = process_granivores(rodents, type)
 
 ###########Remove incomplete trapping sessions----------
 if(incomplete == F) {

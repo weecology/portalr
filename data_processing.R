@@ -74,18 +74,28 @@ remove_suspect_entries = function(rodent_data) {
 
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
-    rodent_data = rodent_data %>%
+    rodent_species_merge = rodent_data %>%
       left_join(species_table, rodent_data, by = "species") %>%
       filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
   
   #Rename all unknowns and non-target rodents to "Other"
   if (unknowns == T) {
-    rodent_data =
+    rodent_species_merge =
       left_join(species_table, rodent_data, by = "species") %>%
       filter(Rodent == 1) %>%
       mutate(species = replace(species, Unidentified == 1, "Other")) %>%
       mutate(species = replace(species, Census.Target == 0, "Other"))
   }
-  return(rodent_data)
+  return(rodent_species_merge)
+}
+
+process_granivores = function(rodent_species_merge, type) {
+  if (type %in% c("Granivores", "granivores")) {
+    granivore_data = rodent_species_merge %>%
+      filter(Granivore == 1)
+    return(granivore_data)
+  } else {
+    return(rodent_species_merge)
+  }
 }
