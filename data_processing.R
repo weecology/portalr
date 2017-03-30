@@ -1,5 +1,3 @@
-##########Get Data
-
 library(RCurl)
 
 loadData = function(path){
@@ -30,3 +28,10 @@ loadData = function(path){
   return(list(rodents,species,trapping,newmoons,plots))
 }
 
+remove_suspect_entries = function(rodent_data) {
+  #Remove suspect trapping periods
+  rodent_data = rodent_data[rodent_data$period > 0, ]
+  
+  #Remove unknown plots
+  rodent_data = rodent_data[!is.na(rodent_data$plot), ]
+}

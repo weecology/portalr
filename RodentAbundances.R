@@ -33,14 +33,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
   plots = data_tables[[5]]
   
 ##########Data cleanup --------------------------------
-#Rename column in species table
-colnames(species)[1]="species"
-
-#Remove suspect trapping periods
-rodents=rodents[rodents$period>0,]
-
-#Remove unknown plots
-rodents=rodents[!is.na(rodents$plot),]
+rodents = remove_suspect_entries(rodents)
 
 ######Remove bad species IDs and non-target animals, 
 ######or throw in unknown column-----------------------
