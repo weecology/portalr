@@ -1,6 +1,7 @@
 ##########Get Data
 
 library(RCurl)
+
 loadData = function(path){
   if (path == 'repo'){
     rodents=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
@@ -28,9 +29,3 @@ loadData = function(path){
   return(list(rodents,species,trapping,newmoons,plots))
 }
 
-results = loadData("../")
-rodents = results[[1]]
-species = results[[2]]
-trapping = results[[3]]
-newmoons = results[[4]]
-plots = results[[5]]

@@ -16,38 +16,21 @@
 #time returns data using the complete "newmoon" numbers or the original "period" numbers
 ###################
 
-library(RCurl)
 library(dplyr)
 library(tidyr)
+source("data_processing.R")
 
 abundance <- function(path = '~/', level="Site",type="Rodents",
                       length="all",unknowns=F,incomplete=F,
                       shape="crosstab",time="period") {
 
 ##########Get Data
-  if (path == 'repo'){
-    rodents=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
-                     na.strings=c(""), colClasses=c('tag'='character'), stringsAsFactors = FALSE)
-    species=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
-                     na.strings=c(""))
-    trapping=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
-    newmoons=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
-    plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
-  } else {
-    rodents = read.csv(paste(path, "PortalData/Rodents/Portal_rodent.csv", 
-                             sep=""),
-                       na.strings = c(""), colClasses = c('tag' = 'character'), 
-                       stringsAsFactors = FALSE)
-    species = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_species.csv", 
-                             sep=""),
-                       na.strings = c(""))
-    trapping = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_trapping.csv", 
-                              sep=""))
-    newmoons = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv", 
-                              sep=""))
-    plots = read.csv(paste(path, "PortalData/SiteandMethods/new_Portal_plots.csv", 
-                           sep=""))
-  }
+  data_tables = loadData("../")
+  rodents = data_tables[[1]]
+  species = data_tables[[2]]
+  trapping = data_tables[[3]]
+  newmoons = data_tables[[4]]
+  plots = data_tables[[5]]
   
 ##########Data cleanup --------------------------------
 #Rename column in species table
