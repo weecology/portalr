@@ -19,6 +19,7 @@ loadData = function(path){
     species = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_species.csv", 
                              sep=""),
                        na.strings = c(""))
+    colnames(species)[1]="species"
     trapping = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_trapping.csv", 
                               sep=""))
     newmoons = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv", 
