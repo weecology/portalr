@@ -40,13 +40,7 @@ rodents = process_unknownsp(rodents,species, unknowns)
 rodents = process_granivores(rodents, type)
 
 ###########Remove incomplete trapping sessions----------
-if(incomplete == F) {
-  incompsampling=trapping %>% filter(Sampled==0 ) %>% 
-    filter(Period > 26) %>% distinct(Period)
-  rodents = filter(rodents, !period %in% incompsampling$Period)
-  #reduce size of trapping table (in case of plot-level summary)
-  trapping = filter(trapping, !Period %in% incompsampling$Period)
-  }
+rodents = remove_incomplete_censuses(trapping, rodents, incomplete)
 
 ###########Use only Long-term treatments --------------
 if(length %in% c("Longterm","longterm")) {
@@ -79,6 +73,10 @@ if(level %in% c("Plot","plot")){
     trapping = trapping %>% 
       filter(Plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
   }
+  #  reduce size of trapping table
+  incompsampling = find_incomplete_censuses(trapping)
+  trapping = filter(trapping, !Period %in% incompsampling$Period)
+  
   abundances = right_join(rodents,trapping,by=c("period"="Period","plot"="Plot")) %>% 
   mutate(species = factor(species)) %>% 
   group_by(period,plot,Sampled) %>%                       

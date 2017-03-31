@@ -122,17 +122,55 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
   return(rodent_species_merge)
 }
 
-#' @title Filters out non-granivores
+#' @title Filters out non-granivores.
 #' 
-#' @param rodent_species_merge Data table with rodent and species data
-#' @param type String. If type=Granivores', non-granivores removed
+#' @param rodent_species_merge Data table with raw rodent records
+#'                             merged with species attributes from
+#'                             species_table.
+#' @param type String. If type=Granivores', non-granivores removed.
 #' 
-#' @return data.table with granivores processed according to argument 'type'
+#' @return data.table with granivores processed according to argument 'type'.
 process_granivores = function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data = rodent_species_merge %>%
       filter(Granivore == 1)
     return(granivore_data)
+  } else {
+    return(rodent_species_merge)
+  }
+}
+
+#' @title Period code for incomplete censuses
+#' 
+#' @param trapping_table Data table. Data on when each plot was trapped. 
+#' 
+#' @return Data.table of period codes when not all plots were trapped.
+find_incomplete_censuses = function(trapping_table){
+  incompsampling=trapping_table %>% filter(Sampled==0 ) %>% 
+    filter(Period > 26) %>% distinct(Period)
+}
+
+#' @title Remove incomplete censuses
+#' 
+#' @details
+#' In some months, not all plots are trapped. Using this data can result in
+#' biased monthly data, especially if summarizing for site or treatment. 
+#' 
+#' @param trapping_table Data table. Data on when each plot was trapped.
+#' @param rodent_species_merge Data table. Merge of raw rodent records and 
+#'                             species information.
+#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' 
+#' @return Data.table of merged rodent records and species info with incomplete
+#'         censuses processed according to argument imcomplete.
+remove_incomplete_censuses = function(trapping_table,
+                                      rodent_species_merge,
+                                      incomplete) {
+  if (incomplete == F) {
+    incompsampling = find_incomplete_censuses(trapping_table)
+    rodent_species_merge = filter(rodent_species_merge,
+                                  !period %in% incompsampling$Period)
+    return(rodent_species_merge)
   } else {
     return(rodent_species_merge)
   }
