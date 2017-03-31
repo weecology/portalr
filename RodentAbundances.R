@@ -43,9 +43,7 @@ rodents = process_granivores(rodents, type)
 rodents = remove_incomplete_censuses(trapping, rodents, incomplete)
 
 ###########Use only Long-term treatments --------------
-if(length %in% c("Longterm","longterm")) {
-  rodents = rodents %>% filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
-  }
+rodents = filter_plots(rodents, length)
 
 ###########Summarise by Treatment ----------------------
 if(level %in% c("Treatment","treatment")){
@@ -56,8 +54,8 @@ if(level %in% c("Treatment","treatment")){
       filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
   }
   plots = plots %>% group_by(yr,plot) %>% 
-    select(yr,month, plot,treatment)
-  rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="month","plot"="plot"))
+    select(yr,mo, plot,treatment)
+  rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="mo","plot"="plot"))
   
 abundances = rodents %>%
   mutate(species = factor(species)) %>% 
@@ -71,13 +69,13 @@ abundances = rodents %>%
 if(level %in% c("Plot","plot")){
   if (length %in% c('Longterm', 'longterm')){
     trapping = trapping %>% 
-      filter(Plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
+      filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
   }
   #  reduce size of trapping table
   incompsampling = find_incomplete_censuses(trapping)
   trapping = filter(trapping, !Period %in% incompsampling$Period)
   
-  abundances = right_join(rodents,trapping,by=c("period"="Period","plot"="Plot")) %>% 
+  abundances = right_join(rodents,trapping,by=c("period"="period","plot"="plot")) %>% 
   mutate(species = factor(species)) %>% 
   group_by(period,plot,Sampled) %>%                       
   do(data.frame(x = table(.$species))) %>%
@@ -101,13 +99,13 @@ if(level %in% c("Site","site")){
 if(time %in% c("NewMoon","Newmoon","newmoon")){
   
   if(incomplete == T){
-    abundances = left_join(newmoons,abundances,by=c("Period"="period")) %>% filter(Period <= max(Period,na.rm=T)) %>% 
-      select(-NewMoonDate,-Period,-CensusDate)
+    abundances = left_join(newmoons,abundances,by=c("period"="period")) %>% filter(period <= max(period,na.rm=T)) %>% 
+      select(-NewMoonDate,-period,-CensusDate)
   }
   
   if(incomplete == F){
-  abundances = right_join(newmoons,abundances,by=c("Period"="period")) %>% filter(Period <= max(Period,na.rm=T)) %>% 
-    select(-NewMoonDate,-Period,-CensusDate)
+  abundances = right_join(newmoons,abundances,by=c("period"="period")) %>% filter(period <= max(period,na.rm=T)) %>% 
+    select(-NewMoonDate,-period,-CensusDate)
   }
 }
 

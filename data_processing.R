@@ -48,28 +48,23 @@ loadData = function(path) {
         "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
   } else {
     rodent_data = read.csv(
-      paste(path, "PortalData/Rodents/Portal_rodent.csv",
-            sep = ""),
-      na.strings = c(""),
-      colClasses = c('tag' = 'character'),
+      paste(path, "PortalData/Rodents/Portal_rodent.csv",sep = ""), 
+      na.strings = c(""), colClasses = c('tag' = 'character'),
       stringsAsFactors = FALSE)
     species_table = read.csv(
-      paste(
-        path,
-        "PortalData/Rodents/Portal_rodent_species.csv",
-        sep = ""), na.strings = c(""))
-    trapping_table = read.csv(paste(
-      path,
-      "PortalData/Rodents/Portal_rodent_trapping.csv",
-      sep = ""))
-    newmoons_table = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv",
-                              sep = ""))
+      paste(path, "PortalData/Rodents/Portal_rodent_species.csv",sep = ""), 
+      na.strings = c(""))
+    trapping_table = read.csv(
+      paste(path, "PortalData/Rodents/Portal_rodent_trapping.csv", sep = ""))
+    newmoons_table = read.csv(
+      paste(path, "PortalData/Rodents/moon_dates.csv", sep = ""))
     plots_table = read.csv(paste(
-      path,
-      "PortalData/SiteandMethods/new_Portal_plots.csv",
-      sep = ""))
+      path, "PortalData/SiteandMethods/new_Portal_plots.csv", sep = ""))
   }
   colnames(species_table)[1] = "species"
+  colnames(trapping_table) = c("dy", "mo","yr", "period", "plot", "Sampled")
+  colnames(newmoons_table)[3] = "period"
+  colnames(plots_table)[3] = "mo"
   return(list(rodent_data, 
               species_table, 
               trapping_table, 
@@ -147,7 +142,7 @@ process_granivores = function(rodent_species_merge, type) {
 #' @return Data.table of period codes when not all plots were trapped.
 find_incomplete_censuses = function(trapping_table){
   incompsampling=trapping_table %>% filter(Sampled==0 ) %>% 
-    filter(Period > 26) %>% distinct(Period)
+    filter(period > 26) %>% distinct(period)
 }
 
 #' @title Remove incomplete censuses
@@ -174,4 +169,15 @@ remove_incomplete_censuses = function(trapping_table,
   } else {
     return(rodent_species_merge)
   }
+}
+
+
+
+filter_plots = function(data, length) {
+  if (length %in% c("Longterm", "longterm")) {
+    if("plot" %in% colnames(data)){
+      data = data %>% filter(plot %in%
+                               c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
+  }
+  return(data)
 }
