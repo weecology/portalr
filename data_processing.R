@@ -165,14 +165,20 @@ remove_incomplete_censuses = function(trapping_table,
     incompsampling = find_incomplete_censuses(trapping_table)
     rodent_species_merge = filter(rodent_species_merge,
                                   !period %in% incompsampling$Period)
-    return(rodent_species_merge)
-  } else {
-    return(rodent_species_merge)
   }
+    return(rodent_species_merge)
 }
 
-
-
+#' @title Filter plots
+#' 
+#' @details
+#' Removes moves not needed for analysis. Currently only returns long-term
+#' plots but could be adjusted in the future to return other subsets as well.
+#'  
+#' @param data Data table. Any data with a plot column.
+#' @param length Character. Denotes if user wants only long-term plots.
+#' 
+#' @return Data.table filtered to the desired subset of plots.
 filter_plots = function(data, length) {
   if (length %in% c("Longterm", "longterm")) {
     if("plot" %in% colnames(data)){
