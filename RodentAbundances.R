@@ -87,16 +87,12 @@ if(level %in% c("Site","site")){
 }
 
 ###########Switch to new moon number if time== 'newmoon'------------------
-abundances = add_newmoon_code(abundances, newmoons, time, incomplete)
+abundances = add_newmoon_code(abundances, newmoons, time)
 
 ##########Convert data to crosstab ----------------------
 if(shape %in% c("Crosstab","crosstab")){
-  
-  abundances = abundances %>% 
-    spread(species, abundance) %>%
-    ungroup()
+abundances = make_crosstab(abundances)
 }
-
 
 return(abundances)
 }

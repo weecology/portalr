@@ -243,3 +243,8 @@ add_newmoon_code = function(summary_table, newmoon_table, time){
   return(summary_table)
 }
 
+make_crosstab = function(summary_data){
+  summary_data = summary_data %>% 
+    spread(species, abundance) %>%
+    ungroup()
+}
