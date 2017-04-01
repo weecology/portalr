@@ -172,7 +172,7 @@ remove_incomplete_censuses = function(trapping_table,
 #' @title Filter plots
 #' 
 #' @details
-#' Removes moves not needed for analysis. Currently only returns long-term
+#' Removes plots not needed for analysis. Currently only returns long-term
 #' plots but could be adjusted in the future to return other subsets as well.
 #'  
 #' @param data Data table. Any data with a plot column.
@@ -188,6 +188,12 @@ filter_plots = function(data, length) {
   return(data)
 }
 
+#' @title Join rodent and plot tables
+#' 
+#' @param rodent_data Data.table with raw rodent data.
+#' @param plots_table Data_table of treatments for the plots.
+#' 
+#' @return Data.table of raw rodent data with treatment info added.
 join_plots_to_rodents = function(rodent_table, plots_table){
   plots_table = plots_table %>% group_by(yr,plot) %>% 
     select(yr,mo, plot,treatment)
@@ -196,6 +202,12 @@ join_plots_to_rodents = function(rodent_table, plots_table){
   return(rodent_table)
 }
 
+#' @title Join rodent and trapping tables
+#' 
+#' @param rodent_data Data.table with raw rodent data.
+#' @param trapping_table Data_table of when plots were censused.
+#' 
+#' @return Data.table of raw rodent data with trapping info added.
 join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
   if (incomplete== F){
     incompsampling = find_incomplete_censuses(trapping_table)
