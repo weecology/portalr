@@ -86,19 +86,8 @@ if(level %in% c("Site","site")){
   select(period,species=x.Var1, abundance=x.Freq) 
 }
 
-###########Switch to new moon number-----------------------
-if(time %in% c("NewMoon","Newmoon","newmoon")){
-  
-  if(incomplete == T){
-    abundances = left_join(newmoons,abundances,by=c("period"="period")) %>% filter(period <= max(period,na.rm=T)) %>% 
-      select(-NewMoonDate,-period,-CensusDate)
-  }
-  
-  if(incomplete == F){
-  abundances = right_join(newmoons,abundances,by=c("period"="period")) %>% filter(period <= max(period,na.rm=T)) %>% 
-    select(-NewMoonDate,-period,-CensusDate)
-  }
-}
+###########Switch to new moon number if time== 'newmoon'------------------
+abundances = add_newmoon_code(abundances, newmoons, time, incomplete)
 
 ##########Convert data to crosstab ----------------------
 if(shape %in% c("Crosstab","crosstab")){

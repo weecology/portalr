@@ -217,3 +217,29 @@ join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
                             by=c("period"="period","plot"="plot"))
   return(rodent_table)
 }
+
+#' @title Add NewMoon Codes
+#' 
+#' @details 
+#' period codes denote the number of censuses that have occurred, but are
+#' not the same as the number of censuses that should have occurred. Sometimes
+#' censuses are missed (weather, transport issues,etc). You can't pick this
+#' up with the period code. Because censues may not always occur monthly due to
+#' the newmoon -  a new moon code was devised to give a standardized language
+#' of time for forcasting in particular.
+#' 
+#' @param summary_table Data.table with summarized rodent data.
+#' @param newmoon_table Data_table linking newmoon codes with period codes.
+#' @param time Character. Denotes whether newmoon codes are desired.
+#' 
+#' @return Data.table of summarized rodent data with period or newmoon code
+add_newmoon_code = function(summary_table, newmoon_table, time){
+  if(time %in% c("NewMoon","Newmoon","newmoon")){
+      summary_table = left_join(newmoon_table,summary_table,
+                                by=c("period"="period")) %>% 
+        filter(period <= max(period,na.rm=T)) %>% 
+        select(-NewMoonDate,-period,-CensusDate)
+    }
+  return(summary_table)
+}
+
