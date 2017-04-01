@@ -195,3 +195,13 @@ join_plots_to_rodents = function(rodent_table, plots_table){
                            by=c("yr"="yr","mo"="mo","plot"="plot"))
   return(rodent_table)
 }
+
+join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
+  if (incomplete== F){
+    incompsampling = find_incomplete_censuses(trapping_table)
+    trapping_table = filter(trapping_table, !period %in% incompsampling$period)
+  }
+  rodent_table = right_join(rodent_table, trapping_table,
+                            by=c("period"="period","plot"="plot"))
+  return(rodent_table)
+}
