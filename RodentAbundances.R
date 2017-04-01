@@ -34,7 +34,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
   
 ##########Data cleanup --------------------------------
 rodents = remove_suspect_entries(rodents)
-rodents = process_unknownsp(rodents,species, unknowns)
+rodents = process_unknownsp(rodents, species, unknowns)
 
 ###########Exclude non-granivores-----------------------
 rodents = process_granivores(rodents, type)
@@ -49,13 +49,12 @@ rodents = filter_plots(rodents, length)
 if(level %in% c("Treatment","treatment")){
 #Name plot treatments in each time period
 
-  if (length %in% c('Longterm', 'longterm')){
-    plots = plots %>% 
-      filter(plot %in% c(3,4,10,11,14,15,16,17,19,21,23))
-  }
-  plots = plots %>% group_by(yr,plot) %>% 
-    select(yr,mo, plot,treatment)
-  rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="mo","plot"="plot"))
+  plots = filter_plots(plots, length)
+  rodents = join_plots_to_rodents(rodents, plots)
+# 
+#   plots = plots %>% group_by(yr,plot) %>% 
+#     select(yr,mo, plot,treatment)
+#   rodents = left_join(rodents,plots, by=c("yr"="yr","mo"="mo","plot"="plot"))
   
 abundances = rodents %>%
   mutate(species = factor(species)) %>% 

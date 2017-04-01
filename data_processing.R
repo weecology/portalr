@@ -107,7 +107,7 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
       filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
   #Rename all unknowns and non-target rodents to "Other"
-  if (unknowns == T) {
+  else {
     rodent_species_merge =
       left_join(species_table, rodent_data, by = "species") %>%
       filter(Rodent == 1) %>%
@@ -164,7 +164,7 @@ remove_incomplete_censuses = function(trapping_table,
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
     rodent_species_merge = filter(rodent_species_merge,
-                                  !period %in% incompsampling$Period)
+                                  !period %in% incompsampling$period)
   }
     return(rodent_species_merge)
 }
@@ -186,4 +186,12 @@ filter_plots = function(data, length) {
                                c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
   }
   return(data)
+}
+
+join_plots_to_rodents = function(rodent_table, plots_table){
+  plots_table = plots_table %>% group_by(yr,plot) %>% 
+    select(yr,mo, plot,treatment)
+  rodent_table = left_join(rodent_table,plots_table, 
+                           by=c("yr"="yr","mo"="mo","plot"="plot"))
+  return(rodent_table)
 }
