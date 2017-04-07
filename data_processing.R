@@ -1,4 +1,3 @@
-library(RCurl)
 library(dplyr)
 library(tidyr)
 
@@ -23,9 +22,10 @@ library(tidyr)
 #' 
 #' @examples 
 #' loadData('repo')
-#' loadData('../PortalData')
+#' loadData('../')
 #' 
 loadData = function(path) {
+  library(RCurl)
   if (path == 'repo') {
     rodent_data = read.csv(
       text = getURL(
@@ -45,7 +45,7 @@ loadData = function(path) {
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
     plots_table = read.csv(
       text = getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
+        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"))
   } else {
     rodent_data = read.csv(
       paste(path, "PortalData/Rodents/Portal_rodent.csv",sep = ""), 
