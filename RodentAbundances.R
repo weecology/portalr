@@ -20,7 +20,25 @@ library(RCurl)
 library(dplyr)
 library(tidyr)
 
-abundance <- function(path = '~/', level="Site",type="Rodents",
+#' Return normalized path for all operating systems
+#'
+#' @param ReferencePath a path to join with current working directory
+#' @param BasePath Current working directory else path given
+#'
+#' @return
+#' @export
+#' @examples
+#' FullPath('PortalData/Rodents/Portal_rodent.csv')
+#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
+FullPath <- function( ReferencePath, BasePath=getwd()){
+  BasePath = normalizePath(BasePath)
+  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
+  return (Path)
+}
+
+
+
+abundance <- function(path = '~', level="Site",type="Rodents",
                       length="all",unknowns=F,incomplete=F,
                       shape="crosstab",time="period") {
 
@@ -34,19 +52,14 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
     newmoons=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
     plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
   } else {
-    rodents = read.csv(paste(path, "PortalData/Rodents/Portal_rodent.csv", 
-                             sep=""),
+    rodents = read.csv(FullPath("PortalData/Rodents/Portal_rodent.csv",path ),
                        na.strings = c(""), colClasses = c('tag' = 'character'), 
                        stringsAsFactors = FALSE)
-    species = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_species.csv", 
-                             sep=""),
+    species = read.csv(FullPath("PortalData/Rodents/Portal_rodent_species.csv",path),
                        na.strings = c(""))
-    trapping = read.csv(paste(path, "PortalData/Rodents/Portal_rodent_trapping.csv", 
-                              sep=""))
-    newmoons = read.csv(paste(path, "PortalData/Rodents/moon_dates.csv", 
-                              sep=""))
-    plots = read.csv(paste(path, "PortalData/SiteandMethods/new_Portal_plots.csv", 
-                           sep=""))
+    trapping = read.csv(FullPath("PortalData/Rodents/Portal_rodent_trapping.csv",path))
+    newmoons = read.csv(FullPath("PortalData/Rodents/moon_dates.csv",path))
+    plots = read.csv(FullPath("PortalData/SiteandMethods/new_Portal_plots.csv",path))
   }
   
 ##########Data cleanup --------------------------------
