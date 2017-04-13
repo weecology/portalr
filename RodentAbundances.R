@@ -50,7 +50,7 @@ abundance <- function(path = '~', level="Site",type="Rodents",
                      na.strings=c(""))
     trapping=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
     newmoons=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
-    plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/new_Portal_plots.csv"))
+    plots=read.csv(text=getURL("https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"))
   } else {
     rodents = read.csv(FullPath("PortalData/Rodents/Portal_rodent.csv",path ),
                        na.strings = c(""), colClasses = c('tag' = 'character'), 
@@ -59,7 +59,7 @@ abundance <- function(path = '~', level="Site",type="Rodents",
                        na.strings = c(""))
     trapping = read.csv(FullPath("PortalData/Rodents/Portal_rodent_trapping.csv",path))
     newmoons = read.csv(FullPath("PortalData/Rodents/moon_dates.csv",path))
-    plots = read.csv(FullPath("PortalData/SiteandMethods/new_Portal_plots.csv",path))
+    plots = read.csv(FullPath("PortalData/SiteandMethods/Portal_plots.csv",path))
   }
   
 ##########Data cleanup --------------------------------
