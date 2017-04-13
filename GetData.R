@@ -11,7 +11,7 @@ download_observations = function(base_folder='~/'){
   zip_download_dest=paste0(base_folder,'PortalData.zip')
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
   
-  final_data_folder=paste0(base_folder,'PortalData')
+  final_data_folder=file.path(base_folder,'PortalData')
   
   #Clear out the old files in the data folder without doing potentially dangerous
   #recursive deleting.
@@ -24,8 +24,9 @@ download_observations = function(base_folder='~/'){
   
   #Github serves this up with the -master extension. Unzip and rename to remove that. 
   unzip(zip_download_dest, exdir=base_folder)
+  Sys.sleep(5)
   file.remove(zip_download_dest)
-  file.rename(paste0(base_folder,'PortalData-master'), final_data_folder)
+  file.rename(file.path(base_folder,'PortalData-master'), final_data_folder)
 }
 
 #' Check if there are new rodent observations. This only checks the
