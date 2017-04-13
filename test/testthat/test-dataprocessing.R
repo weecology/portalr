@@ -24,14 +24,12 @@ test_that("required column names in rodent df", {
   expect_true('dy' %in% rat_cols)
 })
 
-# test_that("required column names in species df", {
-#   data = loadData("repo")
-#   sp = data[[2]]
-#   sp_cols = colnames(sp)
-#   expect_true('species' %in% sp_cols)
-#   expect_true('yr' %in% rat_cols)
-#   expect_true('plot' %in% rat_cols)
-#   expect_true('species' %in% rat_cols)
-#   expect_true('period' %in% rat_cols)
-#   expect_true('dy' %in% rat_cols)
-# })
+test_that("required column names in species df", {
+  data = loadData("repo")
+  sp = data[[2]]
+  sp_cols = colnames(sp)
+  expect_true('species' %in% sp_cols)
+  expect_true('Unidentified' %in% sp_cols)
+  expect_true('Census.Target' %in% sp_cols)
+  expect_true('Granivore' %in% sp_cols)
+})
