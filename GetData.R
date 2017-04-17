@@ -24,6 +24,7 @@ download_observations = function(base_folder='~/'){
   
   #Github serves this up with the -master extension. Unzip and rename to remove that. 
   unzip(zip_download_dest, exdir=base_folder)
+  Sys.sleep(10)
   file.remove(zip_download_dest)
   file.rename(paste0(base_folder,'PortalData-master'), final_data_folder)
 }

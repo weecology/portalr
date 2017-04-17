@@ -59,12 +59,12 @@ loadData = function(path) {
     newmoons_table = read.csv(
       paste(path, "PortalData/Rodents/moon_dates.csv", sep = ""))
     plots_table = read.csv(paste(
-      path, "PortalData/SiteandMethods/new_Portal_plots.csv", sep = ""))
+      path, "PortalData/SiteandMethods/Portal_plots.csv", sep = ""))
   }
   colnames(species_table)[1] = "species"
   colnames(trapping_table) = c("dy", "mo","yr", "period", "plot", "Sampled")
   colnames(newmoons_table)[3] = "period"
-  colnames(plots_table)[3] = "mo"
+  colnames(plots_table)[2] = "mo"
   return(list(rodent_data, 
               species_table, 
               trapping_table, 
@@ -235,7 +235,7 @@ join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
 #' @return Data.table of summarized rodent data with period or newmoon code
 add_newmoon_code = function(summary_table, newmoon_table, time){
   if(time %in% c("NewMoon","Newmoon","newmoon")){
-      summary_table = left_join(newmoon_table,summary_table,
+      summary_table = right_join(newmoon_table,summary_table,
                                 by=c("period"="period")) %>% 
         filter(period <= max(period,na.rm=T)) %>% 
         select(-NewMoonDate,-period,-CensusDate)
