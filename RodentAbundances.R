@@ -20,7 +20,25 @@ library(dplyr)
 library(tidyr)
 source("data_processing.R")
 
-abundance <- function(path = '~/', level="Site",type="Rodents",
+#' Return normalized path for all operating systems
+#'
+#' @param ReferencePath a path to join with current working directory
+#' @param BasePath Current working directory else path given
+#'
+#' @return
+#' @export
+#' @examples
+#' FullPath('PortalData/Rodents/Portal_rodent.csv')
+#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
+FullPath <- function( ReferencePath, BasePath=getwd()){
+  BasePath = normalizePath(BasePath)
+  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
+  return (Path)
+}
+
+
+
+abundance <- function(path = '~', level="Site",type="Rodents",
                       length="all",unknowns=F,incomplete=F,
                       shape="crosstab",time="period") {
 
@@ -31,7 +49,7 @@ abundance <- function(path = '~/', level="Site",type="Rodents",
   trapping = data_tables[[3]]
   newmoons = data_tables[[4]]
   plots = data_tables[[5]]
-  
+
 ##########Data cleanup --------------------------------
 rodents = remove_suspect_entries(rodents)
 rodents = process_unknownsp(rodents, species, unknowns)
