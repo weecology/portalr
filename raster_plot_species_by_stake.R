@@ -3,18 +3,29 @@
 
 library(dplyr)
 library(ggplot2)
+source("data_processing.R")
 
+raster_of_plot_captures = function(path, group_or_individual, year){
+  # load latest version of rodent data
+  data = loadData(path)
+  rdat = data[[1]]
 
-setwd('c:/Users/EC/Desktop/git/PortalData/DataSummaryScripts')
-
-# load latest version of rodent data
-rdat = read.csv('../Rodents/Portal_rodent.csv')
-
-# table of adjustments to x and y coords to put plots in approximate locations
-plotcoords = data.frame(plot=seq(1,24),
-                        x_adj = c(0,10,20,30,40,50, 0,10,20,30,40,50, 0,10,20,30,40,50,60,30,40,50,60,60),
-                        y_adj = c(0, 0, 0, 0, 0, 0,10,10,10,10,10,10,20,20,20,20,20,20,15,30,30,30,25,5))
-
+  # table of adjustments to x and y coords to put plots in approximate locations
+  plotcoords = data.frame(plot=seq(1,24),
+                        x_adj = c(0,10,20,30,40,50, 0,10,20,30,40,50, 
+                                  0,10,20,30,40,50,60,30,40,50,60,60),
+                        y_adj = c(0, 0, 0, 0, 0, 0,10,10,10,10,10,10,20,
+                                  20,20,20,20,20,15,30,30,30,25,5))
+  
+  # select group (species) or individual to plot.  also time period
+  group_or_individual = filter(rdat,species==group_or_individual,yr==year)
+  
+  df = capture_history_coordinates(group_or_individual,plotcoords)
+  
+  ggplot(df,aes(x_position,y_position,fill=z)) + 
+    scale_y_continuous(trans = "reverse") +
+    geom_raster()
+}
 
 capture_history_coordinates = function(group_or_individual,plotcoords) {
   # function takes selected data and counts number of captures at each stake on each plot
@@ -42,12 +53,4 @@ capture_history_coordinates = function(group_or_individual,plotcoords) {
   return(df)
 }
 
-# select group (species) or individual to plot.  also time period
-group_or_individual = filter(rdat,species=='DO',yr==2016)
 
-df = capture_history_coordinates(group_or_individual,plotcoords)
-
-# plot raster
-ggplot(df,aes(x_position,y_position,fill=z)) + 
-  scale_y_continuous(trans = "reverse") +
-  geom_raster()
