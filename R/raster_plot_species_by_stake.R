@@ -3,7 +3,6 @@
 
 library(dplyr)
 library(ggplot2)
-source("data_processing.R")
 
 raster_of_plot_captures = function(path, group_or_individual, year){
   # load latest version of rodent data

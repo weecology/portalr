@@ -15,10 +15,10 @@
 ###################
 #time returns data using the complete "newmoon" numbers or the original "period" numbers
 ###################
+#' @importFrom magrittr "%>%"
 
 library(dplyr)
 library(tidyr)
-source("data_processing.R")
 
 #' Return normalized path for all operating systems
 #'
