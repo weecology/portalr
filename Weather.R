@@ -6,13 +6,31 @@ library(dplyr)
 library(tidyr)
 library(lubridate)
 
+#' Return normalized path for all operating systems
+#'
+#' @param ReferencePath a path to join with current working directory
+#' @param BasePath Current working directory else path given
+#'
+#' @return
+#' @export
+#' @examples
+#' FullPath('PortalData/Rodents/Portal_rodent.csv')
+#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
+FullPath <- function( ReferencePath, BasePath=getwd()){
+  BasePath = normalizePath(BasePath)
+  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
+  return (Path)
+}
+
+
 weather <- function(level) {
   
-  weather_new=read.csv('~/PortalData/Weather/Portal_weather.csv', na.strings=c(""), stringsAsFactors = FALSE)
-  weather_old=read.csv('~/PortalData/Weather/Portal_weather_19801989.csv', na.strings=c("-99"), stringsAsFactors = FALSE)
-  NDVI=read.csv('~/PortalData/NDVI/monthly_NDVI.csv', na.strings=c("-99"), stringsAsFactors = FALSE)
+  weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv'), na.strings=c(""), stringsAsFactors = FALSE)
+  weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv'), na.strings=c("-99"), stringsAsFactors = FALSE)
+  NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv'), na.strings=c("-99"), stringsAsFactors = FALSE)
   
   # Data cleanup
+  ##TO DO: Fill in missing data with means/nearby station data
   
   NDVI$Month=as.numeric(gsub( ".*-", "", NDVI$Date )); NDVI$Year=as.numeric(gsub( "-.*$", "", NDVI$Date ))
   
