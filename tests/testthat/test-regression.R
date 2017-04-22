@@ -1,8 +1,3 @@
-source("RodentAbundances.R")
-source("GetData.R")
-library(testthat)
-library(digest)
-library(dplyr)
 context("checks RodentAbundance.R output")
 
 download_observations('./tests/testthat')

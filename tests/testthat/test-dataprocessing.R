@@ -1,5 +1,3 @@
-source("data_processing.R")
-library(testthat)
 context("checks data_processing functions")
 
 test_that("user given path returns list length 5", {
