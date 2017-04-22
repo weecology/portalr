@@ -48,18 +48,17 @@ loadData = function(path) {
         "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"))
   } else {
     rodent_data = read.csv(
-      paste(path, "PortalData/Rodents/Portal_rodent.csv",sep = ""), 
+      file.path(path, "PortalData/Rodents/Portal_rodent.csv"),
       na.strings = c(""), colClasses = c('tag' = 'character'),
       stringsAsFactors = FALSE)
     species_table = read.csv(
-      paste(path, "PortalData/Rodents/Portal_rodent_species.csv",sep = ""), 
+      file.path(path, "PortalData/Rodents/Portal_rodent_species.csv"),
       na.strings = c(""))
     trapping_table = read.csv(
-      paste(path, "PortalData/Rodents/Portal_rodent_trapping.csv", sep = ""))
+      file.path(path, "PortalData/Rodents/Portal_rodent_trapping.csv"))
     newmoons_table = read.csv(
-      paste(path, "PortalData/Rodents/moon_dates.csv", sep = ""))
-    plots_table = read.csv(paste(
-      path, "PortalData/SiteandMethods/Portal_plots.csv", sep = ""))
+      file.path(path, "PortalData/Rodents/moon_dates.csv"))
+    plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
   }
   colnames(species_table)[1] = "species"
   colnames(trapping_table) = c("dy", "mo","yr", "period", "plot", "Sampled")
