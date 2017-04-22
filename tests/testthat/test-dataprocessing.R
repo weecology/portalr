@@ -1,7 +1,7 @@
 context("checks data_processing functions")
 
 test_that("user given path returns list length 5", {
-  data = loadData(".")
+  data = loadData("repo")
   expect_that(length(data), equals(5))
 })
 
