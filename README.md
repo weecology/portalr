@@ -1,5 +1,13 @@
 ## A collection of basic functions to summarize the Portal data
 
+### Installation
+
+Install the `devtools` package and then run:
+
+```
+install_github("weecology/PortalDataSummaries)
+```
+
 ### RodentAbundances 
 
 abundance - function to summarize total rodent captures 
