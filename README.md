@@ -1,5 +1,8 @@
 ## A collection of basic functions to summarize the Portal data
 
+[![Build Status](https://travis-ci.org/weecology/PortalDataSummaries.svg?branch=master)](https://travis-ci.org/weecology/PortalDataSummaries)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/PortalDataSummaries/master/LICENSE)
+
 ### Installation
 
 Install the `devtools` package and then run:
