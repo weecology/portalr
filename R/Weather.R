@@ -25,10 +25,11 @@ FullPath <- function( ReferencePath, BasePath=getwd()){
 
 weather <- function(level) {
   
-  weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv'), na.strings=c(""), stringsAsFactors = FALSE)
-  weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv'), na.strings=c("-99"), stringsAsFactors = FALSE)
-  NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv'), na.strings=c("-99"), stringsAsFactors = FALSE)
   
+  weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv', '~'), na.strings=c(""), stringsAsFactors = FALSE)
+  weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv', '~'), na.strings=c("-99"), stringsAsFactors = FALSE)
+  NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', '~'), na.strings=c("-99"), stringsAsFactors = FALSE)
+
   # Data cleanup
   ##TO DO: Fill in missing data with means/nearby station data
   
