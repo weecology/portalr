@@ -8,7 +8,7 @@
 download_observations = function(base_folder='~/'){
   base_folder=path.expand(base_folder)
   zip_download_path='https://github.com/weecology/PortalData/archive/master.zip'
-  zip_download_dest=paste0(base_folder,'PortalData.zip')
+  zip_download_dest=file.path(base_folder,'PortalData.zip')
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
   
   final_data_folder=file.path(base_folder,'PortalData')
