@@ -1,26 +1,7 @@
 #A function to summarize hourly weather data
 #with options to summarize by day (level=daily) or month (level=monthly)
 
-#library(dtplyr)
-library(dplyr)
-library(tidyr)
-library(lubridate)
-
-#' Return normalized path for all operating systems
-#'
-#' @param ReferencePath a path to join with current working directory
-#' @param BasePath Current working directory else path given
-#'
-#' @return
-#' @export
-#' @examples
-#' FullPath('PortalData/Rodents/Portal_rodent.csv')
-#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
-FullPath <- function( ReferencePath, BasePath=getwd()){
-  BasePath = normalizePath(BasePath)
-  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
-  return (Path)
-}
+`%>%` <- magrittr::`%>%`
 
 
 weather <- function(level, path = '~') {
@@ -37,20 +18,20 @@ weather <- function(level, path = '~') {
   
   ###########Summarise by Day ----------------------
   days = weather_new %>% 
-    group_by(Year, Month, Day) %>%
-    summarize(MinTemp=min(TempAir),MaxTemp=max(TempAir),MeanTemp=mean(TempAir),Precipitation=sum(Precipitation))
+    dplyr::group_by(Year, Month, Day) %>%
+    dplyr::summarize(MinTemp=min(TempAir),MaxTemp=max(TempAir),MeanTemp=mean(TempAir),Precipitation=sum(Precipitation))
   
-  weather=bind_rows(weather_old[1:3442,],days)
+  weather=dplyr::bind_rows(weather_old[1:3442,],days) %>% dplyr::select(Year,Month,Day,MinTemp,MaxTemp,MeanTemp,Precipitation)
   
 if (level=='Monthly') {
   
   ##########Summarise by Month -----------------
   
   weather = weather %>% 
-    group_by(Year, Month) %>%
-    summarize(MinTemp=min(MinTemp,na.rm=T),MaxTemp=max(MaxTemp,na.rm=T),MeanTemp=mean(MeanTemp,na.rm=T),Precipitation=sum(Precipitation,na.rm=T))
+    dplyr::group_by(Year, Month) %>%
+    dplyr::summarize(MinTemp=min(MinTemp,na.rm=T),MaxTemp=max(MaxTemp,na.rm=T),MeanTemp=mean(MeanTemp,na.rm=T),Precipitation=sum(Precipitation,na.rm=T))
   
-  weather=full_join(weather,NDVI) %>% select(-Date, -X) %>% arrange(Year,Month)
+  weather=dplyr::full_join(weather,NDVI) %>% dplyr::select(-Date, -X) %>% dplyr::arrange(Year,Month)
   weather$NDVI=as.numeric(weather$NDVI)
   }
 

@@ -8,7 +8,7 @@
 Install the `devtools` package and then run:
 
 ```
-install_github("weecology/PortalDataSummaries)
+install_github("weecology/PortalDataSummaries")
 ```
 
 ### RodentAbundances 
