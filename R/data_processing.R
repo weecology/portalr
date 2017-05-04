@@ -1,4 +1,6 @@
-`%>%` <- magrittr::`%>%`
+library(dplyr)
+library(tidyr)
+
 
 #' @title Loads Portal rodent data files. 
 #' 
@@ -23,25 +25,26 @@
 #' loadData('../')
 #' 
 loadData = function(path) {
+  library(RCurl)
   if (path == 'repo') {
     rodent_data = read.csv(
-      text = RCurl::getURL(
+      text = getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
       na.strings = c(""),
       colClasses = c('tag' = 'character'),
       stringsAsFactors = FALSE)
     species_table = read.csv(
-      text = RCurl::getURL(
+      text = getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
       na.strings = c(""))
     trapping_table = read.csv(
-      text = RCurl::getURL(
+      text = getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
     newmoons_table = read.csv(
-      text = RCurl::getURL(
+      text = getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
     plots_table = read.csv(
-      text = RCurl::getURL(
+      text = getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"))
   } else {
     rodent_data = read.csv(
@@ -99,16 +102,16 @@ remove_suspect_entries = function(rodent_data) {
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
     rodent_species_merge = rodent_data %>%
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
+      left_join(species_table, rodent_data, by = "species") %>%
+      filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
   #Rename all unknowns and non-target rodents to "Other"
   else {
     rodent_species_merge =
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(Rodent == 1) %>%
-      dplyr::mutate(species = replace(species, Unidentified == 1, "Other")) %>%
-      dplyr::mutate(species = replace(species, Census.Target == 0, "Other"))
+      left_join(species_table, rodent_data, by = "species") %>%
+      filter(Rodent == 1) %>%
+      mutate(species = replace(species, Unidentified == 1, "Other")) %>%
+      mutate(species = replace(species, Census.Target == 0, "Other"))
   }
   return(rodent_species_merge)
 }
@@ -124,7 +127,7 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
 process_granivores = function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data = rodent_species_merge %>%
-      dplyr::filter(Granivore == 1)
+      filter(Granivore == 1)
     return(granivore_data)
   } else {
     return(rodent_species_merge)
@@ -137,8 +140,8 @@ process_granivores = function(rodent_species_merge, type) {
 #' 
 #' @return Data.table of period codes when not all plots were trapped.
 find_incomplete_censuses = function(trapping_table){
-  incompsampling=trapping_table %>% dplyr::filter(Sampled==0 ) %>% 
-    dplyr::filter(period > 26) %>% dplyr::distinct(period)
+  incompsampling=trapping_table %>% filter(Sampled==0 ) %>% 
+    filter(period > 26) %>% distinct(period)
 }
 
 #' @title Remove incomplete censuses
@@ -159,7 +162,7 @@ remove_incomplete_censuses = function(trapping_table,
                                       incomplete) {
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
-    rodent_species_merge = dplyr::filter(rodent_species_merge,
+    rodent_species_merge = filter(rodent_species_merge,
                                   !period %in% incompsampling$period)
   }
     return(rodent_species_merge)
@@ -178,7 +181,7 @@ remove_incomplete_censuses = function(trapping_table,
 filter_plots = function(data, length) {
   if (length %in% c("Longterm", "longterm")) {
     if("plot" %in% colnames(data)){
-      data = data %>% dplyr::filter(plot %in%
+      data = data %>% filter(plot %in%
                                c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
   }
   return(data)
@@ -191,9 +194,9 @@ filter_plots = function(data, length) {
 #' 
 #' @return Data.table of raw rodent data with treatment info added.
 join_plots_to_rodents = function(rodent_table, plots_table){
-  plots_table = plots_table %>% dplyr::group_by(yr,plot) %>% 
-    dplyr::select(yr,mo, plot,treatment)
-  rodent_table = dplyr::left_join(rodent_table,plots_table, 
+  plots_table = plots_table %>% group_by(yr,plot) %>% 
+    select(yr,mo, plot,treatment)
+  rodent_table = left_join(rodent_table,plots_table, 
                            by=c("yr"="yr","mo"="mo","plot"="plot"))
   return(rodent_table)
 }
@@ -207,9 +210,9 @@ join_plots_to_rodents = function(rodent_table, plots_table){
 join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
   if (incomplete== F){
     incompsampling = find_incomplete_censuses(trapping_table)
-    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
+    trapping_table = filter(trapping_table, !period %in% incompsampling$period)
   }
-  rodent_table = dplyr::right_join(rodent_table, trapping_table,
+  rodent_table = right_join(rodent_table, trapping_table,
                             by=c("period"="period","plot"="plot"))
   return(rodent_table)
 }
@@ -231,16 +234,16 @@ join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
 #' @return Data.table of summarized rodent data with period or newmoon code
 add_newmoon_code = function(summary_table, newmoon_table, time){
   if(time %in% c("NewMoon","Newmoon","newmoon")){
-      summary_table = dplyr::right_join(newmoon_table,summary_table,
+      summary_table = right_join(newmoon_table,summary_table,
                                 by=c("period"="period")) %>% 
-        dplyr::filter(period <= max(period,na.rm=T)) %>% 
-        dplyr::select(-NewMoonDate,-period,-CensusDate)
+        filter(period <= max(period,na.rm=T)) %>% 
+        select(-NewMoonDate,-period,-CensusDate)
     }
   return(summary_table)
 }
 
 make_crosstab = function(summary_data){
   summary_data = summary_data %>% 
-    tidyr::spread(species, abundance) %>%
-    dplyr::ungroup()
+    spread(species, abundance) %>%
+    ungroup()
 }
