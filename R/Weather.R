@@ -13,28 +13,28 @@ weather <- function(level, path = '~') {
 
   # Data cleanup
   ##TO DO: Fill in missing data with means/nearby station data
-  
+
   NDVI$Month=as.numeric(gsub( ".*-", "", NDVI$Date )); NDVI$Year=as.numeric(gsub( "-.*$", "", NDVI$Date ))
-  
+
   ###########Summarise by Day ----------------------
-  days = weather_new %>% 
+  days = weather_new %>%
     dplyr::group_by(Year, Month, Day) %>%
     dplyr::summarize(MinTemp=min(TempAir),MaxTemp=max(TempAir),MeanTemp=mean(TempAir),Precipitation=sum(Precipitation))
-  
+
   weather=dplyr::bind_rows(weather_old[1:3442,],days) %>% dplyr::select(Year,Month,Day,MinTemp,MaxTemp,MeanTemp,Precipitation)
-  
+
 if (level=='Monthly') {
-  
+
   ##########Summarise by Month -----------------
-  
-  weather = weather %>% 
+
+  weather = weather %>%
     dplyr::group_by(Year, Month) %>%
     dplyr::summarize(MinTemp=min(MinTemp,na.rm=T),MaxTemp=max(MaxTemp,na.rm=T),MeanTemp=mean(MeanTemp,na.rm=T),Precipitation=sum(Precipitation,na.rm=T))
-  
+
   weather=dplyr::full_join(weather,NDVI) %>% dplyr::select(-Date, -X) %>% dplyr::arrange(Year,Month)
   weather$NDVI=as.numeric(weather$NDVI)
   }
 
-  
+
   return(weather)
 }
