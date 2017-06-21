@@ -242,6 +242,12 @@ add_newmoon_code = function(summary_table, newmoon_table, time){
   return(summary_table)
 }
 
+#' @title Make Crosstab
+#'
+#' @description convert summarized rodent data to crosstab form
+#'
+#' @param summary_data summarized rodent data - must include 'abundance' column
+#'
 make_crosstab = function(summary_data){
   summary_data = summary_data %>%
     tidyr::spread(species, abundance) %>%
