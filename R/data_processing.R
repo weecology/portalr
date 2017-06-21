@@ -1,5 +1,4 @@
-#library(dplyr)
-#library(tidyr)
+
 `%>%` <- magrittr::`%>%`
 
 
@@ -102,14 +101,14 @@ remove_suspect_entries = function(rodent_data) {
 #' according to the argument unknowns.
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
-    rodent_species_merge2 =
-      dplyr::right_join(rodent_data, species_table, by = c("species" = "Species.Code")) %>%
+    rodent_species_merge =
+      dplyr::right_join(rodent_data, species_table, by = 'species') %>%
       dplyr::filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
   #Rename all unknowns and non-target rodents to "Other"
   else {
     rodent_species_merge =
-      dplyr::right_join(rodent_data, species_table, by = c("species" = "Species.Code")) %>%
+      dplyr::right_join(rodent_data, species_table, by = 'species') %>%
       dplyr::filter(Rodent == 1) %>%
       dplyr::mutate(species = replace(species, Unidentified == 1, "Other")) %>%
       dplyr::mutate(species = replace(species, Census.Target == 0, "Other"))
@@ -142,7 +141,7 @@ process_granivores = function(rodent_species_merge, type) {
 #' @return Data.table of period codes when not all plots were trapped.
 find_incomplete_censuses = function(trapping_table){
   incompsampling=trapping_table %>% dplyr::filter(Sampled==0 ) %>%
-    dplyr::filter(Period > 26) %>% dplyr::distinct(Period)
+    dplyr::filter(period > 26) %>% dplyr::distinct(period)
 }
 
 #' @title Remove incomplete censuses
@@ -194,11 +193,11 @@ filter_plots = function(data, length) {
 #' @param plots_table Data_table of treatments for the plots.
 #'
 #' @return Data.table of raw rodent data with treatment info added.
-join_plots_to_rodents = function(rodent_table, plots_table){
+join_plots_to_rodents = function(rodent_data, plots_table){
   plots_table = plots_table %>% dplyr::group_by(yr,plot) %>%
-    dplyr::select(yr,month, plot,treatment)
-  rodent_table = dplyr::left_join(rodent_table,plots_table,
-                           by=c("yr"="yr","mo"="month","plot"="plot"))
+    dplyr::select(yr,mo, plot,treatment)
+  rodent_table = dplyr::left_join(rodent_data,plots_table,
+                           by=c("yr"="yr","mo"="mo","plot"="plot"))
   return(rodent_table)
 }
 
@@ -208,13 +207,13 @@ join_plots_to_rodents = function(rodent_table, plots_table){
 #' @param trapping_table Data_table of when plots were censused.
 #'
 #' @return Data.table of raw rodent data with trapping info added.
-join_trapping_to_rodents = function(rodent_table, trapping_table, incomplete){
+join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
   if (incomplete== F){
     incompsampling = find_incomplete_censuses(trapping_table)
-    trapping_table = dplyr::filter(trapping_table, !Period %in% incompsampling$Period)
+    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
   }
-  rodent_table = dplyr::right_join(rodent_table, trapping_table,
-                            by=c("period"="Period","plot"="Plot"))
+  rodent_table = dplyr::right_join(rodent_data, trapping_table,
+                            by=c("period"="period","plot"="plot"))
   return(rodent_table)
 }
 
