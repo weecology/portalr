@@ -1,34 +1,24 @@
+#' @importFrom magrittr "%>%"
+#' @importFrom lubridate "%m+%"
 
-`%>%` <- magrittr::`%>%`
-`%m+%` <- lubridate::`%m+%`
-
-#' Make a standardized monthly time series for Portal rodents
+#' @title Makes a standardized monthly time series for Portal rodents
+#' @description The Portal rodent data is collected roughly monthly.
+#' However, some time series methods require regular monthly data with no gaps.
+#' This function deals with the issue that some monthly censuses occur slightly
+#' before or after their intended sample month. The function takes a univariate
+#' time series and pairs samples up with their intended month, averages out
+#' double censuses that occur in the same month and interpolates gaps in the data.
+#' To work properly the data should be a dataframe containing a single time series where
+#' each date contains a single value.
 #'
-#' The Portal rodent data is collected roughly monthly.
-#' However, some time series methods require regular
-#' monthly data with no gaps.
-#' This code deals with the following issues:
-#' Some monthly censuses occur slightly before or
-#' after their intended sample month. Code takes a univariate
-#' times series and pairs samples up with their intended month,
-#' averages out double censuses that occur in the same month
-#' and interpolates gaps in the data.
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#' @param date_format format for the dattes in date column (e.g. "\%Y-\%m-\%d")
 #'
+#' @return dataframe containing 2 columns: newdate and value
 #'
-#' To work properly the data should be a dataframe
-#' constaining a single time series where each date
-#' contains a single value.
+#' @export
 #'
-#'       @param data Data.frame with columns
-#'       date: date of the period (e.g., 2016-01-01)
-#'       period: period code for the census
-#'       value: numeric value to be analyzed
-#'       @param date_format format for the dates
-#'       in date column (e.g. "%Y-%m-%d)
-#'       @return data.frame containing 2 columns: newdate and value
-#'
-#'       @export
-
 make_timeseries = function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series
 

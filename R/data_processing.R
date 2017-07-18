@@ -1,5 +1,4 @@
-
-`%>%` <- magrittr::`%>%`
+#' @importFrom magrittr "%>%"
 
 
 #' @title Loads Portal rodent data files.
@@ -124,7 +123,7 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
 }
 
 #' @title Filters out non-granivores.
-#'
+#' @description If type=Granivores, removes all non-granivore species.
 #' @param rodent_species_merge Data table with raw rodent records
 #'                             merged with species attributes from
 #'                             species_table.
@@ -145,7 +144,7 @@ process_granivores = function(rodent_species_merge, type) {
 }
 
 #' @title Period code for incomplete censuses
-#'
+#' @description Determines incomplete censuses by finding dates when some plots were trapped, but others were not.
 #' @param trapping_table Data table. Data on when each plot was trapped.
 #'
 #' @return Data.table of period codes when not all plots were trapped.
@@ -158,7 +157,7 @@ find_incomplete_censuses = function(trapping_table){
 
 #' @title Remove incomplete censuses
 #'
-#' @details
+#' @description
 #' In some months, not all plots are trapped. Using this data can result in
 #' biased monthly data, especially if summarizing for site or treatment.
 #'
@@ -184,7 +183,7 @@ remove_incomplete_censuses = function(trapping_table,
 
 #' @title Filter plots
 #'
-#' @details
+#' @description
 #' Removes plots not needed for analysis. Currently only returns long-term
 #' plots but could be adjusted in the future to return other subsets as well.
 #'
@@ -204,7 +203,7 @@ filter_plots = function(data, length) {
 }
 
 #' @title Join rodent and plot tables
-#'
+#' @description Joins rodent data with list of plot types, by year, month and plot
 #' @param rodent_data Data.table with raw rodent data.
 #' @param plots_table Data_table of treatments for the plots.
 #'
@@ -220,9 +219,10 @@ join_plots_to_rodents = function(rodent_data, plots_table){
 }
 
 #' @title Join rodent and trapping tables
-#'
+#' @description Joins rodent data with list of trapping dates, by period and plot
 #' @param rodent_data Data.table with raw rodent data.
 #' @param trapping_table Data_table of when plots were censused.
+#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
 #'
 #' @return Data.table of raw rodent data with trapping info added.
 #'
@@ -239,7 +239,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 
 #' @title Add NewMoon Codes
 #'
-#' @details
+#' @description
 #' period codes denote the number of censuses that have occurred, but are
 #' not the same as the number of censuses that should have occurred. Sometimes
 #' censuses are missed (weather, transport issues,etc). You can't pick this
@@ -258,7 +258,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 add_newmoon_code = function(summary_table, newmoon_table, time){
   if(time %in% c("NewMoon","Newmoon","newmoon")){
       summary_table = dplyr::left_join(summary_table, newmoon_table,
-                                by=c("period" = "Period")) %>%
+                                by=c("period" = "period")) %>%
         dplyr::filter(period <= max(period,na.rm=T)) %>%
         dplyr::select(-NewMoonDate,-period,-CensusDate)
     }

@@ -1,8 +1,8 @@
 ### Function for Adding Seasons to Data ###
 
-#' @title add_seasons
+#' @title Add Seasons
 #'
-#' @description add seasons to data frame
+#' @description Adds seasons to data frame
 #'
 #' @param data data frame containing columns: yr, mo, species
 #' @param num_of_seasons either 2: winter = Oct-March

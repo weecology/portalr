@@ -1,7 +1,4 @@
-
 #' @importFrom magrittr "%>%"
-
-
 
 #' @title Rodent Abundance
 #'
@@ -47,7 +44,6 @@ abundance <- function(path = '~', level="Site",type="Rodents",
   ###########Summarise by Treatment ----------------------
   if(level %in% c("Treatment","treatment")){
     #Name plot treatments in each time period
-
 
     rodents = join_plots_to_rodents(rodents, plots)
 

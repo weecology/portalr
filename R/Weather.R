@@ -1,15 +1,11 @@
-##TO DO:
-#       Fill in missing data with means/nearby station data
+#' @importFrom magrittr "%>%"
 
-
-`%>%` <- magrittr::`%>%`
-
-#' @title weather
+#' @title Weather by day or month
 #'
-#' @description summarize hourly weather data to either daily or monthly level
+#' @description Summarize hourly weather data to either daily or monthly level.
 #'
 #' @param level specify 'Monthly' or 'Daily'
-#' @param path
+#' @param path specify where to locate Portal data
 #'
 #' @export
 #'
