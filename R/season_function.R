@@ -1,12 +1,26 @@
 ### Function for Adding Seasons to Data ###
 
+#' @title add_seasons
+#'
+#' @description add seasons to data frame
+#'
+#' @param data data frame containing columns: yr, mo, species
+#' @param num_of_seasons either 2: winter = Oct-March
+#'                                 summer = April-Sept
+#'                           or 4: winter = Dec-Feb
+#'                                 spring = March-May
+#'                                 summer = Jun-Aug
+#'                                 fall = Sep-Nov
+#'
+#' @export
+#'
 add_seasons <- function(data, num_of_seasons){
-  # function for adding seasons to data
+
   if (num_of_seasons == 4) {
     # make seasonal year column
-    data$season4_yr = data$yr             
-    for (n in 1:length(data$species)) {      
-      if (data$mo[n] %in% c(1,2)) {     
+    data$season4_yr = data$yr
+    for (n in 1:length(data$species)) {
+      if (data$mo[n] %in% c(1,2)) {
         data$season4_yr[n] = data$yr[n] - 1
       }
     }
@@ -25,9 +39,9 @@ add_seasons <- function(data, num_of_seasons){
     }
   } else if (num_of_seasons == 2) {
     # make seasonal year column
-    data$season2_yr = data$yr             
-    for (i in 1:length(data$species)) {      
-      if (data$mo[i] %in% c(1,2,3)) {     
+    data$season2_yr = data$yr
+    for (i in 1:length(data$species)) {
+      if (data$mo[i] %in% c(1,2,3)) {
         data$season2_yr[i] = data$yr[i] - 1
       }
     }

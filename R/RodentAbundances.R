@@ -17,7 +17,7 @@
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time return data using the complete "newmoon" numbers of the original "period" numbers
 #'
-#'
+#' @export
 #'
 abundance <- function(path = '~', level="Site",type="Rodents",
                       length="all",unknowns=F,incomplete=F,

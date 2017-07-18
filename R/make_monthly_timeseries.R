@@ -26,6 +26,8 @@
 #'       @param date_format format for the dates
 #'       in date column (e.g. "%Y-%m-%d)
 #'       @return data.frame containing 2 columns: newdate and value
+#'
+#'       @export
 
 make_timeseries = function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series

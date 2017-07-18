@@ -20,6 +20,8 @@
 #' \item plots_table. rodent treatment assignments for each plot.
 #' }
 #'
+#' @export
+#'
 #' @examples
 #' loadData('repo')
 #' loadData('../')
@@ -81,6 +83,8 @@ loadData = function(path) {
 #'
 #' @return Data.table with suspect data removed.
 #'
+#' @export
+#'
 remove_suspect_entries = function(rodent_data) {
   rodent_data = rodent_data[rodent_data$period > 0,]
   rodent_data = rodent_data[!is.na(rodent_data$plot),]
@@ -99,6 +103,9 @@ remove_suspect_entries = function(rodent_data) {
 #'
 #' @return Data.table with species info added and unknown species processed
 #' according to the argument unknowns.
+#'
+#' @export
+#'
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
     rodent_species_merge =
@@ -124,6 +131,9 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
 #' @param type String. If type=Granivores', non-granivores removed.
 #'
 #' @return data.table with granivores processed according to argument 'type'.
+#'
+#' @export
+#'
 process_granivores = function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data = rodent_species_merge %>%
@@ -139,6 +149,8 @@ process_granivores = function(rodent_species_merge, type) {
 #' @param trapping_table Data table. Data on when each plot was trapped.
 #'
 #' @return Data.table of period codes when not all plots were trapped.
+#'
+#' @export
 find_incomplete_censuses = function(trapping_table){
   incompsampling=trapping_table %>% dplyr::filter(Sampled==0 ) %>%
     dplyr::filter(period > 26) %>% dplyr::distinct(period)
@@ -157,6 +169,8 @@ find_incomplete_censuses = function(trapping_table){
 #'
 #' @return Data.table of merged rodent records and species info with incomplete
 #'         censuses processed according to argument imcomplete.
+#'
+#' @export
 remove_incomplete_censuses = function(trapping_table,
                                       rodent_species_merge,
                                       incomplete) {
@@ -178,6 +192,8 @@ remove_incomplete_censuses = function(trapping_table,
 #' @param length Character. Denotes if user wants only long-term plots.
 #'
 #' @return Data.table filtered to the desired subset of plots.
+#'
+#' @export
 filter_plots = function(data, length) {
   if (length %in% c("Longterm", "longterm")) {
     if("plot" %in% colnames(data)){
@@ -193,6 +209,8 @@ filter_plots = function(data, length) {
 #' @param plots_table Data_table of treatments for the plots.
 #'
 #' @return Data.table of raw rodent data with treatment info added.
+#'
+#' @export
 join_plots_to_rodents = function(rodent_data, plots_table){
   plots_table = plots_table %>% dplyr::group_by(yr,plot) %>%
     dplyr::select(yr,mo, plot,treatment)
@@ -207,6 +225,8 @@ join_plots_to_rodents = function(rodent_data, plots_table){
 #' @param trapping_table Data_table of when plots were censused.
 #'
 #' @return Data.table of raw rodent data with trapping info added.
+#'
+#' @export
 join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
   if (incomplete== F){
     incompsampling = find_incomplete_censuses(trapping_table)
@@ -232,6 +252,9 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #' @param time Character. Denotes whether newmoon codes are desired.
 #'
 #' @return Data.table of summarized rodent data with period or newmoon code
+#'
+#' @export
+#'
 add_newmoon_code = function(summary_table, newmoon_table, time){
   if(time %in% c("NewMoon","Newmoon","newmoon")){
       summary_table = dplyr::left_join(summary_table, newmoon_table,
@@ -248,6 +271,7 @@ add_newmoon_code = function(summary_table, newmoon_table, time){
 #'
 #' @param summary_data summarized rodent data - must include 'abundance' column
 #'
+#' @export
 make_crosstab = function(summary_data){
   summary_data = summary_data %>%
     tidyr::spread(species, abundance) %>%
