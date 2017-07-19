@@ -22,8 +22,6 @@
 #' @export
 #'
 #' @examples
-#' loadData('repo')
-#' loadData('../')
 #'
 loadData = function(path) {
   if (path == 'repo') {

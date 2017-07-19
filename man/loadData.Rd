@@ -26,7 +26,5 @@ Loads main Portal rodent data files from either
 a user defined path or the online Github repository.
 }
 \examples{
-loadData('repo')
-loadData('../')
 
 }
