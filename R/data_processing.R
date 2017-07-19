@@ -109,13 +109,13 @@ remove_suspect_entries = function(rodent_data) {
 process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
     rodent_species_merge =
-      dplyr::right_join(rodent_data, species_table, by = 'species') %>%
+      dplyr::left_join(species_table, rodent_data, by = "species") %>%
       dplyr::filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
   }
   #Rename all unknowns and non-target rodents to "Other"
   else {
     rodent_species_merge =
-      dplyr::right_join(rodent_data, species_table, by = 'species') %>%
+      dplyr::left_join(species_table, rodent_data, by = "species") %>%
       dplyr::filter(Rodent == 1) %>%
       dplyr::mutate(species = replace(species, Unidentified == 1, "Other")) %>%
       dplyr::mutate(species = replace(species, Census.Target == 0, "Other"))
@@ -257,7 +257,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #'
 add_newmoon_code = function(summary_table, newmoon_table, time){
   if(time %in% c("NewMoon","Newmoon","newmoon")){
-      summary_table = dplyr::left_join(summary_table, newmoon_table,
+      summary_table = dplyr::right_join(newmoon_table,summary_table,
                                 by=c("period" = "Period")) %>%
         dplyr::filter(period <= max(period,na.rm=T)) %>%
         dplyr::select(-NewMoonDate,-period,-CensusDate)
