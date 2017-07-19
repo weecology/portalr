@@ -175,7 +175,7 @@ remove_incomplete_censuses = function(trapping_table,
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
     rodent_species_merge = dplyr::filter(rodent_species_merge,
-                                  !period %in% incompsampling$Period)
+                                  !period %in% incompsampling$period)
   }
     return(rodent_species_merge)
 }
