@@ -36,8 +36,7 @@ loadData = function(path) {
     species_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
+      na.strings = c(""))
     trapping_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
