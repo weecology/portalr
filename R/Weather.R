@@ -1,9 +1,14 @@
-#A function to summarize hourly weather data
-#with options to summarize by day (level=daily) or month (level=monthly)
+#' @importFrom magrittr "%>%"
 
-`%>%` <- magrittr::`%>%`
-
-
+#' @title Weather by day or month
+#'
+#' @description Summarize hourly weather data to either daily or monthly level.
+#'
+#' @param level specify 'Monthly' or 'Daily'
+#' @param path specify where to locate Portal data
+#'
+#' @export
+#'
 weather <- function(level, path = '~') {
 
 
@@ -12,9 +17,7 @@ weather <- function(level, path = '~') {
   NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
 
   # Data cleanup
-  ##TO DO: Fill in missing data with means/nearby station data
-
-  NDVI$Month=as.numeric(gsub( ".*-", "", NDVI$Date )); NDVI$Year=as.numeric(gsub( "-.*$", "", NDVI$Date ))
+    NDVI$Month=as.numeric(gsub( ".*-", "", NDVI$Date )); NDVI$Year=as.numeric(gsub( "-.*$", "", NDVI$Date ))
 
   ###########Summarise by Day ----------------------
   days = weather_new %>%
