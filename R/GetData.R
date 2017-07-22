@@ -25,6 +25,7 @@ FullPath <- function( ReferencePath, BasePath=getwd()){
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
 #' @return None
+#' @export
 download_observations = function(base_folder='~'){
   zip_download_path='https://github.com/weecology/PortalData/archive/master.zip'
   zip_download_dest=FullPath('PortalData.zip', base_folder)
