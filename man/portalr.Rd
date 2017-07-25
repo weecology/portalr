@@ -4,5 +4,5 @@
 \name{portalr}
 \alias{portalr}
 \alias{portalr-package}
-\title{portalr}
+\title{Creates useful summaries of the Portal data}
 \keyword{package}

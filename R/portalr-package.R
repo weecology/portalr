@@ -1,4 +1,4 @@
-#' @title portalr
+#' @title Creates useful summaries of the Portal data
 #'
 #' @import dplyr
 #' @import tidyr
