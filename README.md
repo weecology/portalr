@@ -1,14 +1,14 @@
 ## A collection of basic functions to summarize the Portal data
 
-[![Build Status](https://travis-ci.org/weecology/PortalDataSummaries.svg?branch=master)](https://travis-ci.org/weecology/PortalDataSummaries)
-[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/PortalDataSummaries/master/LICENSE)
+[![Build Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 
 ### Installation
 
 Install the `devtools` package and then run:
 
 ```
-install_github("weecology/PortalDataSummaries")
+install_github("weecology/portalr")
 ```
 
 ### RodentAbundances 
