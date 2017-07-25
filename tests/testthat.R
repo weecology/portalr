@@ -1,4 +1,4 @@
 library(testthat)
-library(PortalDataSummaries)
+library(portalr)
 
 test_check("PortalDataSummaries")
