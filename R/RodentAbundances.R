@@ -63,9 +63,9 @@ abundance <- function(path = '~', level="Site",type="Rodents",
 
     abundances = rodents %>%
       dplyr::mutate(species = factor(species)) %>%
-      dplyr::group_by(period,plot,Sampled) %>%
+      dplyr::group_by(period,plot,sampled) %>%
       dplyr::do(data.frame(x = table(.$species))) %>%
-      dplyr::mutate(x.Freq=replace(x.Freq,Sampled==0,NA))  %>% #0->NA on untrapped plots
+      dplyr::mutate(x.Freq=replace(x.Freq,sampled==0,NA))  %>% #0->NA on untrapped plots
       dplyr::ungroup() %>%
       dplyr::select(period,plot,species=x.Var1, abundance=x.Freq)
   }
