@@ -11,11 +11,11 @@ process_granivores(rodent_species_merge, type)
 merged with species attributes from
 species_table.}
 
-\item{type}{String. If type=Granivores', non-granivores removed.}
+\item{type}{String. If type=granivores', non-granivores removed.}
 }
 \value{
 data.table with granivores processed according to argument 'type'.
 }
 \description{
-If type=Granivores, removes all non-granivore species.
+If type=granivores, removes all non-granivore species.
 }

@@ -59,9 +59,9 @@ loadData = function(path) {
     plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
   }
   colnames(species_table)[1] = "species"
-  colnames(trapping_table) = c("dy", "mo","yr", "period", "plot", "Sampled")
+  colnames(trapping_table) = c("day", "month","year", "period", "plot", "sampled")
   colnames(newmoons_table)[3] = "period"
-  colnames(plots_table)[2] = "mo"
+  colnames(plots_table)[2] = "month"
   return(list(rodent_data,
               species_table,
               trapping_table,
@@ -106,25 +106,25 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
   if (unknowns == F) {
     rodent_species_merge =
       dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(Rodent == 1, Unidentified == 0, Census.Target == 1)
+      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
   }
-  #Rename all unknowns and non-target rodents to "Other"
+  #Rename all unknowns and non-target rodents to "other"
   else {
     rodent_species_merge =
       dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(Rodent == 1) %>%
-      dplyr::mutate(species = replace(species, Unidentified == 1, "Other")) %>%
-      dplyr::mutate(species = replace(species, Census.Target == 0, "Other"))
+      dplyr::filter(rodent == 1) %>%
+      dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
+      dplyr::mutate(species = replace(species, censustarget == 0, "other"))
   }
   return(rodent_species_merge)
 }
 
 #' @title Filters out non-granivores.
-#' @description If type=Granivores, removes all non-granivore species.
+#' @description If type=granivores, removes all non-granivore species.
 #' @param rodent_species_merge Data table with raw rodent records
 #'                             merged with species attributes from
 #'                             species_table.
-#' @param type String. If type=Granivores', non-granivores removed.
+#' @param type String. If type=granivores', non-granivores removed.
 #'
 #' @return data.table with granivores processed according to argument 'type'.
 #'
@@ -133,7 +133,7 @@ process_unknownsp = function(rodent_data, species_table, unknowns) {
 process_granivores = function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data = rodent_species_merge %>%
-      dplyr::filter(Granivore == 1)
+      dplyr::filter(granivore == 1)
     return(granivore_data)
   } else {
     return(rodent_species_merge)
@@ -148,7 +148,7 @@ process_granivores = function(rodent_species_merge, type) {
 #'
 #' @export
 find_incomplete_censuses = function(trapping_table){
-  incompsampling=trapping_table %>% dplyr::filter(Sampled==0 ) %>%
+  incompsampling=trapping_table %>% dplyr::filter(sampled==0 ) %>%
     dplyr::filter(period > 26) %>% dplyr::distinct(period)
 }
 
@@ -208,10 +208,10 @@ filter_plots = function(data, length) {
 #'
 #' @export
 join_plots_to_rodents = function(rodent_data, plots_table){
-  plots_table = plots_table %>% dplyr::group_by(yr,plot) %>%
-    dplyr::select(yr,mo, plot,treatment)
+  plots_table = plots_table %>% dplyr::group_by(year,plot) %>%
+    dplyr::select(year,month, plot,treatment)
   rodent_table = dplyr::left_join(rodent_data,plots_table,
-                           by=c("yr"="yr","mo"="mo","plot"="plot"))
+                           by=c("year"="year","month"="month","plot"="plot"))
   return(rodent_table)
 }
 
@@ -257,7 +257,7 @@ add_newmoon_code = function(summary_table, newmoon_table, time){
       summary_table = dplyr::right_join(newmoon_table,summary_table,
                                 by=c("period" = "period")) %>%
         dplyr::filter(period <= max(period,na.rm=T)) %>%
-        dplyr::select(-NewMoonDate,-period,-CensusDate)
+        dplyr::select(-newmoondate,-period,-censusdate)
     }
   return(summary_table)
 }
