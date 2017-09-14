@@ -55,16 +55,45 @@ abundance.adjustable <- function(path = '~', level="Site",type="Rodents",
       dplyr::select(period,treatment,species=x.Var1, abundance=x.Freq)
   }
   ##########Summarise by treatment adjusted ----------------------------
-  
+
   if(level %in% c("Treatment.adj","treatment.adj")){
     #Name plot treatments in each time period
-  
+# this one ignores plots if no rodents were caught there
     rodents = join_plots_to_rodents(rodents, plots)
-    
+
     plot.treatments = rodents %>%
       dplyr::distinct(period, plot, treatment) %>%
       dplyr::add_count(period, treatment) %>%
       dplyr::distinct(period, treatment, n)
+
+    # unpiped
+    plot.treatments = rodents
+    plot.treatments = distinct(plot.treatments, period, plot, treatment)
+    plot.treatments = add_count(plot.treatments, period, treatment)
+
+    # k doing this the other way
+    plot.treatments.2 = rodents
+    plot.treatments.2 = select(plot.treatments.2, period, plot, treatment)
+    plot.treatments.2 = unique(plot.treatments.2)
+
+    plot.treatments.3 = plot.treatments.2 %>%
+      select(period, treatment) %>%
+      distinct(period,treatment)
+    plot.treatments.3$count = NA
+
+    for (i in 1:nrow(plot.treatments.3)) {
+      this = filter(plot.treatments.2, period == plot.treatments.3$period[i],
+                    treatment == plot.treatments.3$treatment[i])
+      plot.treatments.3$count[i] = length(unique(this$plot))
+    }
+
+    plot.treatments.2 = left_join(plot.treatments.2, plot.treatments.3, by = c('period', 'treatment'))
+
+    compare.n = plot.treatments.2$count - plot.treatments$n
+
+    max(compare.n)
+
+    plot.treatments.ex = filter(plot.treatments.2, treatment == 'exclosure')
 
     abundances = rodents %>%
       dplyr::mutate(species = factor(species)) %>%
@@ -76,7 +105,7 @@ abundance.adjustable <- function(path = '~', level="Site",type="Rodents",
       dplyr::mutate(abundance.perplot = abundance / n)
 
   }
-  
+
   ##########Summarise by plot ----------------------------
   if(level %in% c("Plot","plot")){
     trapping = filter_plots(trapping, length)
