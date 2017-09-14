@@ -16,9 +16,9 @@
 #'
 #' @export
 #'
-abundance <- function(path = '~', level="Site",type="Rodents",
-                      length="all",unknowns=F,incomplete=F,
-                      shape="crosstab",time="period") {
+abundance.adjustable <- function(path = '~', level="Site",type="Rodents",
+                      length="all",unknowns=F,incomplete=T,
+                      shape="crosstab",time="period", dates = T) {
 
   ##########Get Data
   data_tables = loadData(path)
@@ -54,6 +54,56 @@ abundance <- function(path = '~', level="Site",type="Rodents",
       dplyr::ungroup() %>%
       dplyr::select(period,treatment,species=x.Var1, abundance=x.Freq)
   }
+  ##########Summarise by treatment, adjusted by how many plots were trapped that session ----------------------------
+
+  if(level %in% c("Treatment.adj","treatment.adj")){
+    #Name plot treatments in each time period
+    rodents = join_plots_to_rodents(rodents, plots)
+    plots = filter_plots(plots, length)
+
+    #Tally how many plots were trapped per treatment per time period
+    plot.treatments.trapped = plots %>%
+      left_join(trapping, by = c('month', 'year', 'plot')) %>%
+      select(plot, treatment, period, sampled) %>%
+      filter(sampled == 1) %>%
+      add_count(period, treatment) %>%
+      distinct(period, treatment, n)
+
+    # Calculate abundance by species per treatment, pooling all plots and dividing by how many plots were trapped
+    abundances = rodents %>%
+      dplyr::mutate(species = factor(species)) %>%
+      dplyr::group_by(period,treatment) %>%
+      dplyr::do(data.frame(x = table(.$species))) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(period,treatment,species=x.Var1, abundance=x.Freq) %>%
+      dplyr::left_join(plot.treatments.trapped, by = c('period', 'treatment')) %>%
+      dplyr::mutate(abundance.perplot = abundance / n)
+
+    # Potential to go ahead and multiply by how many plots are *usually* trapped of that treatment
+    # usual.trapping = plot.treatments.trapped %>%
+    #   select(treatment, n) %>%
+    #   group_by(treatment) %>%
+    #   summarize(usual.n = ceiling(mean(n))) %>%
+    #   ungroup()
+    #
+    # abundances = abundances %>%
+    #   left_join(usual.trapping, by = 'treatment') %>%
+    #   mutate(abundance.adj = round(abundance.perplot * usual.n)) %>%
+    #   select()
+
+  }
+  ##########Add census dates (might be redundant?)
+
+  if(dates == T) {
+
+    dates = newmoons%>%
+      dplyr::select(period, censusdate) %>%
+      dplyr::filter(period %in% (as.vector(unique(abundances$period))))
+
+    abundances = abundances %>%
+      dplyr::left_join(dates, by = c('period'))
+
+  }
 
   ##########Summarise by plot ----------------------------
   if(level %in% c("Plot","plot")){
@@ -83,6 +133,8 @@ abundance <- function(path = '~', level="Site",type="Rodents",
 
   ###########Switch to new moon number if time== 'newmoon'------------------
   abundances = add_newmoon_code(abundances, newmoons, time)
+
+
 
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab","crosstab")){
