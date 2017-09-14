@@ -16,8 +16,8 @@
 #'
 #' @export
 #'
-abundance <- function(path = '~', level="Site",type="Rodents",
-                      length="all",unknowns=F,incomplete=F,
+abundance.adjustable <- function(path = '~', level="Site",type="Rodents",
+                      length="all",unknowns=F,incomplete=T,
                       shape="crosstab",time="period") {
 
   ##########Get Data
@@ -54,7 +54,29 @@ abundance <- function(path = '~', level="Site",type="Rodents",
       dplyr::ungroup() %>%
       dplyr::select(period,treatment,species=x.Var1, abundance=x.Freq)
   }
+  ##########Summarise by treatment adjusted ----------------------------
+  
+  if(level %in% c("Treatment.adj","treatment.adj")){
+    #Name plot treatments in each time period
+  
+    rodents = join_plots_to_rodents(rodents, plots)
+    
+    plot.treatments = rodents %>%
+      dplyr::distinct(period, plot, treatment) %>%
+      dplyr::add_count(period, treatment) %>%
+      dplyr::distinct(period, treatment, n)
 
+    abundances = rodents %>%
+      dplyr::mutate(species = factor(species)) %>%
+      dplyr::group_by(period,treatment) %>%
+      dplyr::do(data.frame(x = table(.$species))) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(period,treatment,species=x.Var1, abundance=x.Freq) %>%
+      dplyr::left_join(plot.treatments, by = c('period', 'treatment')) %>%
+      dplyr::mutate(abundance.perplot = abundance / n)
+
+  }
+  
   ##########Summarise by plot ----------------------------
   if(level %in% c("Plot","plot")){
     trapping = filter_plots(trapping, length)
