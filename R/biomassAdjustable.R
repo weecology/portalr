@@ -86,11 +86,12 @@ biomass.adjustable <- function(path = '~', level="Site",type="Rodents",
     r.biomass = rodents %>%
       dplyr::mutate(species = factor(species)) %>%
       dplyr::mutate(wgt = as.numeric(wgt)) %>%
-      dplyr::group_by(period,treatment, species) %>%
-      dplyr::summarize(biomass = sum(wgt, na.rm = TRUE)) %>%
+      dplyr::group_by(period, treatment, species) %>%
+      dplyr::summarise(biomass = sum(wgt, na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
       dplyr::left_join(plot.treatments.trapped, by = c('period', 'treatment')) %>%
       dplyr::mutate(biomass.perplot = biomass / n)
+
 
     # Potential to go ahead and multiply by how many plots are *usually* trapped of that treatment
     # usual.trapping = plot.treatments.trapped %>%
@@ -145,14 +146,14 @@ biomass.adjustable <- function(path = '~', level="Site",type="Rodents",
   # }
 
   ###########Switch to new moon number if time== 'newmoon'------------------
-  abundances = add_newmoon_code(abundances, newmoons, time)
+  r.biomass = add_newmoon_code(r.biomass, newmoons, time)
 
 
 
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab","crosstab")){
-    abundances = make_crosstab(abundances)
+    r.biomass = make_crosstab(r.biomass)
   }
 
-  return(abundances)
+  return(r.biomass)
 }
