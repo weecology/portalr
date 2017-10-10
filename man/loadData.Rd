@@ -4,7 +4,7 @@
 \alias{loadData}
 \title{Loads Portal rodent data files.}
 \usage{
-loadData(path)
+loadData(path = "~")
 }
 \arguments{
 \item{path}{string Containing path to PortalData folder
@@ -26,5 +26,5 @@ Loads main Portal rodent data files from either
 a user defined path or the online Github repository.
 }
 \examples{
-
+portal_data <- loadData("repo")
 }

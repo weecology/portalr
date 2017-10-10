@@ -22,8 +22,8 @@
 #' @export
 #'
 #' @examples
-#'
-loadData = function(path) {
+#' portal_data <- loadData("repo")
+loadData <- function(path = "~") {
   if (path == 'repo') {
     rodent_data = read.csv(
       text = RCurl::getURL(
@@ -62,11 +62,11 @@ loadData = function(path) {
   colnames(trapping_table) = c("day", "month","year", "period", "plot", "sampled")
   colnames(newmoons_table)[3] = "period"
   colnames(plots_table)[2] = "month"
-  return(list(rodent_data,
-              species_table,
-              trapping_table,
-              newmoons_table,
-              plots_table))
+  return(list(rodent_data = rodent_data,
+              species_table = species_table,
+              trapping_table = trapping_table,
+              newmoons_table = newmoons_table,
+              plots_table = plots_table))
 }
 
 #' @title Remove suspect trapping periods and unknown plots.
