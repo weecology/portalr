@@ -2,11 +2,14 @@
 title: "Portal Rodent Abundance Demo"
 author: "Hao Ye"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette: 
+    fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{Portal Rodent Abundance Demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  
 ---
 
 # Introduction
@@ -15,80 +18,79 @@ This vignette is a basic guide to begin exploring the Portal data, and the roden
 
 ```{r}
 library(portalr)
+library(dplyr)
+library(ggplot2)
 ```
 
 # Retrieving the Data
 
 Note that this package does not contain the actual Portal data, which resides online in a [GitHub repository](https://github.com/weecology/PortalData).
 
-First, we use the `download_observations` function to download that repository as a zip file in the current location.
+First, we check whether we already have the data. If we don't have the data, or if the version we have isn't the most recent, we use the `download_observations` function to download the latest copy of the data.
 
 ```{r}
 my_path <- "." # use current folder to store downloaded data
+rodent_file <- FullPath('PortalData/Rodents/Portal_rodent.csv', my_path)
 
-if(observations_are_new(my_path))
+observations_are_new = function(base_folder='~'){
+  md5_file = './Portal_rodent.md5'
+  rodent_file= FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
+  if(!file.exists(rodent_file)) stop('Rodent observations not present. Please run download_observations()')
+
+  if(!file.exists(md5_file)) {
+    old_md5=''
+  } else {
+    old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
+  }
+
+  new_md5 = as.character(tools::md5sum(rodent_file))
+
+  if(old_md5 == new_md5){
+    return(FALSE)
+  } else {
+    sink(md5_file)
+    writeLines(new_md5)
+    sink()
+    return(TRUE)
+  }
+
+}
+
+message("!file.exists(rodent_file) => ", !file.exists(rodent_file))
+message("observations_are_new(my_path) => ", observations_are_new(my_path))
+
+if(!file.exists(rodent_file) || # if data files are missing OR
+   observations_are_new(base_folder = my_path)) # if data is not up to date
 {
-  download_observations(base_folder = my_path)
+  download_observations(base_folder = my_path) # download from GitHub repo
 }
 ```
 
-```{r}
-
-```
-
-
 # Rodent Abundances
 
+We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default it identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
+
 ```{r}
+date_LUT <- loadData(path = my_path)[[4]] %>%
+  select("period", "censusdate") # grab the lookup table for period -> censusdate
 
+rodent_abundance <- abundance(path = my_path) %>%
+  left_join(date_LUT, by = "period") %>%
+  mutate(censusdate = as.Date(censusdate))
+
+print(summary(rodent_abundance))
+```
+
+```{r, fig.cap = "Monthly Abundance of Dipodymus Merriami (all plots)"}
+my_plot <- ggplot(rodent_abundance, 
+                  aes(x = censusdate, y = DM)) + 
+  scale_x_date(date_breaks = "2 years") + 
+  geom_line() + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle=90, hjust=1))
+
+print(my_plot)
 ```
 
 
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
