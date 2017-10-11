@@ -71,22 +71,38 @@ if(!file.exists(rodent_file) || # if data files are missing OR
 We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default it identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
 
 ```{r}
-date_LUT <- loadData(path = my_path)[[4]] %>%
+rodent_data_all <- loadData(path = my_path)
+
+date_LUT <- rodent_data_all[[4]] %>%
   select("period", "censusdate") # grab the lookup table for period -> censusdate
 
 rodent_abundance <- abundance(path = my_path) %>%
   left_join(date_LUT, by = "period") %>%
-  mutate(censusdate = as.Date(censusdate))
+  mutate(censusdate = as.Date(censusdate)) %>%
+  select(censusdate, period, everything())
 
 print(summary(rodent_abundance))
 ```
 
-```{r, fig.cap = "Monthly Abundance of Dipodymus Merriami (all plots)"}
+Let's convert the data to long format for easier facetting:
+```{r}
+rodent_abundance <- rodent_abundance %>%
+  tidyr::gather(species, abundance, -censusdate, -period)
+
+species_idx <- match(rodent_abundance$species, rodent_data_all[[2]]$species)
+rodent_abundance$scientific_name <- rodent_data_all[[2]]$scientificname[species_idx]
+
+```
+
+## Plot abundance over time
+
+```{r, fig.cap = "Monthly Abundance of rodents (all plots)", fig.width = 7.5, fig.height = 10}
 my_plot <- ggplot(rodent_abundance, 
-                  aes(x = censusdate, y = DM)) + 
-  scale_x_date(date_breaks = "2 years") + 
+                  aes(x = censusdate, y = abundance)) + 
+  scale_x_date(date_breaks = "4 years") + 
+  facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
   geom_line() + 
-  theme_bw() + 
+  cowplot::theme_cowplot() + 
   theme(axis.text.x = element_text(angle=90, hjust=1))
 
 print(my_plot)
