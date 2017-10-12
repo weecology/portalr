@@ -54,6 +54,7 @@ download_observations = function(base_folder='~'){
 #'   will not show that there is new data available.)
 #' @param base_folder Folder into which data will be downloaded
 #' @return bool True if new observations are available
+#' @export
 observations_are_new = function(base_folder='~'){
   md5_file = './Portal_rodent.md5'
   rodent_file= FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
