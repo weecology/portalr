@@ -9,18 +9,61 @@ vignette: >
   %\VignetteIndexEntry{Portal Rodent Abundance Demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  
 ---
 
 # Introduction
 
-This vignette is a basic guide to begin exploring the Portal data, and the rodent abundance data, specifically.
+This vignette is a basic guide to begin exploring the Portal data.
+```
+longer description of the vignette
+```
 
-```{r}
+## Package Setup
+
+First we load several packages:
+
+* `portalr` is this package, which contains functions to read in the Portal data and do some basic processing.
+
+* `dplyr` is one of the tidyverse packages for data manipulation
+
+* `ggplot2` is one of the tidyverse packages for plotting
+
+```{r, warning = FALSE, message = FALSE}
 library(portalr)
 library(dplyr)
 library(ggplot2)
 ```
+
+We also use some functions from other packages, but don't necessarily want to load them into our workspace. So this just checks that they are installed:
+
+```{r}
+check_for_package_installation <- function(pkg_names)
+{
+  message_str <- ""
+  missing_pkg <- FALSE
+  for(pkg_name in pkg_names)
+  {
+    if(!is.element(pkg_name, installed.packages()[,1]))
+    {
+      message_str <- paste0(message_str, "[ ] `", pkg_name, "` is not installed.\n")
+      missing_pkg <- TRUE
+    } else {
+      message_str <- paste0(message_str, "[*] `", pkg_name, "` is installed.\n")
+    }
+  }
+  if(missing_pkg)
+  {
+    stop("Some packages not found:\n", message_str)
+  } else {
+    message("All packages found:\n", message_str)
+  }
+}
+
+check_for_package_installation(c("tidyr", 
+                                 "cowplot", 
+                                 "viridis"))
+```
+
 
 # Retrieving the Data
 
@@ -32,54 +75,34 @@ First, we check whether we already have the data. If we don't have the data, or 
 my_path <- "." # use current folder to store downloaded data
 rodent_file <- FullPath('PortalData/Rodents/Portal_rodent.csv', my_path)
 
-observations_are_new = function(base_folder='~'){
-  md5_file = './Portal_rodent.md5'
-  rodent_file= FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
-  if(!file.exists(rodent_file)) stop('Rodent observations not present. Please run download_observations()')
-
-  if(!file.exists(md5_file)) {
-    old_md5=''
-  } else {
-    old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
-  }
-
-  new_md5 = as.character(tools::md5sum(rodent_file))
-
-  if(old_md5 == new_md5){
-    return(FALSE)
-  } else {
-    sink(md5_file)
-    writeLines(new_md5)
-    sink()
-    return(TRUE)
-  }
-
-}
-
-message("!file.exists(rodent_file) => ", !file.exists(rodent_file))
-message("observations_are_new(my_path) => ", observations_are_new(my_path))
-
 if(!file.exists(rodent_file) || # if data files are missing OR
-   observations_are_new(base_folder = my_path)) # if data is not up to date
+   portalr::observations_are_new(base_folder = my_path)) # if data is not up to date
 {
   download_observations(base_folder = my_path) # download from GitHub repo
 }
 ```
 
-# Rodent Abundances
-
-We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default it identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
+The `loadData` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading and naming them now will make it easier later.
 
 ```{r}
 rodent_data_all <- loadData(path = my_path)
+rodent_data <- rodent_data_all[[1]]
+species_table <- rodent_data_all[[2]]
+trapping_table <- rodent_data_all[[3]]
+newmoons_table <- rodent_data_all[[4]]
+plots_table <- rodent_data_all[[5]]
+```
 
-date_LUT <- rodent_data_all[[4]] %>%
-  select("period", "censusdate") # grab the lookup table for period -> censusdate
+# Rodent Abundances
 
+We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default the returned object identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
+
+```{r}
 rodent_abundance <- abundance(path = my_path) %>%
-  left_join(date_LUT, by = "period") %>%
-  mutate(censusdate = as.Date(censusdate)) %>%
-  select(censusdate, period, everything())
+  left_join(select(newmoons_table, "period", "censusdate"),
+            by = "period") %>%
+  mutate(censusdate = as.Date(censusdate)) %>% # convert censusdate to `Date` type
+  select(period, censusdate, everything()) # reorder columns
 
 print(summary(rodent_abundance))
 ```
@@ -87,23 +110,71 @@ print(summary(rodent_abundance))
 Let's convert the data to long format for easier facetting:
 ```{r}
 rodent_abundance <- rodent_abundance %>%
-  tidyr::gather(species, abundance, -censusdate, -period)
-
-species_idx <- match(rodent_abundance$species, rodent_data_all[[2]]$species)
-rodent_abundance$scientific_name <- rodent_data_all[[2]]$scientificname[species_idx]
-
+  tidyr::gather(species, abundance, -censusdate, -period) %>%
+  left_join(select(species_table, "species", "scientificname"), 
+            by = "species") %>%
+  rename(scientific_name = scientificname)
 ```
 
-## Plot abundance over time
+## Figure: abundance over time
 
-```{r, fig.cap = "Monthly Abundance of rodents (all plots)", fig.width = 7.5, fig.height = 10}
+```{r, fig.cap = "Monthly abundance of rodents (all plots)", fig.width = 7.5, fig.height = 10}
 my_plot <- ggplot(rodent_abundance, 
                   aes(x = censusdate, y = abundance)) + 
-  scale_x_date(date_breaks = "4 years") + 
-  facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
   geom_line() + 
+  facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
+  xlab("Date") + 
+  ylab("Abundance") + 
+  scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
   cowplot::theme_cowplot() + 
-  theme(axis.text.x = element_text(angle=90, hjust=1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+print(my_plot)
+```
+
+## Next Steps
+
+Our next steps would likely be to dig deeper into the rodent abundances for different treatments, but first we want to know what the different treatments look like, so let's revisit the abundances later.
+
+# Plot Treatments
+
+A description of the experimental design and treatments can be found in this [Readme file](https://github.com/weecology/PortalData/tree/master/SiteandMethods) in the PortalDate repo.
+
+For now, we are just going to use the [`Portal_plots`](https://github.com/weecology/PortalData/blob/master/SiteandMethods/Portal_plots.csv) table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the `plots_table` from the `loadData` function we ran previously.
+
+```{r}
+print(summary(plots_table))
+```
+
+We want a proper date variable as well as converting `plot` into a factor:
+
+```{r}
+plot_treatments <- plots_table %>%
+  mutate(iso_date = as.Date(paste0(year, "-", month, "-", "01")), 
+         plot = as.factor(plot)) %>%
+  select(iso_date, plot, treatment)
+```
+
+
+
+## Figure: plot treatments over time
+
+```{r, fig.cap = "Treatments of Plots by Date", fig.width = 7, fig.height = 10}
+my_plot <- ggplot(plot_treatments, 
+                  aes(x = iso_date, y = treatment, color = treatment)) +
+  geom_point(shape = 20) + 
+  geom_vline(aes(xintercept = as.Date("1977-10-01")), linetype = 2) + 
+  geom_vline(aes(xintercept = as.Date("1988-01-01")), linetype = 2) + 
+  geom_vline(aes(xintercept = as.Date("2005-01-01")), linetype = 2) + 
+  geom_vline(aes(xintercept = as.Date("2015-04-01")), linetype = 2) + 
+  facet_wrap(~plot, ncol = 4) + 
+  xlab("Date") + 
+  ylab("Treatment") + 
+  scale_color_manual(values = viridis::viridis(4)) + 
+  scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
+  cowplot::theme_cowplot() + 
+  guides(color = FALSE) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 print(my_plot)
 ```
