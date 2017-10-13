@@ -109,7 +109,12 @@ rodent_data <- process_unknownsp(rodent_data, rodent_data_all$species_table, unk
 rodent_data <- remove_incomplete_censuses(rodent_data_all$trapping_table, rodent_data, incomplete = FALSE)
 # filter out trips where not all plots were censused
 
-
+abundances <- rodent_data %>%
+  mutate(species = factor(species)) %>%
+  group_by(period) %>%
+  do(data.frame(x = table(.$species))) %>%
+  ungroup() %>%
+  select(period, species = x.Var1, abundance = x.Freq)
 
 ```
 
