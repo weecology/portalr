@@ -24,7 +24,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "crosstab", time = "period", output = "abundance")
 {
-  message("output = ", output)
   ##########Get Data
   data_tables = loadData(path)
   rodents = data_tables[[1]]
