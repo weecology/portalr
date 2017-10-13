@@ -82,18 +82,37 @@ if(!file.exists(rodent_file) || # if data files are missing OR
 }
 ```
 
-The `loadData` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading and naming them now will make it easier later.
+The `loadData` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
 
 ```{r}
 rodent_data_all <- loadData(path = my_path)
-rodent_data <- rodent_data_all[[1]]
-species_table <- rodent_data_all[[2]]
-trapping_table <- rodent_data_all[[3]]
-newmoons_table <- rodent_data_all[[4]]
-plots_table <- rodent_data_all[[5]]
+print(summary(rodent_data_all))
 ```
 
 # Rodent Abundances
+
+The first table that we loaded (`rodent_data_all$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. However, going through the all of the data filtering steps helps us to get a better of what we actually end up with.
+
+```{r}
+rodent_data <- rodent_data_all$rodent_data
+
+
+rodent_data <- remove_suspect_entries(rodent_data)
+# filters out non-positive `period` (index of sampling trip)
+# filters out NA plot values
+
+rodent_data <- process_unknownsp(rodent_data, rodent_data_all$species_table, unknowns = TRUE)
+# keep only known species codes (filters out NA)
+# keep only rodents
+# unidentified rodents and non-targeted rodents --> "other"
+
+rodent_data <- remove_incomplete_censuses(rodent_data_all$trapping_table, rodent_data, incomplete = FALSE)
+# filter out trips where not all plots were censused
+
+
+
+```
+
 
 We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default the returned object identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
 
