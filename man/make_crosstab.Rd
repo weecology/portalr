@@ -4,10 +4,12 @@
 \alias{make_crosstab}
 \title{Make Crosstab}
 \usage{
-make_crosstab(summary_data)
+make_crosstab(summary_data, variable_name = quo(abundance))
 }
 \arguments{
-\item{summary_data}{summarized rodent data - must include 'abundance' column}
+\item{summary_data}{summarized rodent data}
+
+\item{variable_name}{what variable to spread (default is "abundance")}
 }
 \description{
 convert summarized rodent data to crosstab form
