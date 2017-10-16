@@ -96,7 +96,6 @@ The first table that we loaded (`rodent_data_all$rodent_data`) is a record of th
 ```{r}
 rodent_data <- rodent_data_all$rodent_data
 
-
 rodent_data <- remove_suspect_entries(rodent_data)
 # filters out non-positive `period` (index of sampling trip)
 # filters out NA plot values
@@ -109,49 +108,75 @@ rodent_data <- process_unknownsp(rodent_data, rodent_data_all$species_table, unk
 rodent_data <- remove_incomplete_censuses(rodent_data_all$trapping_table, rodent_data, incomplete = FALSE)
 # filter out trips where not all plots were censused
 
-abundances <- rodent_data %>%
-  mutate(species = factor(species)) %>%
-  group_by(period) %>%
-  do(data.frame(x = table(.$species))) %>%
-  ungroup() %>%
-  select(period, species = x.Var1, abundance = x.Freq)
+summarize_abundance <- function(rodent_data)
+{
+  # within each `period`, count up instances of each species
+  
+  return(rodent_data %>%
+           mutate(species = factor(species)) %>%
+           group_by(period) %>%
+           do(data.frame(x = table(.$species))) %>% 
+           ungroup() %>%
+           select(period, species = x.Var1, abundance = x.Freq)
+  )
+}
 
+rodent_abundance <- summarize_abundance(rodent_data)
 ```
 
 
 We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default the returned object identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
 
 ```{r}
-rodent_abundance <- abundance(path = my_path) %>%
-  left_join(select(newmoons_table, "period", "censusdate"),
-            by = "period") %>%
-  mutate(censusdate = as.Date(censusdate)) %>% # convert censusdate to `Date` type
-  select(period, censusdate, everything()) # reorder columns
+join_census_date <- function(rodent_abundance, 
+                             newmoons_table = rodent_data_all$newmoons_table)
+{
+  return(rodent_abundance %>%
+           left_join(select(newmoons_table, "period", "censusdate"),
+                     by = "period") %>%
+           mutate(census_date = as.Date(censusdate)) %>% # convert censusdate to `Date` type
+           select(period, census_date, everything()) # reorder columns
+  )
+}
+
+rodent_abundance <- join_census_date(rodent_abundance)
 
 print(summary(rodent_abundance))
 ```
 
-Let's convert the data to long format for easier facetting:
+Let's convert the data to long format for easier facetting. Also, we want the scientific names instead of the two-letter species codes, so let's do that matching, too:
 ```{r}
-rodent_abundance <- rodent_abundance %>%
-  tidyr::gather(species, abundance, -censusdate, -period) %>%
-  left_join(select(species_table, "species", "scientificname"), 
-            by = "species") %>%
-  rename(scientific_name = scientificname)
+join_scientific_name <- function(rodent_abundance, 
+                                 species_table = rodent_data_all$species_table)
+{
+  return(rodent_abundance %>%
+           left_join(select(rodent_data_all$species_table, "species", "scientificname"), 
+                     by = "species") %>%
+           rename(scientific_name = scientificname)
+  )
+}
+
+rodent_abundance <- join_scientific_name(rodent_abundance)
 ```
 
 ## Figure: abundance over time
 
 ```{r, fig.cap = "Monthly abundance of rodents (all plots)", fig.width = 7.5, fig.height = 10}
-my_plot <- ggplot(rodent_abundance, 
-                  aes(x = censusdate, y = abundance)) + 
-  geom_line() + 
-  facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
-  xlab("Date") + 
-  ylab("Abundance") + 
-  scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
-  cowplot::theme_cowplot() + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+make_abundance_plot_over_time <- function(rodent_abundance)
+{
+  return(ggplot(rodent_abundance, 
+                aes(x = census_date, y = abundance)) + 
+           geom_line() + 
+           facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
+           xlab("Date") + 
+           ylab("Abundance") + 
+           scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
+           cowplot::theme_cowplot() + 
+           theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  )
+}
+
+my_plot <- make_abundance_plot_over_time(rodent_abundance)
 
 print(my_plot)
 ```
@@ -167,19 +192,17 @@ A description of the experimental design and treatments can be found in this [Re
 For now, we are just going to use the [`Portal_plots`](https://github.com/weecology/PortalData/blob/master/SiteandMethods/Portal_plots.csv) table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the `plots_table` from the `loadData` function we ran previously.
 
 ```{r}
-print(summary(plots_table))
+print(summary(rodent_data_all$plots_table))
 ```
 
 We want a proper date variable as well as converting `plot` into a factor:
 
 ```{r}
-plot_treatments <- plots_table %>%
+plot_treatments <- rodent_data_all$plots_table %>%
   mutate(iso_date = as.Date(paste0(year, "-", month, "-", "01")), 
          plot = as.factor(plot)) %>%
   select(iso_date, plot, treatment)
 ```
-
-
 
 ## Figure: plot treatments over time
 
@@ -203,5 +226,64 @@ my_plot <- ggplot(plot_treatments,
 print(my_plot)
 ```
 
+## Identifying control plots
 
+The treatments for the plots have changed over time: in some cases, this was due to initial ramping up of the experimental protocol, in others, exclusions of *Dipodomys spectabilis* were started and then converted back later because the species went locally extinct (e.g. plots 1, 5, 9, 24).
+
+### Which plots have always been control plots?
+```{r}
+always_control_plots <- plot_treatments %>% 
+  group_by(plot) %>% 
+  summarize(always_control = all(treatment == "control")) %>% 
+  filter(always_control)
+
+print(always_control_plots)
+```
+
+Note, however, that this excludes several plots for which the treatment was changed ~2015. We can include these plots by first filtering by date before testing for the "control" treatment:
+
+```{r}
+mostly_control_plots <- plot_treatments %>% 
+  filter(iso_date < as.Date("2015-01-01")) %>%
+  group_by(plot) %>%
+  summarize(mostly_control = all(treatment == "control")) %>% 
+  filter(mostly_control)
+
+print(mostly_control_plots)
+```
+
+And to identify the datespan over which these plots have been controls:
+
+```{r}
+date_span <- plot_treatments %>%
+  filter(plot %in% mostly_control_plots$plot) %>%
+  group_by(iso_date) %>%
+  summarize(all_control = all(treatment == "control")) %>%
+  filter(all_control)
+
+print(date_span)
+```
+
+## Abundances over control plots
+
+We are now ready to plot abundances just over the control plots and the time span in `r min(date_span$iso_date)` to `r max(date_span$iso_date)`:
+
+```{r, fig.cap = "Monthly abundance of rodents (control plots)", fig.width = 7.5, fig.height = 10}
+rodent_abundance_in_controls <- rodent_data %>%
+  mutate(capture_date = as.Date(paste0(year, "-", month, "-", day))) %>%
+  filter(capture_date >= min(date_span$iso_date), 
+         capture_date <= max(date_span$iso_date), 
+         plot %in% mostly_control_plots$plot) %>%
+  summarize_abundance() %>%
+  join_census_date %>%
+  join_scientific_name
+
+my_plot <- rodent_abundance_in_controls %>%
+  make_abundance_plot_over_time()
+
+print(my_plot)
+```
+
+
+## Abundances over rodent exclosures
 
