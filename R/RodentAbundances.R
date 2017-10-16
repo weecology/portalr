@@ -36,7 +36,7 @@ abundance <- function(path = '~', level="Site",type="Rodents",
   rodents = process_granivores(rodents, type)
 
   ###########Remove incomplete trapping sessions----------
-  rodents = remove_incomplete_censuses(trapping, rodents, incomplete)
+  rodents = remove_incomplete_censuses(rodents, trapping, incomplete)
 
   ###########Use only Long-term treatments --------------
   rodents = filter_plots(rodents, length)
