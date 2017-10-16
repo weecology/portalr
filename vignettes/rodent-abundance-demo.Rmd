@@ -269,19 +269,18 @@ print(date_span)
 We are now ready to plot abundances just over the control plots and the time span in `r min(date_span$iso_date)` to `r max(date_span$iso_date)`:
 
 ```{r, fig.cap = "Monthly abundance of rodents (control plots)", fig.width = 7.5, fig.height = 10}
-rodent_abundance_in_controls <- rodent_data %>%
+rodent_data %>%
   mutate(capture_date = as.Date(paste0(year, "-", month, "-", day))) %>%
   filter(capture_date >= min(date_span$iso_date), 
          capture_date <= max(date_span$iso_date), 
          plot %in% mostly_control_plots$plot) %>%
   summarize_abundance() %>%
-  join_census_date %>%
-  join_scientific_name
+  join_census_date() %>%
+  join_scientific_name() %>%
+  make_abundance_plot_over_time() %>%
+  {.} -> rodent_abundance_in_controls_plot
 
-my_plot <- rodent_abundance_in_controls %>%
-  make_abundance_plot_over_time()
-
-print(my_plot)
+print(rodent_abundance_in_controls_plot)
 ```
 
 
