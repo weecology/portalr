@@ -28,18 +28,22 @@ abundance <- function(path = '~', level="Site",type="Rodents",
   newmoons = data_tables[[4]]
   plots = data_tables[[5]]
 
+  rodents %>%
   ##########Data cleanup --------------------------------
-  rodents = remove_suspect_entries(rodents)
-  rodents = process_unknownsp(rodents, species, unknowns)
+    remove_suspect_entries() %>%
+    process_unknownsp(species, unknowns) %>%
 
   ###########Exclude non-granivores-----------------------
-  rodents = process_granivores(rodents, type)
+    process_granivores(type) %>%
 
   ###########Remove incomplete trapping sessions----------
-  rodents = remove_incomplete_censuses(rodents, trapping, incomplete)
+    remove_incomplete_censuses(trapping, incomplete) %>%
 
   ###########Use only Long-term treatments --------------
-  rodents = filter_plots(rodents, length)
+    filter_plots(length) %>%
+
+  ###########Re-assign back into `rodents` --------------
+    {.} -> rodents
 
   ###########Summarise by Treatment ----------------------
   if(level %in% c("Treatment","treatment")){
