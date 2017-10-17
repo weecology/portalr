@@ -170,7 +170,9 @@ make_abundance_plot_over_time <- function(rodent_abundance)
            facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
            xlab("Date") + 
            ylab("Abundance") + 
-           scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
+           scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), 
+                        date_labels = "%Y", 
+                        limits = as.Date(c("1977-01-01", "2018-01-01"))) + 
            cowplot::theme_cowplot() + 
            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   )
@@ -244,7 +246,7 @@ Note, however, that this excludes several plots for which the treatment was chan
 
 ```{r}
 mostly_control_plots <- plot_treatments %>% 
-  filter(iso_date < as.Date("2015-01-01")) %>%
+  filter(iso_date < "2015-01-01") %>%
   group_by(plot) %>%
   summarize(mostly_control = all(treatment == "control")) %>% 
   filter(mostly_control)
@@ -286,3 +288,46 @@ print(rodent_abundance_in_controls_plot)
 
 ## Abundances over rodent exclosures
 
+We can do the same with the "exclosure" condition. First, which plots:
+
+```{r}
+mostly_exclosure_plots <- plot_treatments %>% 
+  filter(iso_date > as.Date("1989-01-01"), 
+         iso_date < "2015-01-01") %>%
+  group_by(plot) %>%
+  summarize(mostly_exclosure = all(treatment == "exclosure")) %>% 
+  filter(mostly_exclosure)
+
+print(mostly_exclosure_plots)
+```
+
+Then, the datespan:
+
+```{r}
+date_span <- plot_treatments %>%
+  filter(plot %in% mostly_exclosure_plots$plot) %>%
+  group_by(iso_date) %>%
+  summarize(all_exclosure = all(treatment == "exclosure")) %>%
+  filter(all_exclosure)
+
+print(date_span)
+```
+
+Finally, the figure:
+
+```{r, fig.cap = "Monthly abundance of rodents (exclosure plots)", fig.width = 7.5, fig.height = 10}
+rodent_data %>%
+  mutate(capture_date = as.Date(paste0(year, "-", month, "-", day))) %>%
+  filter(capture_date >= min(date_span$iso_date), 
+         capture_date <= max(date_span$iso_date), 
+         plot %in% mostly_exclosure_plots$plot) %>%
+  summarize_abundance() %>%
+  join_census_date() %>%
+  join_scientific_name() %>%
+  make_abundance_plot_over_time() %>%
+  {.} -> rodent_abundance_in_exclosures_plot
+
+print(rodent_abundance_in_exclosures_plot)
+```
+
+Since this has the same number of plots as the previous figure, we can directly compare abundances. Note the decreased numbers for kangaroo rats (*Dipodomys spp.*) and increased numbers for some other taxa.
