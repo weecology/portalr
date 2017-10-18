@@ -158,17 +158,17 @@ find_incomplete_censuses = function(trapping_table){
 #' In some months, not all plots are trapped. Using this data can result in
 #' biased monthly data, especially if summarizing for site or treatment.
 #'
-#' @param trapping_table Data table. Data on when each plot was trapped.
 #' @param rodent_species_merge Data table. Merge of raw rodent records and
 #'                             species information.
+#' @param trapping_table Data table. Data on when each plot was trapped.
 #' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
 #'
 #' @return Data.table of merged rodent records and species info with incomplete
 #'         censuses processed according to argument imcomplete.
 #'
 #' @export
-remove_incomplete_censuses = function(trapping_table,
-                                      rodent_species_merge,
+remove_incomplete_censuses = function(rodent_species_merge,
+                                      trapping_table,
                                       incomplete) {
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
