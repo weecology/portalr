@@ -7,7 +7,7 @@
 bait_presence_absence(level = "Site")
 }
 \arguments{
-\item{level}{level at which to summarize data: 'Site' or 'Plot'}
+\item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
 }
 \value{
 data frame with year, species, (plot if applicable), and presence [1,0]

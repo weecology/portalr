@@ -36,7 +36,7 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 
 
   # filter out duplicated data (flag=10)
-  colonydat = filter(colony, species %in% specieslist, flag != 10)
+  colonydat = filter(colony, species %in% specieslist, !flag %in% c(10))
   # reduce colony data to list of year, plot, species
   if (level == 'Site') {
     colonypresence = colonydat %>% select(year,species) %>% unique()
@@ -56,7 +56,21 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
     full_df = merge(df,full_df)
   }
   if (level == 'Stake') {
+    # filter out data taken only at plot level (flag=9) or rows where stake is missing (flag=1)
+    colonypresence = filter(colonydat, !flag %in% c(9,1), !is.na(stake)) %>% select(year,plot,stake,species)
+    colonypresence$presence = rep(1)
 
+    #data frame of which plots were censused in which years
+    df = colonypresence %>% select(year,plot) %>% unique()
+    full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), stake = c(11,12,13,14,15,16,17,
+                                                                                    21,22,23,24,25,26,27,
+                                                                                    31,32,33,34,35,36,37,
+                                                                                    41,42,43,44,45,46,47,
+                                                                                    51,52,53,54,55,56,57,
+                                                                                    61,62,63,64,65,66,67,
+                                                                                    71,72,73,74,75,76,77), species = specieslist)
+    full_df = merge(df,full_df)
+    full_df = full_df[order(full_df$year,full_df$plot,full_df$stake,full_df$species),]
   }
 
   colonypresabs = merge(full_df,colonypresence,all = T)
@@ -78,7 +92,7 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 #' Bait census data is more consistent over time than the colony census data. This function assumes that all species
 #' present in at least one census were censused in all years.
 #'
-#' @param level level at which to summarize data: 'Site' or 'Plot'
+#' @param level level at which to summarize data: 'Site', 'Plot', or 'Stake'
 #'
 #' @return data frame with year, species, (plot if applicable), and presence [1,0]
 #'
@@ -91,11 +105,9 @@ bait_presence_absence= function(level='Site') {
   specieslist = unique(bait$species)
 
 
-  # filter out duplicated data (flag=10)
-  baitdat = filter(bait, species %in% specieslist, flag != 10)
   # reduce data to list of year, plot, species
   if (level == 'Site') {
-    baitpresence = baitdat %>% select(year,species) %>% unique()
+    baitpresence = bait %>% select(year,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of all year/species
@@ -103,13 +115,29 @@ bait_presence_absence= function(level='Site') {
 
   }
   if (level == 'Plot') {
-    baitpresence = baitdat %>% select(year,plot,species) %>% unique()
+    baitpresence = bait %>% select(year,plot,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of which plots were censused in which years
     df = baitpresence %>% select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
     full_df = merge(df,full_df)
+  }
+  if (level == 'Stake') {
+    baitpresence = bait %>% select(year,plot,stake,species)
+    baitpresence$presence = rep(1)
+
+    #data frame of which plots were censused in which years
+    df = baitpresence %>% select(year,plot) %>% unique()
+    full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), stake = c(11,13,15,17,
+                                                                                    22,24,26,
+                                                                                    31,33,35,37,
+                                                                                    42,44,46,
+                                                                                    51,53,55,57,
+                                                                                    62,64,66,
+                                                                                    71,73,75,77), species = specieslist)
+    full_df = merge(df,full_df)
+    full_df = full_df[order(full_df$year,full_df$plot,full_df$stake,full_df$species),]
   }
 
   baitpresabs = merge(full_df,baitpresence,all = T)
