@@ -7,7 +7,7 @@
 colony_presence_absence(level = "Site", rare_sp = F)
 }
 \arguments{
-\item{level}{level at which to summarize data: 'Site' or 'Plot'}
+\item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
 
 \item{rare_sp}{include rare species (T) or not (F).
 Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence}
