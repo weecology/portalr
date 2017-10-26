@@ -13,7 +13,7 @@ library(dplyr)
 #' Unknowns are always xcluded, as well as extremely rare species (if a species is only recorded a few times in one year of 30,
 #' it was assumed that data for this species was not collected consistently through time)
 #'
-#' @param level level at which to summarize data: 'Site' or 'Plot'
+#' @param level level at which to summarize data: 'Site', 'Plot', or 'Stake'
 #' @param rare_sp include rare species (T) or not (F).
 #'                    Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence
 #'
@@ -34,9 +34,12 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
     specieslist = antsp$speciescode[!(antsp$speciescode %in% c('unkn','camp fest','camp sp','phei sp','novo sp'))]
   }
 
+
+  # filter out duplicated data (flag=10)
+  colonydat = filter(colony, species %in% specieslist, flag != 10)
   # reduce colony data to list of year, plot, species
   if (level == 'Site') {
-    colonypresence = filter(colony, species %in% specieslist) %>% select(year,species) %>% unique()
+    colonypresence = colonydat %>% select(year,species) %>% unique()
     colonypresence$presence = rep(1)
 
     # data frame of all year/species
@@ -44,13 +47,16 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 
   }
   if (level == 'Plot') {
-    colonypresence = filter(colony, species %in% specieslist) %>% select(year,plot,species) %>% unique()
+    colonypresence = colonydat %>% select(year,plot,species) %>% unique()
     colonypresence$presence = rep(1)
 
     # data frame of which plots were censused in which years
     df = colonypresence %>% select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
     full_df = merge(df,full_df)
+  }
+  if (level == 'Stake') {
+
   }
 
   colonypresabs = merge(full_df,colonypresence,all = T)
@@ -84,9 +90,12 @@ bait_presence_absence= function(level='Site') {
   # list of species
   specieslist = unique(bait$species)
 
+
+  # filter out duplicated data (flag=10)
+  baitdat = filter(bait, species %in% specieslist, flag != 10)
   # reduce data to list of year, plot, species
   if (level == 'Site') {
-    baitpresence = filter(bait, species %in% specieslist) %>% select(year,species) %>% unique()
+    baitpresence = baitdat %>% select(year,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of all year/species
@@ -94,7 +103,7 @@ bait_presence_absence= function(level='Site') {
 
   }
   if (level == 'Plot') {
-    baitpresence = filter(bait, species %in% specieslist) %>% select(year,plot,species) %>% unique()
+    baitpresence = baitdat %>% select(year,plot,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of which plots were censused in which years
