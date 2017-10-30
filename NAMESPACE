@@ -2,7 +2,7 @@
 
 export(FullPath)
 export(abundance)
-export(add_newmoon_code)
+export(add_time)
 export(add_seasons)
 export(download_observations)
 export(filter_plots)
