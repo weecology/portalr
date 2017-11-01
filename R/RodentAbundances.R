@@ -86,7 +86,7 @@ abundance <- function(path = '~', level="Site",type="Rodents",
   }
 
   ###########Switch to new moon number if time== 'newmoon'------------------
-  abundances = add_newmoon_code(abundances, newmoons, time)
+  abundances = add_time(abundances, newmoons, time)
 
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab","crosstab")){
