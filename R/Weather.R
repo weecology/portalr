@@ -11,13 +11,9 @@
 #'
 weather <- function(level, path = '~') {
 
-
   weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv', path), na.strings=c(""), stringsAsFactors = FALSE)
   weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
   NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
-
-  # Data cleanup
-    NDVI$month=as.numeric(gsub( ".*-", "", NDVI$date )); NDVI$year=as.numeric(gsub( "-.*$", "", NDVI$date ))
 
   ###########Summarise by Day ----------------------
   days = weather_new %>%
