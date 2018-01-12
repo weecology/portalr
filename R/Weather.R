@@ -10,14 +10,9 @@
 #' @export
 #'
 weather <- function(level, path = '~') {
-
-
   weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv', path), na.strings=c(""), stringsAsFactors = FALSE)
   weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
   NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
-
-  # Data cleanup
-    NDVI$month=as.numeric(gsub( ".*-", "", NDVI$date )); NDVI$year=as.numeric(gsub( "-.*$", "", NDVI$date ))
 
   ###########Summarise by Day ----------------------
   days = weather_new %>%
@@ -34,8 +29,8 @@ if (level=='Monthly') {
     dplyr::group_by(year, month) %>%
     dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),precipitation=sum(precipitation,na.rm=T))
 
-  weather=dplyr::full_join(weather,NDVI) %>% dplyr::select(-date, -X) %>% dplyr::arrange(year,month)
-  weather$NDVI=as.numeric(weather$NDVI)
+  weather=dplyr::full_join(weather,NDVI) %>% dplyr::arrange(year,month)
+  weather$ndvi=as.numeric(weather$ndvi)
   }
 
 
