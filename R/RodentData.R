@@ -20,6 +20,8 @@
 #'
 #' @export
 #'
+
+
 get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "crosstab", time = "period", output = "abundance")
@@ -45,6 +47,9 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     ###########Use only Long-term treatments --------------
   filter_plots(length) %>%
+
+    ###########Fill in missing weights (where possible) --------------
+  fill_weight(species_list = species) %>%
 
     ###########Re-assign back into `rodents` --------------
   {.} -> rodents

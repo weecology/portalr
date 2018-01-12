@@ -243,7 +243,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #' up with the period code. Because censues may not always occur monthly due to
 #' the newmoon -  a new moon code was devised to give a standardized language
 #' of time for forcasting in particular. This function allows the user to decide
-#' if they want to use the rodent period code, the new moon code, the date of 
+#' if they want to use the rodent period code, the new moon code, the date of
 #' the rodent census, or have their data with all three time formats
 #'
 #' @param summary_table Data.table with summarized rodent data.
@@ -271,7 +271,7 @@ add_time = function(summary_table, newmoon_table, time='period'){
     join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate)
   } else
     join_summary_newmoon = summary_table
-  
+
   return(join_summary_newmoon)
 }
 
@@ -287,4 +287,48 @@ make_crosstab = function(summary_data, variable_name = quo(abundance)){
   summary_data = summary_data %>%
     tidyr::spread(species, !!variable_name) %>%
     dplyr::ungroup()
+}
+
+
+#' @title Fill Weight
+#'
+#' @description fill in missing weight values with either a recently recorded weight for that individual or species average
+#'
+#' @param rodent_data raw rodent data
+#'
+#' @export
+fill_weight = function(rodent_data, species_list) {
+
+  findmyweight = function(thisrow, rodent_data) {
+    if(is.na(rodent_data$wgt[thisrow]) | rodent_data$wgt[thisrow] < 1) {
+
+      mytag = rodent_data$tag[thisrow]
+      if(is.na(mytag) | mytag < 1) {
+        if(is.na(rodent_data$species[thisrow])) return(NA)
+        return(species_list[ which(species_list$species == rodent_data$species[thisrow]), 'meanwgt'])
+      }
+
+      my.fullrecords = rodent_data %>%
+        filter(tag == mytag, wgt > 0)
+
+      if(nrow(my.fullrecords) < 1) {
+        if(is.na(rodent_data$species[thisrow])) return(NA)
+        return(species_list[ which(species_list$species == rodent_data$species[thisrow]), 'meanwgt'])
+      }
+
+      record_distance = abs(my.fullrecords$period - rodent_data$period[thisrow])
+      closestwgt = my.fullrecords[which(record_distance == min(record_distance)), 'wgt']
+      if(length(closestwgt) > 1 ) closestwgt = mean(closestwgt)
+
+      return(closestwgt)
+
+    } else {
+      return(rodent_data$wgt[thisrow])
+    }
+    }
+
+filled.weights = apply(as.matrix(1:nrow(rodent_data)), c(1), findmyweight, rodent_data = rodent_data)
+rodent_data$wgt = filled.weights
+
+return(rodent_data)
 }
