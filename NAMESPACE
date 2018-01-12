@@ -2,8 +2,8 @@
 
 export(FullPath)
 export(abundance)
-export(add_time)
 export(add_seasons)
+export(add_time)
 export(bait_presence_absence)
 export(colony_presence_absence)
 export(download_observations)
