@@ -32,21 +32,25 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   newmoons = data_tables[[4]]
   plots = data_tables[[5]]
 
-  ##########Data cleanup --------------------------------
-  rodents = remove_suspect_entries(rodents)
-  rodents = process_unknownsp(rodents, species, unknowns)
+  rodents %>%
+    ##########Data cleanup --------------------------------
+  remove_suspect_entries() %>%
+    process_unknownsp(species, unknowns) %>%
 
-  ###########Exclude non-granivores-----------------------
-  rodents = process_granivores(rodents, type)
+    ###########Exclude non-granivores-----------------------
+  process_granivores(type) %>%
 
-  ###########Remove incomplete trapping sessions----------
-  rodents = remove_incomplete_censuses(trapping, rodents, incomplete)
+    ###########Remove incomplete trapping sessions----------
+  remove_incomplete_censuses(trapping, incomplete) %>%
 
-  ###########Use only Long-term treatments --------------
-  rodents = filter_plots(rodents, length)
+    ###########Use only Long-term treatments --------------
+  filter_plots(length) %>%
+
+    ###########Re-assign back into `rodents` --------------
+  {.} -> rodents
 
   ###########Summarise by Treatment ----------------------
-  if(level %in% c("Treatment","treatment")){
+  if(level %in% c("Treatment","treatment")) {
     #Name plot treatments in each time period
 
     rodents = join_plots_to_rodents(rodents, plots)
@@ -116,7 +120,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   }
 
   ###########Switch to new moon number if time == 'newmoon'------------------
-  out_df = add_newmoon_code(out_df, newmoons, time)
+  out_df = add_time(out_df, newmoons, time)
 
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab", "crosstab")){
