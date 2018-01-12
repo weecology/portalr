@@ -14,7 +14,8 @@ Imports:
     magrittr,
     RCurl,
     tidyr,
-    zoo
+    zoo,
+    httr
 Suggests:
     testthat,
     digest,
