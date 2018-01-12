@@ -8,7 +8,7 @@
 Install the `devtools` package and then run:
 
 ```
-install_github("weecology/portalr")
+devtools::install_github("weecology/portalr")
 ```
 
 ### RodentAbundances 

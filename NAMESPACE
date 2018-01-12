@@ -2,9 +2,11 @@
 
 export(FullPath)
 export(abundance)
-export(add_newmoon_code)
+export(add_time)
 export(add_seasons)
 export(biomass)
+export(bait_presence_absence)
+export(colony_presence_absence)
 export(download_observations)
 export(filter_plots)
 export(find_incomplete_censuses)

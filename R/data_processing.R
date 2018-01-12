@@ -158,17 +158,17 @@ find_incomplete_censuses = function(trapping_table){
 #' In some months, not all plots are trapped. Using this data can result in
 #' biased monthly data, especially if summarizing for site or treatment.
 #'
-#' @param trapping_table Data table. Data on when each plot was trapped.
 #' @param rodent_species_merge Data table. Merge of raw rodent records and
 #'                             species information.
+#' @param trapping_table Data table. Data on when each plot was trapped.
 #' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
 #'
 #' @return Data.table of merged rodent records and species info with incomplete
 #'         censuses processed according to argument imcomplete.
 #'
 #' @export
-remove_incomplete_censuses = function(trapping_table,
-                                      rodent_species_merge,
+remove_incomplete_censuses = function(rodent_species_merge,
+                                      trapping_table,
                                       incomplete) {
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
@@ -234,7 +234,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
   return(rodent_table)
 }
 
-#' @title Add NewMoon Codes
+#' @title Add User-specified time column
 #'
 #' @description
 #' period codes denote the number of censuses that have occurred, but are
@@ -242,24 +242,37 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #' censuses are missed (weather, transport issues,etc). You can't pick this
 #' up with the period code. Because censues may not always occur monthly due to
 #' the newmoon -  a new moon code was devised to give a standardized language
-#' of time for forcasting in particular.
+#' of time for forcasting in particular. This function allows the user to decide
+#' if they want to use the rodent period code, the new moon code, the date of 
+#' the rodent census, or have their data with all three time formats
 #'
 #' @param summary_table Data.table with summarized rodent data.
 #' @param newmoon_table Data_table linking newmoon codes with period codes.
-#' @param time Character. Denotes whether newmoon codes are desired.
+#' @param time Character. Denotes whether newmoon codes, period codes,
+#' and/or date are desired.
 #'
-#' @return Data.table of summarized rodent data with period or newmoon code
+#' @return Data.table of summarized rodent data with user-specified time format
 #'
 #' @export
 #'
-add_newmoon_code = function(summary_table, newmoon_table, time){
+
+add_time = function(summary_table, newmoon_table, time='period'){
+  newmoon_table$censusdate = as.Date(newmoon_table$censusdate)
+  join_summary_newmoon = dplyr::right_join(newmoon_table,summary_table,
+                                           by=c("period" = "period")) %>%
+    dplyr::filter(period <= max(period,na.rm=T))
   if(time %in% c("NewMoon","Newmoon","newmoon")){
-      summary_table = dplyr::right_join(newmoon_table,summary_table,
-                                by=c("period" = "period")) %>%
-        dplyr::filter(period <= max(period,na.rm=T)) %>%
-        dplyr::select(-newmoondate,-period,-censusdate)
-    }
-  return(summary_table)
+    join_summary_newmoon = dplyr::select(join_summary_newmoon, -newmoondate,
+                                         -period,-censusdate)
+  } else if (time %in% c("Date","date")) {
+    join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate,
+                                         -period,-newmoonnumber)
+  } else if (time %in% c("All","all")) {
+    join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate)
+  } else
+    join_summary_newmoon = summary_table
+  
+  return(join_summary_newmoon)
 }
 
 #' @title Make Crosstab

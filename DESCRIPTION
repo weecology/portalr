@@ -17,5 +17,10 @@ Imports:
     zoo
 Suggests:
     testthat,
-    digest
+    digest,
+    tidyverse, 
+    cowplot, 
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

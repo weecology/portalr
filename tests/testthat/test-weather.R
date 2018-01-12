@@ -11,7 +11,7 @@ test_that("'Daily' option returns 7 columns" , {
 test_that("Monthly option returns 7 columns", {
   data = weather("Monthly",".")
   expect_that(dim(data)[2], equals(7))
-  expect_that(sum(colnames(data)==c("year","month","mintemp","maxtemp","meantemp","precipitation","NDVI")), equals(7))
+  expect_that(sum(colnames(data)==c("year","month","mintemp","maxtemp","meantemp","precipitation","ndvi")), equals(7))
 })
 
 

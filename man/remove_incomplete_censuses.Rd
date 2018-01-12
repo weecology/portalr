@@ -4,13 +4,13 @@
 \alias{remove_incomplete_censuses}
 \title{Remove incomplete censuses}
 \usage{
-remove_incomplete_censuses(trapping_table, rodent_species_merge, incomplete)
+remove_incomplete_censuses(rodent_species_merge, trapping_table, incomplete)
 }
 \arguments{
-\item{trapping_table}{Data table. Data on when each plot was trapped.}
-
 \item{rodent_species_merge}{Data table. Merge of raw rodent records and
 species information.}
+
+\item{trapping_table}{Data table. Data on when each plot was trapped.}
 
 \item{incomplete}{Boolean. Denotes if users wants to keep incomplete censuses.}
 }
