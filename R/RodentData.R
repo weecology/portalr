@@ -17,6 +17,7 @@
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time return data using the complete "newmoon" numbers of the original "period" numbers
 #' @param output specify whether to return "abundance", or "biomass"
+#' @param fillweight specify whether to fill in unknown weights with other records from that individual or species, where possible
 #'
 #' @export
 #'
@@ -35,6 +36,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   plots = data_tables[[5]]
 
   rodents %>%
+    ##########Fill in missing weights --------------------------------
+  fill_weight(tofill, species) %>%
     ##########Data cleanup --------------------------------
   remove_suspect_entries() %>%
     process_unknownsp(species, unknowns) %>%
@@ -47,9 +50,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     ###########Use only Long-term treatments --------------
   filter_plots(length) %>%
-
-    ###########Fill in missing weights (where possible) --------------
-  fill_weight(species_list = species) %>%
 
     ###########Re-assign back into `rodents` --------------
   {.} -> rodents
@@ -65,7 +65,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         dplyr::mutate(species = factor(species)) %>%
         dplyr::mutate(wgt = as.numeric(wgt)) %>%
         dplyr::group_by(period, treatment, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = TRUE)) %>%
+        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
         dplyr::ungroup() %>%
         dplyr::select(period, treatment, species, biomass)
     } else { # abundance by default
@@ -89,7 +89,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         dplyr::mutate(species = factor(species)) %>%
         dplyr::mutate(wgt = as.numeric(wgt)) %>%
         dplyr::group_by(period, plot, sampled, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = TRUE)) %>%
+        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
         dplyr::mutate(biomass = replace(biomass, sampled == 0, NA)) %>% # 0->NA on untrapped plots
         dplyr::ungroup() %>%
         dplyr::select(period, plot, species, biomass)
@@ -111,7 +111,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         dplyr::mutate(species = factor(species)) %>%
         dplyr::mutate(wgt = as.numeric(wgt)) %>%
         dplyr::group_by(period, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = TRUE)) %>%
+        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
         dplyr::ungroup() %>%
         dplyr::select(period, species, biomass)
     } else { # abundance by default

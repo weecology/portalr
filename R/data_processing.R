@@ -290,45 +290,78 @@ make_crosstab = function(summary_data, variable_name = quo(abundance)){
 }
 
 
-#' @title Fill Weight
-#'
-#' @description fill in missing weight values with either a recently recorded weight for that individual or species average
-#'
-#' @param rodent_data raw rodent data
-#'
-#' @export
-fill_weight = function(rodent_data, species_list) {
+ #' @title Fill Weight
+ #'
+ #' @description fill in missing weight values with either a recently recorded weight for that individual or species average
+ #'
+ #' @param rodent_data raw rodent data
+ #' @param tofill logical whether to fill in missing values or not
+ #' @param species_list species table
+ #'
+ #' @export
+ fill_weight = function(rodent_data, tofill, species_list) {
+if (tofill == TRUE) {
+findmyweight = function(these.rodents, thisrow) {
 
-  findmyweight = function(thisrow, rodent_data) {
-    if(is.na(rodent_data$wgt[thisrow]) | rodent_data$wgt[thisrow] < 1) {
+  my.weight = these.rodents$wgt[thisrow]
+  # if they have a weight, great. skip.
+  if (!is.na(my.weight)  && my.weight >0) {
+    thisweight = my.weight
+    return(thisweight)
+  }
 
-      mytag = rodent_data$tag[thisrow]
-      if(is.na(mytag) | mytag < 1) {
-        if(is.na(rodent_data$species[thisrow])) return(NA)
-        return(species_list[ which(species_list$species == rodent_data$species[thisrow]), 'meanwgt'])
+
+  my.tag = these.rodents$tag[thisrow]
+  my.species = these.rodents$species[thisrow]
+  # if they don't have a weight, do they have a tag?
+  if(!is.na(my.tag) && my.tag != 0) {
+    # if they have a tag
+    my.period = these.rodents$period[thisrow]
+    my.fullrecords = rodents %>%
+      filter(tag == my.tag, wgt > 0, species == my.species)
+    # if they have a weight record at some point
+    if(nrow(my.fullrecords) > 0) {
+      my.fullrecords = mutate(my.fullrecords, period.distance = abs(my.period - period))
+      my.closestrecords = my.fullrecords[ which(my.fullrecords$period.distance == min(my.fullrecords$period.distance)), 'wgt']
+      my.closestwgt = mean(my.closestrecords, na.rm = TRUE)
+      thisweight = my.closestwgt
+      return(thisweight)
+    }
+  }
+  if (!is.na(my.species) && my.species != 0) {
+    # if they don't have a tag
+    # or if they have a tag but no weights ever recorded
+    # but they do have a species
+    if (!is.na(these.rodents$age[thisrow]) && (these.rodents$age[thisrow] == 'J')) {
+      # if they're juvenile
+      juvweight = species[ which(species == my.species), 'juvwgt']
+      # and there is a juv weight for that species
+      if(!is.na(juvweight)) {
+        thisweight = juvweight
+        return(thisweight)
       }
-
-      my.fullrecords = rodent_data %>%
-        filter(tag == mytag, wgt > 0)
-
-      if(nrow(my.fullrecords) < 1) {
-        if(is.na(rodent_data$species[thisrow])) return(NA)
-        return(species_list[ which(species_list$species == rodent_data$species[thisrow]), 'meanwgt'])
-      }
-
-      record_distance = abs(my.fullrecords$period - rodent_data$period[thisrow])
-      closestwgt = my.fullrecords[which(record_distance == min(record_distance)), 'wgt']
-      if(length(closestwgt) > 1 ) closestwgt = mean(closestwgt)
-
-      return(closestwgt)
-
     } else {
-      return(rodent_data$wgt[thisrow])
-    }
-    }
+      # if they're not juvenile
+      # or the juvwgt for that species is NA
+      sp.weight = species %>%
+        filter(species == my.species) %>%
+        select(meanwgt)
 
-filled.weights = apply(as.matrix(1:nrow(rodent_data)), c(1), findmyweight, rodent_data = rodent_data)
-rodent_data$wgt = filled.weights
+      # give it the species weight, even if that is na. this is the best you can do.
+      thisweight = sp.weight[1,1]
+      return(thisweight)
 
+    }
+  }
+
+  # if they have no tag and no species, you're stuck.
+
+  thisweight = my.weight
+  return(thisweight)
+
+}
+
+rodent_data$wgt = vapply(1:nrow(rodent_data), findmyweight, these.rodents = rodent_data, FUN.VALUE = 1)
+}
 return(rodent_data)
 }
