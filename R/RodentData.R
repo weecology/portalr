@@ -25,7 +25,7 @@
 
 get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
-                            shape = "crosstab", time = "period", output = "abundance")
+                            shape = "crosstab", time = "period", output = "abundance", fillweight = TRUE)
 {
   ##########Get Data
   data_tables = loadData(path)
@@ -37,7 +37,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
   rodents %>%
     ##########Fill in missing weights --------------------------------
-  fill_weight(tofill, species) %>%
+  fill_weight(fillweight, species) %>%
     ##########Data cleanup --------------------------------
   remove_suspect_entries() %>%
     process_unknownsp(species, unknowns) %>%
