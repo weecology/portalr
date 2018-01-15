@@ -86,7 +86,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     if(output %in% c("Biomass", "biomass")) {
       out_df <- rodents %>%
-       dplyr::mutate(species = factor(species)) %>%
+        dplyr::mutate(species = factor(species)) %>%
         dplyr::mutate(wgt = as.numeric(wgt)) %>%
         dplyr::group_by(period, plot, sampled, species) %>%
         dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
@@ -124,18 +124,19 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     }
   }
 
-  ###########Switch to new moon number if time == 'newmoon'------------------
-  out_df = add_time(out_df, newmoons, time)
-
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab", "crosstab")){
     out_df = make_crosstab(out_df, variable_name = output)
-    if (output %in% c('Biomass', 'biomass') && level %in% c('plot', 'Plot')) {
-      if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
+    if (output %in% c('Biomass', 'biomass')) {
+      if (level %in% c('plot', 'Plot')) {
+        if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
+        out_df[is.na(out_df)] <- 0
+        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+        out_df[ which(out_df$sampled == 0), 3:(ncol(out_df) - 1)] <- NA
+        out_df = out_df[, (1:ncol(out_df) - 1)]
+      } else {
       out_df[is.na(out_df)] <- 0
-      out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
-      out_df[ which(out_df$sampled == 0), 3:(ncol(out_df) - 1)] <- NA
-      out_df = out_df[, (1:ncol(out_df) - 1)]
+      }
     }
   } else {
 
@@ -159,9 +160,15 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
-}
+      }
     }
   }
+
+
+
+  ###########Switch to new moon number if time == 'newmoon'------------------
+  out_df = add_time(out_df, newmoons, time)
+
 
 
   return(out_df)
