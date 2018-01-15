@@ -317,7 +317,7 @@ findmyweight = function(these.rodents, thisrow) {
   if(!is.na(my.tag) && my.tag != 0) {
     # if they have a tag
     my.period = these.rodents$period[thisrow]
-    my.fullrecords = rodents %>%
+    my.fullrecords = these.rodents %>%
       filter(tag == my.tag, wgt > 0, species == my.species)
     # if they have a weight record at some point
     if(nrow(my.fullrecords) > 0) {
@@ -334,7 +334,7 @@ findmyweight = function(these.rodents, thisrow) {
     # but they do have a species
     if (!is.na(these.rodents$age[thisrow]) && (these.rodents$age[thisrow] == 'J')) {
       # if they're juvenile
-      juvweight = species[ which(species == my.species), 'juvwgt']
+      juvweight = species_list[ which(species_list$species == my.species), 'juvwgt']
       # and there is a juv weight for that species
       if(!is.na(juvweight)) {
         thisweight = juvweight
@@ -343,7 +343,7 @@ findmyweight = function(these.rodents, thisrow) {
     } else {
       # if they're not juvenile
       # or the juvwgt for that species is NA
-      sp.weight = species %>%
+      sp.weight = species_list %>%
         filter(species == my.species) %>%
         select(meanwgt)
 

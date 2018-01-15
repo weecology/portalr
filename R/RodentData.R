@@ -86,7 +86,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     if(output %in% c("Biomass", "biomass")) {
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
+       dplyr::mutate(species = factor(species)) %>%
         dplyr::mutate(wgt = as.numeric(wgt)) %>%
         dplyr::group_by(period, plot, sampled, species) %>%
         dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
@@ -130,7 +130,39 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   ##########Convert data to crosstab ----------------------
   if(shape %in% c("Crosstab", "crosstab")){
     out_df = make_crosstab(out_df, variable_name = output)
+    if (output %in% c('Biomass', 'biomass') && level %in% c('plot', 'Plot')) {
+      if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
+      out_df[is.na(out_df)] <- 0
+      out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+      out_df[ which(out_df$sampled == 0), 3:(ncol(out_df) - 1)] <- NA
+      out_df = out_df[, (1:ncol(out_df) - 1)]
+    }
+  } else {
+
+    if(output %in% c('Biomass', 'biomass')) {
+      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(biomass = 0))
+      if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(biomass = 0))
+      if(level %in% c('Plot', 'Plot')) {
+        out_df =  tidyr::complete(out_df, species, period, plot, fill = list(biomass = 0))
+        out_df = filter(out_df, !(is.na(species)))
+        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+        out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
+        out_df = out_df[, (1:ncol(out_df) - 1)]
+      }
+
+    }
+    if(output %in% c('Abundance', 'abundance')) {
+      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
+      if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
+      if(level %in% c('Plot', 'Plot')) {
+        out_df =  tidyr::complete(out_df, species, period, plot, fill = list(abundance = 0))
+        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+        out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
+        out_df = out_df[, (1:ncol(out_df) - 1)]
+}
+    }
   }
+
 
   return(out_df)
 }
