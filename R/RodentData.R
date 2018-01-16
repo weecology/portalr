@@ -155,7 +155,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     if(output %in% c('Abundance', 'abundance')) {
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
       if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
-      if(level %in% c('Plot', 'Plot')) {
+      if(level %in% c('Plot', 'plot')) {
         out_df =  tidyr::complete(out_df, species, period, plot, fill = list(abundance = 0))
         out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA

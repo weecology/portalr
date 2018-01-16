@@ -33,13 +33,13 @@ source('R/RodentData.R')
 tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T, incomplete = T, shape = 'crosstab', time = 'period') {
   a = get_rodent_data(path = 'repo', level, type,
                       length, unknowns, incomplete,
-                      shape, time =, output = "abundance", fillweight = TRUE)
+                      shape, time, output = "abundance", fillweight = TRUE)
   b = get_rodent_data(path = 'repo', level, type,
                       length, unknowns, incomplete,
-                      shape, time =, output = "biomass", fillweight = TRUE)
+                      shape, time, output = "biomass", fillweight = TRUE)
   c = get_rodent_data(path = 'repo', level, type,
                       length, unknowns, incomplete,
-                      shape, time =, output = "abundance", fillweight = F)
+                      shape, time, output = "abundance", fillweight = F)
 
   if(level != 'Plot') {
     if(shape == 'crosstab') {
@@ -78,9 +78,18 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
     } else {
       # flat tests
       if(shape == 'flat'){
-        return('write flat tests')
+        joint_to_compare = full_join(a, b, by = c('species', 'period', 'plot'))
+        if (
+          (length(which(dim(a) != dim(b))) == 0) &&
+          (nrow(joint_to_compare) == nrow(a)) &&
+          (length(which((is.na(joint_to_compare$abundance)) != (is.na(joint_to_compare$biomass)))) == 0) &&
+          (length(which(filter(joint_to_compare, abundance == 0, species != 'other') != filter(joint_to_compare, biomass == 0, species != 'other'))) == 0) &&
+          (length(which(unique(a$species) != unique(b$species))) == 0) &&
+          (length(which(a != c)) == 0)
+        )
+        return('pass')
       } else {
-        return('write flat tests')
+        return('fail')
       }
     }
   }
