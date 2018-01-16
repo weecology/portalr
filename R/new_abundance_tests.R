@@ -78,7 +78,8 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
     } else {
       # flat tests
       if(shape == 'flat'){
-        joint_to_compare = full_join(a, b, by = c('species', 'period', 'plot'))
+        if (time == 'newmoon') time = 'newmoonnumber'
+        joint_to_compare = full_join(a, b, by = c('species', time, 'plot'))
         if (
           (length(which(dim(a) != dim(b))) == 0) &&
           (nrow(joint_to_compare) == nrow(a)) &&
@@ -96,11 +97,61 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
 }
 
 # most inclusive
-one = tests(level = "Site", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
-one.flat = tests(level = "Site", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
+one = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+one.flat = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
 
-two = tests(level = "Treatment", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
-two.flat = tests(level = "Treatment", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
+two = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+two.flat = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
 
-three = tests(level = "Plot", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
-three.flat = tests(level = "Plot", type = "Rodents", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
+three = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+three.flat = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "period")
+
+
+# change time
+four = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "newmoon")
+four.flat = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "newmoon")
+
+five = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "newmoon")
+five.flat = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "newmoon")
+
+six = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "crosstab", time = "newmoon")
+six.flat = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = T, shape = "flat", time = "newmoon")
+
+# make longterm
+seven = tests(level = "Site", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+seven.flat(level = "Site", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "flat", time = "period")
+
+eight = tests(level = "Treatment", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+eight.flat = tests(level = "Treatment", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "flat", time = "period")
+
+nine = tests(level = "Plot", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "crosstab", time = "period")
+nine.flat = tests(level = "Plot", type = "Granivores", length = "longterm", unknowns = T, incomplete = T, shape = "flat", time = "period")
+
+
+# remove incompletes
+ten = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "crosstab", time = "period")
+ten.flat = tests(level = "Site", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "flat", time = "period")
+
+eleven = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "crosstab", time = "period")
+eleven.flat = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "flat", time = "period")
+
+twelve = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "crosstab", time = "period")
+twelve.flat = tests(level = "Plot", type = "Granivores", length = "all", unknowns = T, incomplete = F, shape = "flat", time = "period")
+
+
+# remove unknowns and incompletes
+thirteen = tests(level = "Site", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "crosstab", time = "period")
+thirteen.flat = tests(level = "Site", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "flat", time = "period")
+
+fourteen = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "crosstab", time = "period")
+fourteen.flat = tests(level = "Treatment", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "flat", time = "period")
+
+fifteen = tests(level = "Plot", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "crosstab", time = "period")
+fifteen.flat = tests(level = "Plot", type = "Granivores", length = "all", unknowns = F, incomplete = F, shape = "flat", time = "period")
+
+thirteen
+thirteen.flat
+fourteen
+fourteen.flat
+fifteen
+fifteen.flat
