@@ -41,5 +41,26 @@ Note that you can also include links to other functions, math formatting, and mo
 
 ### Testing
 
+If you are adding new functionality, please include automated tests to verify that some of the basic functionality is correct.
+
+Automated testing uses R scripts, that live in the `tests/testthat/` subfolder for the package. If you are adding a new file, please name it as `test-{concept}.R`. 
+
+As a general rule, you don't need to test all possible inputs and outputs for a function, but you should test some important aspects:
+* outputs are the correct format (including dimensions and components)
+* sample input produces the correct sample output
+
+You can see the existing tests as examples of how to organize your tests, but note that there are several different kinds of `expect_` functions that test for different things. For more details, see the [chapter on testing ](http://r-pkgs.had.co.nz/tests.html) in Hadley Wickham's book for R packages.
+
 ### Building
-However, you will need both the `roxygen2` and the `devtools` package to build the documentation. For more details, see the [section below](#building).
+
+To fully build the package, including documentation, running-tests, you will need the `roxygen2`, the `testthat`, and the `devtools` package.
+
+Specific operations are then done by calling the appropriate functions from within R, while your working directory is somewhere in the package folder.
+
+The suggested workflow is:
+1. Write code, documentation, and tests.
+2. Run `devtools::document()` to generate the documentation files and update the `NAMESPACE` file.
+3. Run `devtools::install()` to install the new version of the package.
+4. Run `devtools::test()` to run the test scripts on the new version of the package.
+
+For more info, see the [GitHub repo](https://github.com/hadley/devtools) for the `devtools` package. 
