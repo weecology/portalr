@@ -32,3 +32,33 @@ test_that("required column names in species df", {
   expect_true('granivore' %in% sp_cols)
 })
 
+test_that("abundance returns expected results", {
+  abundance.notfilled = abundance(path = 'repo', level = "Plot", type = "Rodents",
+                        length = "all", unknowns = T, incomplete = T,
+                        shape = "flat", time = "period", fillweight = F)
+  test.abundance = filter(abundance.notfilled, period %in% 400:450)
+  expect_true(sum(test.abundance$abundance, na.rm = T) == 10622)
+  test.abundance = filter(abundance, species == 'DM', abundance > 0)
+  expect_true(max(test.abundance$abundance, na.rm = T) == 17)
+  expect_true(anyNA(test.abundance) == F)
+  expect_true(nrow(test.abundance) == 4948)
+
+  abundance.filled = abundance(path = 'repo', level = "Plot", type = "Rodents",
+                               length = "all", unknowns = T, incomplete = T,
+                               shape = "flat", time = "period", fillweight = T)
+  expect_true(length(which(abundance.notfilled != abundance.filled)) == 0)
+})
+
+test_that("biomass returns expected results", {
+  biomass = biomass(path = 'repo', level = "Site", type = "Rodents",
+                        length = "all", unknowns = T, incomplete = T,
+                        shape = "flat", time = "period", fillweight = T)
+})
+
+test_that("energy returns expected results", {
+  energy = energy(path = 'repo', level = "Site", type = "Rodents",
+                        length = "all", unknowns = T, incomplete = T,
+                        shape = "flat", time = "period", fillweight = T)
+})
+
+
