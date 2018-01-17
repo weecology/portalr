@@ -190,6 +190,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
+    }
       if(output %in% c('Abundance', 'abundance')) {
         if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
         if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
@@ -201,7 +202,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         }
       }
     }
-  }
+
 
 
 
