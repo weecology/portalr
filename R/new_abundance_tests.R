@@ -40,22 +40,32 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
   c = get_rodent_data(path = 'repo', level, type,
                       length, unknowns, incomplete,
                       shape, time, output = "abundance", fillweight = F)
+  e = get_rodent_data(path = 'repo', level, type,
+                      length, unknowns, incomplete,
+                      shape, time, output = "energy", fillweight = T)
 
   if(level != 'Plot') {
     if(shape == 'crosstab') {
-    if ((dim(a) == dim(b) &&
+    if ((length(which(dim(a) != dim(b))) == 0) &&
        (length(which(which(is.na(a[,c(which(colnames(a)!='other'))])) != which(is.na(b[,c(which(colnames(b)!='other'))])))) == 0) &&
        (length(which(colnames(a) != colnames(b))) == 0) &&
-       (length(which(a != c)) == 0))) {
+       (length(which(a != c)) == 0) &&
+       (length(which(dim(a) != dim(e))) == 0) &&
+       (length(which(which(is.na(a[,c(which(colnames(a)!='other'))])) != which(is.na(e[,c(which(colnames(e)!='other'))])))) == 0) &&
+       (length(which(colnames(a) != colnames(e))) == 0))
+  {
     return('pass')
   } else {
     return('fail')
   }
   } else {
-    if ((dim(a) == dim(b) &&
+    if ((dim(a) == dim(b)) &&
          (length(which(is.na(a)) != which(is.na(b))) == 0) &&
          (length(which(unique(a$species) != unique(b$species))) == 0) &&
-         (length(which(a != c)) == 0))) {
+         (length(which(a != c)) == 0) &&
+        (dim(a) == dim(e)) &&
+        (length(which(is.na(a)) != which(is.na(e))) == 0) &&
+        (length(which(unique(a$species) != unique(e$species))) == 0) ){
       return('pass')
     } else {
       return('fail')
@@ -70,6 +80,10 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
         (length(which(which(is.na(a[,c(which(colnames(a)!='other'))])) != which(is.na(b[,c(which(colnames(b)!='other'))])))) == 0) &&
         (length(which(which(a[,c(which(colnames(a)!='other'))] == 0) != which(b[,c(which(colnames(b)!='other'))] == 0))) == 0) &&
         (length(which(colnames(a) != colnames(b))) == 0)
+        (length(which(dim(a) != dim(e))) == 0) &&
+        (length(which(which(is.na(a[,c(which(colnames(a)!='other'))])) != which(is.na(e[,c(which(colnames(e)!='other'))])))) == 0) &&
+        (length(which(which(a[,c(which(colnames(a)!='other'))] == 0) != which(e[,c(which(colnames(e)!='other'))] == 0))) == 0) &&
+        (length(which(colnames(a) != colnames(e))) == 0)
       ) {
         return('pass')
       } else {
@@ -80,13 +94,19 @@ tests = function(level = 'site', type = 'rodents', length = 'all', unknowns = T,
       if(shape == 'flat'){
         if (time == 'newmoon') time = 'newmoonnumber'
         joint_to_compare = full_join(a, b, by = c('species', time, 'plot'))
+        joint_to_compare2 = full_join(a, e, by = c('species', time, 'plot'))
         if (
           (length(which(dim(a) != dim(b))) == 0) &&
           (nrow(joint_to_compare) == nrow(a)) &&
           (length(which((is.na(joint_to_compare$abundance)) != (is.na(joint_to_compare$biomass)))) == 0) &&
           (length(which(filter(joint_to_compare, abundance == 0, species != 'other') != filter(joint_to_compare, biomass == 0, species != 'other'))) == 0) &&
           (length(which(unique(a$species) != unique(b$species))) == 0) &&
-          (length(which(a != c)) == 0)
+          (length(which(a != c)) == 0)  &&
+          (length(which(dim(a) != dim(e))) == 0) &&
+          (nrow(joint_to_compare2) == nrow(a)) &&
+          (length(which((is.na(joint_to_compare2$abundance)) != (is.na(joint_to_compare2$energy)))) == 0) &&
+          (length(which(filter(joint_to_compare2, abundance == 0, species != 'other') != filter(joint_to_compare2, energy == 0, species != 'other'))) == 0) &&
+          (length(which(unique(a$species) != unique(e$species))) == 0)
         )
         return('pass')
       } else {
