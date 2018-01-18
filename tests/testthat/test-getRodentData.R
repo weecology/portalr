@@ -36,9 +36,9 @@ test_that("abundance returns expected results", {
   abundance.notfilled = abundance(path = 'repo', level = "Plot", type = "Rodents",
                         length = "all", unknowns = T, incomplete = T,
                         shape = "flat", time = "period", fillweight = F)
-  test.abundance = filter(abundance.notfilled, period %in% 400:450)
+  test.abundance = dplyr::filter(abundance.notfilled, period %in% 400:450)
   expect_true(sum(test.abundance$abundance, na.rm = T) == 10622)
-  test.abundance = filter(abundance.notfilled, species == 'DM', abundance > 0)
+  test.abundance = dplyr::filter(abundance.notfilled, species == 'DM', abundance > 0)
   expect_true(max(test.abundance$abundance, na.rm = T) == 17)
   expect_true(anyNA(test.abundance) == F)
   expect_true(nrow(test.abundance) == 4948)
@@ -54,12 +54,12 @@ test_that("biomass returns expected results", {
   biomass.filled = biomass(path = 'repo', level = "Plot", type = "Rodents",
                         length = "all", unknowns = T, incomplete = T,
                         shape = "flat", time = "period", fillweight = T)
-  biomass.test = filter(biomass.filled, period %in% 400:450)
+  biomass.test = dplyr::filter(biomass.filled, period %in% 400:450)
   biomass.notfilled = biomass(path = 'repo', level = "Plot", type = "Rodents",
                               length = "all", unknowns = T, incomplete = T,
                               shape = "flat", time = "period", fillweight = F)
 
-  biomass.notfilledt = filter(biomass.notfilled, period %in% 400:450)
+  biomass.notfilledt = dplyr::filter(biomass.notfilled, period %in% 400:450)
   expect_true(nrow(biomass.test) == 26928)
   expect_true(length(which(dim(biomass.test) != dim(biomass.notfilledt))) == 0)
 
@@ -78,12 +78,12 @@ test_that("energy returns expected results", {
                         length = "all", unknowns = T, incomplete = T,
                         shape = "flat", time = "period", fillweight = T)
 
-  energy.test = filter(energy.filled, period %in% 400:450)
+  energy.test = dplyr::filter(energy.filled, period %in% 400:450)
   energy.notfilled = energy(path = 'repo', level = "Plot", type = "Rodents",
                               length = "all", unknowns = T, incomplete = T,
                               shape = "flat", time = "period", fillweight = F)
 
-  energy.notfilledt = filter(energy.notfilled, period %in% 400:450)
+  energy.notfilledt = dplyr::filter(energy.notfilled, period %in% 400:450)
   expect_true(nrow(energy.test) == 26928)
   expect_true(length(which(dim(energy.test) != dim(energy.notfilledt))) == 0)
 
