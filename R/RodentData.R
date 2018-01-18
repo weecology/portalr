@@ -174,7 +174,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       if(level %in% c('Plot', 'plot')) {
         out_df %>%
           tidyr::complete(species, period, plot, fill = list(biomass = 0)) %>%
-          dplyr::filter(out_df, !(is.na(species))) %>%
+          dplyr::filter(!(is.na(species))) %>%
           dplyr::left_join(trapping[, c('period', 'plot', 'sampled')], by = c('period', 'plot')) %>%
           {.} -> out_df
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
@@ -212,6 +212,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 #'
 #' @description \code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
 #'
+#' @param ... arguments passed to \code{\link{get_rodent_data}}
+#'
 #' @examples
 #' abundance("repo")
 #'
@@ -224,6 +226,8 @@ abundance <- function(...) {
 #' @rdname get_rodent_data
 #'
 #' @description \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
+#'
+#' @param ... arguments passed to \code{\link{get_rodent_data}}
 #'
 #' @examples
 #' biomass("repo")
@@ -238,6 +242,8 @@ biomass <- function(...) {
 #' @rdname get_rodent_data
 #'
 #' @description \code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
+#'
+#' @param ... arguments passed to \code{\link{get_rodent_data}}
 #'
 #' @examples
 #' energy("repo")
