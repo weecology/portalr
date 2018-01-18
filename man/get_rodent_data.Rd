@@ -4,6 +4,7 @@
 \alias{get_rodent_data}
 \alias{abundance}
 \alias{biomass}
+\alias{energy}
 \alias{abundance}
 \alias{biomass}
 \alias{energy}
@@ -12,7 +13,7 @@
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
   shape = "crosstab", time = "period", output = "abundance",
-  fillweight = TRUE)
+  fillweight = !(output \%in\% c("abundance", "Abundance")))
 
 abundance(...)
 
