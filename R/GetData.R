@@ -32,8 +32,17 @@ download_observations <- function(base_folder = '~', release_only = TRUE) {
   if(release_only) # get download link to latest release
   {
     repo_url <- "https://api.github.com/repos/weecology/PortalData/releases/latest"
-    httr::GET(repo_url) -> res
-    httr::stop_for_status(res) # check for errors
+    pat <- Sys.getenv("GITHUB_PAT", unset = NA)
+    if(!is.na(pat)) # use personal authentication token for GitHub if available
+    {
+      httr::GET(repo_url, httr::authenticate(pat, "x-oauth-basic", "basic")) -> resp
+    } else {
+      httr::GET(repo_url) -> resp
+    }
+    if (httr:http_type(resp) != "application/json") # check for errors
+    {
+      stop("GitHub response was not in json format", call. = FALSE)
+    }
     zip_download_path <- httr::content(res)$assets[[1]]$browser_download_url
   }
   zip_download_dest = FullPath('PortalData.zip', base_folder)
