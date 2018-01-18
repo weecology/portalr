@@ -63,4 +63,6 @@ The suggested workflow is:
 3. Run `devtools::install()` to install the new version of the package.
 4. Run `devtools::test()` to run the test scripts on the new version of the package.
 
+If you are also prepping the package as a whole, then you will also want to run `devtools::check()` and/or `devtools::check_cran()` to make sure that the package is complete.
+
 For more info, see the [GitHub repo](https://github.com/hadley/devtools) for the `devtools` package. 
