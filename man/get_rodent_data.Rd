@@ -6,15 +6,19 @@
 \alias{biomass}
 \alias{abundance}
 \alias{biomass}
+\alias{energy}
 \title{Retrieve Rodent Data}
 \usage{
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
-  shape = "crosstab", time = "period", output = "abundance")
+  shape = "crosstab", time = "period", output = "abundance",
+  fillweight = TRUE)
 
 abundance(...)
 
 biomass(...)
+
+energy(...)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or 'repo' to retrieve data from github repo}
@@ -34,7 +38,9 @@ biomass(...)
 
 \item{time}{return data using the complete "newmoon" numbers of the original "period" numbers}
 
-\item{output}{specify whether to return "abundance", or "biomass"}
+\item{output}{specify whether to return "abundance", or "biomass", or "energy"}
+
+\item{fillweight}{specify whether to fill in unknown weights with other records from that individual or species, where possible}
 }
 \description{
 A function to summarize monthly Portal rodent species data.
@@ -42,10 +48,14 @@ A function to summarize monthly Portal rodent species data.
 \code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
 
 \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
+
+\code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
 }
 \examples{
 abundance("repo")
 
 biomass("repo")
+
+energy("repo")
 
 }

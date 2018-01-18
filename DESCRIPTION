@@ -10,11 +10,12 @@ LazyData: true
 Imports:
     dplyr,
     ggplot2,
+    tidyr,
+    zoo,
+    RCurl,
     lubridate,
     magrittr,
-    RCurl,
-    tidyr,
-    zoo
+    httr
 Suggests:
     testthat,
     digest,

@@ -34,7 +34,8 @@ loadData <- function(path = "~") {
     species_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""))
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
     trapping_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
@@ -51,7 +52,8 @@ loadData <- function(path = "~") {
       stringsAsFactors = FALSE)
     species_table = read.csv(
       file.path(path, "PortalData/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""))
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
     trapping_table = read.csv(
       file.path(path, "PortalData/Rodents/Portal_rodent_trapping.csv"))
     newmoons_table = read.csv(
@@ -103,18 +105,18 @@ remove_suspect_entries = function(rodent_data) {
 #' @export
 #'
 process_unknownsp = function(rodent_data, species_table, unknowns) {
-  if (unknowns == F) {
-    rodent_species_merge =
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
-  }
-  #Rename all unknowns and non-target rodents to "other"
-  else {
+  if (unknowns)
+  {
+    #Rename all unknowns and non-target rodents to "other"
     rodent_species_merge =
       dplyr::left_join(species_table, rodent_data, by = "species") %>%
       dplyr::filter(rodent == 1) %>%
       dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
       dplyr::mutate(species = replace(species, censustarget == 0, "other"))
+  } else {
+    rodent_species_merge =
+      dplyr::left_join(species_table, rodent_data, by = "species") %>%
+      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
   }
   return(rodent_species_merge)
 }
