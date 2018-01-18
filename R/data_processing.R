@@ -322,10 +322,10 @@ fill_weight = function(rodent_data, tofill, species_list) {
       # if they have a tag
       my.period = these.rodents$period[thisrow]
       my.fullrecords = these.rodents %>%
-        filter(tag == my.tag, wgt > 0, species == my.species)
+        dplyr::filter(tag == my.tag, wgt > 0, species == my.species)
       # if they have a weight record at some point
       if(nrow(my.fullrecords) > 0) {
-        my.fullrecords = mutate(my.fullrecords, period.distance = abs(my.period - period))
+        my.fullrecords = dplyr::mutate(my.fullrecords, period.distance = abs(my.period - period))
         my.closestrecords = my.fullrecords[ which(my.fullrecords$period.distance == min(my.fullrecords$period.distance)), 'wgt']
         my.closestwgt = mean(my.closestrecords, na.rm = TRUE)
         thisweight = my.closestwgt
@@ -348,7 +348,7 @@ fill_weight = function(rodent_data, tofill, species_list) {
         # if they're not juvenile
         # or the juvwgt for that species is NA
         sp.weight = species_list %>%
-          filter(species == my.species) %>%
+          dplyr::filter(species == my.species) %>%
           select(meanwgt)
 
         # give it the species weight, even if that is na. this is the best you can do.
