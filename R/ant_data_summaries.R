@@ -70,7 +70,7 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
                                                                                     51,52,53,54,55,56,57,
                                                                                     61,62,63,64,65,66,67,
                                                                                     71,72,73,74,75,76,77), species = specieslist)
-    full_df = dplyr::merge(df,full_df)
+    full_df = merge(df,full_df)
     full_df = full_df[order(full_df$year,full_df$plot,full_df$stake,full_df$species),]
   }
 
@@ -122,7 +122,7 @@ bait_presence_absence= function(level='Site') {
     # data frame of which plots were censused in which years
     df = baitpresence %>% dplyr::select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
-    full_df = dplyr::merge(df,full_df)
+    full_df = merge(df,full_df)
   }
   if (level == 'Stake') {
     baitpresence = bait %>% dplyr::select(year,plot,stake,species)
@@ -137,11 +137,11 @@ bait_presence_absence= function(level='Site') {
                                                                                     51,53,55,57,
                                                                                     62,64,66,
                                                                                     71,73,75,77), species = specieslist)
-    full_df = dplyr::merge(df,full_df)
+    full_df = merge(df,full_df)
     full_df = full_df[order(full_df$year,full_df$plot,full_df$stake,full_df$species),]
   }
 
-  baitpresabs = dplyr::merge(full_df,baitpresence,all = T)
+  baitpresabs = merge(full_df,baitpresence,all = T)
   # fill NAs with absence '0'
   baitpresabs[is.na(baitpresabs)] = 0
 
