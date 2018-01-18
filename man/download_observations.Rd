@@ -4,10 +4,12 @@
 \alias{download_observations}
 \title{Download the PortalData repo}
 \usage{
-download_observations(base_folder = "~")
+download_observations(base_folder = "~", release_only = TRUE)
 }
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
+
+\item{release_only}{whether to download only the "Release" version of the data}
 }
 \value{
 None

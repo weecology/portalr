@@ -19,18 +19,28 @@ weather <- function(level, path = '~') {
     dplyr::group_by(year, month, day) %>%
     dplyr::summarize(mintemp=min(airtemp),maxtemp=max(airtemp),meantemp=mean(airtemp),precipitation=sum(precipitation))
 
-  weather=dplyr::bind_rows(weather_old[1:3442,],days) %>% dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation)
+  weather=dplyr::bind_rows(weather_old[1:3442,],days) %>%
+    dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation)
 
-if (level=='Monthly') {
+  if (level=='Monthly') {
 
-  ##########Summarise by Month -----------------
+    ##########Summarise by Month -----------------
 
-  weather = weather %>%
-    dplyr::group_by(year, month) %>%
-    dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),precipitation=sum(precipitation,na.rm=T))
+    if(!all(c("year", "month") %in% names(NDVI))) # make year and month column if necessary
+    {
+      NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
+      NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))
+      NDVI$ndvi <- NDVI$NDVI
+    }
+    NDVI$ndvi[NDVI$ndvi == "NA"] <- NA
 
-  weather=dplyr::full_join(weather,NDVI) %>% dplyr::arrange(year,month)
-  weather$ndvi=as.numeric(weather$ndvi)
+    weather = weather %>%
+      dplyr::group_by(year, month) %>%
+      dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),precipitation=sum(precipitation,na.rm=T)) %>%
+      dplyr::full_join(NDVI) %>%
+      dplyr::arrange(year,month) %>%
+      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, ndvi) %>%
+      dplyr::mutate(ndvi = as.numeric(ndvi))
   }
 
 

@@ -34,7 +34,8 @@ loadData <- function(path = "~") {
     species_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""))
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
     trapping_table = read.csv(
       text = RCurl::getURL(
         "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
@@ -51,7 +52,8 @@ loadData <- function(path = "~") {
       stringsAsFactors = FALSE)
     species_table = read.csv(
       file.path(path, "PortalData/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""))
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
     trapping_table = read.csv(
       file.path(path, "PortalData/Rodents/Portal_rodent_trapping.csv"))
     newmoons_table = read.csv(
@@ -103,18 +105,18 @@ remove_suspect_entries = function(rodent_data) {
 #' @export
 #'
 process_unknownsp = function(rodent_data, species_table, unknowns) {
-  if (unknowns == F) {
-    rodent_species_merge =
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
-      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
-  }
-  #Rename all unknowns and non-target rodents to "other"
-  else {
+  if (unknowns)
+  {
+    #Rename all unknowns and non-target rodents to "other"
     rodent_species_merge =
       dplyr::left_join(species_table, rodent_data, by = "species") %>%
       dplyr::filter(rodent == 1) %>%
       dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
       dplyr::mutate(species = replace(species, censustarget == 0, "other"))
+  } else {
+    rodent_species_merge =
+      dplyr::left_join(species_table, rodent_data, by = "species") %>%
+      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
   }
   return(rodent_species_merge)
 }
@@ -243,7 +245,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #' up with the period code. Because censues may not always occur monthly due to
 #' the newmoon -  a new moon code was devised to give a standardized language
 #' of time for forcasting in particular. This function allows the user to decide
-#' if they want to use the rodent period code, the new moon code, the date of 
+#' if they want to use the rodent period code, the new moon code, the date of
 #' the rodent census, or have their data with all three time formats
 #'
 #' @param summary_table Data.table with summarized rodent data.
@@ -271,7 +273,7 @@ add_time = function(summary_table, newmoon_table, time='period'){
     join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate)
   } else
     join_summary_newmoon = summary_table
-  
+
   return(join_summary_newmoon)
 }
 
