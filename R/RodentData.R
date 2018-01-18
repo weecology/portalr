@@ -227,7 +227,7 @@ abundance <- function(...) {
 #'
 #' @description \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
 #'
-#' @param ... arguments passed to \code{\link{get_rodent_data}}
+#' @inheritParams abundance
 #'
 #' @examples
 #' biomass("repo")
@@ -243,7 +243,7 @@ biomass <- function(...) {
 #'
 #' @description \code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
 #'
-#' @param ... arguments passed to \code{\link{get_rodent_data}}
+#' @inheritParams abundance
 #'
 #' @examples
 #' energy("repo")

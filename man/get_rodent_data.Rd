@@ -44,10 +44,6 @@ energy(...)
 \item{fillweight}{specify whether to fill in unknown weights with other records from that individual or species, where possible}
 
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
-
-\item{...}{arguments passed to \code{\link{get_rodent_data}}}
-
-\item{...}{arguments passed to \code{\link{get_rodent_data}}}
 }
 \description{
 A function to summarize monthly Portal rodent species data.
