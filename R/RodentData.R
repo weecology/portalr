@@ -172,9 +172,11 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(biomass = 0))
       if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(biomass = 0))
       if(level %in% c('Plot', 'plot')) {
-        out_df =  tidyr::complete(out_df, species, period, plot, fill = list(biomass = 0))
-        out_df = filter(out_df, !(is.na(species)))
-        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+        out_df %>%
+          tidyr::complete(species, period, plot, fill = list(biomass = 0)) %>%
+          dplyr::filter(out_df, !(is.na(species))) %>%
+          dplyr::left_join(trapping[, c('period', 'plot', 'sampled')], by = c('period', 'plot')) %>%
+          {.} -> out_df
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
@@ -182,9 +184,11 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(energy = 0))
       if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(energy = 0))
       if(level %in% c('Plot', 'plot')) {
-        out_df =  tidyr::complete(out_df, species, period, plot, fill = list(energy = 0))
-        out_df = filter(out_df, !(is.na(species)))
-        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
+        out_df %>%
+          tidyr::complete(species, period, plot, fill = list(energy = 0)) %>%
+          dplyr::filter(!(is.na(species))) %>%
+          dplyr::left_join(trapping[, c('period', 'plot', 'sampled')], by = c('period', 'plot')) %>%
+          {.} -> out_df
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
