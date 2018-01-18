@@ -349,7 +349,7 @@ fill_weight = function(rodent_data, tofill, species_list) {
         # or the juvwgt for that species is NA
         sp.weight = species_list %>%
           dplyr::filter(species == my.species) %>%
-          select(meanwgt)
+          dplyr::select(meanwgt)
 
         # give it the species weight, even if that is na. this is the best you can do.
         thisweight = sp.weight[1,1]
