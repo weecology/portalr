@@ -1,7 +1,7 @@
 #' @importFrom magrittr "%>%"
 
 #' @name get_rodent_data
-#' @aliases abundance biomass
+#' @aliases abundance biomass energy
 #'
 #' @title Retrieve Rodent Data
 #'
@@ -25,7 +25,8 @@
 
 get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
-                            shape = "crosstab", time = "period", output = "abundance", fillweight = TRUE)
+                            shape = "crosstab", time = "period", output = "abundance",
+                            fillweight = !(output %in% c("abundance", "Abundance")))
 {
   ##########Get Data
   data_tables = loadData(path)
@@ -167,7 +168,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       }
     }
   } else {
-
     if(output %in% c('Biomass', 'biomass')) {
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(biomass = 0))
       if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(biomass = 0))
@@ -178,9 +178,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
-
-    }
-    if (output %in% c('Energy', 'energy')){
+    } else if (output %in% c('Energy', 'energy')){
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(energy = 0))
       if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(energy = 0))
       if(level %in% c('Plot', 'plot')) {
@@ -190,68 +188,59 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
+    } else { # output == "abundance"
+      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
+      if(level %in% c('Treatment', 'treatment')) out_df = tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
     }
-      if(output %in% c('Abundance', 'abundance')) {
-        if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
-        if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
-        if(level %in% c('Plot', 'plot')) {
-          out_df =  tidyr::complete(out_df, species, period, plot, fill = list(abundance = 0))
-          out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
-          out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
-          out_df = out_df[, (1:ncol(out_df) - 1)]
-        }
-      }
-    }
-
-
-
-
-    ###########Switch to new moon number if time == 'newmoon'------------------
-    out_df = add_time(out_df, newmoons, time)
-
-
-
-    return(out_df)
   }
 
 
-  #' @rdname get_rodent_data
-  #'
-  #' @description \code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
-  #'
-  #' @examples
-  #' abundance("repo")
-  #'
-  #' @export
-  #'
-  abundance <- function(...) {
-    get_rodent_data(..., output = "abundance")
-  }
-
-  #' @rdname get_rodent_data
-  #'
-  #' @description \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
-  #'
-  #' @examples
-  #' biomass("repo")
-  #'
-  #' @export
-  #'
-  biomass <- function(...) {
-    get_rodent_data(..., output = "biomass")
-  }
+  ###########Switch to new moon number if time == 'newmoon'------------------
+  out_df = add_time(out_df, newmoons, time)
 
 
-  #' @rdname get_rodent_data
-  #'
-  #' @description \code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
-  #'
-  #' @examples
-  #' energy("repo")
-  #'
-  #' @export
-  #'
-  energy <- function(...) {
-    get_rodent_data(..., output = "energy")
-  }
+
+  return(out_df)
+}
+
+
+#' @rdname get_rodent_data
+#'
+#' @description \code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
+#'
+#' @examples
+#' abundance("repo")
+#'
+#' @export
+#'
+abundance <- function(...) {
+  get_rodent_data(..., output = "abundance")
+}
+
+#' @rdname get_rodent_data
+#'
+#' @description \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
+#'
+#' @examples
+#' biomass("repo")
+#'
+#' @export
+#'
+biomass <- function(...) {
+  get_rodent_data(..., output = "biomass")
+}
+
+
+#' @rdname get_rodent_data
+#'
+#' @description \code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
+#'
+#' @examples
+#' energy("repo")
+#'
+#' @export
+#'
+energy <- function(...) {
+  get_rodent_data(..., output = "energy")
+}
 
