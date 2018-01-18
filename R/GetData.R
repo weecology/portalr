@@ -39,7 +39,7 @@ download_observations <- function(base_folder = '~', release_only = TRUE) {
     } else {
       httr::GET(repo_url) -> resp
     }
-    if (httr:http_type(resp) != "application/json") # check for errors
+    if (httr::http_type(resp) != "application/json") # check for errors
     {
       stop("GitHub response was not in json format", call. = FALSE)
     }
