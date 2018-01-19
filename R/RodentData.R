@@ -64,89 +64,93 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     if(level %in% c("Treatment", "treatment")) # group by treatments
     {
-    rodents = join_plots_to_rodents(rodents, plots)
+      rodents = join_plots_to_rodents(rodents, plots)
 
-    if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, treatment, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species, biomass)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, treatment) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species = x.Var1, abundance = x.Freq)
+      if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::group_by(period, treatment, species) %>%
+          dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
+          dplyr::ungroup() %>%
+          dplyr::select(period, treatment, species, biomass)
+      } else { # abundance by default
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::group_by(period, treatment) %>%
+          dplyr::do(data.frame(x = table(.$species))) %>%
+          dplyr::ungroup() %>%
+          dplyr::select(period, treatment, species = x.Var1, abundance = x.Freq)
+      }
+    } else if(level %in% c("Plot", "plot")) {    # group by plots
+      trapping = filter_plots(trapping, length)
+      rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
+      # reduce size of trapping table
+
+      if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
+        # which period x plot were not sampled?
+        sampled_LUT <- rodents %>%
+          dplyr::filter(sampled == 0) %>%
+          dplyr::select(period, plot, sampled) %>%
+          dplyr::distinct()
+
+        # aggregate over period x plot; fill in 0s
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::count(period, plot, species, wt = wgt) %>%
+          dplyr::select(period, plot, species, biomass = n) %>%
+          tidyr::complete(period, plot, species, fill = list(biomass = 0)) %>%
+          dplyr::filter(!is.na(species))
+
+        # replace abundancs for non-sampled period x plot with NA
+        out_df <- out_df %>%
+          dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
+          dplyr::mutate(biomass = replace(biomass, sampled == 0, NA)) %>%
+          dplyr::select(period, plot, species, biomass)
+
+      } else { # abundance by default
+        # which period x plot were not sampled?
+        sampled_LUT <- rodents %>%
+          dplyr::filter(sampled == 0) %>%
+          dplyr::select(period, plot, sampled) %>%
+          dplyr::distinct()
+
+        # aggregate over period x plot; fill in 0s
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::count(period, plot, species) %>%
+          dplyr::select(period, plot, species, abundance = n) %>%
+          tidyr::complete(period, plot, species, fill = list(abundance = 0L)) %>%
+          dplyr::filter(!is.na(species))
+
+        # replace abundancs for non-sampled period x plot with NA
+        out_df <- out_df %>%
+          dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
+          dplyr::mutate(abundance = replace(abundance, sampled == 0, NA)) %>%
+          dplyr::select(period, plot, species, abundance)
+      }
+    } else if(level %in% c("Site", "site")) {    # group by the whole site
+      if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::group_by(period, species) %>%
+          dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
+          dplyr::ungroup() %>%
+          dplyr::select(period, species, biomass)
+      } else { # abundance by default
+        out_df <- rodents %>%
+          dplyr::mutate(species = factor(species)) %>%
+          dplyr::group_by(period) %>%
+          dplyr::do(data.frame(x = table(.$species))) %>%
+          dplyr::ungroup() %>%
+          dplyr::select(period, species = x.Var1, abundance = x.Freq)
+      }
     }
-  } else if(level %in% c("Plot", "plot")) {    # group by plots
-    trapping = filter_plots(trapping, length)
-    rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
-    # reduce size of trapping table
-
-    if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, plot, sampled, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::mutate(biomass = replace(biomass, sampled == 0, NA)) %>% # 0->NA on untrapped plots
-        dplyr::ungroup() %>%
-        dplyr::select(period, plot, species, biomass)
-    } else { # abundance by default
-      # which period x plot were not sampled?
-      sampled_LUT <- rodents %>%
-        dplyr::filter(sampled == 0) %>%
-        dplyr::select(period, plot, sampled) %>%
-        dplyr::distinct()
-
-      # aggregate over period x plot; fill in 0s
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::count(period, plot, species) %>%
-        dplyr::select(period, plot, species, abundance = n) %>%
-        tidyr::complete(period, plot, species, fill = list(abundance = 0L)) %>%
-        dplyr::filter(!is.na(species))
-
-      # replace abundancs for non-sampled period x plot with NA
-      out_df <- out_df %>%
-        dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
-        dplyr::mutate(abundance = replace(abundance, sampled == 0, NA)) %>%
-        dplyr::select(period, plot, species, abundance)
-    }
-  } else if(level %in% c("Site", "site")) {    # group by the whole site
-    if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species, biomass)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species = x.Var1, abundance = x.Freq)
-    }
-  }
 
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
   {
     if (output %in% c('Biomass', 'biomass', 'Energy', 'energy')) {
       out_df = make_crosstab(out_df, "biomass")
-      if (level %in% c('plot', 'Plot')) {
-        if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
-        out_df[is.na(out_df)] <- 0
-        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
-        out_df[ which(out_df$sampled == 0), 3:(ncol(out_df) - 1)] <- NA
-        out_df = out_df[, (1:ncol(out_df) - 1)]
-      } else {
-        out_df[is.na(out_df)] <- 0
-      }
     } else {
       out_df = make_crosstab(out_df, "abundance")
     }
