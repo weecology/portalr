@@ -64,7 +64,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
   }
 
-
   if(level %in% c("Treatment", "treatment")) # group by treatments
   {
     rodents = join_plots_to_rodents(rodents, plots)
@@ -122,8 +121,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
       out_df <- rodents %>%
         dplyr::count(period, species, wt = wgt) %>%
-        dplyr::select(period, species, biomass = n) %>%
-        tidyr::complete(period, species, fill = list(biomass = 0))
+        dplyr::select(period, species, biomass = n)
     } else { # abundance by default
       out_df <- rodents %>%
         dplyr::count(period, species) %>%
