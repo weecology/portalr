@@ -35,8 +35,11 @@
 get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "crosstab", time = "period", output = "abundance",
-                            fillweight = !(output %in% c("abundance", "Abundance")))
+                            fillweight = (output != "abundance"))
 {
+  #### Clean inputs ----
+  output <- tolower(output)
+
   #### Get Data ----
   data_tables = loadData(path)
   rodents = data_tables[[1]]
@@ -59,26 +62,18 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   #### Summarise data ----
 
   rodents$wgt <- as.numeric(rodents$wgt)
-  if(output %in% c("Energy", "energy"))
+  if(output == "energy")
   {
     rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
   }
 
-  if(level %in% c("Treatment", "treatment")) # group by treatments
-  {
-    rodents = join_plots_to_rodents(rodents, plots)
+  ## select what to summarize, depending on output
+  ##   if output == abundance then NULL     --> count entries
+  ##                          else quo(wgt) --> sum up `wgt` column
+  wt <- if(output == "abundance") NULL else quo(wgt)
 
-    if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
-      out_df <- rodents %>%
-        dplyr::count(period, treatment, species, wt = wgt) %>%
-        dplyr::select(period, treatment, species, biomass = n) %>%
-        tidyr::complete(period, treatment, species, fill = list(biomass = 0))
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::count(period, treatment, species) %>%
-        dplyr::select(period, treatment, species, abundance = n)
-    }
-  } else if(level %in% c("Plot", "plot")) {    # group by plots
+  ## summarize over each plot
+  if(level %in% c("Plot", "plot")) {
     trapping = filter_plots(trapping, length)
     rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
 
@@ -88,61 +83,42 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       dplyr::select(period, plot, sampled) %>%
       dplyr::distinct()
 
-    if(output %in% c("Biomass", "biomass", "Energy", "energy"))
-    {
-      # aggregate over period x plot; fill in 0s
-      out_df <- rodents %>%
-        dplyr::count(period, plot, species, wt = wgt) %>%
-        dplyr::select(period, plot, species, biomass = n) %>%
-        tidyr::complete(period, plot, species, fill = list(biomass = 0)) %>%
-        dplyr::filter(!is.na(species))
+    # aggregate over period x plot; fill in 0s
+    out_df <- rodents %>%
+      dplyr::count(period, plot, species, wt = !!wt) %>%
+      dplyr::select(period, plot, species, n) %>%
+      tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
+      dplyr::filter(!is.na(species))
 
-      # replace abundancs for non-sampled period x plot with NA
-      out_df <- out_df %>%
-        dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
-        dplyr::mutate(biomass = replace(biomass, sampled == 0, NA)) %>%
-        dplyr::select(period, plot, species, biomass)
+    # replace values for non-sampled period x plot with NA
+    out_df <- out_df %>%
+      dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
+      dplyr::mutate(n = replace(n, sampled == 0, NA)) %>%
+      dplyr::select(period, plot, species, n) %>%
+      dplyr::rename(!!output := n)
 
-    } else { # output == "abundance" by default
-      # aggregate over period x plot; fill in 0s
-      out_df <- rodents %>%
-        dplyr::count(period, plot, species) %>%
-        dplyr::select(period, plot, species, abundance = n) %>%
-        tidyr::complete(period, plot, species, fill = list(abundance = 0L)) %>%
-        dplyr::filter(!is.na(species))
+    ## summarize over the whole site
+  } else if(level %in% c("Site", "site")) {
+    out_df <- rodents %>%
+      dplyr::count(period, species, wt = !!wt) %>%
+      dplyr::select(period, species, n) %>%
+      dplyr::rename(!!output := n)
 
-      # replace abundancs for non-sampled period x plot with NA
-      out_df <- out_df %>%
-        dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
-        dplyr::mutate(abundance = replace(abundance, sampled == 0, NA)) %>%
-        dplyr::select(period, plot, species, abundance)
-    }
-  } else if(level %in% c("Site", "site")) {    # group by the whole site
-    if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
-      out_df <- rodents %>%
-        dplyr::count(period, species, wt = wgt) %>%
-        dplyr::select(period, species, biomass = n)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::count(period, species) %>%
-        dplyr::select(period, species, abundance = n)
-    }
+    ## sumamrize over each treatment
+  } else if(level %in% c("Treatment", "treatment")) {
+    rodents = join_plots_to_rodents(rodents, plots)
+
+    out_df <- rodents %>%
+      dplyr::count(period, treatment, species, wt = !!wt) %>%
+      dplyr::select(period, treatment, species, n) %>%
+      dplyr::rename(!!output := n)
   }
 
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
   {
-    if (output %in% c('Biomass', 'biomass', 'Energy', 'energy')) {
-      out_df = make_crosstab(out_df, "biomass")
-    } else {
-      out_df = make_crosstab(out_df, "abundance", fill = 0L)
-    }
-  } else {
-    #### correct column name for "biomass" -> "energy" ----
-    if(output %in% c("Energy", "energy"))
-    {
-      out_df <- dplyr::rename(out_df, energy = biomass) # rename output column
-    }
+    crosstab_fill <- if(output == "abundance") 0L else NA
+    out_df <- make_crosstab(out_df, output, crosstab_fill)
   }
 
   #### use new moon number as time index if time == "newmoon" ----

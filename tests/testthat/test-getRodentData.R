@@ -92,10 +92,6 @@ test_that("energy returns expected results", {
   expect_equal(floor(dplyr::filter(energy.notfilled, period == 447, plot == 3, species == "BA")$energy), 9)
   expect_equal(floor(dplyr::filter(energy.filled, period == 447, plot == 3, species == "BA")$energy), 14)
 
-  #
-  # expect_true(floor(as.numeric(energy.notfilledt[1131, 'energy'])) == 9)
-  # expect_true(floor(as.numeric(energy.test[1131, 'energy'])) == 14)
-
   })
 
 
