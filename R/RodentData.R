@@ -136,8 +136,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
   {
-    out_df = make_crosstab(out_df, variable_name = output)
     if (output %in% c('Biomass', 'biomass', 'Energy', 'energy')) {
+      out_df = make_crosstab(out_df, "biomass")
       if (level %in% c('plot', 'Plot')) {
         if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
         out_df[is.na(out_df)] <- 0
@@ -147,6 +147,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       } else {
         out_df[is.na(out_df)] <- 0
       }
+    } else {
+      out_df = make_crosstab(out_df, "abundance")
     }
   } else { # flat output
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
@@ -165,12 +167,12 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
       if(level %in% c('Treatment', 'treatment')) out_df = tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
     }
-  }
 
-  #### correct column name for "biomass" -> "energy" ----
-  if(output %in% c("Energy", "energy"))
-  {
-    out_df <- rename(out_df, energy = biomass) # rename output column
+    #### correct column name for "biomass" -> "energy" ----
+    if(output %in% c("Energy", "energy"))
+    {
+      out_df <- dplyr::rename(out_df, energy = biomass) # rename output column
+    }
   }
 
   #### use new moon number as time index if time == "newmoon" ----

@@ -8,7 +8,7 @@
 \alias{abundance}
 \alias{biomass}
 \alias{energy}
-\title{Retrieve Rodent Data}
+\title{Generate summaries of Portal rodent data}
 \usage{
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
@@ -22,17 +22,22 @@ biomass(...)
 energy(...)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or 'repo' to retrieve data from github repo}
+\item{path}{path to location of downloaded Portal data; or "repo" to
+retrieve data from github repo}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
-\item{type}{specify subset of species; either all "Rodents" or only "Granivores"}
+\item{type}{specify subset of species; either all "Rodents" or only
+"Granivores"}
 
-\item{length}{specify subset of plots; use "All" plots or only "Longterm" plots (plots that have had same treatment for entire time series)}
+\item{length}{specify subset of plots; use "All" plots or only "Longterm"
+plots (plots that have had same treatment for entire time series)}
 
-\item{unknowns}{either removes all individuals not identified to species (unknowns=F) or sums them in an additional column (unknowns=T)}
+\item{unknowns}{either removes all individuals not identified to species
+(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{incomplete}{either removes all data from incomplete trapping sessions (incomplete = F) or includes them (incomplete = T)
+\item{incomplete}{either removes all data from incomplete trapping sessions
+(incomplete = FALSE) or includes them (incomplete = TRUE)
 [note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
@@ -46,13 +51,17 @@ energy(...)
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
 }
 \description{
-A function to summarize monthly Portal rodent species data.
+This function is a generic interface into creating (monthly)
+  summaries of the Portal rodent species data. It contains a number of
+  arguments to specify both the kind of data to summarize, at what level of
+  aggregation, various choices for dealing with data quality, and output
+  format.
 
-\code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
+\code{abundance} generates a table of rodent abundance
 
-\code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
+* \code{biomass()} generates a table of rodent biomass
 
-\code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
+* \code{energy()} generates a table of rodent energy (computed as biomass ^ 0.75)
 }
 \examples{
 abundance("repo")
