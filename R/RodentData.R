@@ -2,6 +2,8 @@
 #' @importFrom rlang "!!"
 #' @importFrom rlang "!!!"
 #' @importFrom rlang ":="
+#' @importFrom rlang quo
+#' @importFrom rlang quos
 
 #' @name get_rodent_data
 #' @aliases abundance biomass energy
@@ -45,12 +47,12 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   level <- tolower(level)
 
   #### Get Data ----
-  data_tables = loadData(path)
-  rodents = data_tables[[1]]
-  species = data_tables[[2]]
-  trapping = data_tables[[3]]
-  newmoons = data_tables[[4]]
-  plots = data_tables[[5]]
+  data_tables <- loadData(path)
+  rodents <- data_tables[[1]]
+  species <- data_tables[[2]]
+  trapping <- data_tables[[3]]
+  newmoons <- data_tables[[4]]
+  plots <- data_tables[[5]]
 
   #### Do initial cleaning ----
   rodents %>%
@@ -63,57 +65,57 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     dplyr::mutate(species = factor(species)) %>%         # convert species to factor
     {.} -> rodents                             # re-assign back into rodents
 
-  #### Summarise data ----
+  #### Summarize data ----
 
+  ## [1] if output == "energy", convert weight to energy
   rodents$wgt <- as.numeric(rodents$wgt)
   if(output == "energy")
   {
     rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
   }
 
-  ## select what to summarize, depending on output
-  ##   if output == abundance then NULL     --> count entries
-  ##                          else quo(wgt) --> sum up `wgt` column
-  wt <- if(output == "abundance") NULL else rlang::quo(wgt)
+  ## [2] select what to summarize, depending on output
+  ##     if output == abundance then NULL     --> count entries
+  ##                            else quo(wgt) --> sum up `wgt` column
+  wt <- if(output == "abundance") NULL else quo(wgt)
 
+  ## [3] determine grouping variables
   ## summarize over each plot
   if(level == "plot") {
-    trapping = filter_plots(trapping, length)
-    rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
+    trapping <- filter_plots(trapping, length)
+    rodents <- join_trapping_to_rodents(rodents, trapping, incomplete)
+    grouping <- quos(period, plot, species)
 
-    # which period x plot were not sampled?
+    # remember which (period x plot) were not sampled
     sampled_LUT <- rodents %>%
       dplyr::filter(sampled == 0) %>%
       dplyr::select(period, plot, sampled) %>%
       dplyr::distinct()
+  } else if(level == "treatment") {
+    rodents = join_plots_to_rodents(rodents, plots)
+    grouping <- quos(period, treatment, species)
+  } else { # level == "site"
+    grouping <- quos(period, species)
+  }
 
-    # aggregate over period x plot; fill in 0s
-    out_df <- rodents %>%
-      dplyr::count(period, plot, species, wt = !!wt) %>%
-      dplyr::select(period, plot, species, n)
+  ## [4] summarize
+  out_df <- rodents %>%
+    dplyr::count(!!!grouping, wt = !!wt) %>%
+    dplyr::select(!!!grouping, n)
 
+  ## [5] post-process
+  if(level == "plot") {
     # replace values for non-sampled period x plot with NA
     out_df <- out_df %>%
       tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
       dplyr::filter(!is.na(species)) %>%
       dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
       dplyr::mutate(n = replace(n, sampled == 0, NA)) %>%
-      dplyr::select(period, plot, species, n) %>%
-      dplyr::rename(!!output := n)
-
-    ## summarize over the whole site or over each treatment
-  } else {
-    if(level == "treatment") {
-      rodents = join_plots_to_rodents(rodents, plots)
-      grouping <- rlang::quos(period, treatment, species)
-    } else { # level == "site"
-      grouping <- rlang::quos(period, species)
-    }
-    out_df <- rodents %>%
-      dplyr::count(!!!grouping, wt = !!wt) %>%
-      dplyr::select(!!!grouping, n) %>%
-      dplyr::rename(!!output := n)
+      dplyr::select(period, plot, species, n)
   }
+
+  ## [6] rename output variable correctly
+  out_df <- dplyr::rename(out_df, !!output := n)
 
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
