@@ -1,4 +1,4 @@
-context("checks data_processing functions")
+context("checks get_rodent_data functions")
 
 test_that("user given path returns list length 5", {
   data = loadData("repo")

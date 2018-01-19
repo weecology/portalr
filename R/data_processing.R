@@ -301,6 +301,73 @@ make_crosstab = function(summary_data, variable_name = quo(abundance)){
 #' @param species_list species table
 #'
 #' @export
+# fill_weight = function(rodent_data, tofill, species_list) {
+#   if (!tofill) return(rodent_data)
+#
+#   # else substitute missing weight data
+#   findmyweight = function(these.rodents, thisrow) {
+#
+#     my.weight = these.rodents$wgt[thisrow]
+#     # if they have a weight, great. skip.
+#     if (!is.na(my.weight)  && my.weight >0) {
+#       thisweight = my.weight
+#       return(thisweight)
+#     }
+#
+#
+#     my.tag = these.rodents$tag[thisrow]
+#     my.species = these.rodents$species[thisrow]
+#     # if they don't have a weight, do they have a tag?
+#     if(!is.na(my.tag) && my.tag != 0) {
+#       # if they have a tag
+#       my.period = these.rodents$period[thisrow]
+#       my.fullrecords = these.rodents %>%
+#         dplyr::filter(tag == my.tag, wgt > 0, species == my.species)
+#       # if they have a weight record at some point
+#       if(nrow(my.fullrecords) > 0) {
+#         my.fullrecords = dplyr::mutate(my.fullrecords, period.distance = abs(my.period - period))
+#         my.closestrecords = my.fullrecords[ which(my.fullrecords$period.distance == min(my.fullrecords$period.distance)), 'wgt']
+#         my.closestwgt = mean(my.closestrecords, na.rm = TRUE)
+#         thisweight = my.closestwgt
+#         return(thisweight)
+#       }
+#     }
+#     if (!is.na(my.species) && my.species != 0) {
+#       # if they don't have a tag
+#       # or if they have a tag but no weights ever recorded
+#       # but they do have a species
+#       if (!is.na(these.rodents$age[thisrow]) && (these.rodents$age[thisrow] == 'J')) {
+#         # if they're juvenile
+#         juvweight = species_list[ which(species_list$species == my.species), 'juvwgt']
+#         # and there is a juv weight for that species
+#         if(!is.na(juvweight)) {
+#           thisweight = juvweight
+#           return(thisweight)
+#         }
+#       } else {
+#         # if they're not juvenile
+#         # or the juvwgt for that species is NA
+#         sp.weight = species_list %>%
+#           dplyr::filter(species == my.species) %>%
+#           dplyr::select(meanwgt)
+#
+#         # give it the species weight, even if that is na. this is the best you can do.
+#         thisweight = sp.weight[1,1]
+#         return(thisweight)
+#
+#       }
+#     }
+#
+#     # if they have no tag and no species, you're stuck.
+#
+#     thisweight = my.weight
+#     return(thisweight)
+#
+#   }
+#
+#   rodent_data$wgt = vapply(1:nrow(rodent_data), findmyweight, these.rodents = rodent_data, FUN.VALUE = 1)
+#   return(rodent_data)
+# }
 fill_weight = function(rodent_data, tofill, species_list) {
   if (!tofill) return(rodent_data)
 
@@ -308,12 +375,6 @@ fill_weight = function(rodent_data, tofill, species_list) {
   findmyweight = function(these.rodents, thisrow) {
 
     my.weight = these.rodents$wgt[thisrow]
-    # if they have a weight, great. skip.
-    if (!is.na(my.weight)  && my.weight >0) {
-      thisweight = my.weight
-      return(thisweight)
-    }
-
 
     my.tag = these.rodents$tag[thisrow]
     my.species = these.rodents$species[thisrow]
@@ -327,9 +388,7 @@ fill_weight = function(rodent_data, tofill, species_list) {
       if(nrow(my.fullrecords) > 0) {
         my.fullrecords = dplyr::mutate(my.fullrecords, period.distance = abs(my.period - period))
         my.closestrecords = my.fullrecords[ which(my.fullrecords$period.distance == min(my.fullrecords$period.distance)), 'wgt']
-        my.closestwgt = mean(my.closestrecords, na.rm = TRUE)
-        thisweight = my.closestwgt
-        return(thisweight)
+        return(mean(my.closestrecords, na.rm = TRUE))
       }
     }
     if (!is.na(my.species) && my.species != 0) {
@@ -365,6 +424,8 @@ fill_weight = function(rodent_data, tofill, species_list) {
 
   }
 
-  rodent_data$wgt = vapply(1:nrow(rodent_data), findmyweight, these.rodents = rodent_data, FUN.VALUE = 1)
+  idx <- is.na(rodent_data$wgt) | rodent_data$wgt <= 0
+
+  rodent_data$wgt[idx] = vapply(which(idx), findmyweight, these.rodents = rodent_data, FUN.VALUE = 1)
   return(rodent_data)
 }
