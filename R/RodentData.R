@@ -1,4 +1,7 @@
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang "!!"
+#' @importFrom rlang "!!!"
+#' @importFrom rlang ":="
 
 #' @name get_rodent_data
 #' @aliases abundance biomass energy
@@ -39,6 +42,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 {
   #### Clean inputs ----
   output <- tolower(output)
+  level <- tolower(level)
 
   #### Get Data ----
   data_tables = loadData(path)
@@ -70,10 +74,10 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   ## select what to summarize, depending on output
   ##   if output == abundance then NULL     --> count entries
   ##                          else quo(wgt) --> sum up `wgt` column
-  wt <- if(output == "abundance") NULL else quo(wgt)
+  wt <- if(output == "abundance") NULL else rlang::quo(wgt)
 
   ## summarize over each plot
-  if(level %in% c("Plot", "plot")) {
+  if(level == "plot") {
     trapping = filter_plots(trapping, length)
     rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
 
@@ -86,31 +90,28 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     # aggregate over period x plot; fill in 0s
     out_df <- rodents %>%
       dplyr::count(period, plot, species, wt = !!wt) %>%
-      dplyr::select(period, plot, species, n) %>%
-      tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
-      dplyr::filter(!is.na(species))
+      dplyr::select(period, plot, species, n)
 
     # replace values for non-sampled period x plot with NA
     out_df <- out_df %>%
+      tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
+      dplyr::filter(!is.na(species)) %>%
       dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
       dplyr::mutate(n = replace(n, sampled == 0, NA)) %>%
       dplyr::select(period, plot, species, n) %>%
       dplyr::rename(!!output := n)
 
-    ## summarize over the whole site
-  } else if(level %in% c("Site", "site")) {
+    ## summarize over the whole site or over each treatment
+  } else {
+    if(level == "treatment") {
+      rodents = join_plots_to_rodents(rodents, plots)
+      grouping <- rlang::quos(period, treatment, species)
+    } else { # level == "site"
+      grouping <- rlang::quos(period, species)
+    }
     out_df <- rodents %>%
-      dplyr::count(period, species, wt = !!wt) %>%
-      dplyr::select(period, species, n) %>%
-      dplyr::rename(!!output := n)
-
-    ## sumamrize over each treatment
-  } else if(level %in% c("Treatment", "treatment")) {
-    rodents = join_plots_to_rodents(rodents, plots)
-
-    out_df <- rodents %>%
-      dplyr::count(period, treatment, species, wt = !!wt) %>%
-      dplyr::select(period, treatment, species, n) %>%
+      dplyr::count(!!!grouping, wt = !!wt) %>%
+      dplyr::select(!!!grouping, n) %>%
       dplyr::rename(!!output := n)
   }
 

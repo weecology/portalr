@@ -13,7 +13,7 @@
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
   shape = "crosstab", time = "period", output = "abundance",
-  fillweight = !(output \%in\% c("abundance", "Abundance")))
+  fillweight = (output != "abundance"))
 
 abundance(...)
 
