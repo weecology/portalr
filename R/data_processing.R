@@ -283,10 +283,11 @@ add_time = function(summary_table, newmoon_table, time='period'){
 #'
 #' @param summary_data summarized rodent data
 #' @param variable_name what variable to spread (default is "abundance")
+#' @param ... other arguments to pass on to tidyr::spread
 #'
 #' @export
-make_crosstab = function(summary_data, variable_name = quo(abundance), ...){
-  summary_data = summary_data %>%
+make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
+  summary_data %>%
     tidyr::spread(species, !!variable_name, ...) %>%
     dplyr::ungroup()
 }

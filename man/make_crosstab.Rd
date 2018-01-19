@@ -10,6 +10,8 @@ make_crosstab(summary_data, variable_name = quo(abundance), ...)
 \item{summary_data}{summarized rodent data}
 
 \item{variable_name}{what variable to spread (default is "abundance")}
+
+\item{...}{other arguments to pass on to tidyr::spread}
 }
 \description{
 convert summarized rodent data to crosstab form
