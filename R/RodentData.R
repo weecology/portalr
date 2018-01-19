@@ -69,10 +69,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
       out_df <- rodents %>%
-        dplyr::group_by(period, treatment, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species, biomass) %>%
+        dplyr::count(period, treatment, species, wt = wgt) %>%
+        dplyr::select(period, treatment, species, biomass = n) %>%
         tidyr::complete(period, treatment, species, fill = list(biomass = 0))
     } else { # abundance by default
       out_df <- rodents %>%
@@ -127,17 +125,13 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   } else if(level %in% c("Site", "site")) {    # group by the whole site
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
       out_df <- rodents %>%
-        dplyr::group_by(period, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species, biomass) %>%
+        dplyr::count(period, species, wt = wgt) %>%
+        dplyr::select(period, species, biomass = n) %>%
         tidyr::complete(period, species, fill = list(biomass = 0))
     } else { # abundance by default
       out_df <- rodents %>%
-        dplyr::group_by(period) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species = x.Var1, abundance = x.Freq)
+        dplyr::count(period, species) %>%
+        dplyr::select(period, species, abundance = n)
     }
   }
 
@@ -160,10 +154,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
         out_df = out_df[, (1:ncol(out_df) - 1)]
       }
-    } else { # output == "abundance"
-      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
     }
-
     #### correct column name for "biomass" -> "energy" ----
     if(output %in% c("Energy", "energy"))
     {
