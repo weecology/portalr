@@ -51,6 +51,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     process_granivores(type) %>%               # exclude granivores?
     remove_incomplete_censuses(trapping, incomplete) %>% # incomplete trapping sessions
     filter_plots(length) %>%                   # keep only the long-term treatments
+    mutate(species = factor(species)) %>%      # convert species to factor
     {.} -> rodents                             # re-assign back into rodents
 
   #### Summarise data ----
@@ -68,7 +69,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
         dplyr::group_by(period, treatment, species) %>%
         dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
         dplyr::ungroup() %>%
@@ -76,11 +76,8 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         tidyr::complete(period, treatment, species, fill = list(biomass = 0))
     } else { # abundance by default
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, treatment) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species = x.Var1, abundance = x.Freq)
+        dplyr::count(period, treatment, species) %>%
+        dplyr::select(period, treatment, species, abundance = n)
     }
   } else if(level %in% c("Plot", "plot")) {    # group by plots
     trapping = filter_plots(trapping, length)
@@ -96,7 +93,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
       # aggregate over period x plot; fill in 0s
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
         dplyr::count(period, plot, species, wt = wgt) %>%
         dplyr::select(period, plot, species, biomass = n) %>%
         tidyr::complete(period, plot, species, fill = list(biomass = 0)) %>%
@@ -117,7 +113,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
       # aggregate over period x plot; fill in 0s
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
         dplyr::count(period, plot, species) %>%
         dplyr::select(period, plot, species, abundance = n) %>%
         tidyr::complete(period, plot, species, fill = list(abundance = 0L)) %>%
@@ -132,7 +127,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   } else if(level %in% c("Site", "site")) {    # group by the whole site
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
         dplyr::group_by(period, species) %>%
         dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
         dplyr::ungroup() %>%
@@ -140,7 +134,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
         tidyr::complete(period, species, fill = list(biomass = 0))
     } else { # abundance by default
       out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
         dplyr::group_by(period) %>%
         dplyr::do(data.frame(x = table(.$species))) %>%
         dplyr::ungroup() %>%
@@ -154,7 +147,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
     if (output %in% c('Biomass', 'biomass', 'Energy', 'energy')) {
       out_df = make_crosstab(out_df, "biomass")
     } else {
-      out_df = make_crosstab(out_df, "abundance")
+      out_df = make_crosstab(out_df, "abundance", fill = 0L)
     }
   } else { # flat output
     if(output %in% c("Biomass", "biomass", "Energy", "energy")) {
@@ -169,7 +162,6 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       }
     } else { # output == "abundance"
       if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
-      if(level %in% c('Treatment', 'treatment')) out_df = tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
     }
 
     #### correct column name for "biomass" -> "energy" ----

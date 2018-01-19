@@ -285,9 +285,9 @@ add_time = function(summary_table, newmoon_table, time='period'){
 #' @param variable_name what variable to spread (default is "abundance")
 #'
 #' @export
-make_crosstab = function(summary_data, variable_name = quo(abundance)){
+make_crosstab = function(summary_data, variable_name = quo(abundance), ...){
   summary_data = summary_data %>%
-    tidyr::spread(species, !!variable_name) %>%
+    tidyr::spread(species, !!variable_name, ...) %>%
     dplyr::ungroup()
 }
 
