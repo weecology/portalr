@@ -175,9 +175,9 @@ remove_incomplete_censuses = function(rodent_species_merge,
   if (incomplete == F) {
     incompsampling = find_incomplete_censuses(trapping_table)
     rodent_species_merge = dplyr::filter(rodent_species_merge,
-                                  !period %in% incompsampling$period)
+                                         !period %in% incompsampling$period)
   }
-    return(rodent_species_merge)
+  return(rodent_species_merge)
 }
 
 #' @title Filter plots
@@ -196,7 +196,7 @@ filter_plots = function(data, length) {
   if (length %in% c("Longterm", "longterm")) {
     if("plot" %in% colnames(data)){
       data = data %>% dplyr::filter(plot %in%
-                               c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
+                                      c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
   }
   return(data)
 }
@@ -213,7 +213,7 @@ join_plots_to_rodents = function(rodent_data, plots_table){
   plots_table = plots_table %>% dplyr::group_by(year,plot) %>%
     dplyr::select(year,month, plot,treatment)
   rodent_table = dplyr::left_join(rodent_data,plots_table,
-                           by=c("year"="year","month"="month","plot"="plot"))
+                                  by=c("year"="year","month"="month","plot"="plot"))
   return(rodent_table)
 }
 
@@ -232,7 +232,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
     trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
   }
   rodent_table = dplyr::right_join(rodent_data, trapping_table,
-                            by=c("period"="period","plot"="plot"))
+                                   by=c("period"="period","plot"="plot"))
   return(rodent_table)
 }
 
@@ -281,11 +281,90 @@ add_time = function(summary_table, newmoon_table, time='period'){
 #'
 #' @description convert summarized rodent data to crosstab form
 #'
-#' @param summary_data summarized rodent data - must include 'abundance' column
+#' @param summary_data summarized rodent data
+#' @param variable_name what variable to spread (default is "abundance")
 #'
 #' @export
-make_crosstab = function(summary_data){
+make_crosstab = function(summary_data, variable_name = quo(abundance)){
   summary_data = summary_data %>%
-    tidyr::spread(species, abundance) %>%
+    tidyr::spread(species, !!variable_name) %>%
     dplyr::ungroup()
+}
+
+
+#' @title Fill Weight
+#'
+#' @description fill in missing weight values with either a recently recorded weight for that individual or species average
+#'
+#' @param rodent_data raw rodent data
+#' @param tofill logical whether to fill in missing values or not
+#' @param species_list species table
+#'
+#' @export
+fill_weight = function(rodent_data, tofill, species_list) {
+  if (!tofill) return(rodent_data)
+
+  # else substitute missing weight data
+  findmyweight = function(these.rodents, thisrow) {
+
+    my.weight = these.rodents$wgt[thisrow]
+    # if they have a weight, great. skip.
+    if (!is.na(my.weight)  && my.weight >0) {
+      thisweight = my.weight
+      return(thisweight)
+    }
+
+
+    my.tag = these.rodents$tag[thisrow]
+    my.species = these.rodents$species[thisrow]
+    # if they don't have a weight, do they have a tag?
+    if(!is.na(my.tag) && my.tag != 0) {
+      # if they have a tag
+      my.period = these.rodents$period[thisrow]
+      my.fullrecords = these.rodents %>%
+        dplyr::filter(tag == my.tag, wgt > 0, species == my.species)
+      # if they have a weight record at some point
+      if(nrow(my.fullrecords) > 0) {
+        my.fullrecords = dplyr::mutate(my.fullrecords, period.distance = abs(my.period - period))
+        my.closestrecords = my.fullrecords[ which(my.fullrecords$period.distance == min(my.fullrecords$period.distance)), 'wgt']
+        my.closestwgt = mean(my.closestrecords, na.rm = TRUE)
+        thisweight = my.closestwgt
+        return(thisweight)
+      }
+    }
+    if (!is.na(my.species) && my.species != 0) {
+      # if they don't have a tag
+      # or if they have a tag but no weights ever recorded
+      # but they do have a species
+      if (!is.na(these.rodents$age[thisrow]) && (these.rodents$age[thisrow] == 'J')) {
+        # if they're juvenile
+        juvweight = species_list[ which(species_list$species == my.species), 'juvwgt']
+        # and there is a juv weight for that species
+        if(!is.na(juvweight)) {
+          thisweight = juvweight
+          return(thisweight)
+        }
+      } else {
+        # if they're not juvenile
+        # or the juvwgt for that species is NA
+        sp.weight = species_list %>%
+          dplyr::filter(species == my.species) %>%
+          dplyr::select(meanwgt)
+
+        # give it the species weight, even if that is na. this is the best you can do.
+        thisweight = sp.weight[1,1]
+        return(thisweight)
+
+      }
+    }
+
+    # if they have no tag and no species, you're stuck.
+
+    thisweight = my.weight
+    return(thisweight)
+
+  }
+
+  rodent_data$wgt = vapply(1:nrow(rodent_data), findmyweight, these.rodents = rodent_data, FUN.VALUE = 1)
+  return(rodent_data)
 }

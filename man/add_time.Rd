@@ -24,6 +24,6 @@ censuses are missed (weather, transport issues,etc). You can't pick this
 up with the period code. Because censues may not always occur monthly due to
 the newmoon -  a new moon code was devised to give a standardized language
 of time for forcasting in particular. This function allows the user to decide
-if they want to use the rodent period code, the new moon code, the date of 
+if they want to use the rodent period code, the new moon code, the date of
 the rodent census, or have their data with all three time formats
 }

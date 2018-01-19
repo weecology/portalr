@@ -36,10 +36,10 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 
 
   # filter out duplicated data (flag=10)
-  colonydat = filter(colony, species %in% specieslist, !flag %in% c(10))
+  colonydat = dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
   # reduce colony data to list of year, plot, species
   if (level == 'Site') {
-    colonypresence = colonydat %>% select(year,species) %>% unique()
+    colonypresence = colonydat %>% dplyr::select(year,species) %>% unique()
     colonypresence$presence = rep(1)
 
     # data frame of all year/species
@@ -47,21 +47,22 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 
   }
   if (level == 'Plot') {
-    colonypresence = colonydat %>% select(year,plot,species) %>% unique()
+    colonypresence = colonydat %>% dplyr::select(year,plot,species) %>% unique()
     colonypresence$presence = rep(1)
 
     # data frame of which plots were censused in which years
-    df = colonypresence %>% select(year,plot) %>% unique()
+    df = colonypresence %>% dplyr::select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
     full_df = merge(df,full_df)
   }
   if (level == 'Stake') {
     # filter out data taken only at plot level (flag=9) or rows where stake is missing (flag=1)
-    colonypresence = filter(colonydat, !flag %in% c(9,1), !is.na(stake)) %>% select(year,plot,stake,species)
+    colonypresence = dplyr::filter(colonydat, !flag %in% c(9,1), !is.na(stake)) %>%
+      dplyr::select(year,plot,stake,species)
     colonypresence$presence = rep(1)
 
     #data frame of which plots were censused in which years
-    df = colonypresence %>% select(year,plot) %>% unique()
+    df = colonypresence %>% dplyr::select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), stake = c(11,12,13,14,15,16,17,
                                                                                     21,22,23,24,25,26,27,
                                                                                     31,32,33,34,35,36,37,
@@ -107,7 +108,7 @@ bait_presence_absence= function(level='Site') {
 
   # reduce data to list of year, plot, species
   if (level == 'Site') {
-    baitpresence = bait %>% select(year,species) %>% unique()
+    baitpresence = bait %>% dplyr::select(year,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of all year/species
@@ -115,20 +116,20 @@ bait_presence_absence= function(level='Site') {
 
   }
   if (level == 'Plot') {
-    baitpresence = bait %>% select(year,plot,species) %>% unique()
+    baitpresence = bait %>% dplyr::select(year,plot,species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of which plots were censused in which years
-    df = baitpresence %>% select(year,plot) %>% unique()
+    df = baitpresence %>% dplyr::select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
     full_df = merge(df,full_df)
   }
   if (level == 'Stake') {
-    baitpresence = bait %>% select(year,plot,stake,species)
+    baitpresence = bait %>% dplyr::select(year,plot,stake,species)
     baitpresence$presence = rep(1)
 
     #data frame of which plots were censused in which years
-    df = baitpresence %>% select(year,plot) %>% unique()
+    df = baitpresence %>% dplyr::select(year,plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), stake = c(11,13,15,17,
                                                                                     22,24,26,
                                                                                     31,33,35,37,
