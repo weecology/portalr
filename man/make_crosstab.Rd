@@ -4,7 +4,7 @@
 \alias{make_crosstab}
 \title{Make Crosstab}
 \usage{
-make_crosstab(summary_data, variable_name = quo(abundance))
+make_crosstab(summary_data, variable_name = quo(abundance), ...)
 }
 \arguments{
 \item{summary_data}{summarized rodent data}

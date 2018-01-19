@@ -42,7 +42,9 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 
-\item{time}{return data using the complete "newmoon" numbers of the original "period" numbers}
+\item{time}{specify the format of the time index in the output, either
+"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
+"date" (calendar date)}
 
 \item{output}{specify whether to return "abundance", or "biomass", or "energy"}
 
