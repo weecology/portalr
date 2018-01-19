@@ -15,7 +15,8 @@ Imports:
     RCurl,
     lubridate,
     magrittr,
-    httr
+    httr, 
+    rlang
 Suggests:
     testthat,
     digest,

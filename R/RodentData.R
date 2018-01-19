@@ -1,208 +1,131 @@
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang "!!"
+#' @importFrom rlang "!!!"
+#' @importFrom rlang ":="
+#' @importFrom rlang quo
+#' @importFrom rlang quos
 
 #' @name get_rodent_data
 #' @aliases abundance biomass energy
 #'
-#' @title Retrieve Rodent Data
+#' @title Generate summaries of Portal rodent data
 #'
-#' @description A function to summarize monthly Portal rodent species data.
+#' @description This function is a generic interface into creating (monthly)
+#'   summaries of the Portal rodent species data. It contains a number of
+#'   arguments to specify both the kind of data to summarize, at what level of
+#'   aggregation, various choices for dealing with data quality, and output
+#'   format.
 #'
-#' @param path path to location of downloaded Portal data; or 'repo' to retrieve data from github repo
+#' @param path path to location of downloaded Portal data; or "repo" to
+#'   retrieve data from github repo
 #' @param level summarize by "Plot", "Treatment", or "Site"
-#' @param type specify subset of species; either all "Rodents" or only "Granivores"
-#' @param length specify subset of plots; use "All" plots or only "Longterm" plots (plots that have had same treatment for entire time series)
-#' @param unknowns either removes all individuals not identified to species (unknowns=F) or sums them in an additional column (unknowns=T)
-#' @param incomplete either removes all data from incomplete trapping sessions (incomplete = F) or includes them (incomplete = T)
-#'                  [note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete]
+#' @param type specify subset of species; either all "Rodents" or only
+#'   "Granivores"
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (plots that have had same treatment for entire time series)
+#' @param unknowns either removes all individuals not identified to species
+#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param incomplete either removes all data from incomplete trapping sessions
+#'   (incomplete = FALSE) or includes them (incomplete = TRUE)
+#'   [note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete]
 #' @param shape return data as a "crosstab" or "flat" list
-#' @param time return data using the complete "newmoon" numbers of the original "period" numbers
+#' @param time specify the format of the time index in the output, either
+#'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
+#'   "date" (calendar date)
 #' @param output specify whether to return "abundance", or "biomass", or "energy"
 #' @param fillweight specify whether to fill in unknown weights with other records from that individual or species, where possible
 #'
 #' @export
 #'
-
-
 get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "crosstab", time = "period", output = "abundance",
-                            fillweight = !(output %in% c("abundance", "Abundance")))
+                            fillweight = (output != "abundance"))
 {
-  ##########Get Data
-  data_tables = loadData(path)
-  rodents = data_tables[[1]]
-  species = data_tables[[2]]
-  trapping = data_tables[[3]]
-  newmoons = data_tables[[4]]
-  plots = data_tables[[5]]
+  #### Clean inputs ----
+  output <- tolower(output)
+  level <- tolower(level)
 
+  #### Get Data ----
+  data_tables <- loadData(path)
+  rodents <- data_tables[[1]]
+  species <- data_tables[[2]]
+  trapping <- data_tables[[3]]
+  newmoons <- data_tables[[4]]
+  plots <- data_tables[[5]]
+
+  #### Do initial cleaning ----
   rodents %>%
-    ##########Fill in missing weights --------------------------------
-  fill_weight(fillweight, species) %>%
-    ##########Data cleanup --------------------------------
-  remove_suspect_entries() %>%
-    process_unknownsp(species, unknowns) %>%
+    fill_weight(fillweight, species) %>%       # add in missing biomass info
+    remove_suspect_entries() %>%               # remove various "weird" data
+    process_unknownsp(species, unknowns) %>%   # keep non-rodent, un-identified?
+    process_granivores(type) %>%               # exclude granivores?
+    remove_incomplete_censuses(trapping, incomplete) %>% # incomplete trapping sessions
+    filter_plots(length) %>%                   # keep only the long-term treatments
+    dplyr::mutate(species = factor(species)) %>%         # convert species to factor
+    {.} -> rodents                             # re-assign back into rodents
 
-    ###########Exclude non-granivores-----------------------
-  process_granivores(type) %>%
+  #### Summarize data ----
 
-    ###########Remove incomplete trapping sessions----------
-  remove_incomplete_censuses(trapping, incomplete) %>%
+  ## [1] if output == "energy", convert weight to energy
+  rodents$wgt <- as.numeric(rodents$wgt)
+  if(output == "energy")
+  {
+    rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
+  }
 
-    ###########Use only Long-term treatments --------------
-  filter_plots(length) %>%
+  ## [2] select what to summarize, depending on output
+  ##     if output == abundance then NULL     --> count entries
+  ##                            else quo(wgt) --> sum up `wgt` column
+  wt <- if(output == "abundance") NULL else quo(wgt)
 
-    ###########Re-assign back into `rodents` --------------
-  {.} -> rodents
+  ## [3] determine grouping variables
+  ## summarize over each plot
+  if(level == "plot") {
+    trapping <- filter_plots(trapping, length)
+    rodents <- join_trapping_to_rodents(rodents, trapping, incomplete)
+    grouping <- quos(period, plot, species)
 
-  ###########Summarise by Treatment ----------------------
-  if(level %in% c("Treatment","treatment")) {
-    #Name plot treatments in each time period
-
+    # remember which (period x plot) were not sampled
+    sampled_LUT <- rodents %>%
+      dplyr::filter(sampled == 0) %>%
+      dplyr::select(period, plot, sampled) %>%
+      dplyr::distinct()
+  } else if(level == "treatment") {
     rodents = join_plots_to_rodents(rodents, plots)
-
-    if(output %in% c("Biomass", "biomass")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::group_by(period, treatment, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species, biomass)
-    } else if (output %in% c('Energy', 'energy')) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::mutate(ind.energy = wgt ^ .75, na.rm = T) %>%
-        dplyr::group_by(period, treatment, species) %>%
-        dplyr::summarize(energy = sum(ind.energy, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species, energy)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, treatment) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, treatment, species = x.Var1, abundance = x.Freq)
-    }
+    grouping <- quos(period, treatment, species)
+  } else { # level == "site"
+    grouping <- quos(period, species)
   }
 
-  ##########Summarise by plot ----------------------------
-  if(level %in% c("Plot", "plot")) {
-    trapping = filter_plots(trapping, length)
-    rodents = join_trapping_to_rodents(rodents, trapping, incomplete)
-    #  reduce size of trapping table
+  ## [4] summarize
+  out_df <- rodents %>%
+    dplyr::count(!!!grouping, wt = !!wt) %>%
+    dplyr::select(!!!grouping, n)
 
-    if(output %in% c("Biomass", "biomass")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::group_by(period, plot, sampled, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::mutate(biomass = replace(biomass, sampled == 0, NA)) %>% # 0->NA on untrapped plots
-        dplyr::ungroup() %>%
-        dplyr::select(period, plot, species, biomass)
-    } else if (output %in% c('Energy', 'energy')) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::mutate(ind.energy = wgt ^ .75, na.rm = T) %>%
-        dplyr::group_by(period, plot, sampled, species) %>%
-        dplyr::summarize(energy = sum(ind.energy, na.rm = T)) %>%
-        dplyr::mutate(energy = replace(energy, sampled == 0, NA)) %>% # 0->NA on untrapped plots
-        dplyr::ungroup() %>%
-        dplyr::select(period, plot, species, energy)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period, plot, sampled) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::mutate(x.Freq = replace(x.Freq, sampled == 0, NA)) %>% # 0->NA on untrapped plots
-        dplyr::ungroup() %>%
-        dplyr::select(period, plot, species = x.Var1, abundance = x.Freq)
-    }
+  ## [5] post-process
+  if(level == "plot") {
+    # replace values for non-sampled period x plot with NA
+    out_df <- out_df %>%
+      tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
+      dplyr::filter(!is.na(species)) %>%
+      dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
+      dplyr::mutate(n = replace(n, sampled == 0, NA)) %>%
+      dplyr::select(period, plot, species, n)
   }
 
-  ##########Summarise site-wide --------------------------
-  if(level %in% c("Site", "site")) {
-    if(output %in% c("Biomass", "biomass")) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::group_by(period, species) %>%
-        dplyr::summarize(biomass = sum(wgt, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species, biomass)
-    } else if(output %in% c("Energy", 'energy')) {
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::mutate(wgt = as.numeric(wgt)) %>%
-        dplyr::mutate(ind.energy = wgt ^ .75, na.rm = T) %>%
-        dplyr::group_by(period, species) %>%
-        dplyr::summarize(energy = sum(ind.energy, na.rm = T)) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species, energy)
-    } else { # abundance by default
-      out_df <- rodents %>%
-        dplyr::mutate(species = factor(species)) %>%
-        dplyr::group_by(period) %>%
-        dplyr::do(data.frame(x = table(.$species))) %>%
-        dplyr::ungroup() %>%
-        dplyr::select(period, species = x.Var1, abundance = x.Freq)
-    }
+  ## [6] rename output variable correctly
+  out_df <- dplyr::rename(out_df, !!output := n)
+
+  #### Reshape data into crosstab ----
+  if(shape %in% c("Crosstab", "crosstab"))
+  {
+    crosstab_fill <- if(output == "abundance") 0L else NA
+    out_df <- make_crosstab(out_df, output, crosstab_fill)
   }
 
-  ##########Convert data to crosstab ----------------------
-  if(shape %in% c("Crosstab", "crosstab")){
-    out_df = make_crosstab(out_df, variable_name = output)
-    if (output %in% c('Biomass', 'biomass', 'Energy', 'energy')) {
-      if (level %in% c('plot', 'Plot')) {
-        if ("<NA>" %in% colnames(out_df)) out_df = out_df[,(1:ncol(out_df) - 1)]
-        out_df[is.na(out_df)] <- 0
-        out_df = dplyr::left_join(out_df, trapping[,c('period', 'plot', 'sampled')], by = c('period', 'plot') )
-        out_df[ which(out_df$sampled == 0), 3:(ncol(out_df) - 1)] <- NA
-        out_df = out_df[, (1:ncol(out_df) - 1)]
-      } else {
-        out_df[is.na(out_df)] <- 0
-      }
-    }
-  } else {
-    if(output %in% c('Biomass', 'biomass')) {
-      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(biomass = 0))
-      if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(biomass = 0))
-      if(level %in% c('Plot', 'plot')) {
-        out_df %>%
-          tidyr::complete(species, period, plot, fill = list(biomass = 0)) %>%
-          dplyr::filter(!(is.na(species))) %>%
-          dplyr::left_join(trapping[, c('period', 'plot', 'sampled')], by = c('period', 'plot')) %>%
-          {.} -> out_df
-        out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
-        out_df = out_df[, (1:ncol(out_df) - 1)]
-      }
-    } else if (output %in% c('Energy', 'energy')){
-      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(energy = 0))
-      if(level %in% c('Treatment', 'treatment')) out_df =  tidyr::complete(out_df, species, period, treatment, fill = list(energy = 0))
-      if(level %in% c('Plot', 'plot')) {
-        out_df %>%
-          tidyr::complete(species, period, plot, fill = list(energy = 0)) %>%
-          dplyr::filter(!(is.na(species))) %>%
-          dplyr::left_join(trapping[, c('period', 'plot', 'sampled')], by = c('period', 'plot')) %>%
-          {.} -> out_df
-        out_df[ which(out_df$sampled == 0), (ncol(out_df) - 1)] <- NA
-        out_df = out_df[, (1:ncol(out_df) - 1)]
-      }
-    } else { # output == "abundance"
-      if(level %in% c('Site', 'site')) out_df = tidyr::complete(out_df, species, period, fill = list(abundance = 0))
-      if(level %in% c('Treatment', 'treatment')) out_df = tidyr::complete(out_df, species, period, treatment, fill = list(abundance = 0))
-    }
-  }
-
-
-  ###########Switch to new moon number if time == 'newmoon'------------------
+  #### use new moon number as time index if time == "newmoon" ----
   out_df = add_time(out_df, newmoons, time)
-
-
 
   return(out_df)
 }
@@ -210,7 +133,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
 #' @rdname get_rodent_data
 #'
-#' @description \code{abundance} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "abundance"
+#' @description \code{abundance} generates a table of rodent abundance
 #'
 #' @param ... arguments passed to \code{\link{get_rodent_data}}
 #'
@@ -225,7 +148,7 @@ abundance <- function(...) {
 
 #' @rdname get_rodent_data
 #'
-#' @description \code{biomass} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "biomass"
+#' @description * \code{biomass()} generates a table of rodent biomass
 #'
 #' @inheritParams abundance
 #'
@@ -241,7 +164,7 @@ biomass <- function(...) {
 
 #' @rdname get_rodent_data
 #'
-#' @description \code{energy} essentially passes along all arguments to \code{get_rodent_data}, but fixes the output type as "energy"
+#' @description * \code{energy()} generates a table of rodent energy (computed as biomass ^ 0.75)
 #'
 #' @inheritParams abundance
 #'
