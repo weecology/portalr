@@ -1,17 +1,22 @@
-context("checks data_processing functions")
+context("Check data retrieval")
+
+test_that("download_observations works", {
+  expect_error(download_observations(".", release_only = FALSE), NA)
+  expect_error(download_observations("."), NA)
+})
 
 test_that("user given path returns list length 5", {
-  data = loadData("repo")
-  expect_that(length(data), equals(5))
+  data <- loadData(".")
+  expect_equal(length(data), 5)
 })
 
-test_that("argument repo returns list length 5", {
+test_that("loadData returns list of length 5", {
   data = loadData("repo")
-  expect_that(length(data), equals(5))
+  expect_equal(length(data), 5)
 })
 
-test_that("required column names in rodent df", {
-  data = loadData("repo")
+test_that("rodent data.frame has correct column names", {
+  data <- loadData(".")
   rats = data[[1]]
   rat_cols = colnames(rats)
   expect_true('month' %in% rat_cols)
@@ -22,8 +27,8 @@ test_that("required column names in rodent df", {
   expect_true('day' %in% rat_cols)
 })
 
-test_that("required column names in species df", {
-  data = loadData("repo")
+test_that("species data.frame has correct column names", {
+  data <- loadData(".")
   sp = data[[2]]
   sp_cols = colnames(sp)
   expect_true('species' %in% sp_cols)
@@ -31,4 +36,3 @@ test_that("required column names in species df", {
   expect_true('censustarget' %in% sp_cols)
   expect_true('granivore' %in% sp_cols)
 })
-
