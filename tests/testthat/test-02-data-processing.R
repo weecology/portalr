@@ -67,8 +67,8 @@ test_that("does process_unknownsp work properly?", {
 
 test_that("does remove_incomplete_censuses work properly?", {
   rodents_with_incompletes <- clean_rodent_data(data_tables, incomplete = TRUE)
-  expect_gt(nrow(filter(rodents_with_incompletes, plot == 24)),
-            nrow(filter(rodents, plot == 24)))
+  expect_gt(nrow(dplyr::filter(rodents_with_incompletes, plot == 24)),
+            nrow(dplyr::filter(rodents, plot == 24)))
 })
 
 test_that("does filter_plots work properly?", {
