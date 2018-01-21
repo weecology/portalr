@@ -2,9 +2,31 @@ context("Check data processing")
 
 data_tables <- loadData(".")
 
+test_that("rodent data.frame has correct column names", {
+  rats = data_tables[[1]]
+  rat_cols = colnames(rats)
+  expect_true('month' %in% rat_cols)
+  expect_true('year' %in% rat_cols)
+  expect_true('plot' %in% rat_cols)
+  expect_true('species' %in% rat_cols)
+  expect_true('period' %in% rat_cols)
+  expect_true('day' %in% rat_cols)
+})
+
+test_that("species data.frame has correct column names", {
+  sp = data_tables[[2]]
+  sp_cols = colnames(sp)
+  expect_true('species' %in% sp_cols)
+  expect_true('unidentified' %in% sp_cols)
+  expect_true('censustarget' %in% sp_cols)
+  expect_true('granivore' %in% sp_cols)
+})
+
 test_that("clean_rodent_data works", {
   expect_error(rodents <- clean_rodent_data(data_tables), NA)
 })
+
+rodents <- clean_rodent_data(data_tables)
 
 test_that("clean_rodent_data has correct columns", {
   rodent_cols <- names(rodents)

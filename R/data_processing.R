@@ -384,7 +384,7 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
                               unknowns = FALSE, incomplete = FALSE, length = "all")
 {
   data_tables$rodent_data %>%
-    left_join(data_tables$species_table, by = "species") %>%
+    dplyr::left_join(data_tables$species_table, by = "species") %>%
     fill_weight(fillweight) %>%
     remove_suspect_entries() %>%
     process_unknownsp(unknowns) %>%
