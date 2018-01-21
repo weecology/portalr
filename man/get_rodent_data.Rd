@@ -38,7 +38,8 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{incomplete}{either removes all data from incomplete trapping sessions
 (incomplete = FALSE) or includes them (incomplete = TRUE)
-[note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete]}
+[note that if level="plot" and incomplete=T, NAs will be included in
+ periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 
@@ -48,9 +49,14 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{output}{specify whether to return "abundance", or "biomass", or "energy"}
 
-\item{fillweight}{specify whether to fill in unknown weights with other records from that individual or species, where possible}
+\item{fillweight}{specify whether to fill in unknown weights with other
+records from that individual or species, where possible}
 
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
+}
+\value{
+a data.frame in either "long" or "wide" format, depending on the
+  value of `shape`
 }
 \description{
 This function is a generic interface into creating (monthly)

@@ -96,7 +96,6 @@ remove_suspect_entries = function(rodent_data) {
 #' given as 'other'.
 #'
 #' @param rodent_data Data.table with raw rodent data.
-#' @param species_table Data.table with species info.
 #' @param unknowns String. If unknowns=False, unknown species removed.
 #'
 #' @return Data.table with species info added and unknown species processed
@@ -104,18 +103,16 @@ remove_suspect_entries = function(rodent_data) {
 #'
 #' @export
 #'
-process_unknownsp = function(rodent_data, species_table, unknowns) {
+process_unknownsp = function(rodent_data, unknowns) {
   if (unknowns)
   {
     #Rename all unknowns and non-target rodents to "other"
-    rodent_species_merge =
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
+    rodent_species_merge = rodent_data %>%
       dplyr::filter(rodent == 1) %>%
       dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
       dplyr::mutate(species = replace(species, censustarget == 0, "other"))
   } else {
-    rodent_species_merge =
-      dplyr::left_join(species_table, rodent_data, by = "species") %>%
+    rodent_species_merge = rodent_data %>%
       dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
   }
   return(rodent_species_merge)
@@ -149,8 +146,8 @@ process_granivores = function(rodent_species_merge, type) {
 #' @return Data.table of period codes when not all plots were trapped.
 #'
 #' @export
-find_incomplete_censuses = function(trapping_table){
-  incompsampling=trapping_table %>% dplyr::filter(sampled==0 ) %>%
+find_incomplete_censuses = function(trapping_table) {
+  incompsampling = trapping_table %>% dplyr::filter(sampled==0 ) %>%
     dplyr::filter(period > 26) %>% dplyr::distinct(period)
 }
 
@@ -172,7 +169,7 @@ find_incomplete_censuses = function(trapping_table){
 remove_incomplete_censuses = function(rodent_species_merge,
                                       trapping_table,
                                       incomplete) {
-  if (incomplete == F) {
+  if (!incomplete) {
     incompsampling = find_incomplete_censuses(trapping_table)
     rodent_species_merge = dplyr::filter(rodent_species_merge,
                                          !period %in% incompsampling$period)
@@ -299,11 +296,10 @@ make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
 #'
 #' @param rodent_data raw rodent data
 #' @param tofill logical whether to fill in missing values or not
-#' @param species_list species table
 #'
 #' @export
 #'
-fill_weight = function(rodent_data, tofill, species_list)
+fill_weight = function(rodent_data, tofill)
 {
   if (!tofill) return(rodent_data)
 
@@ -330,27 +326,73 @@ fill_weight = function(rodent_data, tofill, species_list)
   }
 
   ## [3] fill in species weight for all remaining missing weights
-  #      (i) merge in species-level info
-  rodent_data <- dplyr::left_join(
-    rodent_data,
-    dplyr::select(species_list, species, juvwgt, meanwgt),
-    by = "species")
-
-  #      (ii) see who is still missing weight
+  #      (i) see who is still missing weight
   missing_wgt_idx <- is.na(rodent_data$wgt) | rodent_data$wgt <= 0
 
-  #      (iii) see who is a juvenile and species has juvenile weight
+  #      (ii) see who is a juvenile and species has juvenile weight
   juv_idx <- !is.na(rodent_data$age) & (rodent_data$age == 'J') &
     !is.na(rodent_data$juvwgt)
 
-  #      (iv) fill in juvenile weight for known juveniles
+  #      (iii) fill in juvenile weight for known juveniles
   rodent_data$wgt[missing_wgt_idx & juv_idx] <- rodent_data$juvwgt[missing_wgt_idx & juv_idx]
 
-  #      (v) fill in average weight for everyone else
+  #      (iv) fill in average weight for everyone else
   rodent_data$wgt[missing_wgt_idx & !juv_idx] <- rodent_data$meanwgt[missing_wgt_idx & !juv_idx]
 
-  #      (vi) remove added columns for juvenile and average weight
+  #      (v) remove added columns for juvenile and average weight
   rodent_data <- dplyr::select(rodent_data, -juvwgt, -meanwgt)
 
   return(rodent_data)
+}
+
+#' @name clean_rodent_data
+#'
+#' @title Do basic cleaning of Portal rodent data
+#'
+#' @description This function does basic quality control of the Portal rodent
+#'   data. It is mainly called from \code{\link{get_rodent_data}}, with
+#'   several arguments passed along.
+#'
+#'   The specific steps it does are, in order:
+#'     (1) add in missing weight data via \code{\link{fill_weight}})
+#'     (2) remove records with "bad" period codes or plot numbers via
+#'         \code{\link{remove_suspect_entries}}
+#'     (3) remove records for unidentified species via
+#'         \code{\link{process_unknownsp}}
+#'     (4) exclude non-granivores via \code{\link{process_granivores}}
+#'     (5) exclude incomplete trapping sessions via
+#'         \code{\link{remove_incomplete_censuses}}
+#'     (6) exclude the plots that aren't long-term treatments via
+#'         \code{\link{filter_plots}}
+#'
+#' @param data_tables the list of data_tables, returned from calling
+#'   \code{\link{loadData}}
+#' @param fillweight specify whether to fill in unknown weights with other
+#'   records from that individual or species, where possible
+#' @param type specify subset of species; either all "Rodents" or only
+#'   "Granivores"
+#' @param unknowns either removes all individuals not identified to species
+#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param incomplete either removes all data from incomplete trapping sessions
+#'   (incomplete = FALSE) or includes them (incomplete = TRUE)
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (plots that have had same treatment for entire time series)
+#'
+#' @export
+#'
+clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
+                              unknowns = FALSE, incomplete = FALSE, length = "all")
+{
+  data_tables$rodent_data %>%
+    left_join(data_tables$species_table, by = "species") %>%
+    fill_weight(fillweight) %>%
+    remove_suspect_entries() %>%
+    process_unknownsp(unknowns) %>%
+    process_granivores(type) %>%
+    remove_incomplete_censuses(data_tables$trapping_table, incomplete) %>%
+    filter_plots(length) %>%
+    dplyr::mutate(species = as.factor(species),
+                  wgt = as.numeric(wgt),
+                  energy = wgt ^ 0.75) %>%
+    return()
 }

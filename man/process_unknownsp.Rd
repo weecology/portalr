@@ -4,12 +4,10 @@
 \alias{process_unknownsp}
 \title{Processes unknown species.}
 \usage{
-process_unknownsp(rodent_data, species_table, unknowns)
+process_unknownsp(rodent_data, unknowns)
 }
 \arguments{
 \item{rodent_data}{Data.table with raw rodent data.}
-
-\item{species_table}{Data.table with species info.}
 
 \item{unknowns}{String. If unknowns=False, unknown species removed.}
 }
