@@ -27,13 +27,18 @@
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param incomplete either removes all data from incomplete trapping sessions
 #'   (incomplete = FALSE) or includes them (incomplete = TRUE)
-#'   [note that if level="plot" and incomplete=T, NAs will be included in periods where trapping was incomplete]
+#'   [note that if level="plot" and incomplete=T, NAs will be included in
+#'    periods where trapping was incomplete]
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time specify the format of the time index in the output, either
 #'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
 #'   "date" (calendar date)
 #' @param output specify whether to return "abundance", or "biomass", or "energy"
-#' @param fillweight specify whether to fill in unknown weights with other records from that individual or species, where possible
+#' @param fillweight specify whether to fill in unknown weights with other
+#'   records from that individual or species, where possible
+#'
+#' @return a data.frame in either "long" or "wide" format, depending on the
+#'   value of `shape`
 #'
 #' @export
 #'
@@ -48,41 +53,31 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
 
   #### Get Data ----
   data_tables <- loadData(path)
-  rodents <- data_tables[[1]]
-  species <- data_tables[[2]]
-  trapping <- data_tables[[3]]
-  newmoons <- data_tables[[4]]
-  plots <- data_tables[[5]]
 
   #### Do initial cleaning ----
-  rodents %>%
-    fill_weight(fillweight, species) %>%       # add in missing biomass info
-    remove_suspect_entries() %>%               # remove various "weird" data
-    process_unknownsp(species, unknowns) %>%   # keep non-rodent, un-identified?
-    process_granivores(type) %>%               # exclude granivores?
-    remove_incomplete_censuses(trapping, incomplete) %>% # incomplete trapping sessions
-    filter_plots(length) %>%                   # keep only the long-term treatments
-    dplyr::mutate(species = factor(species)) %>%         # convert species to factor
-    {.} -> rodents                             # re-assign back into rodents
+  rodents <- clean_rodent_data(data_tables, fillweight, type,
+                               unknowns, incomplete, length)
 
   #### Summarize data ----
 
   ## [1] if output == "energy", convert weight to energy
-  rodents$wgt <- as.numeric(rodents$wgt)
-  if(output == "energy")
-  {
-    rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
-  }
+  # if(output == "energy")
+  # {
+  #   rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
+  # }
 
   ## [2] select what to summarize, depending on output
   ##     if output == abundance then NULL     --> count entries
   ##                            else quo(wgt) --> sum up `wgt` column
-  wt <- if(output == "abundance") NULL else quo(wgt)
+  wt <- switch(output,
+               "abundance" = NULL,
+               "biomass" = quo(wgt),
+               "energy" = quo(energy))
 
   ## [3] determine grouping variables
   ## summarize over each plot
   if(level == "plot") {
-    trapping <- filter_plots(trapping, length)
+    trapping <- filter_plots(data_tables$trapping, length)
     rodents <- join_trapping_to_rodents(rodents, trapping, incomplete)
     grouping <- quos(period, plot, species)
 
@@ -92,7 +87,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       dplyr::select(period, plot, sampled) %>%
       dplyr::distinct()
   } else if(level == "treatment") {
-    rodents = join_plots_to_rodents(rodents, plots)
+    rodents = join_plots_to_rodents(rodents, data_tables$plots_table)
     grouping <- quos(period, treatment, species)
   } else { # level == "site"
     grouping <- quos(period, species)
@@ -125,7 +120,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   }
 
   #### use new moon number as time index if time == "newmoon" ----
-  out_df = add_time(out_df, newmoons, time)
+  out_df = add_time(out_df, data_tables$newmoons, time)
 
   return(out_df)
 }

@@ -61,21 +61,7 @@ print(summary(rodent_data_all))
 The first table that we loaded (`rodent_data_all$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. However, going through the all of the data filtering steps helps us to get a better of what we actually end up with.
 
 ```{r}
-rodent_data_all$rodent_data %>%
-  
-  remove_suspect_entries() %>%
-  # filters out non-positive `period` (index of sampling trip)
-  # filters out NA plot values
-  
-  process_unknownsp(rodent_data_all$species_table, unknowns = TRUE) %>%
-  # keep only known species codes (filters out NA)
-  # keep only rodents
-  # unidentified rodents and non-targeted rodents --> "other"
-  
-  remove_incomplete_censuses(rodent_data_all$trapping_table, incomplete = FALSE) %>%
-  # filter out trips where not all plots were censused
-  
-  {.} -> rodent_data
+rodent_data <- clean_rodent_data(rodent_data_all)
 
 summarize_abundance <- function(rodent_data)
 {

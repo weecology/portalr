@@ -4,14 +4,12 @@
 \alias{fill_weight}
 \title{Fill Weight}
 \usage{
-fill_weight(rodent_data, tofill, species_list)
+fill_weight(rodent_data, tofill)
 }
 \arguments{
 \item{rodent_data}{raw rodent data}
 
 \item{tofill}{logical whether to fill in missing values or not}
-
-\item{species_list}{species table}
 }
 \description{
 fill in missing weight values with either a recently recorded weight for that individual or species average
