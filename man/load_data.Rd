@@ -4,11 +4,14 @@
 \alias{load_data}
 \title{Loads the Portal rodent data files}
 \usage{
-load_data(path = "~")
+load_data(path = "~", download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 }
 \value{
 List of 5 dataframes:
