@@ -52,7 +52,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   level <- tolower(level)
 
   #### Get Data ----
-  data_tables <- loadData(path)
+  data_tables <- load_data(path)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,

@@ -1,69 +1,70 @@
 #' @importFrom magrittr "%>%"
 
-
-#' @title Loads Portal rodent data files.
+#' @title Loads the Portal rodent data files
 #'
-#' @description Loads main Portal rodent data files from either
-#' a user defined path or the online Github repository.
+#' @description Loads main Portal rodent data files from either a user-defined
+#'   path or the online Github repository. If the user-defined path is un-
+#'   available, the default option is to download to that location.
 #'
-#' @param path string Containing path to PortalData folder
-#'              should include ending /; if path = 'repo',
-#'              data is pulled from PortalData GitHub repository.
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
 #'
-#' @return       List of 5 dataframes:
-#' \itemize{
-#' \item rodent_data. raw data on rodent captures
-#' \item species_table. species code, names, types
-#' \item trapping_table. when each plot was trapped
-#' \item newmoons_table. pairs census periods with newmoons
-#' \item plots_table. rodent treatment assignments for each plot.
-#' }
+#' @return List of 5 dataframes:
+#'   \itemize{
+#'     \item rodent_data. raw data on rodent captures
+#'     \item species_table. species code, names, types
+#'     \item trapping_table. when each plot was trapped
+#'     \item newmoons_table. pairs census periods with newmoons
+#'     \item plots_table. rodent treatment assignments for each plot.
+#'   }
+#'
+#' @examples
+#' portal_data <- load_data("repo")
 #'
 #' @export
 #'
-#' @examples
-#' portal_data <- loadData("repo")
-loadData <- function(path = "~") {
-  if (path == 'repo') {
-    rodent_data = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent.csv"),
-      na.strings = c(""),
-      colClasses = c('tag' = 'character'),
-      stringsAsFactors = FALSE)
-    species_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    trapping_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/Portal_rodent_trapping.csv"))
-    newmoons_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"))
-    plots_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"))
+load_data <- function(path = "~")
+{
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_URL <- "https://raw.githubusercontent.com/weecology/PortalData/master/"
+    rodent_data_file <- paste0(base_URL, "Rodents/Portal_rodent.csv")
+    species_table_file <- paste0(base_URL, "Rodents/Portal_rodent_species.csv")
+    trapping_table_file <- paste0(base_URL, "Rodents/Portal_rodent_trapping.csv")
+    newmoons_table_file <- paste0(base_URL, "Rodents/moon_dates.csv")
+    plots_table_file <- paste0(base_URL, "SiteandMethods/Portal_plots.csv")
   } else {
-    rodent_data = read.csv(
-      file.path(path, "PortalData/Rodents/Portal_rodent.csv"),
-      na.strings = c(""), colClasses = c('tag' = 'character'),
-      stringsAsFactors = FALSE)
-    species_table = read.csv(
-      file.path(path, "PortalData/Rodents/Portal_rodent_species.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    trapping_table = read.csv(
-      file.path(path, "PortalData/Rodents/Portal_rodent_trapping.csv"))
-    newmoons_table = read.csv(
-      file.path(path, "PortalData/Rodents/moon_dates.csv"))
-    plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
+    rodent_data_file <- file.path(normalizePath(path),
+                                  "PortalData", "Rodents", "Portal_rodent.csv")
+    species_table_file <- file.path(normalizePath(path),
+                                    "PortalData", "Rodents", "Portal_rodent_species.csv")
+    trapping_table_file <- file.path(normalizePath(path),
+                                     "PortalData", "Rodents", "Portal_rodent_trapping.csv")
+    newmoons_table_file <- file.path(normalizePath(path),
+                                     "PortalData", "Rodents", "moon_dates.csv")
+    plots_table_file <- file.path(normalizePath(path),
+                                  "PortalData", "SiteandMethods", "Portal_plots.csv")
   }
-  colnames(species_table)[1] = "species"
-  colnames(trapping_table) = c("day", "month","year", "period", "plot", "sampled")
-  colnames(newmoons_table)[3] = "period"
-  colnames(plots_table)[2] = "month"
+
+  ## read in CSV files
+  rodent_data = read.csv(rodent_data_file,
+                         na.strings = c(""), colClasses = c('tag' = 'character'),
+                         stringsAsFactors = FALSE)
+  species_table = read.csv(species_table_file,
+                           na.strings = c(""),
+                           stringsAsFactors = FALSE)
+  trapping_table = read.csv(trapping_table_file)
+  newmoons_table = read.csv(newmoons_table_file)
+  plots_table = read.csv(plots_table_file)
+
+  ## reformat
+
+  colnames(species_table)[1] <- "species"
+  colnames(trapping_table) <- c("day", "month", "year", "period", "plot", "sampled")
+  colnames(newmoons_table)[3] <- "period"
+  colnames(plots_table)[2] <- "month"
+
   return(list(rodent_data = rodent_data,
               species_table = species_table,
               trapping_table = trapping_table,
