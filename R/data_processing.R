@@ -342,6 +342,9 @@ fill_weight = function(rodent_data, tofill)
   #      (v) remove added columns for juvenile and average weight
   rodent_data <- dplyr::select(rodent_data, -juvwgt, -meanwgt)
 
+  #      (vi) if all else fails, convert to 0, so that sums will work correctly
+  rodent_data$wgt[is.na(rodent_data$wgt)] <- 0
+
   return(rodent_data)
 }
 

@@ -120,7 +120,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   }
 
   #### use new moon number as time index if time == "newmoon" ----
-  out_df = add_time(out_df, data_tables$newmoons, time)
+  out_df = add_time(out_df, data_tables$newmoons_table, time)
 
   return(out_df)
 }
