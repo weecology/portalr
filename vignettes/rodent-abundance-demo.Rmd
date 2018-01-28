@@ -52,7 +52,7 @@ if(!file.exists(rodent_file) || # if data files are missing OR
 The `loadData` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
 
 ```{r}
-rodent_data_all <- loadData(path = my_path)
+rodent_data_all <- load_data(path = my_path)
 print(summary(rodent_data_all))
 ```
 
