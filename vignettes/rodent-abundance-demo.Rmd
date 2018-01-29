@@ -36,43 +36,34 @@ library(portalr)
 
 Note that this package does not contain the actual Portal data, which resides online in a [GitHub repository](https://github.com/weecology/PortalData).
 
-First, we check whether we already have the data. If we don't have the data, or if the version we have isn't the most recent, we use the `download_observations` function to download the latest copy of the data.
+First, we try to load the data. If there isn't a Portal folder, than `load_data` will fall back to downloading the data, as well.
+
+check whether we already have the data. If we don't have the data, or if the version we have isn't the most recent, we use the `download_observations` function to download the latest copy of the data.
 
 ```{r}
 my_path <- "." # use current folder to store downloaded data
-rodent_file <- FullPath('PortalData/Rodents/Portal_rodent.csv', my_path)
-
-if(!file.exists(rodent_file) || # if data files are missing OR
-   observations_are_new(base_folder = my_path)) # if data is not up to date
-{
-  download_observations(base_folder = my_path) # download from GitHub repo
-}
+data_tables <- load_data(my_path, download_if_missing = TRUE)
 ```
 
-The `loadData` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
+The `load_data` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
 
 ```{r}
-rodent_data_all <- load_data(path = my_path)
-print(summary(rodent_data_all))
+print(summary(data_tables))
 ```
 
 # Rodent Abundances
 
-The first table that we loaded (`rodent_data_all$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. However, going through the all of the data filtering steps helps us to get a better of what we actually end up with.
+The first table that we loaded (`data_tables$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. However, going through the all of the data filtering steps helps us to get a better of what we actually end up with.
 
 ```{r}
-rodent_data <- clean_rodent_data(rodent_data_all)
+rodent_data <- clean_rodent_data(data_tables)
 
 summarize_abundance <- function(rodent_data)
 {
   # within each `period`, count up instances of each species
-  
   return(rodent_data %>%
-           mutate(species = factor(species)) %>%
-           group_by(period) %>%
-           do(data.frame(x = table(.$species))) %>% 
-           ungroup() %>%
-           select(period, species = x.Var1, abundance = x.Freq)
+           count(period, species) %>%
+           select(period, species, abundance = n)
   )
 }
 
@@ -83,29 +74,25 @@ rodent_abundance <- summarize_abundance(rodent_data)
 We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default the returned object identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
 
 ```{r}
-join_census_date <- function(rodent_abundance, 
-                             newmoons_table = rodent_data_all$newmoons_table)
+join_census_date <- function(rodent_abundance,
+                             newmoons_table = data_tables$newmoons_table)
 {
   return(rodent_abundance %>%
-           left_join(select(newmoons_table, "period", "censusdate"),
-                     by = "period") %>%
-           mutate(census_date = as.Date(censusdate)) %>% # convert censusdate to `Date` type
-           select(period, census_date, everything()) # reorder columns
-  )
+           add_time(newmoons_table, "date") %>%
+           rename(census_date = censusdate))
 }
 
 rodent_abundance <- join_census_date(rodent_abundance)
-
 print(summary(rodent_abundance))
 ```
 
 Let's convert the data to long format for easier facetting. Also, we want the scientific names instead of the two-letter species codes, so let's do that matching, too:
 ```{r}
 join_scientific_name <- function(rodent_abundance, 
-                                 species_table = rodent_data_all$species_table)
+                                 species_table = data_tables$species_table)
 {
   return(rodent_abundance %>%
-           left_join(select(rodent_data_all$species_table, "species", "scientificname"), 
+           left_join(select(species_table, "species", "scientificname"), 
                      by = "species") %>%
            rename(scientific_name = scientificname)
   )
@@ -151,13 +138,13 @@ A description of the experimental design and treatments can be found in this [Re
 For now, we are just going to use the [`Portal_plots`](https://github.com/weecology/PortalData/blob/master/SiteandMethods/Portal_plots.csv) table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the `plots_table` from the `loadData` function we ran previously.
 
 ```{r}
-print(summary(rodent_data_all$plots_table))
+print(summary(data_tables$plots_table))
 ```
 
 We want a proper date variable as well as converting `plot` into a factor:
 
 ```{r}
-plot_treatments <- rodent_data_all$plots_table %>%
+plot_treatments <- data_tables$plots_table %>%
   mutate(iso_date = as.Date(paste0(year, "-", month, "-", "01")), 
          plot = as.factor(plot)) %>%
   select(iso_date, plot, treatment)
