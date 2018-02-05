@@ -208,7 +208,7 @@ filter_plots = function(data, length) {
 #' @export
 join_plots_to_rodents = function(rodent_data, plots_table){
   plots_table = plots_table %>% dplyr::group_by(year,plot) %>%
-    dplyr::select(year,month, plot,treatment)
+    dplyr::select(year,month,plot,treatment)
   rodent_table = dplyr::left_join(rodent_data,plots_table,
                                   by=c("year"="year","month"="month","plot"="plot"))
   return(rodent_table)
@@ -229,7 +229,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
     trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
   }
   rodent_table = dplyr::right_join(rodent_data, trapping_table,
-                                   by=c("period"="period","plot"="plot"))
+                                   by=c("month"="month","year"="year","period"="period","plot"="plot"))
   return(rodent_table)
 }
 
