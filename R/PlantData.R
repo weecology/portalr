@@ -50,30 +50,16 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   data_tables <- loadPlantData(path)
 
   #### Do initial cleaning ----
-  rodents <- clean_rodent_data(data_tables, type,
+  quadrats <- clean_plant_data(data_tables, type="Annuals",
                                unknowns, incomplete, length)
 
   #### Summarize data ----
 
-  ## [1] if output == "energy", convert weight to energy
-  # if(output == "energy")
-  # {
-  #   rodents$wgt <- rodents$wgt ^ 0.75          # convert to energy
-  # }
 
-  ## [2] select what to summarize, depending on output
-  ##     if output == abundance then NULL     --> count entries
-  ##                            else quo(wgt) --> sum up `wgt` column
-  wt <- switch(output,
-               "abundance" = NULL,
-               "biomass" = quo(wgt),
-               "energy" = quo(energy))
-
-  ## [3] determine grouping variables
   ## summarize over each plot
   if(level == "plot") {
-    trapping <- filter_plots(data_tables$trapping, length)
-    rodents <- join_trapping_to_rodents(rodents, trapping, incomplete)
+    census_table <- filter_plots(data_tables$census_table, length)
+    quadrats <- join_census_to_quadrats(quadrats, census_table, incomplete)
     grouping <- quos(period, plot, species)
 
     # remember which (period x plot) were not sampled

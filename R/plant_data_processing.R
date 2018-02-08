@@ -1,8 +1,10 @@
 # WIP -------------
-# TO DO:
+# Issues:
 #   - remove_suspect_entries_plants function does nothing.  I left it as a placeholder in case we need it
+#   - remove_incomplete_censuses_plants function also does nothing. Might think of a use later
+#   - filter_plots function is identical to the rodent one in data_processing.R
 
-
+# ------------------------------------------------------------------------------
 
 
 
@@ -145,15 +147,15 @@ process_annuals = function(quadrat_sp_data, type) {
   }
 }
 
-#' @title Finds incomplete (early) plant censuses
+#' @title Finds incomplete plant censuses
 #' @description Determines incomplete censuses by finding dates when some quadrats were not counted.
 #' @param census_table Data table. Data on when each plot and quadrat was counted.
 #'
-#' @return Data.table of dates when not all quadrats were counted.
+#' @return Data.table of dates when there are uncounted quadrats.
 #'
 #' @export
 find_incomplete_censuses_plants = function(census_table) {
-  incompsampling = census_table %>% dplyr::filter(censused==0 ) #%>%
+  incompsampling = census_table %>% dplyr::filter(censused==0 ) %>%
      dplyr::distinct(year,season)
 }
 
@@ -164,8 +166,9 @@ find_incomplete_censuses_plants = function(census_table) {
 #'
 #' @param quadrat_sp_merge Data table. Merge of raw plant data and
 #'                             species information.
-#' @param cesus_table Data table. Data on when each quadrat was counted
+#' @param census_table Data table. Data on when each quadrat was counted
 #' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' @param date_table Data table. Data on whether or not census was conducted by season/year
 #'
 #' @return Data.table of merged plant quadrat data and species info with incomplete
 #'         censuses processed according to argument imcomplete.
@@ -173,13 +176,15 @@ find_incomplete_censuses_plants = function(census_table) {
 #' @export
 remove_incomplete_censuses_plants = function(quadrat_sp_merge,
                                       census_table,
-                                      incomplete) {
-  if (!incomplete) {
-    incompsampling = find_incomplete_censuses_plants(census_table)
-    quadrat_sp_merge = dplyr::filter(quadrat_sp_merge,
-                                     !period %in% incompsampling$period)
-  }
-  return(rodent_species_merge)
+                                      incomplete,
+                                      date_table) {
+  #if (!incomplete) {
+  #  incompsampling = find_incomplete_censuses_plants(census_table)
+  #  incompsampling = dplyr::left_join(incompsampling, date_table, by=c("year","season")) %>% filter(censusdone=="yes")
+  #  quadrat_sp_merge = dplyr::filter(quadrat_sp_merge,
+  #                                   !period %in% incompsampling$period)
+  #}
+  return(quadrat_sp_merge)
 }
 
 #' @title Filter plots
@@ -219,23 +224,23 @@ join_plots_to_rodents = function(rodent_data, plots_table){
   return(rodent_table)
 }
 
-#' @title Join rodent and trapping tables
-#' @description Joins rodent data with list of trapping dates, by period and plot
-#' @param rodent_data Data.table with raw rodent data.
-#' @param trapping_table Data_table of when plots were censused.
+#' @title Join quadrat and census date tables
+#' @description Joins quadrat data with list of census dates
+#' @param quadrat_data Data.table with raw rodent data.
+#' @param census_table Data_table of when plots were censused.
 #' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
 #'
-#' @return Data.table of raw rodent data with trapping info added.
+#' @return Data.table of raw quadrat data with census info added.
 #'
 #' @export
-join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
+join_census_to_quadrats = function(quadrat_data, date_table, incomplete){
   if (incomplete== F){
-    incompsampling = find_incomplete_censuses(trapping_table)
-    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
+    incompsampling = find_incomplete_censuses(date_table)
+    date_table = dplyr::filter(date_table, !period %in% incompsampling$period)
   }
-  rodent_table = dplyr::right_join(rodent_data, trapping_table,
+  quadrat_table = dplyr::right_join(quadrat_data, census_table,
                                    by=c("period"="period","plot"="plot"))
-  return(rodent_table)
+  return(quadrat_table)
 }
 
 #' @title Add User-specified time column
@@ -337,11 +342,9 @@ clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     remove_suspect_entries_plants() %>%
     process_annuals(type) %>%
-    process_unknownsp_plants(unknowns) #%>%
-    remove_incomplete_censuses_plants(data_tables$census_table, incomplete) %>%
+    process_unknownsp_plants(unknowns) %>%
+    remove_incomplete_censuses_plants(data_tables$census_table, incomplete, data_tables$date_table) %>%
     filter_plots(length) %>%
-    dplyr::mutate(species = as.factor(species),
-                  wgt = as.numeric(wgt),
-                  energy = wgt ^ 0.75) %>%
+
     return()
 }
