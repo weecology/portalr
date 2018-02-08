@@ -61,7 +61,7 @@ loadData <- function(path = "~") {
     plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
   }
   colnames(species_table)[1] = "species"
-  colnames(trapping_table) = c("day", "month","year", "period", "plot", "sampled","effort")
+  #colnames(trapping_table) = c("day", "month","year", "period", "plot", "sampled","effort")
   colnames(newmoons_table)[3] = "period"
   colnames(plots_table)[2] = "month"
   return(list(rodent_data = rodent_data,
