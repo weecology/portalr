@@ -26,6 +26,7 @@
 #'   plots (plots that have had same treatment for entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param output specify whether to return "abundance", or "cover" [cover data
 #'    starts in summer 2015]
@@ -36,7 +37,7 @@
 #' @export
 #'
 get_plant_data <- function(path = '~', level = "Site", type = "All",
-                           length = "all", unknowns = FALSE,
+                           length = "all", unknowns = FALSE, correct_sp = TRUE,
                            shape = "crosstab", output = "abundance")
 {
   #### Clean inputs ----
@@ -47,8 +48,8 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   data_tables <- loadPlantData(path)
 
   #### Do initial cleaning ----
-  quadrats <- clean_plant_data(data_tables, type="Annuals",
-                               unknowns, length)
+  quadrats <- clean_plant_data(data_tables, type,
+                               unknowns, correct_sp, length)
 
   #### Summarize data ----
 

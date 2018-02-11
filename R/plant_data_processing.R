@@ -7,6 +7,7 @@
 #   - crosstab output contains a column called 'NA' that is full of zeros.  why.
 #   - add option for getting "cover" instead of abundance (cover data starts in 2015)
 #   - were annuals removed from quadrats during plant removal treatment?
+#   - if user asks for something other than just annuals, should restrict time series (when did they definitely start counting perennials?)
 #
 # ------------------------------------------------------------------------------
 
@@ -87,20 +88,30 @@ loadPlantData <- function(path = "~") {
 }
 
 
-#' @title Remove suspect data
+#' @title Rename plant species
 #'
-#' @description
+#' @description Several species are suspected to have been IDed
+#' incorrectly until 2017, when voucher samples were collected.
+#'     acac greg -> mimo acul
+#'     tali angu -> tali aura
+#'     lcyi torr -> lyci ande
 #'
 #'
 #' @param quadrat_data Data.table of raw plant quadrat data.
+#' @param correct_sp T/F whether or not to use likely corrected plant IDs
+#'                   [see Methods.md for explanation]
 #'
-#' @return Data.table with suspect data removed.
+#' @return Data.table with suspected incorrect plant species names replaced
 #'
 #' @export
 #'
-remove_suspect_entries_plants = function(quadrat_data) {
-  #rodent_data = rodent_data[rodent_data$period > 0,]
-  #rodent_data = rodent_data[!is.na(rodent_data$plot),]
+rename_species_plants = function(quadrat_data, correct_sp) {
+  if (correct_sp) {
+    quadrat_data$species <- gsub('acac greg','mimo acul',quadrat_data$species)
+    quadrat_data$species <- gsub('tali angu','tali aura',quadrat_data$species)
+    quadrat_data$species <- gsub('lyci torr','lyci ande',quadrat_data$species)
+  }
+
   return(quadrat_data)
 }
 
@@ -263,14 +274,15 @@ make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
 #' @export
 #'
 clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
-                             length = "all")
+                             correct_sp, length = "all")
 {
   data_tables$quadrat_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
-    remove_suspect_entries_plants() %>%
+    rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
     filter_plots(length) %>%
 
     return()
 }
+
