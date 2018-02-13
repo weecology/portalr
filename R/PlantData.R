@@ -109,7 +109,8 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 #' @export
 #'
 plant_abundance <- function(...) {
-  get_plant_data(..., output = "abundance")
+  get_plant_data(..., output = "abundance") %>%
+    dplyr::filter(abundance>0)
 }
 
 
