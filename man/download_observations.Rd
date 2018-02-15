@@ -9,7 +9,8 @@ download_observations(base_folder = "~", release_only = TRUE)
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
 
-\item{release_only}{whether to download only the "Release" version of the data}
+\item{release_only}{whether to download the "Release" version of the data. Set to FALSE
+to download the most up to date data.}
 }
 \value{
 None
