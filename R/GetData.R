@@ -24,7 +24,8 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
-#' @param release_only whether to download only the "Release" version of the data
+#' @param release_only whether to download the "Release" version of the data. Set to FALSE
+#'        to download the most up to date data.
 #' @return None
 #' @export
 download_observations <- function(base_folder = '~', release_only = TRUE) {
