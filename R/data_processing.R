@@ -399,3 +399,238 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
                   energy = wgt ^ 0.75) %>%
     return()
 }
+
+#' @title Loads Portal plant data files.
+#'
+#' @description Loads main Portal plant data files from either
+#' a user defined path or the online Github repository.
+#'
+#' @param path string Containing path to PortalData folder
+#'              should include ending /; if path = 'repo',
+#'              data is pulled from PortalData GitHub repository.
+#'
+#' @return       List of 4 dataframes:
+#' \itemize{
+#' \item quadrat_data. raw plant quadrat data
+#' \item species_table. species code, names, types
+#' \item census_table. indicates whether each quadrat was counted in each census; area of each quadrat
+#' \item date_table. start and end date of each plant census
+#' \item plots_table. rodent treatment assignments for each plot.
+#' }
+#'
+#' @export
+#'
+#' @examples
+#' portal_plant_data <- loadPlantData("repo")
+loadPlantData <- function(path = "~") {
+  if (path == 'repo') {
+    quadrat_data = read.csv(
+      text = RCurl::getURL(
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_quadrats.csv"),
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
+    species_table = read.csv(
+      text = RCurl::getURL(
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_species.csv"),
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
+    census_table = read.csv(
+      text = RCurl::getURL(
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_censuses.csv"),
+      stringsAsFactors = FALSE)
+    date_table = read.csv(
+      text = RCurl::getURL(
+        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_census_dates.csv"),
+      stringsAsFactors = FALSE,
+      na.strings = c('','none','unknown'))
+    plots_table = read.csv(
+      text = RCurl::getURL(
+        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"),
+      stringsAsFactors = FALSE)
+  } else {
+    quadrat_data = read.csv(
+      file.path(path, "PortalData/Plants/Portal_plant_quadrats.csv"),
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
+    species_table = read.csv(
+      file.path(path, "PortalData/Plants/Portal_plant_species.csv"),
+      na.strings = c(""),
+      stringsAsFactors = FALSE)
+    census_table = read.csv(
+      file.path(path, "PortalData/Plants/Portal_plant_censuses.csv"),
+      stringsAsFactors = FALSE)
+    date_table = read.csv(
+      file.path(path, "PortalData/Plants/Portal_plant_census_dates.csv"),
+      stringsAsFactors = FALSE,
+      na.strings = c('','none','unknown'))
+    plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
+  }
+  colnames(species_table)[1] = "species"
+  colnames(species_table)[4] = "sp"
+  return(list(quadrat_data = quadrat_data,
+              species_table = species_table,
+              census_table = census_table,
+              date_table = date_table,
+              plots_table = plots_table))
+}
+
+
+#' @title Rename plant species
+#'
+#' @description Several species are suspected to have been IDed
+#' incorrectly until 2017, when voucher samples were collected.
+#'     acac greg -> mimo acul
+#'     tali angu -> tali aura
+#'     lcyi torr -> lyci ande
+#'
+#'
+#' @param quadrat_data Data.table of raw plant quadrat data.
+#' @param correct_sp T/F whether or not to use likely corrected plant IDs
+#'                   [see Methods.md for explanation]
+#'
+#' @return Data.table with suspected incorrect plant species names replaced
+#'
+#' @export
+#'
+rename_species_plants = function(quadrat_data, correct_sp) {
+  if (correct_sp) {
+    quadrat_data$species <- gsub('acac greg','mimo acul',quadrat_data$species)
+    quadrat_data$species <- gsub('tali angu','tali aura',quadrat_data$species)
+    quadrat_data$species <- gsub('lyci torr','lyci ande',quadrat_data$species)
+  }
+
+  return(quadrat_data)
+}
+
+#' @title Processes unknown species -- plant data.
+#'
+#' @description
+#' Removes any records for unidentified species if unknowns=FALSE.
+#' If unknowns=TRUE, then their designation in the output file is
+#' given as 'other'.
+#'
+#' @param quadrat_data Data.table with raw plant quadrat data.
+#' @param unknowns String. If unknowns=False, unknown species removed.
+#'
+#' @return Data.table with species info added and unknown species processed
+#' according to the argument unknowns.
+#'
+#' @export
+#'
+process_unknownsp_plants = function(quadrat_data, unknowns) {
+  if (unknowns)
+  {
+    #Rename all unknowns to "other"
+    quadrat_species_merge = quadrat_data %>%
+      dplyr::mutate(species = replace(species, commonname == "Unknown", "other"))
+  } else {
+    quadrat_species_merge = quadrat_data %>%
+      dplyr::filter(commonname != "Unknown")
+  }
+  return(quadrat_species_merge)
+}
+
+#' @title Restricts species to annuals or non-woody as specified
+#' @description If type=Annuals, removes all non-annual species.
+#'              If type=Non-woody, removes shrub species
+#' @param quadrat_sp_data Data table with raw quadrat plant data
+#'                             merged with species attributes from
+#'                             species_table.
+#' @param type String. Either "Annuals" or "Non-woody" results in filtering
+#'
+#' @return data.table with species processed according to argument 'type'.
+#'
+#' @export
+#'
+process_annuals = function(quadrat_sp_data, type) {
+  if (type %in% c("Annuals", "annuals")) {
+    annual_data = quadrat_sp_data %>%
+      dplyr::filter(duration == 'Annual')
+    return(annual_data)
+  } else if (type %in% c("Non-woody", "non-woody")) {
+    nonwoody_data = quadrat_sp_data %>%
+      dplyr::filter(!(community %in% c("Shrub","Subshrub")))
+    return(nonwoody_data)
+  } else {
+    return(quadrat_sp_data)
+  }
+}
+
+#' @title Join census, dates, and plot treatment tables
+#' @description Joins plant census table, census date table, and plot treatment tables
+#' @param census_table Data_table of plant censuses
+#' @param date_table Data table of dates of plant censuses
+#' @param plots_table Data_table of treatments for the plots.
+#'
+#' @return Data.table of quadrat data with treatment info added.
+#'
+#' @export
+join_census_to_dates = function(census_table, date_table, plots_table){
+  census_dates = dplyr::left_join(census_table,date_table,
+                                  by=c("year"="year","season"="season"))
+  census_plots = dplyr::left_join(census_dates,plots_table,
+                                  by=c("year"="year","start_month"="month","plot"="plot"))
+  return(census_plots)
+}
+
+#' @title Join quadrat and census tables
+#' @description Joins quadrat data with list of census dates
+#' @param quadrat_data Data.table with raw rodent data.
+#' @param census_table Data_table of when plots were censused.
+#'
+#' @return Data.table of raw quadrat data with census info added.
+#'
+#' @export
+join_census_to_quadrats = function(quadrat_data, census_table){
+  quadrat_table = dplyr::right_join(quadrat_data, census_table,
+                                    by=c("year"="year","season"="season",
+                                         "plot"="plot","quadrat"="quadrat"))
+  return(quadrat_table)
+}
+
+#' @name clean_plant_data
+#'
+#' @title Do basic cleaning of Portal plant data
+#'
+#' @description This function does basic quality control of the Portal plant
+#'   data. It is mainly called from \code{\link{get_plant_data}}, with
+#'   several arguments passed along.
+#'
+#'   The specific steps it does are, in order:
+#'     (1) remove records with "bad" period codes or plot numbers via
+#'         \code{\link{remove_suspect_entries}}
+#'     (2) restrict species to annuals or non-woody via
+#'         \code{link{process_annuals}}
+#'     (3) remove records for unidentified species via
+#'         \code{\link{process_unknownsp_plants}}
+#'     (4) exclude incomplete trapping sessions via
+#'         \code{\link{remove_incomplete_censuses}}
+#'     (5) exclude the plots that aren't long-term treatments via
+#'         \code{\link{filter_plots}}
+#'
+#' @param data_tables the list of data_tables, returned from calling
+#'   \code{\link{loadPlantData}}
+#' @param type specify subset of species; either "All" - includes annuals,
+#'  perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
+#'  annuals and perennials but not shrubs
+#' @param unknowns either removes all individuals not identified to species
+#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (plots that have had same treatment for entire time series)
+#'
+#' @export
+#'
+clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
+                             correct_sp, length = "all")
+{
+  data_tables$quadrat_data %>%
+    dplyr::left_join(data_tables$species_table, by = "species") %>%
+    rename_species_plants(correct_sp) %>%
+    process_annuals(type) %>%
+    process_unknownsp_plants(unknowns) %>%
+    filter_plots(length) %>%
+
+    return()
+}
+
+
