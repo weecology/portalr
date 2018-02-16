@@ -83,7 +83,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   nquads <- census_info_table %>%
               dplyr::count(!!!head(grouping,-1),wt = censused)
   nquads <- dplyr::rename(nquads, "nquads"="n")
-  out_df <- left_join(out_df,nquads)
+  out_df <- dplyr::left_join(out_df,nquads)
 
 
   #### Reshape data into crosstab ----
