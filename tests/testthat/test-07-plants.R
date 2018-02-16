@@ -1,6 +1,7 @@
 context("Check plant data summaries")
 
 test_that("plant_abundance returns expected results", {
+  download_observations(".", release_only = FALSE)
   plantabundance.all = plant_abundance(path = '.', level = "Plot", type = "All",
                                   length = "all", unknowns = T, correct_sp= F,
                                   shape = "flat")
