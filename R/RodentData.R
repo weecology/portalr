@@ -116,7 +116,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
   {
-    crosstab_fill <- if(output == "abundance") 0L else NA
+    crosstab_fill <- if((output == "abundance") && (level %in% c('site', 'treatment'))) 0L else NA
     out_df <- make_crosstab(out_df, output, crosstab_fill)
   }
 
