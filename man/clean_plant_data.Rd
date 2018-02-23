@@ -18,11 +18,16 @@ annuals and perennials but not shrubs}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
+<<<<<<< 51e7553393dfecfe0963eea9888fce888b55176b
 <<<<<<< 6314ff373f0dd9ebe173c0025e13b9e6010ac7ad
 \item{correct_sp}{T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}}
 
 =======
 >>>>>>> Update docs and tests
+=======
+\item{correct_sp}{T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}}
+
+>>>>>>> Switch plant_abundance shape default to flat, fix bug in plant crosstabs
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (plots that have had same treatment for entire time series)}
 }
