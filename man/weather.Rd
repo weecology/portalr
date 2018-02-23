@@ -4,7 +4,7 @@
 \alias{weather}
 \title{Weather by day or month}
 \usage{
-weather(level, path = "~")
+weather(level = "Daily", fill = FALSE, path = "~")
 }
 \arguments{
 \item{level}{specify 'Monthly' or 'Daily'}

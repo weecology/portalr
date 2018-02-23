@@ -6,10 +6,17 @@
 \title{Generate summaries of Portal plant data}
 \usage{
 get_plant_data(path = "~", level = "Site", type = "All", length = "all",
+<<<<<<< 6314ff373f0dd9ebe173c0025e13b9e6010ac7ad
   unknowns = FALSE, correct_sp = TRUE, shape = "flat",
   output = "abundance")
 
 plant_abundance(..., shape = "flat")
+=======
+  unknowns = FALSE, correct_sp = TRUE, shape = "crosstab",
+  output = "abundance")
+
+plant_abundance(...)
+>>>>>>> Update docs and tests
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
@@ -29,14 +36,21 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 
+<<<<<<< 6314ff373f0dd9ebe173c0025e13b9e6010ac7ad
 \item{shape}{return data as a "flat" list or "crosstab"}
+=======
+\item{shape}{return data as a "crosstab" or "flat" list}
+>>>>>>> Update docs and tests
 
 \item{output}{specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]}
 
 \item{...}{arguments passed to \code{\link{get_plant_data}}}
+<<<<<<< 6314ff373f0dd9ebe173c0025e13b9e6010ac7ad
 
 \item{shape}{return data as a "flat" list or "crosstab"}
+=======
+>>>>>>> Update docs and tests
 }
 \value{
 a data.frame in either "long" or "wide" format, depending on the
