@@ -9,6 +9,8 @@ weather(level = "Daily", fill = FALSE, path = "~")
 \arguments{
 \item{level}{specify 'Monthly' or 'Daily'}
 
+\item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
+
 \item{path}{specify where to locate Portal data}
 }
 \description{

@@ -5,6 +5,7 @@
 #' @description Summarize hourly weather data to either daily or monthly level.
 #'
 #' @param level specify 'Monthly' or 'Daily'
+#' @param fill specify if missing data should be filled, passed to \code{fill_missing_weather}
 #' @param path specify where to locate Portal data
 #'
 #' @export

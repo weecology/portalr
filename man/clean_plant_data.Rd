@@ -18,6 +18,8 @@ annuals and perennials but not shrubs}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
+\item{correct_sp}{T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}}
+
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (plots that have had same treatment for entire time series)}
 }

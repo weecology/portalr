@@ -615,6 +615,7 @@ join_census_to_quadrats = function(quadrat_data, census_table){
 #'  annuals and perennials but not shrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param correct_sp T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}
 #' @param length specify subset of plots; use "All" plots or only "Longterm"
 #'   plots (plots that have had same treatment for entire time series)
 #'

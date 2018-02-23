@@ -27,7 +27,7 @@
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
-#' @param shape return data as a "crosstab" or "flat" list
+#' @param shape return data as a "flat" list or "crosstab"
 #' @param output specify whether to return "abundance", or "cover" [cover data
 #'    starts in summer 2015]
 #'
@@ -38,7 +38,7 @@
 #'
 get_plant_data <- function(path = '~', level = "Site", type = "All",
                            length = "all", unknowns = FALSE, correct_sp = TRUE,
-                           shape = "crosstab", output = "abundance")
+                           shape = "flat", output = "abundance")
 {
   #### Clean inputs ----
   output <- tolower(output)
@@ -102,15 +102,24 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 #' @description \code{plant_abundance} generates a table of plant abundance
 #'
 #' @param ... arguments passed to \code{\link{get_plant_data}}
+#' @param shape return data as a "flat" list or "crosstab"
 #'
 #' @examples
 #' plant_abundance("repo")
 #'
 #' @export
 #'
-plant_abundance <- function(...) {
-  get_plant_data(..., output = "abundance") %>%
-    dplyr::filter(abundance>0)
+plant_abundance <- function(..., shape = "flat") {
+
+  if(shape %in% c("Crosstab", "crosstab"))
+  {
+    get_plant_data(..., shape = "crosstab", output = "abundance")
+  }
+  else {
+    get_plant_data(..., shape = "flat", output = "abundance") %>%
+      dplyr::filter(abundance>0)
+  }
+
 }
 
 
