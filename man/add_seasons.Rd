@@ -2,20 +2,48 @@
 % Please edit documentation in R/season_function.R
 \name{add_seasons}
 \alias{add_seasons}
+\alias{yearly}
 \title{Add Seasons}
 \usage{
-add_seasons(data, num_of_seasons)
+add_seasons(data, level = "site", season_level = 2, date_column = yearmon,
+  summarize = NA, path = "~")
+
+yearly(...)
 }
 \arguments{
-\item{data}{data frame containing columns: yr, mo, species}
+\item{data}{data frame containing columns: date, period, newmoonnumber, or year and month}
 
-\item{num_of_seasons}{either 2: winter = Oct-March
-      summer = April-Sept
-or 4: winter = Dec-Feb
-      spring = March-May
-      summer = Jun-Aug
-      fall = Sep-Nov}
+\item{level}{"plot, "treatment" or "site"}
+
+\item{season_level}{either year,
+2: winter = Oct-March
+   summer = April-Sept
+4: winter = Dec-Feb
+   spring = March-May
+   summer = Jun-Aug
+   fall = Sep-Nov}
+
+\item{date_column}{either "date" (must be in format "y-m-d"), "period", "newmoonnumber",
+or "yearmon" (data must contain "year" and "month")}
+
+\item{summarize}{A function or list of functions specified by their name (e.g. "mean").
+Default is NA (returned with seasons added but not summarized).}
+
+\item{path}{path to location of downloaded Portal data; or "repo" to
+retrieve data from github repo}
+
+\item{...}{arguments passed to \code{\link{add_seasons}}}
+}
+\value{
+a data.frame with additional "season" and "year" column, and other columns summarized as specified
 }
 \description{
-Adds seasons to data frame
+Higher-order data summaries, by 6-month seasons, 3-month seasons, or year.
+Also applies specified functions to the specified summary level.
+
+\code{yearly} generates a table of yearly means
+}
+\examples{
+yearly(abundance(path = "repo",time = "newmoon"), date_column = "newmoonnumber", path = "repo")
+
 }

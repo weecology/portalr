@@ -14,7 +14,6 @@ test_that("Monthly option returns 8 columns", {
   expect_that(sum(colnames(data)==c("year","month","mintemp","maxtemp","meantemp","precipitation","ndvi","flag")), equals(8))
 })
 
-
 test_that("Daily temperatures ok" , {
   data = weather("Daily",path = ".")
   expect_that(length(which((data$mintemp<=data$maxtemp)==FALSE)),equals(0))
