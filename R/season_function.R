@@ -25,7 +25,6 @@
 #'
 #' @return a data.frame with additional "season" and "year" column, and other columns summarized as specified
 #'
-#' @examples add_seasons(abundance(path = '.',time="newmoon"), date_column = "newmoonnumber", season_level = 2, summarize = "mean")
 #'
 #' @export
 #'
@@ -105,7 +104,7 @@ add_seasons <- function(data, level = "site", season_level = 2, date_column = ye
 #'
 #' @param ... arguments passed to \code{\link{add_seasons}}
 #'
-#' @examples yearly(abundance(path = '.',time="newmoon"), date_column = "newmoonnumber")
+#' @examples yearly(abundance(path = "repo",time = "newmoon"), date_column = "newmoonnumber", path = "repo")
 #'
 #' @export
 #'
