@@ -10,6 +10,8 @@ weather(level, path = "~")
 \item{level}{specify 'Monthly' or 'Daily'}
 
 \item{path}{specify where to locate Portal data}
+
+\item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
 }
 \description{
 Summarize hourly weather data to either daily or monthly level.
