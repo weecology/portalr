@@ -2,16 +2,16 @@ context("checks weather summary output")
 
 download_observations('.')
 
-test_that("'Daily' option returns 7 columns" , {
+test_that("'Daily' option returns 8 columns" , {
   data = weather("Daily",path = ".")
-  expect_that(dim(data)[2], equals(7))
-  expect_that(sum(colnames(data)==c("year","month","day","mintemp","maxtemp","meantemp","precipitation")), equals(7))
+  expect_that(dim(data)[2], equals(8))
+  expect_that(sum(colnames(data)==c("year","month","day","mintemp","maxtemp","meantemp","precipitation","flag")), equals(8))
 })
 
-test_that("Monthly option returns 7 columns", {
+test_that("Monthly option returns 8 columns", {
   data = weather("Monthly",path = ".")
-  expect_that(dim(data)[2], equals(7))
-  expect_that(sum(colnames(data)==c("year","month","mintemp","maxtemp","meantemp","precipitation","ndvi")), equals(7))
+  expect_that(dim(data)[2], equals(8))
+  expect_that(sum(colnames(data)==c("year","month","mintemp","maxtemp","meantemp","precipitation","ndvi","flag")), equals(8))
 })
 
 

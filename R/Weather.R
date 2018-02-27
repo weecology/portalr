@@ -21,7 +21,8 @@ weather <- function(level = "Daily", fill = FALSE, path = '~') {
     dplyr::summarize(mintemp=min(airtemp),maxtemp=max(airtemp),meantemp=mean(airtemp),precipitation=sum(precipitation))
 
   weather=dplyr::bind_rows(weather_old[1:3442,],days) %>%
-    dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation)
+    dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation) %>%
+    dplyr::mutate(flag = 0)
 
     weather = fill_missing_weather(weather, fill)
 
@@ -39,10 +40,11 @@ weather <- function(level = "Daily", fill = FALSE, path = '~') {
 
     weather = weather %>%
       dplyr::group_by(year, month) %>%
-      dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),precipitation=sum(precipitation,na.rm=T)) %>%
+      dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),
+                       precipitation=sum(precipitation,na.rm=T), flag=max(flag)) %>%
       dplyr::full_join(NDVI) %>%
       dplyr::arrange(year,month) %>%
-      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, ndvi) %>%
+      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, ndvi, flag) %>%
       dplyr::mutate(ndvi = as.numeric(ndvi))
   }
 
@@ -88,9 +90,11 @@ fill_missing_weather <- function(daily, fill) {
       dplyr::full_join(tobs,by = c("year", "month", "day")) %>% dplyr::arrange(year,month,day) %>% dplyr::distinct(.)
 
     filled_data = dplyr::full_join(regionmeans,daily,by = c("year", "month", "day")) %>% dplyr::arrange(year,month,day) %>%
-      dplyr::mutate(mintemp = ifelse(is.na(mintemp),tmin,mintemp), maxtemp = ifelse(is.na(maxtemp),tmax,maxtemp),
-             meantemp = ifelse(is.na(meantemp),tobs,meantemp), precipitation = ifelse(is.na(precipitation),precip,precipitation)) %>%
-      dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation)
+      dplyr::mutate(flag = ifelse(any(is.na(c(mintemp,maxtemp,meantemp,precipitation))),1,0),
+                    mintemp = ifelse(is.na(mintemp),tmin,mintemp), maxtemp = ifelse(is.na(maxtemp),tmax,maxtemp),
+                    meantemp = ifelse(is.na(meantemp),tobs,meantemp),
+                    precipitation = ifelse(is.na(precipitation),precip,precipitation)) %>%
+      dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation,flag)
     daily = filled_data
     }
   return(daily)
