@@ -4,14 +4,14 @@
 \alias{weather}
 \title{Weather by day or month}
 \usage{
-weather(level = "Daily", fill = FALSE, path = "~")
+weather(level, path = "~")
 }
 \arguments{
 \item{level}{specify 'Monthly' or 'Daily'}
 
-\item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
-
 \item{path}{specify where to locate Portal data}
+
+\item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
 }
 \description{
 Summarize hourly weather data to either daily or monthly level.

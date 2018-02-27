@@ -1,5 +1,6 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang quos
+#' @importFrom utils head
 #'
 #' @title Add Seasons
 #'
@@ -7,6 +8,7 @@
 #' Also applies specified functions to the specified summary level.
 #'
 #' @param data data frame containing columns: date, period, newmoonnumber, or year and month
+#' @param level "plot, "treatment" or "site"
 #' @param season_level either year,
 #'                       2: winter = Oct-March
 #'                          summer = April-Sept
@@ -17,23 +19,25 @@
 #' @param date_column either "date" (must be in format "y-m-d"), "period", "newmoonnumber",
 #'                    or "yearmon" (data must contain "year" and "month")
 #' @param summarize A function or list of functions specified by their name (e.g. "mean").
-#'                  Default is NULL (returned with seasons added but not summarized).
+#'                  Default is NA (returned with seasons added but not summarized).
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'             retrieve data from github repo
 #'
 #' @return a data.frame with additional "season" and "year" column, and other columns summarized as specified
 #'
-#' @example add_seasons(data, date_column = "newmoonnumber", season_level = 2, summarize = "mean")
+#' @examples add_seasons(abundance(time="newmoon"), date_column = "newmoonnumber", season_level = 2, summarize = "mean")
 #'
 #' @export
 #'
-add_seasons <- function(data, season_level = 2, date_column = yearmon, summarize = NA, path = "~"){
+add_seasons <- function(data, level = "site", season_level = 2, date_column = yearmon, summarize = NA, path = "~"){
 
   date_column <- tolower(date_column)
   summarize <- tolower(summarize)
   if(!is.na(summarize)) {sumfun <- get(summarize)}
-  if("species" %in% colnames(data)) {grouping <- quos(year, season, species)
-  } else {grouping <- quos(year,season)}
+  if(level=="plot") {grouping <- quos(year, season, treatment, plot)
+     } else if(level=="treatment") {grouping <- quos(year, season, treatment)
+     } else {grouping <- quos(year,season)}
+  if("species" %in% colnames(data)) {grouping <- c(grouping,quos(species))}
 
   data_tables <- loadData(path)
 
@@ -69,7 +73,7 @@ add_seasons <- function(data, season_level = 2, date_column = yearmon, summarize
 
     full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
 
-    if(!(is.null(summarize))) {
+    if(!(is.na(summarize))) {
       full_data = full_data %>% dplyr::group_by(!!!grouping) %>% dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
         dplyr::select(-month,-dplyr::contains("day"),-dplyr::contains("newmoonnumber"),-dplyr::contains("date"),-dplyr::contains("period"))
     }
@@ -80,11 +84,11 @@ add_seasons <- function(data, season_level = 2, date_column = yearmon, summarize
 
       full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
 
-      if(!(is.null(summarize))) {
+      if(!(is.na(summarize))) {
         full_data = full_data %>% dplyr::group_by(!!!grouping) %>% dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
           dplyr::select(-month,-dplyr::contains("day"),-dplyr::contains("newmoonnumber"),-dplyr::contains("date"),-dplyr::contains("period"))
       }
-    } else if (season_level == "year" && !(is.null(summarize))) {
+    } else if (season_level == "year" && !(is.na(summarize))) {
 
     full_data = full_data %>% dplyr::group_by(!!!grouping[-2]) %>% dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
       dplyr::select(-month,-dplyr::contains("day"),-dplyr::contains("newmoonnumber"),-dplyr::contains("date"),-dplyr::contains("period"))
@@ -101,7 +105,7 @@ add_seasons <- function(data, season_level = 2, date_column = yearmon, summarize
 #'
 #' @param ... arguments passed to \code{\link{add_seasons}}
 #'
-#' @examples yearly(data, date_column = "newmoonnumber")
+#' @examples yearly(abundance(time="newmoon"), date_column = "newmoonnumber")
 #'
 #' @export
 #'

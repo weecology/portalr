@@ -5,13 +5,15 @@
 \alias{yearly}
 \title{Add Seasons}
 \usage{
-add_seasons(data, season_level = 2, date_column = yearmon, summarize = NA,
-  path = "~")
+add_seasons(data, level = "site", season_level = 2, date_column = yearmon,
+  summarize = NA, path = "~")
 
 yearly(...)
 }
 \arguments{
 \item{data}{data frame containing columns: date, period, newmoonnumber, or year and month}
+
+\item{level}{"plot, "treatment" or "site"}
 
 \item{season_level}{either year,
 2: winter = Oct-March
@@ -25,7 +27,7 @@ yearly(...)
 or "yearmon" (data must contain "year" and "month")}
 
 \item{summarize}{A function or list of functions specified by their name (e.g. "mean").
-Default is NULL (returned with seasons added but not summarized).}
+Default is NA (returned with seasons added but not summarized).}
 
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
@@ -42,6 +44,8 @@ Also applies specified functions to the specified summary level.
 \code{yearly} generates a table of yearly means
 }
 \examples{
-yearly(data, date_column = "newmoonnumber")
+add_seasons(abundance(time="newmoon"), date_column = "newmoonnumber", season_level = 2, summarize = "mean")
+
+yearly(abundance(time="newmoon"), date_column = "newmoonnumber")
 
 }
