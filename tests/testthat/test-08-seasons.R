@@ -3,7 +3,7 @@ context("Check seasonal data summaries")
 rodents = abundance(path = '.', level = "plot", shape = "flat")
 test.rodents = dplyr::filter(rodents, period %in% 21:191)
 
-test.weather = weather("monthly") %>% dplyr::filter(year %in% 1989:2010)
+test.weather = weather("monthly",path=".") %>% dplyr::filter(year %in% 1989:2010)
 
 test_that("add_seasons returns expected results", {
 
