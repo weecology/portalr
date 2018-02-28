@@ -4,10 +4,21 @@
 \alias{weather}
 \title{Weather by day or month}
 \usage{
+<<<<<<< HEAD
 weather(level = "daily", fill = FALSE, path = "~")
 }
 \arguments{
 \item{level}{specify 'monthly' or 'daily'}
+=======
+weather(level = "Daily", fill = FALSE, path = "~")
+}
+\arguments{
+\item{level}{specify 'Monthly' or 'Daily'}
+
+\item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
+
+\item{path}{specify where to locate Portal data}
+>>>>>>> upstream/fill_weather
 
 \item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
 

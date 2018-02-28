@@ -4,14 +4,21 @@
 \alias{fill_missing_weather}
 \title{Fill missing weather with regional data}
 \usage{
+<<<<<<< HEAD
 fill_missing_weather(daily, fill, path)
+=======
+fill_missing_weather(daily, fill)
+>>>>>>> upstream/fill_weather
 }
 \arguments{
 \item{daily}{a dataframe of daily weather data}
 
 \item{fill}{specify if missing data should be filled}
+<<<<<<< HEAD
 
 \item{path}{specify where to locate regional data}
+=======
+>>>>>>> upstream/fill_weather
 }
 \description{
 Use two weather stations in San Simon valley to fill in
