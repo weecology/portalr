@@ -4,13 +4,14 @@
 #'
 #' @description Summarize hourly weather data to either daily or monthly level.
 #'
-#' @param level specify 'Monthly' or 'Daily'
+#' @param level specify 'monthly' or 'daily'
 #' @param fill specify if missing data should be filled, passed to \code{fill_missing_weather}
 #' @param path specify where to locate Portal data
 #'
 #' @export
 #'
-weather <- function(level = "Daily", fill = FALSE, path = '~') {
+weather <- function(level = "daily", fill = FALSE, path = '~') {
+  level = tolower(level)
   weather_new=read.csv(FullPath('PortalData/Weather/Portal_weather.csv', path), na.strings=c(""), stringsAsFactors = FALSE)
   weather_old=read.csv(FullPath('PortalData/Weather/Portal_weather_19801989.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
   NDVI=read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), na.strings=c("-99"), stringsAsFactors = FALSE)
@@ -18,15 +19,15 @@ weather <- function(level = "Daily", fill = FALSE, path = '~') {
   ###########Summarise by Day ----------------------
   days = weather_new %>%
     dplyr::group_by(year, month, day) %>%
-    dplyr::summarize(mintemp=min(airtemp),maxtemp=max(airtemp),meantemp=mean(airtemp),precipitation=sum(precipitation))
+    dplyr::summarize(mintemp=min(airtemp),maxtemp=max(airtemp),meantemp=mean(airtemp),precipitation=sum(precipitation),battv=min(battv,na.rm=TRUE))
 
-  weather=dplyr::bind_rows(weather_old[1:3442,],days) %>%
-    dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation) %>%
-    dplyr::mutate(flag = 0)
+  weather=dplyr::bind_rows(weather_old[1:3442,],days)  %>%
+    dplyr::mutate(locally_measured = TRUE, battv = ifelse(is.infinite(battv),NA,battv), battery_low = ifelse(battv<11,TRUE,FALSE)) %>%
+    dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation,locally_measured,battery_low)
 
-    weather = fill_missing_weather(weather, fill)
+    weather = fill_missing_weather(weather, fill, path)
 
-  if (level=='Monthly') {
+  if (level=='monthly') {
 
     ##########Summarise by Month -----------------
 
@@ -41,11 +42,12 @@ weather <- function(level = "Daily", fill = FALSE, path = '~') {
     weather = weather %>%
       dplyr::group_by(year, month) %>%
       dplyr::summarize(mintemp=min(mintemp,na.rm=T),maxtemp=max(maxtemp,na.rm=T),meantemp=mean(meantemp,na.rm=T),
-                       precipitation=sum(precipitation,na.rm=T), flag=max(flag)) %>%
-      dplyr::full_join(NDVI) %>%
+                       precipitation=sum(precipitation,na.rm=T), locally_measured=all(locally_measured),
+                       battery_low=all(battery_low,na.rm=TRUE)) %>%
+      dplyr::full_join(NDVI, by = c("year", "month")) %>%
       dplyr::arrange(year,month) %>%
-      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, ndvi, flag) %>%
-      dplyr::mutate(ndvi = as.numeric(ndvi))
+      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, ndvi, locally_measured, battery_low) %>%
+      dplyr::mutate(ndvi = as.numeric(ndvi), battery_low=ifelse(year<2003,NA,battery_low))
   }
 
 
@@ -60,10 +62,11 @@ weather <- function(level = "Daily", fill = FALSE, path = '~') {
 #'
 #' @param daily a dataframe of daily weather data
 #' @param fill specify if missing data should be filled
+#' @param path specify where to locate regional data
 #'
 #' @export
 #'
-fill_missing_weather <- function(daily, fill) {
+fill_missing_weather <- function(daily, fill,path) {
 
   if(fill) {
     portal4sw = read.csv(FullPath('PortalData/Weather/Portal4sw_regional_weather.csv', path), na.strings=c(""), header=T,
@@ -90,11 +93,11 @@ fill_missing_weather <- function(daily, fill) {
       dplyr::full_join(tobs,by = c("year", "month", "day")) %>% dplyr::arrange(year,month,day) %>% dplyr::distinct(.)
 
     filled_data = dplyr::full_join(regionmeans,daily,by = c("year", "month", "day")) %>% dplyr::arrange(year,month,day) %>%
-      dplyr::mutate(flag = ifelse(any(is.na(c(mintemp,maxtemp,meantemp,precipitation))),1,0),
+      dplyr::mutate(locally_measured = ifelse(any(is.na(c(mintemp,maxtemp,meantemp,precipitation))),FALSE,TRUE),
                     mintemp = ifelse(is.na(mintemp),tmin,mintemp), maxtemp = ifelse(is.na(maxtemp),tmax,maxtemp),
                     meantemp = ifelse(is.na(meantemp),tobs,meantemp),
                     precipitation = ifelse(is.na(precipitation),precip,precipitation)) %>%
-      dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation,flag)
+      dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation,locally_measured,battery_low)
     daily = filled_data
     }
   return(daily)

@@ -14,7 +14,7 @@ test_that("add_seasons returns expected results", {
   expect_true(expect_true(round(sum(rodent_seasons$abundance, na.rm = T),4) == 476.1733))
 
   weather_seasons = add_seasons(test.weather,date_column = "yearmon",season_level = 4, summarize = "mean", path = ".")
-  expect_true(expect_true(round(sum(weather_seasons$precipitation, na.rm = T),5) == 61.58203))
+  expect_true(expect_true(round(sum(weather_seasons$precipitation, na.rm = T),3) == 1788.509))
 
   })
 
@@ -24,6 +24,6 @@ test_that("yearly returns expected results", {
   expect_true(expect_true(round(sum(rodent_yearly$abundance, na.rm = T),3) == 1531.998))
 
   weather_yearly = yearly(test.weather,date_column = "yearmon", path = ".")
-  expect_true(expect_true(round(sum(weather_yearly$precipitation, na.rm = T),5) == 15.5211))
+  expect_true(expect_true(round(sum(weather_yearly$precipitation, na.rm = T),4) == 453.3213))
 
 })
