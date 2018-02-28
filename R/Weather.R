@@ -98,6 +98,7 @@ fill_missing_weather <- function(daily, fill,path) {
                     meantemp = ifelse(is.na(meantemp),tobs,meantemp),
                     precipitation = ifelse(is.na(precipitation),precip,precipitation)) %>%
       dplyr::select(year,month,day,mintemp,maxtemp,meantemp,precipitation,locally_measured,battery_low)
+
     daily = filled_data
     }
   return(daily)
