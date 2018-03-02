@@ -38,7 +38,7 @@ add_seasons <- function(data, level = "site", season_level = 2, date_column = ye
      } else {grouping <- quos(year,season)}
   if("species" %in% colnames(data)) {grouping <- c(grouping,quos(species))}
 
-  data_tables <- loadData(path)
+  data_tables <- load_data(path)
 
   #### Get month and year column
   if(date_column == "period"){

@@ -379,7 +379,7 @@ fill_weight = function(rodent_data, tofill)
 #'         \code{\link{filter_plots}}
 #'
 #' @param data_tables the list of data_tables, returned from calling
-#'   \code{\link{loadData}}
+#'   \code{\link{load_data}}
 #' @param fillweight specify whether to fill in unknown weights with other
 #'   records from that individual or species, where possible
 #' @param type specify subset of species; either all "Rodents" or only
