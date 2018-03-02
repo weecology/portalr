@@ -78,8 +78,9 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   ## summarize over each plot
   if(level == "plot") {
     trapping <- filter_plots(data_tables$trapping, length)
-    rodents <- join_trapping_to_rodents(rodents, trapping, incomplete)
-    grouping <- quos(period, plot, species)
+    rodents <- join_trapping_to_rodents(rodents, trapping, incomplete) %>%
+      join_plots_to_rodents(data_tables$plots_table)
+    grouping <- quos(period, plot, treatment, species)
 
     # remember which (period x plot) were not sampled
     sampled_LUT <- rodents %>%
@@ -87,7 +88,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
       dplyr::select(period, plot, sampled) %>%
       dplyr::distinct()
   } else if(level == "treatment") {
-    rodents = join_plots_to_rodents(rodents, data_tables$plots_table)
+    rodents <- join_plots_to_rodents(rodents, data_tables$plots_table)
     grouping <- quos(period, treatment, species)
   } else { # level == "site"
     grouping <- quos(period, species)
@@ -102,11 +103,11 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   if(level == "plot") {
     # replace values for non-sampled period x plot with NA
     out_df <- out_df %>%
-      tidyr::complete(period, plot, species, fill = list(n = 0L)) %>%
+      tidyr::complete(tidyr::nesting(period, plot, treatment), species, fill = list(n = 0L)) %>%
       dplyr::filter(!is.na(species)) %>%
       dplyr::left_join(sampled_LUT, by = c("period", "plot")) %>%
       dplyr::mutate(n = replace(n, sampled == 0, NA)) %>%
-      dplyr::select(period, plot, species, n)
+      dplyr::select(period, plot, treatment, species, n)
   }
 
   ## [6] rename output variable correctly
@@ -115,7 +116,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   #### Reshape data into crosstab ----
   if(shape %in% c("Crosstab", "crosstab"))
   {
-    crosstab_fill <- if(output == "abundance") 0L else NA
+    crosstab_fill <- if((output == "abundance") && (level %in% c('site', 'treatment'))) 0L else NA
     out_df <- make_crosstab(out_df, output, crosstab_fill)
   }
 
