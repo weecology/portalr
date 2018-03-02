@@ -9,7 +9,7 @@ clean_rodent_data(data_tables, fillweight = FALSE, type = "Rodents",
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
-\code{\link{loadData}}}
+\code{\link{load_data}}}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}

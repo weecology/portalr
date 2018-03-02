@@ -431,52 +431,60 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
 #' @export
 #'
 #' @examples
-#' portal_plant_data <- loadPlantData("repo")
-loadPlantData <- function(path = "~") {
-  if (path == 'repo') {
-    quadrat_data = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_quadrats.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    species_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_species.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    census_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_censuses.csv"),
-      stringsAsFactors = FALSE)
-    date_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/Plants/Portal_plant_census_dates.csv"),
-      stringsAsFactors = FALSE,
-      na.strings = c('','none','unknown'))
-    plots_table = read.csv(
-      text = RCurl::getURL(
-        "https://raw.githubusercontent.com/weecology/PortalData/master/SiteandMethods/Portal_plots.csv"),
-      stringsAsFactors = FALSE)
+#' portal_plant_data <- load_plant_data("repo")
+load_plant_pata <- function(path = "~") {
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
   } else {
-    quadrat_data = read.csv(
-      file.path(path, "PortalData/Plants/Portal_plant_quadrats.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    species_table = read.csv(
-      file.path(path, "PortalData/Plants/Portal_plant_species.csv"),
-      na.strings = c(""),
-      stringsAsFactors = FALSE)
-    census_table = read.csv(
-      file.path(path, "PortalData/Plants/Portal_plant_censuses.csv"),
-      stringsAsFactors = FALSE)
-    date_table = read.csv(
-      file.path(path, "PortalData/Plants/Portal_plant_census_dates.csv"),
-      stringsAsFactors = FALSE,
-      na.strings = c('','none','unknown'))
-    plots_table = read.csv(file.path(path, "PortalData/SiteandMethods/Portal_plots.csv"))
+    tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+             error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
+             warning = function(w) w)
   }
-  colnames(species_table)[1] = "species"
-  colnames(species_table)[4] = "sp"
+
+  quadrat_data_file <- file.path(base_path, "Plants", "Portal_plant_quadrats.csv")
+  species_table_file <- file.path(base_path, "Plants", "Portal_plant_species.csv")
+  census_table_file <- file.path(base_path, "Plants", "Portal_plant_censuses.csv")
+  data_table_file <- file.path(base_path, "Plants", "Portal_plant_census_dates.csv")
+  plots_table_file <- file.path(base_path, "SiteandMethods", "Portal_plots.csv")
+
+  ## check if files exist and download if appropriate
+  if (tolower(path) != "repo" &&
+      any(!file.exists(quadrat_data_file),
+          !file.exists(species_table_file),
+          !file.exists(census_table_file),
+          !file.exists(data_table_file),
+          !file.exists(plots_table_file)))
+  {
+    if (download_if_missing) {
+      warning("Proceeding to download data into specified path", path)
+      download_observations(path)
+    } else {
+      stop("Data files were not found in specified path", path)
+    }
+  }
+
+  ## read in CSV files
+  quadrat_data = read.csv(quadrat_data_file,
+                         na.strings = c(""),
+                         stringsAsFactors = FALSE)
+  species_table = read.csv(species_table_file,
+                           na.strings = c(""),
+                           stringsAsFactors = FALSE)
+  census_table = read.csv(census_table_file,
+                          stringsAsFactors = FALSE)
+  data_table = read.csv(data_table_file,
+                        stringsAsFactors = FALSE,
+                        na.strings = c('','none','unknown'))
+  plots_table = read.csv(plots_table_file,
+                         stringsAsFactors = FALSE)
+
+  ## reformat
+  if (!"sp" %in% names(species_table))
+    species_table <- dplyr::rename(species_table, sp = species,
+                                     species = speciescode)
+
   return(list(quadrat_data = quadrat_data,
               species_table = species_table,
               census_table = census_table,
@@ -619,7 +627,7 @@ join_census_to_quadrats = function(quadrat_data, census_table){
 #'         \code{\link{filter_plots}}
 #'
 #' @param data_tables the list of data_tables, returned from calling
-#'   \code{\link{loadPlantData}}
+#'   \code{\link{load_plant_data}}
 #' @param type specify subset of species; either "All" - includes annuals,
 #'  perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
 #'  annuals and perennials but not shrubs

@@ -45,7 +45,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   level <- tolower(level)
 
   #### Get Data ----
-  data_tables <- loadPlantData(path)
+  data_tables <- load_plant_data(path)
 
   #### Do initial cleaning ----
   quadrats <- clean_plant_data(data_tables, type,
@@ -102,7 +102,6 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 #' @description \code{plant_abundance} generates a table of plant abundance
 #'
 #' @param ... arguments passed to \code{\link{get_plant_data}}
-#' @param shape return data as a "flat" list or "crosstab"
 #'
 #' @examples
 #' plant_abundance("repo")
