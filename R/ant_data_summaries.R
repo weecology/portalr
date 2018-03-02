@@ -97,7 +97,7 @@ colony_presence_absence= function(level='Site', rare_sp = F) {
 #' @export
 #'
 bait_presence_absence= function(level='Site') {
-  bait = read.csv(text = RCurl::getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_bait.csv"),stringsAsFactors = F)
+  bait = read.csv("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_bait.csv",stringsAsFactors = F)
 
   # list of species
   specieslist = unique(bait$species)

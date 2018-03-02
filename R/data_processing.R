@@ -432,7 +432,7 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
 #'
 #' @examples
 #' portal_plant_data <- load_plant_data("repo")
-load_plant_pata <- function(path = "~") {
+load_plant_data <- function(path = "~") {
   ## define file paths
   if (tolower(path) == "repo")
   {
