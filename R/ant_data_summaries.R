@@ -1,6 +1,3 @@
-library(dplyr)
-
-
 #' @title Ant Colony Presence Absence
 #'
 #' @description Get ant species presence/absence by year (and plot if desired) from colony census data
@@ -22,8 +19,8 @@ library(dplyr)
 #' @export
 #'
 colony_presence_absence= function(level='Site', rare_sp = F) {
-  colony = read.csv(text = RCurl::getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_colony.csv"),stringsAsFactors = F)
-  antsp = read.csv(text = RCurl::getURL("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_species.csv"),stringsAsFactors = F)
+  colony = read.csv("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_colony.csv",stringsAsFactors = F)
+  antsp = read.csv("https://raw.githubusercontent.com/weecology/PortalData/master/Ants/Portal_ant_species.csv",stringsAsFactors = F)
 
   # make list of species: exclude unknowns, and extremely rare species
   # if rare_sp == F, the species list will be further restricted to the 8 species we absolutely know were censused consistently

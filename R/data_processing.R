@@ -446,7 +446,7 @@ load_plant_pata <- function(path = "~") {
   quadrat_data_file <- file.path(base_path, "Plants", "Portal_plant_quadrats.csv")
   species_table_file <- file.path(base_path, "Plants", "Portal_plant_species.csv")
   census_table_file <- file.path(base_path, "Plants", "Portal_plant_censuses.csv")
-  data_table_file <- file.path(base_path, "Plants", "Portal_plant_census_dates.csv")
+  date_table_file <- file.path(base_path, "Plants", "Portal_plant_census_dates.csv")
   plots_table_file <- file.path(base_path, "SiteandMethods", "Portal_plots.csv")
 
   ## check if files exist and download if appropriate
@@ -454,7 +454,7 @@ load_plant_pata <- function(path = "~") {
       any(!file.exists(quadrat_data_file),
           !file.exists(species_table_file),
           !file.exists(census_table_file),
-          !file.exists(data_table_file),
+          !file.exists(date_table_file),
           !file.exists(plots_table_file)))
   {
     if (download_if_missing) {
@@ -474,7 +474,7 @@ load_plant_pata <- function(path = "~") {
                            stringsAsFactors = FALSE)
   census_table = read.csv(census_table_file,
                           stringsAsFactors = FALSE)
-  data_table = read.csv(data_table_file,
+  date_table = read.csv(date_table_file,
                         stringsAsFactors = FALSE,
                         na.strings = c('','none','unknown'))
   plots_table = read.csv(plots_table_file,
