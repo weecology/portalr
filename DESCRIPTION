@@ -16,7 +16,9 @@ Imports:
     lubridate,
     magrittr,
     httr, 
-    rlang
+    rlang,
+	forecast,
+	htmltab
 Suggests:
     testthat,
     digest,

@@ -7,13 +7,11 @@
 fill_missing_weather(daily, fill, path)
 }
 \arguments{
-
 \item{daily}{a dataframe of daily weather data}
 
 \item{fill}{specify if missing data should be filled}
 
 \item{path}{specify where to locate regional data}
-
 }
 \description{
 Use two weather stations in San Simon valley to fill in
