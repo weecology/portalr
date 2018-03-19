@@ -1,6 +1,6 @@
 context("Check data processing")
 
-data_tables <- loadData(".")
+data_tables <- load_data(".")
 
 test_that("rodent data.frame has correct column names", {
   rats = data_tables[[1]]

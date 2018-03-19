@@ -35,8 +35,6 @@ plots (plots that have had same treatment for entire time series)}
 starts in summer 2015]}
 
 \item{...}{arguments passed to \code{\link{get_plant_data}}}
-
-\item{shape}{return data as a "flat" list or "crosstab"}
 }
 \value{
 a data.frame in either "long" or "wide" format, depending on the

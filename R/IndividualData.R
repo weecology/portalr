@@ -32,7 +32,7 @@ get_stake_data <- function(path = '~', type = "Rodents",
                             time = "period", fillweight = FALSE) {
 
   #### Get Data ----
-  data_tables <- loadData(path)
+  data_tables <- load_data(path)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,

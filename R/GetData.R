@@ -73,34 +73,34 @@ download_observations <- function(base_folder = '~', release_only = TRUE) {
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
 
-#' @title Find new observations
-#' @description Check if there are new rodent observations. This only checks the
-#'   Portal_rodent.csv file. (If other data (non-rodent) are updated this function
-#'   will not show that there is new data available.)
-#' @param base_folder Folder into which data will be downloaded
-#' @return bool True if new observations are available
-#' @export
-observations_are_new = function(base_folder = '~') {
-  md5_file = './Portal_rodent.md5'
-  rodent_file = FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
-  if (!file.exists(rodent_file))
-    stop('Rodent observations not present. Please run download_observations()')
-
-  if (!file.exists(md5_file)) {
-    old_md5 = ''
-  } else {
-    old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
-  }
-
-  new_md5 = as.character(tools::md5sum(rodent_file))
-
-  if (old_md5 == new_md5) {
-    return(FALSE)
-  } else {
-    sink(md5_file)
-    writeLines(new_md5)
-    sink()
-    return(TRUE)
-  }
-
-}
+#' #' @title Find new observations
+#' #' @description Check if there are new rodent observations. This only checks the
+#' #'   Portal_rodent.csv file. (If other data (non-rodent) are updated this function
+#' #'   will not show that there is new data available.)
+#' #' @param base_folder Folder into which data will be downloaded
+#' #' @return bool True if new observations are available
+#' #' @export
+#' observations_are_new = function(base_folder = '~') {
+#'   md5_file = './Portal_rodent.md5'
+#'   rodent_file = FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
+#'   if (!file.exists(rodent_file))
+#'     stop('Rodent observations not present. Please run download_observations()')
+#'
+#'   if (!file.exists(md5_file)) {
+#'     old_md5 = ''
+#'   } else {
+#'     old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
+#'   }
+#'
+#'   new_md5 = as.character(tools::md5sum(rodent_file))
+#'
+#'   if (old_md5 == new_md5) {
+#'     return(FALSE)
+#'   } else {
+#'     sink(md5_file)
+#'     writeLines(new_md5)
+#'     sink()
+#'     return(TRUE)
+#'   }
+#'
+#' }

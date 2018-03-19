@@ -9,7 +9,7 @@ clean_plant_data(data_tables, type = "All", unknowns = FALSE, correct_sp,
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
-\code{\link{loadPlantData}}}
+\code{\link{load_plant_data}}}
 
 \item{type}{specify subset of species; either "All" - includes annuals,
 perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
