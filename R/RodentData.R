@@ -236,7 +236,7 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
                             na.drop = NULL, zero.drop = NULL,  
                             min_traps = 1, min_plots = 1, effort = FALSE){
 
-  data_tables <- portalr::loadData(path)
+  data_tables <- portalr::load_data(path)
 
   level <- tolower(level)
   type <- tolower(type)
