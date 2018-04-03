@@ -2,7 +2,9 @@
 % Please edit documentation in R/RodentData.R
 \name{true_length}
 \alias{true_length}
-\title{Length of non-missing values in a vector}
+\title{Length of non-missing values in a vector
+
+How many values in the given vector are not NAs}
 \usage{
 true_length(x)
 }

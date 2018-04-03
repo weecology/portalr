@@ -1,6 +1,7 @@
 #' @importFrom utils tail
 
-#' @title Get next 12 new moon dates and assign newmoon numbers for forecasting
+#' @title Get future moon dates
+#' @description Get next 12 new moon dates and assign newmoon numbers for forecasting
 #' @param moons current newmoonnumber table
 #' @param num_future_moons number of future moons to get
 #' @return expected moons table for 12 future new moons

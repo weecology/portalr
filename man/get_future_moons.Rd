@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_future_moons.R
 \name{get_future_moons}
 \alias{get_future_moons}
-\title{Get next 12 new moon dates and assign newmoon numbers for forecasting}
+\title{Get future moon dates}
 \usage{
 get_future_moons(moons, num_future_moons = 12)
 }
@@ -13,4 +13,7 @@ get_future_moons(moons, num_future_moons = 12)
 }
 \value{
 expected moons table for 12 future new moons
+}
+\description{
+Get next 12 new moon dates and assign newmoon numbers for forecasting
 }

@@ -28,15 +28,15 @@
 #' @export
 #'
 get_stake_data <- function(path = '~', type = "Rodents",
-                            length = "all", unknowns = FALSE, incomplete = FALSE,
-                            time = "period", fillweight = FALSE) {
+                           length = "all", unknowns = FALSE, incomplete = FALSE,
+                           time = "period", fillweight = FALSE) {
 
   #### Get Data ----
   data_tables <- load_data(path)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,
-                               unknowns, incomplete, length)
+                               unknowns, incomplete)
 
   #### Filter by length and add treatment types ----
   trapping <- filter_plots(data_tables$trapping, length)

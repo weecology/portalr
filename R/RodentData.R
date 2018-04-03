@@ -2,6 +2,8 @@
 
 #' @title Length of non-missing values in a vector
 #'
+#' How many values in the given vector are not NAs
+#'
 #' @param x vector of values
 #' @return integer of how many non-NA values in x
 #'
