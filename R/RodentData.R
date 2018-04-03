@@ -144,7 +144,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
     } else if (shape == "crosstab") {
       species <- as.character(unique(level_data$species))
       out_data %>%
-        dplyr::filter(rowSums(select(., species)) != 0) %>%
+        dplyr::filter(rowSums(dplyr::select(., species)) != 0) %>%
         return()
     }
   }
