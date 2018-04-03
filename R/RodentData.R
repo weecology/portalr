@@ -5,48 +5,26 @@
 #'
 #' @export
 #'
-true_length <- function(x){
+true_length <- function(x) {
  length(which(!is.na(x)))
-}
-
-#' Join plots and trapping tables
-#'
-#' @param trapping trapping_table from Portal data (can be filtered)
-#' @param plots plots_table from Portal data
-#' 
-#' @return trapping table with sampled column removed and treatment column 
-#'   added 
-#'
-#' @export 
-#'
-join_plots_to_trapping <- function(trapping, plots){
-
-  plots_table <- plots %>% 
-                 dplyr::group_by(year, plot) %>% 
-                 dplyr::select(year, month, plot, treatment)
-  join_by <- c(year = "year", month = "month", plot = "plot")
-  trapping_table <- dplyr::left_join(trapping, plots_table, by = join_by)
-  trapping_table <- dplyr::select(trapping_table , -sampled)
-
-  return(trapping_table)
 }
 
 #' Plot-level rodent data
 #'
 #' @param rodent_data cleaned rodent data
-#' @param trapping_data trapping table with treatment column 
-#' @param output specify whether to return "abundance", or "biomass", 
+#' @param trapping_data trapping table with treatment column
+#' @param output specify whether to return "abundance", or "biomass",
 #'   or "energy"
 #' @param min_traps minimum number of traps for a plot to be included
 #'
 #' @return fully crossed period x plot x species flat table of observations
-#'   with effort (number of traps) and treatment columns. Any plots not 
-#'   sufficiently (as defined by min_traps) sampled is returned with NA 
+#'   with effort (number of traps) and treatment columns. Any plots not
+#'   sufficiently (as defined by min_traps) sampled is returned with NA
 #'   for effort and the output value of interest
 #'
-#' @export 
+#' @export
 #'
-make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1){
+make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 
   grouping <- rlang::quos(period, plot, species)
   wt <- switch(output,
@@ -56,7 +34,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1){
   filler <- list(n = as.integer(0))
   plot_data <- rodent_data %>%
                dplyr::count(!!!grouping, wt = !!wt)  %>%
-               tidyr::complete(!!!grouping, fill = filler) %>% 
+               tidyr::complete(!!!grouping, fill = filler) %>%
                dplyr::right_join(trapping_data, by = c("period", "plot")) %>%
                dplyr::select(period, plot, species, n, effort, treatment)
   naspecies <- which(is.na(plot_data$species))
@@ -66,7 +44,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1){
   insuff_plot <- which(plot_data$effort < min_traps)
   plot_data[insuff_plot, c("n", "effort")] <- c(NA, NA)
 
-  plot_data <- dplyr::rename(plot_data, !!output := n) 
+  plot_data <- dplyr::rename(plot_data, !!output := n)
   return(plot_data)
 }
 
@@ -74,20 +52,20 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1){
 #'
 #' @param plot_data rodent data summarized at the plot level
 #' @param level specify level of interest ("plot", "treatment", "site")
-#' @param output specify whether to return "abundance", or "biomass", 
+#' @param output specify whether to return "abundance", or "biomass",
 #'   or "energy"
-#' @param min_plots minimum number of plots within a period for an 
+#' @param min_plots minimum number of plots within a period for an
 #'   observation to be included
 #'
 #' @return fully crossed flat table of observations with effort (number of
 #'   traps and number of plots). The crossing depends on the level:
 #'   "plot" is period x treatment x plot x species, "treatment" is
-#'   period x treatment x species, and "site" is period x species. Any 
-#'   observations not sufficiently (as defined by min_plots, and 
-#'   hierarchically by min_traps) sampled are returned with NA 
+#'   period x treatment x species, and "site" is period x species. Any
+#'   observations not sufficiently (as defined by min_plots, and
+#'   hierarchically by min_traps) sampled are returned with NA
 #'   for ntraps, nplots, and the output value of interest
 #'
-#' @export 
+#' @export
 #'
 make_level_data <- function(plot_data, level, output, min_plots){
 
@@ -98,7 +76,7 @@ make_level_data <- function(plot_data, level, output, min_plots){
                 "site" = rlang::quos(period, species))
 
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
-                dplyr::summarise(n = sum(n, na.rm = TRUE), 
+                dplyr::summarise(n = sum(n, na.rm = TRUE),
                  ntraps = sum(effort, na.rm = TRUE),
                  nplots = portalr::true_length(effort))
 
@@ -109,7 +87,7 @@ make_level_data <- function(plot_data, level, output, min_plots){
 
   level_data <- dplyr::rename(level_data, !!output := n) %>%
                 data.frame() %>%
-                dplyr::as.tbl() 
+                dplyr::as.tbl()
 
   return(level_data)
 }
@@ -123,25 +101,25 @@ make_level_data <- function(plot_data, level, output, min_plots){
 #'   or "date" (calendar date)
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
-#' @param na.drop logical, drop NA values (representing insufficient sampling)
-#' @param zero.drop logica, drop 0s (representing sufficient sampling, but no
+#' @param na_drop logical, drop NA values (representing insufficient sampling)
+#' @param zero_drop logica, drop 0s (representing sufficient sampling, but no
 #'   detections)
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param level specify level of interest ("plot", "treatment", "site")
-#' @param output specify whether to return "abundance", or "biomass", 
+#' @param output specify whether to return "abundance", or "biomass",
 #'   or "energy"
 #' @return fully crossed flat table of observations with effort (number of
 #'   traps and number of plots). The crossing depends on the level:
 #'   "plot" is period x treatment x plot x species, "treatment" is
-#'   period x treatment x species, and "site" is period x species. Any 
-#'   observations not sufficiently (as defined by min_plots, and 
-#'   hierarchically by min_traps) sampled are returned with NA 
+#'   period x treatment x species, and "site" is period x species. Any
+#'   observations not sufficiently (as defined by min_plots, and
+#'   hierarchically by min_traps) sampled are returned with NA
 #'   for ntraps, nplots, and the output value of interest
 #'
-#' @export 
+#' @export
 #'
-prep_rodent_output <- function(level_data, data_tables, time, effort, na.drop,
-                               zero.drop, shape, level, output){
+prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
+                               zero_drop, shape, level, output){
 
   out_data <- portalr::add_time(level_data, data_tables$newmoons_table, time)
   if (effort == FALSE){
@@ -149,35 +127,35 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na.drop,
   } else if (level == "plot"){
     out_data <- dplyr::select(out_data, -nplots)
   }
-  if (length(na.drop) == 0){
-    na.drop <- switch(level, 
-                   "plot" = FALSE, 
-                   "treatment" = TRUE, 
+  if (length(na_drop) == 0){
+    na_drop <- switch(level,
+                   "plot" = FALSE,
+                   "treatment" = TRUE,
                    "site" = TRUE)
   }
-  if (na.drop == TRUE){
+  if (na_drop == TRUE){
     out_data <- na.omit(out_data)
   }
   if (shape == "crosstab"){
     out_data <- portalr::make_crosstab(out_data, output, NA)
   }
-  if (length(zero.drop) == 0){
-    zero.drop <- switch(level,
-                   "plot" = FALSE, 
-                   "treatment" = TRUE, 
+  if (length(zero_drop) == 0) {
+    zero_drop <- switch(level,
+                   "plot" = FALSE,
+                   "treatment" = TRUE,
                    "site" = TRUE)
   }
-  if (zero.drop == TRUE){
-    if (shape == "flat"){
-      values <- out_data[ , output]
+  if (zero_drop == TRUE) {
+    if (shape == "flat") {
+      values <- out_data[, output]
       zeroes <- which(values == 0)
-    } else if (shape == "crosstab"){
+    } else if (shape == "crosstab") {
         species <- as.character(unique(level_data$species))
-        values <- out_data[ , which(colnames(out_data) %in% species)]
+        values <- out_data[, which(colnames(out_data) %in% species)]
         value_totals <- apply(values, 1, sum)
         zeroes <- which(value_totals == 0)
     }
-    if (length(zeroes) > 0){
+    if (length(zeroes) > 0) {
       out_data <- out_data[-zeroes, ]
     }
   }
@@ -191,7 +169,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na.drop,
 #' @title Generate summaries of Portal rodent data
 #'
 #' @description This function is a generic interface into creating summaries
-#'   of the Portal rodent species data. It contains a number of arguments 
+#'   of the Portal rodent species data. It contains a number of arguments
 #'   to specify the kind of data to summarize (at what level of aggregation)
 #'   and various choices for dealing with data quality, and output format.
 #'
@@ -210,15 +188,15 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na.drop,
 #' @param time specify the format of the time index in the output, either
 #'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
 #'   "date" (calendar date)
-#' @param output specify whether to return "abundance", or "biomass", or 
+#' @param output specify whether to return "abundance", or "biomass", or
 #'   "energy"
 #' @param fillweight specify whether to fill in unknown weights with other
 #'   records from that individual or species, where possible
-#' @param na.drop logical, drop NA values (representing insufficient sampling)
-#' @param zero.drop logica, drop 0s (representing sufficient sampling, but no
+#' @param na_drop logical, drop NA values (representing insufficient sampling)
+#' @param zero_drop logica, drop 0s (representing sufficient sampling, but no
 #'   detections)
 #' @param min_traps minimum number of traps for a plot to be included
-#' @param min_plots minimum number of plots within a period for an 
+#' @param min_plots minimum number of plots within a period for an
 #'   observation to be included
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
@@ -229,11 +207,11 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na.drop,
 #' @export
 #'
 get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
-                            length = "all", unknowns = FALSE, 
-                            incomplete = FALSE, shape = "crosstab",  
-                            time = "period", output = "abundance", 
+                            length = "all", unknowns = FALSE,
+                            incomplete = FALSE, shape = "crosstab",
+                            time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
-                            na.drop = NULL, zero.drop = NULL,  
+                            na_drop = NULL, zero_drop = NULL,
                             min_traps = 1, min_plots = 1, effort = FALSE){
 
   data_tables <- portalr::load_data(path)
@@ -246,15 +224,15 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
   output <- tolower(output)
 
   trapping_data <- portalr::filter_plots(data_tables$trapping, length) %>%
-                   portalr::join_plots_to_trapping(data_tables$plots_table)
+    portalr::join_plots_to_trapping(data_tables$plots_table)
 
-  out <- portalr::clean_rodent_data(data_tables, fillweight, type, 
-           unknowns, incomplete, length) %>%
-         portalr::make_plot_data(trapping_data, output, min_traps) %>%
-         portalr::make_level_data(level, output, min_plots) %>%
-         portalr::prep_rodent_output(data_tables, time, effort, na.drop, 
-           zero.drop, shape, level, output)
-               
+  out <- portalr::clean_rodent_data(data_tables, fillweight, type,
+                                    unknowns, incomplete, length) %>%
+    portalr::make_plot_data(trapping_data, output, min_traps) %>%
+    portalr::make_level_data(level, output, min_plots) %>%
+    portalr::prep_rodent_output(data_tables, time, effort, na_drop,
+                                zero_drop, shape, level, output)
+
   return(out)
 }
 
@@ -290,7 +268,7 @@ biomass <- function(...) {
 
 #' @rdname get_rodent_data
 #'
-#' @description * \code{energy()} generates a table of rodent energy 
+#' @description * \code{energy()} generates a table of rodent energy
 #'   (computed as biomass ^ 0.75)
 #'
 #' @inheritParams abundance

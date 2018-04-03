@@ -54,9 +54,11 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   #### Summarize data ----
 
   # make master census info table from census_table, date_table and plots_table [filters out un-censused quadrats]
-  census_info_table <- join_census_to_dates(data_tables$census_table, data_tables$date_table, data_tables$plots_table) %>%
-                          filter_plots(length=length) %>%
-                          dplyr::filter(censused==1)
+  census_info_table <- join_census_to_dates(data_tables$census_table,
+                                            data_tables$date_table,
+                                            data_tables$plots_table) %>%
+                          filter_plots(length = length) %>%
+                          dplyr::filter(censused == 1)
 
   # join census info to quadrat data
   quadrats <- join_census_to_quadrats(quadrats, census_info_table)
@@ -72,7 +74,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 
   ## [4] summarize
   out_df <- quadrats %>%
-    dplyr::count(!!!grouping,wt = abundance) %>%
+    dplyr::count(!!!grouping, wt = abundance) %>%
     dplyr::select(!!!grouping, n)
 
   ## [5] rename output variable correctly
