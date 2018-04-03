@@ -357,9 +357,9 @@ fill_weight <- function(rodent_data, tofill)
   for (this_row in which(missing_wgt_idx))
   {
     rodents_with_wgt <- dplyr::filter(rodent_data,
-                                    tag == rodent_data$tag[this_row],
-                                    species == rodent_data$species[this_row],
-                                    wgt > 0)
+                                      tag == rodent_data$tag[this_row],
+                                      species == rodent_data$species[this_row],
+                                      wgt > 0)
 
     # if there are weights for the same individual
     if (nrow(rodents_with_wgt) > 0) {

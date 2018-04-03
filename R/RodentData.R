@@ -6,7 +6,7 @@
 #' @export
 #'
 true_length <- function(x) {
- length(which(!is.na(x)))
+  length(which(!is.na(x)))
 }
 
 #' Plot-level rodent data
@@ -28,9 +28,9 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 
   grouping <- rlang::quos(period, plot, species)
   wt <- switch(output,
-          "abundance" = NULL,
-          "biomass" = rlang::quo(wgt),
-          "energy" = rlang::quo(energy))
+               "abundance" = NULL,
+               "biomass" = rlang::quo(wgt),
+               "energy" = rlang::quo(energy))
   filler <- list(n = as.integer(0))
   rodent_data %>%
     dplyr::count(!!!grouping, wt = !!wt)  %>%
@@ -67,25 +67,26 @@ make_level_data <- function(plot_data, level, output, min_plots) {
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
-                "plot" = rlang::quos(period, treatment, plot, species),
-                "treatment" = rlang::quos(period, treatment, species),
-                "site" = rlang::quos(period, species))
+                     "plot" = rlang::quos(period, treatment, plot, species),
+                     "treatment" = rlang::quos(period, treatment, species),
+                     "site" = rlang::quos(period, species))
 
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
-                dplyr::summarise(n = sum(n, na.rm = TRUE),
-                 ntraps = sum(effort, na.rm = TRUE),
-                 nplots = portalr::true_length(effort))
+    dplyr::summarise(n = sum(n, na.rm = TRUE),
+                     ntraps = sum(effort, na.rm = TRUE),
+                     nplots = portalr::true_length(effort))
 
-  if (length(min_plots) > 0){
-    insuff_level <- which(level_data$nplots < min_plots)
-    level_data[insuff_level, c("n", "ntraps", "nplots")] <- c(NA, NA, NA)
+  if (length(min_plots) > 0) {
+    level_data <- level_data %>%
+      dplyr::mutate(n = replace(n, nplots < min_plots, NA),
+                    ntraps = replace(ntraps, nplots < min_plots, NA),
+                    nplots = replace(nplots, nplots < min_plots, NA))
   }
 
-  level_data <- dplyr::rename(level_data, !!output := n) %>%
-                data.frame() %>%
-                dplyr::as.tbl()
-
-  return(level_data)
+  level_data %>%
+    dplyr::rename(!!output := n) %>%
+    dplyr::as.tbl() %>%
+    return()
 }
 
 #' Rodent data prepared for output
@@ -115,44 +116,34 @@ make_level_data <- function(plot_data, level, output, min_plots) {
 #' @export
 #'
 prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
-                               zero_drop, shape, level, output){
+                               zero_drop, shape, level, output) {
 
   out_data <- portalr::add_time(level_data, data_tables$newmoons_table, time)
-  if (effort == FALSE){
+
+  if (effort == FALSE) {
     out_data <- dplyr::select(out_data, -nplots, -ntraps)
-  } else if (level == "plot"){
+  } else if (level == "plot") {
     out_data <- dplyr::select(out_data, -nplots)
   }
-  if (length(na_drop) == 0){
-    na_drop <- switch(level,
-                   "plot" = FALSE,
-                   "treatment" = TRUE,
-                   "site" = TRUE)
-  }
-  if (na_drop == TRUE){
+
+  if (na_drop) {
     out_data <- na.omit(out_data)
   }
-  if (shape == "crosstab"){
+
+  if (shape == "crosstab") {
     out_data <- portalr::make_crosstab(out_data, output, NA)
   }
-  if (length(zero_drop) == 0) {
-    zero_drop <- switch(level,
-                   "plot" = FALSE,
-                   "treatment" = TRUE,
-                   "site" = TRUE)
-  }
-  if (zero_drop == TRUE) {
+
+  if (zero_drop) {
     if (shape == "flat") {
-      values <- out_data[, output]
-      zeroes <- which(values == 0)
+      out_data %>%
+        dplyr::filter(output != 0) %>%
+        return()
     } else if (shape == "crosstab") {
-        species <- as.character(unique(level_data$species))
-        values <- out_data[, which(colnames(out_data) %in% species)]
-        value_totals <- apply(values, 1, sum)
-        zeroes <- which(value_totals == 0)
-    }
-    if (length(zeroes) > 0) {
-      out_data <- out_data[-zeroes, ]
+      species <- as.character(unique(level_data$species))
+      out_data %>%
+        dplyr::filter(rowSums(select(., species)) != 0) %>%
+        return()
     }
   }
   return(out_data)
@@ -207,8 +198,15 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
                             incomplete = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
-                            na_drop = NULL, zero_drop = NULL,
-                            min_traps = 1, min_plots = 1, effort = FALSE){
+                            na_drop = switch(tolower(level),
+                                             "plot" = FALSE,
+                                             "treatment" = TRUE,
+                                             "site" = TRUE),
+                            zero_drop = switch(tolower(level),
+                                               "plot" = FALSE,
+                                               "treatment" = TRUE,
+                                               "site" = TRUE),
+                            min_traps = 1, min_plots = 1, effort = FALSE) {
 
   data_tables <- portalr::load_data(path)
 
