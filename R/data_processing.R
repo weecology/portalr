@@ -94,8 +94,7 @@ load_data <- function(path = "~", download_if_missing = TRUE)
 #'
 remove_suspect_entries <- function(rodent_data) {
    rodent_data %>%
-    dplyr::filter(period > 0, !is.na(plot)) %>%
-    return()
+    dplyr::filter(period > 0, !is.na(plot))
 }
 
 #' @title Processes unknown species.
@@ -160,8 +159,7 @@ find_incomplete_censuses <- function(trapping_table) {
   trapping_table %>%
     dplyr::filter(sampled == 0) %>%
     dplyr::filter(period > 26) %>%
-    dplyr::distinct(period) %>%
-    return()
+    dplyr::distinct(period)
 }
 
 
@@ -227,8 +225,7 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
     dplyr::select(year, month, plot, treatment)
 
   join_by <- c(year = "year", month = "month", plot = "plot")
-  dplyr::left_join(rodent_data, plots_table, by = join_by) %>%
-    return()
+  dplyr::left_join(rodent_data, plots_table, by = join_by)
 }
 
 #' @title Join rodent and trapping tables
@@ -247,8 +244,7 @@ join_trapping_to_rodents <- function(rodent_data, trapping_table, incomplete) {
                                     !period %in% incompsampling$period)
   }
   join_by <- c(year = "year", month = "month", period = "period", plot = "plot")
-  dplyr::right_join(rodent_data, trapping_table, by = join_by) %>%
-    return()
+  dplyr::right_join(rodent_data, trapping_table, by = join_by)
 }
 
 #' Join plots and trapping tables
@@ -269,8 +265,7 @@ join_plots_to_trapping <- function(trapping, plots) {
 
   join_by <- c(year = "year", month = "month", plot = "plot")
   dplyr::left_join(trapping, plots_table, by = join_by) %>%
-    dplyr::select(-sampled) %>%
-    return()
+    dplyr::select(-sampled)
 }
 
 #' @title Add User-specified time column
@@ -435,8 +430,7 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     remove_incomplete_censuses(data_tables$trapping_table, incomplete) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
-                  energy = wgt ^ 0.75) %>%
-    return()
+                  energy = wgt ^ 0.75)
 }
 
 #' @title Loads Portal plant data files.

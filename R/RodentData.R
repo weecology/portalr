@@ -36,6 +36,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
                "biomass" = rlang::quo(wgt),
                "energy" = rlang::quo(energy))
   filler <- list(n = as.integer(0))
+
   rodent_data %>%
     dplyr::count(!!!grouping, wt = !!wt)  %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
@@ -44,8 +45,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
     dplyr::filter(!is.na(species)) %>%
     dplyr::mutate(n = replace(n, effort < min_traps, NA),
                   effort = replace(effort, effort < min_traps, NA)) %>%
-    dplyr::rename(!!output := n) %>%
-    return()
+    dplyr::rename(!!output := n)
 }
 
 #' Rodent data summarized at the relevant level (plot, treatment, site)
@@ -89,8 +89,7 @@ make_level_data <- function(plot_data, level, output, min_plots) {
 
   level_data %>%
     dplyr::rename(!!output := n) %>%
-    dplyr::as.tbl() %>%
-    return()
+    dplyr::as.tbl()
 }
 
 #' Rodent data prepared for output
@@ -139,17 +138,16 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
   }
 
   if (zero_drop) {
-    if (shape == "flat") {
-      out_data %>%
-        dplyr::filter(output != 0) %>%
-        return()
-    } else if (shape == "crosstab") {
+    if (shape == "crosstab") {
       species <- as.character(unique(level_data$species))
-      out_data %>%
-        dplyr::filter(rowSums(dplyr::select(., species)) != 0) %>%
-        return()
+      out_data <- out_data %>%
+        dplyr::filter(rowSums(dplyr::select(., species)) != 0)
+    } else { # shape == "flat"
+      out_data <- out_data %>%
+        dplyr::filter(output != 0)
     }
   }
+
   return(out_data)
 }
 
