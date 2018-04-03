@@ -12,6 +12,3 @@ true_length(x)
 \value{
 integer of how many non-NA values in x
 }
-\description{
-Length of non-missing values in a vector
-}

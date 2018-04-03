@@ -1,10 +1,12 @@
-#' Get next 12 new moon dates and assign newmoon numbers for forecasting
+#' @importFrom utils tail
+
+#' @title Get next 12 new moon dates and assign newmoon numbers for forecasting
 #' @param moons current newmoonnumber table
 #' @param num_future_moons number of future moons to get
 #' @return expected moons table for 12 future new moons
 #'
 #' @export
-#' 
+#'
 get_future_moons <- function(moons, num_future_moons=12){
   most_recent_year = as.numeric(format(as.Date(tail(moons$newmoondate,1)), "%Y"))
   most_recent_month = as.numeric(format(as.Date(tail(moons$newmoondate,1)), "%m")) +1

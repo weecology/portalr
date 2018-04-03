@@ -1,4 +1,6 @@
-#' Length of non-missing values in a vector
+#' @importFrom stats na.omit
+
+#' @title Length of non-missing values in a vector
 #'
 #' @param x vector of values
 #' @return integer of how many non-NA values in x

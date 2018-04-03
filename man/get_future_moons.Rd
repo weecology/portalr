@@ -14,6 +14,3 @@ get_future_moons(moons, num_future_moons = 12)
 \value{
 expected moons table for 12 future new moons
 }
-\description{
-Get next 12 new moon dates and assign newmoon numbers for forecasting
-}

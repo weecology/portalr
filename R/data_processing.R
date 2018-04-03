@@ -1,5 +1,3 @@
-#' @importFrom magrittr "%>%"
-
 #' @title Loads the Portal rodent data files
 #'
 #' @description Loads main Portal rodent data files from either a user-defined
