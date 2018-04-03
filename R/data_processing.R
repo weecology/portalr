@@ -422,13 +422,11 @@ fill_weight <- function(rodent_data, tofill)
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param incomplete either removes all data from incomplete trapping sessions
 #'   (incomplete = FALSE) or includes them (incomplete = TRUE)
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
 #'
 #' @export
 #'
 clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
-                              unknowns = FALSE, incomplete = FALSE, length = "all")
+                              unknowns = FALSE, incomplete = FALSE)
 {
   data_tables$rodent_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
@@ -437,7 +435,6 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     process_unknownsp(unknowns) %>%
     process_granivores(type) %>%
     remove_incomplete_censuses(data_tables$trapping_table, incomplete) %>%
-    filter_plots(length) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
                   energy = wgt ^ 0.75) %>%

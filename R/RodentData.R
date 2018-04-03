@@ -32,20 +32,16 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
           "biomass" = rlang::quo(wgt),
           "energy" = rlang::quo(energy))
   filler <- list(n = as.integer(0))
-  plot_data <- rodent_data %>%
-               dplyr::count(!!!grouping, wt = !!wt)  %>%
-               tidyr::complete(!!!grouping, fill = filler) %>%
-               dplyr::right_join(trapping_data, by = c("period", "plot")) %>%
-               dplyr::select(period, plot, species, n, effort, treatment)
-  naspecies <- which(is.na(plot_data$species))
-  if (length(naspecies) > 0){
-    plot_data <- plot_data[-naspecies, ]
-  }
-  insuff_plot <- which(plot_data$effort < min_traps)
-  plot_data[insuff_plot, c("n", "effort")] <- c(NA, NA)
-
-  plot_data <- dplyr::rename(plot_data, !!output := n)
-  return(plot_data)
+  rodent_data %>%
+    dplyr::count(!!!grouping, wt = !!wt)  %>%
+    tidyr::complete(!!!grouping, fill = filler) %>%
+    dplyr::right_join(trapping_data, by = c("period", "plot")) %>%
+    dplyr::select(period, plot, species, n, effort, treatment) %>%
+    dplyr::filter(!is.na(species)) %>%
+    dplyr::mutate(n = replace(n, effort < min_traps, NA),
+                  effort = replace(effort, effort < min_traps, NA)) %>%
+    dplyr::rename(!!output := n) %>%
+    return()
 }
 
 #' Rodent data summarized at the relevant level (plot, treatment, site)
@@ -67,7 +63,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 #'
 #' @export
 #'
-make_level_data <- function(plot_data, level, output, min_plots){
+make_level_data <- function(plot_data, level, output, min_plots) {
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
@@ -227,7 +223,7 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
     portalr::join_plots_to_trapping(data_tables$plots_table)
 
   out <- portalr::clean_rodent_data(data_tables, fillweight, type,
-                                    unknowns, incomplete, length) %>%
+                                    unknowns, incomplete) %>%
     portalr::make_plot_data(trapping_data, output, min_traps) %>%
     portalr::make_level_data(level, output, min_plots) %>%
     portalr::prep_rodent_output(data_tables, time, effort, na_drop,
