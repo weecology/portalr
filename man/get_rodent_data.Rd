@@ -13,8 +13,10 @@
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
   shape = "crosstab", time = "period", output = "abundance",
-  fillweight = (output != "abundance"), na.drop = NULL, zero.drop = NULL,
-  min_traps = 1, min_plots = 1, effort = FALSE)
+  fillweight = (output != "abundance"), na_drop = switch(tolower(level),
+  plot = FALSE, treatment = TRUE, site = TRUE),
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
+  TRUE), min_traps = 1, min_plots = 1, effort = FALSE)
 
 abundance(...)
 
@@ -46,20 +48,20 @@ plots (plots that have had same treatment for entire time series)}
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
 "date" (calendar date)}
 
-\item{output}{specify whether to return "abundance", or "biomass", or 
+\item{output}{specify whether to return "abundance", or "biomass", or
 "energy"}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
 
-\item{na.drop}{logical, drop NA values (representing insufficient sampling)}
+\item{na_drop}{logical, drop NA values (representing insufficient sampling)}
 
-\item{zero.drop}{logica, drop 0s (representing sufficient sampling, but no
+\item{zero_drop}{logica, drop 0s (representing sufficient sampling, but no
 detections)}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
 
-\item{min_plots}{minimum number of plots within a period for an 
+\item{min_plots}{minimum number of plots within a period for an
 observation to be included}
 
 \item{effort}{logical as to whether or not the effort columns should be
@@ -73,7 +75,7 @@ a data.frame in either "long" or "wide" format, depending on the
 }
 \description{
 This function is a generic interface into creating summaries
-  of the Portal rodent species data. It contains a number of arguments 
+  of the Portal rodent species data. It contains a number of arguments
   to specify the kind of data to summarize (at what level of aggregation)
   and various choices for dealing with data quality, and output format.
 
@@ -81,7 +83,7 @@ This function is a generic interface into creating summaries
 
 * \code{biomass()} generates a table of rodent biomass
 
-* \code{energy()} generates a table of rodent energy 
+* \code{energy()} generates a table of rodent energy
   (computed as biomass ^ 0.75)
 }
 \examples{

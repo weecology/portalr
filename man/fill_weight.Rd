@@ -12,5 +12,6 @@ fill_weight(rodent_data, tofill)
 \item{tofill}{logical whether to fill in missing values or not}
 }
 \description{
-fill in missing weight values with either a recently recorded weight for that individual or species average
+fill in missing weight values with either a recently recorded
+  weight for that individual or species average
 }
