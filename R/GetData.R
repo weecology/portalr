@@ -73,6 +73,53 @@ download_observations <- function(base_folder = '~', release_only = TRUE) {
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
 
+#' @title Check for latest version of data files
+#' @description Check the latest newmoonnumber against the data that exists on
+#'   the web (as of now, this means against the latest release or latest commit
+#'   on GitHub)
+#' @param newmoons_table the read in data.frame from
+#'   "PortalData/Rodents/moon_dates.csv"
+#' @param release_only whether to check against the latest release or against
+#'   the latest commit on GitHub (defaults to TRUE)
+#' @return bool TRUE if there is a newer version of the data online
+#' @export
+#'
+check_for_newer_data <- function(newmoons_table, release_only = TRUE)
+{
+  if(!release_only) # FALSE = use latest commit on GitHub
+  {
+    newmoons_table_link <- "https://raw.githubusercontent.com/weecology/PortalData/master/Rodents/moon_dates.csv"
+  } else {
+    release_url <- "https://github.com/weecology/PortalData/releases/latest/"
+    pat <- Sys.getenv("GITHUB_PAT", unset = NA)
+    if(!is.na(pat)) # use personal authentication token for GitHub if available
+    {
+      httr::GET(release_url, httr::authenticate(pat, "x-oauth-basic", "basic")) -> resp
+    } else {
+      httr::GET(release_url) -> resp
+    }
+    if (httr::http_type(resp) != "text/html") # check for errors
+    {
+      stop("GitHub response was not in text format", call. = FALSE)
+    }
+    page_content <- httr::content(resp, "text")
+    match_pos <- regexec("weecology/PortalData/commit/([0-9a-f]+)", page_content)
+    match_text <- regmatches(page_content, match_pos)
+    if(length(match_text) != 1)
+    {
+      warning("Wasn't able to parse GitHub for the commit hash.")
+      return(FALSE)
+    }
+    newmoons_table_link <- paste0("https://raw.githubusercontent.com/weecology/PortalData/",
+                                  match_text[[1]][2],
+                                  "/Rodents/moon_dates.csv")
+  }
+
+  online_newmoons_table <- read.csv(newmoons_table_link)
+  return(max(online_newmoons_table$newmoonnumber, na.rm = TRUE) >
+           max(newmoons_table$newmoonnumber, na.rm = TRUE))
+}
+
 #' #' @title Find new observations
 #' #' @description Check if there are new rodent observations. This only checks the
 #' #'   Portal_rodent.csv file. (If other data (non-rodent) are updated this function
