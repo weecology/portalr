@@ -4,15 +4,14 @@
 \alias{fcast_ndvi}
 \title{Forecast ndvi using a seasonal auto ARIMA}
 \usage{
-fcast_ndvi(hist_ndvi, level, time_to_fcast = NULL, moons = NULL)
+fcast_ndvi(hist_ndvi, level, lead, moons = NULL)
 }
 \arguments{
 \item{hist_ndvi}{historic ndvi data}
 
 \item{level}{specify "monthly" or "newmoon"}
 
-\item{time_to_fcast}{specific times (dates of months or numbers of new 
-moons) to forecast}
+\item{lead}{number of steps forward to forecast}
 
 \item{moons}{moon data (required if level = "newmoon")}
 }
