@@ -10,10 +10,10 @@
 \alias{energy}
 \title{Generate summaries of Portal rodent data}
 \usage{
-get_rodent_data(path = "~", level = "Site", type = "Rodents",
-  length = "all", unknowns = FALSE, incomplete = FALSE,
-  shape = "crosstab", time = "period", output = "abundance",
-  fillweight = (output != "abundance"))
+get_rodent_data(path = "~", clean = TRUE, level = "Site",
+  type = "Rodents", length = "all", unknowns = FALSE,
+  incomplete = FALSE, shape = "crosstab", time = "period",
+  output = "abundance", fillweight = (output != "abundance"))
 
 abundance(...)
 
@@ -24,6 +24,8 @@ energy(...)
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
+
+\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 

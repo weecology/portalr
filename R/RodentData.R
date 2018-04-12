@@ -18,6 +18,7 @@
 #'
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
+#' @param clean passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
@@ -42,7 +43,7 @@
 #'
 #' @export
 #'
-get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
+get_rodent_data <- function(path = '~', clean=TRUE, level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "crosstab", time = "period", output = "abundance",
                             fillweight = (output != "abundance"))
@@ -52,7 +53,7 @@ get_rodent_data <- function(path = '~', level = "Site", type = "Rodents",
   level <- tolower(level)
 
   #### Get Data ----
-  data_tables <- load_data(path)
+  data_tables <- load_data(path, clean = clean)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,
