@@ -46,6 +46,5 @@ get_stake_data <- function(path = '~', type = "Rodents",
                   species, sex, hfl, wgt, tag, ltag)
 
   #### use new moon number as time index if time == "newmoon" ----
-  add_time(rodents, data_tables$newmoons_table, time) %>%
-    return()
+  return(add_time(rodents, data_tables$newmoons_table, time))
 }
