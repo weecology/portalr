@@ -28,26 +28,23 @@
 #' @export
 #'
 get_stake_data <- function(path = '~', type = "Rodents",
-                            length = "all", unknowns = FALSE, incomplete = FALSE,
-                            time = "period", fillweight = FALSE) {
+                           length = "all", unknowns = FALSE, incomplete = FALSE,
+                           time = "period", fillweight = FALSE) {
 
   #### Get Data ----
   data_tables <- load_data(path)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,
-                               unknowns, incomplete, length)
+                               unknowns, incomplete)
 
-  #### Filter by length and add treatment types
-
+  #### Filter by length and add treatment types ----
   trapping <- filter_plots(data_tables$trapping, length)
   rodents <- join_trapping_to_rodents(rodents, trapping, incomplete) %>%
     join_plots_to_rodents(data_tables$plots_table) %>%
-    dplyr::select(period, month, day = day.x, year, treatment, plot, stake, species, sex, hfl, wgt, tag, ltag)
+    dplyr::select(period, month, day = day.x, year, treatment, plot, stake,
+                  species, sex, hfl, wgt, tag, ltag)
 
   #### use new moon number as time index if time == "newmoon" ----
-  rodents = add_time(rodents, data_tables$newmoons_table, time)
-
-  return(rodents)
-
+  return(add_time(rodents, data_tables$newmoons_table, time))
 }

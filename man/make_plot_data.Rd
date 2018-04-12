@@ -11,15 +11,15 @@ make_plot_data(rodent_data, trapping_data, output, min_traps = 1)
 
 \item{trapping_data}{trapping table with treatment column}
 
-\item{output}{specify whether to return "abundance", or "biomass", 
+\item{output}{specify whether to return "abundance", or "biomass",
 or "energy"}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
 }
 \value{
 fully crossed period x plot x species flat table of observations
-  with effort (number of traps) and treatment columns. Any plots not 
-  sufficiently (as defined by min_traps) sampled is returned with NA 
+  with effort (number of traps) and treatment columns. Any plots not
+  sufficiently (as defined by min_traps) sampled is returned with NA
   for effort and the output value of interest
 }
 \description{

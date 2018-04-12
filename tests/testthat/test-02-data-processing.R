@@ -72,6 +72,6 @@ test_that("does remove_incomplete_censuses work properly?", {
 })
 
 test_that("does filter_plots work properly?", {
-  rodents_longterm <- clean_rodent_data(data_tables, length = "longterm")
+  rodents_longterm <- filter_plots(data_tables$trapping, length = "longterm")
   expect_equal(sort(unique(rodents_longterm$plot)), c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
 })

@@ -4,7 +4,7 @@
 \alias{prep_rodent_output}
 \title{Rodent data prepared for output}
 \usage{
-prep_rodent_output(level_data, data_tables, time, effort, na.drop, zero.drop,
+prep_rodent_output(level_data, data_tables, time, effort, na_drop, zero_drop,
   shape, level, output)
 }
 \arguments{
@@ -19,25 +19,25 @@ or "date" (calendar date)}
 \item{effort}{logical as to whether or not the effort columns should be
 included in the output}
 
-\item{na.drop}{logical, drop NA values (representing insufficient sampling)}
+\item{na_drop}{logical, drop NA values (representing insufficient sampling)}
 
-\item{zero.drop}{logica, drop 0s (representing sufficient sampling, but no
+\item{zero_drop}{logica, drop 0s (representing sufficient sampling, but no
 detections)}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 
 \item{level}{specify level of interest ("plot", "treatment", "site")}
 
-\item{output}{specify whether to return "abundance", or "biomass", 
+\item{output}{specify whether to return "abundance", or "biomass",
 or "energy"}
 }
 \value{
 fully crossed flat table of observations with effort (number of
   traps and number of plots). The crossing depends on the level:
   "plot" is period x treatment x plot x species, "treatment" is
-  period x treatment x species, and "site" is period x species. Any 
-  observations not sufficiently (as defined by min_plots, and 
-  hierarchically by min_traps) sampled are returned with NA 
+  period x treatment x species, and "site" is period x species. Any
+  observations not sufficiently (as defined by min_plots, and
+  hierarchically by min_traps) sampled are returned with NA
   for ntraps, nplots, and the output value of interest
 }
 \description{

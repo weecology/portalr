@@ -11,19 +11,19 @@ make_level_data(plot_data, level, output, min_plots)
 
 \item{level}{specify level of interest ("plot", "treatment", "site")}
 
-\item{output}{specify whether to return "abundance", or "biomass", 
+\item{output}{specify whether to return "abundance", or "biomass",
 or "energy"}
 
-\item{min_plots}{minimum number of plots within a period for an 
+\item{min_plots}{minimum number of plots within a period for an
 observation to be included}
 }
 \value{
 fully crossed flat table of observations with effort (number of
   traps and number of plots). The crossing depends on the level:
   "plot" is period x treatment x plot x species, "treatment" is
-  period x treatment x species, and "site" is period x species. Any 
-  observations not sufficiently (as defined by min_plots, and 
-  hierarchically by min_traps) sampled are returned with NA 
+  period x treatment x species, and "site" is period x species. Any
+  observations not sufficiently (as defined by min_plots, and
+  hierarchically by min_traps) sampled are returned with NA
   for ntraps, nplots, and the output value of interest
 }
 \description{

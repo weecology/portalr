@@ -5,7 +5,7 @@
 \title{Do basic cleaning of Portal rodent data}
 \usage{
 clean_rodent_data(data_tables, fillweight = FALSE, type = "Rodents",
-  unknowns = FALSE, incomplete = FALSE, length = "all")
+  unknowns = FALSE, incomplete = FALSE)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -22,9 +22,6 @@ records from that individual or species, where possible}
 
 \item{incomplete}{either removes all data from incomplete trapping sessions
 (incomplete = FALSE) or includes them (incomplete = TRUE)}
-
-\item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
 }
 \description{
 This function does basic quality control of the Portal rodent
