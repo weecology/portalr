@@ -4,7 +4,7 @@
 \alias{load_data}
 \title{Loads the Portal rodent data files}
 \usage{
-load_data(path = "~", download_if_missing = TRUE)
+load_data(path = "~", download_if_missing = TRUE, clean = TRUE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -12,6 +12,8 @@ load_data(path = "~", download_if_missing = TRUE)
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 }
 \value{
 List of 5 dataframes:
