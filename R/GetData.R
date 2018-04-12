@@ -44,7 +44,7 @@ download_observations <- function(base_folder = '~', release_only = TRUE) {
     {
       stop("GitHub response was not in json format", call. = FALSE)
     }
-    zip_download_path <- httr::content(resp)$assets[[1]]$browser_download_url
+    zip_download_path <- httr::content(resp)$zipball_url
   }
   zip_download_dest = FullPath('PortalData.zip', base_folder)
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)

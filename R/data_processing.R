@@ -585,13 +585,9 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 #'
 process_annuals <- function(quadrat_sp_data, type) {
   if (tolower(type) == "annuals") {
-    quadrat_sp_data %>%
-      dplyr::filter(duration == "Annual") %>%
-      return()
+    return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
   } else if (tolower(type) == "non-woody") {
-    quadrat_sp_data %>%
-      dplyr::filter(!community %in% c("Shrub", "Subshrub")) %>%
-      return()
+    return(dplyr::filter(quadrat_sp_data, !community %in% c("Shrub", "Subshrub")))
   } else {
     return(quadrat_sp_data)
   }
@@ -609,8 +605,7 @@ process_annuals <- function(quadrat_sp_data, type) {
 join_census_to_dates <- function(census_table, date_table, plots_table) {
   census_table %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
-    dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot")) %>%
-    return()
+    dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot"))
 }
 
 #' @title Join quadrat and census tables
@@ -625,8 +620,7 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
   quadrat_data %>%
     dplyr::right_join(census_table,
                       by = c(year = "year", season = "season",
-                             plot = "plot", quadrat = "quadrat")) %>%
-    return()
+                             plot = "plot", quadrat = "quadrat"))
 }
 
 #' @name clean_plant_data
@@ -670,7 +664,5 @@ clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(length) %>%
-
-    return()
+    filter_plots(length)
 }
