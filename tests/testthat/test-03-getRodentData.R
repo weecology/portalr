@@ -5,11 +5,11 @@ test_that("abundance returns expected results", {
                         length = "all", unknowns = T, incomplete = T,
                         shape = "flat", time = "period", fillweight = F)
   test.abundance = dplyr::filter(abundance.notfilled, period %in% 400:450)
-  expect_true(sum(test.abundance$abundance, na.rm = T) == 10622)
-  test.abundance = dplyr::filter(abundance.notfilled, species == 'DM', abundance > 0)
-  expect_equal(max(test.abundance$abundance, na.rm = T), 17)
+  expect_true(sum(test.abundance$abundance, na.rm = T) == 11790)
+  test.abundance = dplyr::filter(test.abundance, species == 'DM', abundance > 0)
+  expect_equal(max(test.abundance$abundance, na.rm = T), 20)
   expect_false(anyNA(test.abundance))
-  expect_equal(nrow(test.abundance), 4863)
+  expect_equal(nrow(test.abundance), 594)
 
   abundance.filled = abundance(path = '.', level = "Plot", type = "Rodents",
                                length = "all", unknowns = T, incomplete = T,
