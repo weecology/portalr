@@ -13,8 +13,7 @@
 get_rodent_data(path = "~", level = "Site", type = "Rodents",
   length = "all", unknowns = FALSE, incomplete = FALSE,
   shape = "crosstab", time = "period", output = "abundance",
-  fillweight = (output != "abundance"), na.drop = NULL, zero.drop = NULL,
-  min_traps = 1, min_plots = 1, effort = FALSE)
+  fillweight = (output != "abundance"))
 
 abundance(...)
 
@@ -38,7 +37,9 @@ plots (plots that have had same treatment for entire time series)}
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
 \item{incomplete}{either removes all data from incomplete trapping sessions
-(incomplete = FALSE) or includes them (incomplete = TRUE)}
+(incomplete = FALSE) or includes them (incomplete = TRUE)
+[note that if level="plot" and incomplete=T, NAs will be included in
+ periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 
@@ -46,24 +47,10 @@ plots (plots that have had same treatment for entire time series)}
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
 "date" (calendar date)}
 
-\item{output}{specify whether to return "abundance", or "biomass", or 
-"energy"}
+\item{output}{specify whether to return "abundance", or "biomass", or "energy"}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
-
-\item{na.drop}{logical, drop NA values (representing insufficient sampling)}
-
-\item{zero.drop}{logica, drop 0s (representing sufficient sampling, but no
-detections)}
-
-\item{min_traps}{minimum number of traps for a plot to be included}
-
-\item{min_plots}{minimum number of plots within a period for an 
-observation to be included}
-
-\item{effort}{logical as to whether or not the effort columns should be
-included in the output}
 
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
 }
@@ -72,17 +59,17 @@ a data.frame in either "long" or "wide" format, depending on the
   value of `shape`
 }
 \description{
-This function is a generic interface into creating summaries
-  of the Portal rodent species data. It contains a number of arguments 
-  to specify the kind of data to summarize (at what level of aggregation)
-  and various choices for dealing with data quality, and output format.
+This function is a generic interface into creating (monthly)
+  summaries of the Portal rodent species data. It contains a number of
+  arguments to specify both the kind of data to summarize, at what level of
+  aggregation, various choices for dealing with data quality, and output
+  format.
 
 \code{abundance} generates a table of rodent abundance
 
 * \code{biomass()} generates a table of rodent biomass
 
-* \code{energy()} generates a table of rodent energy 
-  (computed as biomass ^ 0.75)
+* \code{energy()} generates a table of rodent energy (computed as biomass ^ 0.75)
 }
 \examples{
 abundance("repo")
