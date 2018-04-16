@@ -5,9 +5,9 @@ test_that("abundance returns expected results", {
                         length = "all", unknowns = T, incomplete = T,
                         shape = "flat", time = "period", fillweight = F)
   test.abundance = dplyr::filter(abundance.notfilled, period %in% 400:450)
-  expect_true(sum(test.abundance$abundance, na.rm = T) == 11790)
+  expect_true(sum(test.abundance$abundance, na.rm = T) == 10631)
   test.abundance = dplyr::filter(test.abundance, species == 'DM', abundance > 0)
-  expect_equal(max(test.abundance$abundance, na.rm = T), 20)
+  expect_equal(max(test.abundance$abundance, na.rm = T), 12)
   expect_false(anyNA(test.abundance))
   expect_equal(nrow(test.abundance), 594)
 
