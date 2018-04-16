@@ -105,7 +105,9 @@ clean_data = function(full_data,trapping_table) {
   names = colnames(full_data)
   full_data = dplyr::left_join(full_data,trapping_table) %>%
     dplyr::filter(qcflag==1) %>%
-    dplyr::select(names)
+    dplyr::select(names) %>%
+    unique()
+
   return(full_data)
 }
 
