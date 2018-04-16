@@ -8,6 +8,7 @@
 #'  "repo", which then pulls data from the PortalData GitHub repository
 #' @param download_if_missing if the specified file path doesn't have the
 #'   PortalData folder, then download it
+#' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
 #'
 #' @return List of 5 dataframes:
 #'   \itemize{
@@ -23,7 +24,7 @@
 #'
 #' @export
 #'
-load_data <- function(path = "~", download_if_missing = TRUE)
+load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 {
   ## define file paths
   if (tolower(path) == "repo")
@@ -73,11 +74,40 @@ load_data <- function(path = "~", download_if_missing = TRUE)
   if (!"species" %in% names(species_table))
     species_table <- dplyr::rename(species_table, species = speciescode)
 
+  ## remove data still under quality control
+  if(clean) {
+    rodent_data = clean_data(rodent_data,trapping_table)
+    newmoons_table = clean_data(newmoons_table,trapping_table)
+    plots_table = clean_data(plots_table,trapping_table)
+    trapping_table = dplyr::filter(trapping_table,qcflag==1)
+  }
+
   return(list(rodent_data = rodent_data,
               species_table = species_table,
               trapping_table = trapping_table,
               newmoons_table = newmoons_table,
               plots_table = plots_table))
+}
+
+#' @title Remove data still under QA/QC.
+#'
+#' @description
+#' Removes records that are still undergoing QA/QC (latest 12 months)
+#'
+#' @param full_data Data.table of raw data.
+#' @param trapping_table Data.table with QCflag
+#'
+#' @return Data.table with latest 12 months of data removed.
+#'
+#'
+clean_data = function(full_data,trapping_table) {
+  names = colnames(full_data)
+  full_data = dplyr::left_join(full_data,trapping_table) %>%
+    dplyr::filter(qcflag==1) %>%
+    dplyr::select(names) %>%
+    unique()
+
+  return(full_data)
 }
 
 #' @title Remove suspect trapping periods and unknown plots.
@@ -161,7 +191,6 @@ find_incomplete_censuses <- function(trapping_table) {
     dplyr::filter(period > 26) %>%
     dplyr::distinct(period)
 }
-
 
 #' @title Remove incomplete censuses
 #'

@@ -151,7 +151,6 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
   return(out_data)
 }
 
-
 #' @name get_rodent_data
 #' @aliases abundance biomass energy
 #'
@@ -164,6 +163,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
+#' @param clean passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
@@ -173,6 +173,8 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param incomplete either removes all data from incomplete trapping sessions
 #'   (incomplete = FALSE) or includes them (incomplete = TRUE)
+#'   [note that if level="plot" and incomplete=T, NAs will be included in
+#'    periods where trapping was incomplete]
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time specify the format of the time index in the output, either
 #'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
@@ -182,7 +184,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #' @param fillweight specify whether to fill in unknown weights with other
 #'   records from that individual or species, where possible
 #' @param na_drop logical, drop NA values (representing insufficient sampling)
-#' @param zero_drop logica, drop 0s (representing sufficient sampling, but no
+#' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
 #'   detections)
 #' @param min_traps minimum number of traps for a plot to be included
 #' @param min_plots minimum number of plots within a period for an
@@ -195,7 +197,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 #' @export
 #'
-get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
+get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE,
                             incomplete = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
@@ -210,7 +212,7 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
                                                "site" = TRUE),
                             min_traps = 1, min_plots = 1, effort = FALSE) {
 
-  data_tables <- portalr::load_data(path)
+  data_tables <- portalr::load_data(path, clean = clean)
 
   level <- tolower(level)
   type <- tolower(type)
@@ -227,10 +229,11 @@ get_rodent_data <- function(path = "~", level = "Site", type = "Rodents",
     portalr::make_plot_data(trapping_data, output, min_traps) %>%
     portalr::make_level_data(level, output, min_plots) %>%
     portalr::prep_rodent_output(data_tables, time, effort, na_drop,
-                                zero_drop, shape, level, output)
+                                     zero_drop, shape, level, output)
 
   return(out)
 }
+
 
 #' @rdname get_rodent_data
 #'
@@ -261,6 +264,7 @@ abundance <- function(...) {
 biomass <- function(...) {
   get_rodent_data(..., output = "biomass")
 }
+
 
 #' @rdname get_rodent_data
 #'

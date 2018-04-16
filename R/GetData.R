@@ -24,28 +24,10 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
-#' @param release_only whether to download the "Release" version of the data. Set to FALSE
-#'        to download the most up to date data.
 #' @return None
 #' @export
-download_observations <- function(base_folder = '~', release_only = TRUE) {
+download_observations <- function(base_folder = '~') {
   zip_download_path <- 'https://github.com/weecology/PortalData/archive/master.zip'
-  if(release_only) # get download link to latest release
-  {
-    repo_url <- "https://api.github.com/repos/weecology/PortalData/releases/latest"
-    pat <- Sys.getenv("GITHUB_PAT", unset = NA)
-    if(!is.na(pat)) # use personal authentication token for GitHub if available
-    {
-      httr::GET(repo_url, httr::authenticate(pat, "x-oauth-basic", "basic")) -> resp
-    } else {
-      httr::GET(repo_url) -> resp
-    }
-    if (httr::http_type(resp) != "application/json") # check for errors
-    {
-      stop("GitHub response was not in json format", call. = FALSE)
-    }
-    zip_download_path <- httr::content(resp)$zipball_url
-  }
   zip_download_dest = FullPath('PortalData.zip', base_folder)
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 

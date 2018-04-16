@@ -10,13 +10,13 @@
 \alias{energy}
 \title{Generate summaries of Portal rodent data}
 \usage{
-get_rodent_data(path = "~", level = "Site", type = "Rodents",
-  length = "all", unknowns = FALSE, incomplete = FALSE,
-  shape = "crosstab", time = "period", output = "abundance",
-  fillweight = (output != "abundance"), na_drop = switch(tolower(level),
-  plot = FALSE, treatment = TRUE, site = TRUE),
-  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), min_traps = 1, min_plots = 1, effort = FALSE)
+get_rodent_data(path = "~", clean = TRUE, level = "Site",
+  type = "Rodents", length = "all", unknowns = FALSE,
+  incomplete = FALSE, shape = "crosstab", time = "period",
+  output = "abundance", fillweight = (output != "abundance"),
+  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
+  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE,
+  site = TRUE), min_traps = 1, min_plots = 1, effort = FALSE)
 
 abundance(...)
 
@@ -27,6 +27,8 @@ energy(...)
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
+
+\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
@@ -40,7 +42,9 @@ plots (plots that have had same treatment for entire time series)}
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
 \item{incomplete}{either removes all data from incomplete trapping sessions
-(incomplete = FALSE) or includes them (incomplete = TRUE)}
+(incomplete = FALSE) or includes them (incomplete = TRUE)
+[note that if level="plot" and incomplete=T, NAs will be included in
+ periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 

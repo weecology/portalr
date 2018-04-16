@@ -1,7 +1,6 @@
 context("Check rodent data summaries")
 
 test_that("abundance returns expected results", {
-
   ab_notfilled <- abundance(path = ".", level = "Plot", type = "Rodents",
                             length = "all", unknowns = FALSE, incomplete = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
@@ -20,7 +19,6 @@ test_that("abundance returns expected results", {
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = NULL, effort = FALSE)
   expect_equal(ab_notfilled, ab_filled)
-
 })
 
 test_that("biomass returns expected results", {
@@ -39,6 +37,13 @@ test_that("biomass returns expected results", {
                             min_plots = NULL, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
+  biom_notfilled <- biomass(path = ".", level = "Plot", type = "Rodents",
+                            length = "all", unknowns = FALSE, incomplete = FALSE,
+                            shape = "flat", time = "period", fillweight = FALSE,
+                            na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
+                            min_plots = NULL, effort = FALSE) %>%
+    dplyr::filter(period %in% 400:450)
+
   expect_equal(nrow(biom_filled), 23184)
   expect_equal(dim(biom_filled), dim(biom_notfilled))
   expect_equal(sum(is.na(biom_filled$biomass)), 0)
@@ -47,7 +52,7 @@ test_that("biomass returns expected results", {
   expect_equal(floor(dplyr::filter(biom_notfilled, period == 447, plot == 3,
                                    species == "BA")$biomass), 15)
   expect_equal(floor(dplyr::filter(biom_filled, period == 447, plot == 3,
-                                   species == "BA")$biomass), 24)
+                                      species == "BA")$biomass), 24)
 })
 
 test_that("energy returns expected results", {
@@ -76,5 +81,4 @@ test_that("energy returns expected results", {
   expect_equal(floor(dplyr::filter(energy_filled, period == 447, plot == 3,
                                    species == "BA")$energy), 14)
 })
-
 
