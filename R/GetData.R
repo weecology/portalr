@@ -45,7 +45,7 @@ download_observations <- function(base_folder = '~')
   }
 
   # Attemt to download the zip file
-  zip_download_path <- paste0("https://", match_text[[1]][1])
+  zip_download_path <- match_text[[1]][1]
   zip_download_dest = FullPath("PortalData.zip", base_folder)
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
