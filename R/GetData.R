@@ -26,15 +26,33 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #' @param base_folder Folder into which data will be downloaded
 #' @return None
 #' @export
-download_observations <- function(base_folder = '~') {
-  zip_download_path <- 'https://github.com/weecology/PortalData/archive/master.zip'
-  zip_download_dest = FullPath('PortalData.zip', base_folder)
+download_observations <- function(base_folder = '~')
+{
+  # Try and parse the download link from Zenodo
+  resp <- httr::GET("https://zenodo.org/record/1219752")
+  if (httr::http_type(resp) != "text/html") # check for errors
+  {
+    stop("Zenodo response was not in text format", call. = FALSE)
+  }
+  page_content <- httr::content(resp, "text")
+  match_pos <- regexec("(https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+)zip",
+                       page_content)
+  match_text <- regmatches(page_content, match_pos)
+
+  if (length(match_text) != 1)
+  {
+    stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
+  }
+
+  # Attemt to download the zip file
+  zip_download_path <- paste0("https://", match_text[[1]][1])
+  zip_download_dest = FullPath("PortalData.zip", base_folder)
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder = FullPath('PortalData', base_folder)
+  final_data_folder = FullPath("PortalData", base_folder)
 
-  #Clear out the old files in the data folder without doing potentially dangerous
-  #recursive deleting.
+  # Clear out the old files in the data folder without doing potentially dangerous
+  # recursive deleting.
   if (file.exists(final_data_folder)) {
     old_files = list.files(
       final_data_folder,
@@ -54,35 +72,3 @@ download_observations <- function(base_folder = '~') {
   file.remove(zip_download_dest)
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
-
-#' #' @title Find new observations
-#' #' @description Check if there are new rodent observations. This only checks the
-#' #'   Portal_rodent.csv file. (If other data (non-rodent) are updated this function
-#' #'   will not show that there is new data available.)
-#' #' @param base_folder Folder into which data will be downloaded
-#' #' @return bool True if new observations are available
-#' #' @export
-#' observations_are_new = function(base_folder = '~') {
-#'   md5_file = './Portal_rodent.md5'
-#'   rodent_file = FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
-#'   if (!file.exists(rodent_file))
-#'     stop('Rodent observations not present. Please run download_observations()')
-#'
-#'   if (!file.exists(md5_file)) {
-#'     old_md5 = ''
-#'   } else {
-#'     old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
-#'   }
-#'
-#'   new_md5 = as.character(tools::md5sum(rodent_file))
-#'
-#'   if (old_md5 == new_md5) {
-#'     return(FALSE)
-#'   } else {
-#'     sink(md5_file)
-#'     writeLines(new_md5)
-#'     sink()
-#'     return(TRUE)
-#'   }
-#'
-#' }
