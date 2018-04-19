@@ -18,7 +18,7 @@ or "energy"}
 }
 \value{
 fully crossed period x plot x species flat table of observations
-  with effort (number of traps) and treatment columns. Any plots not
+  with effort (number of traps) and treatment columns. Any plot not
   sufficiently (as defined by min_traps) sampled is returned with NA
   for effort and the output value of interest
 }

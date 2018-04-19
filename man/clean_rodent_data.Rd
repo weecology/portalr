@@ -5,7 +5,7 @@
 \title{Do basic cleaning of Portal rodent data}
 \usage{
 clean_rodent_data(data_tables, fillweight = FALSE, type = "Rodents",
-  unknowns = FALSE, incomplete = FALSE)
+  unknowns = FALSE, fill_incomplete = FALSE)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -20,8 +20,8 @@ records from that individual or species, where possible}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{incomplete}{either removes all data from incomplete trapping sessions
-(incomplete = FALSE) or includes them (incomplete = TRUE)}
+\item{fill_incomplete}{Logical. Either reports raw data from incomplete trapping sessions
+(fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)}
 }
 \description{
 This function does basic quality control of the Portal rodent
@@ -36,7 +36,7 @@ This function does basic quality control of the Portal rodent
         \code{\link{process_unknownsp}}
     (4) exclude non-granivores via \code{\link{process_granivores}}
     (5) exclude incomplete trapping sessions via
-        \code{\link{remove_incomplete_censuses}}
+        \code{\link{process_incomplete_censuses}}
     (6) exclude the plots that aren't long-term treatments via
         \code{\link{filter_plots}}
 }

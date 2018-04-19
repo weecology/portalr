@@ -12,11 +12,11 @@
 \usage{
 get_rodent_data(path = "~", clean = TRUE, level = "Site",
   type = "Rodents", length = "all", unknowns = FALSE,
-  incomplete = FALSE, shape = "crosstab", time = "period",
+  fill_incomplete = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE,
-  site = TRUE), min_traps = 1, min_plots = 1, effort = FALSE)
+  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE)
 
 abundance(...)
 
@@ -41,9 +41,9 @@ plots (plots that have had same treatment for entire time series)}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{incomplete}{either removes all data from incomplete trapping sessions
-(incomplete = FALSE) or includes them (incomplete = TRUE)
-[note that if level="plot" and incomplete=T, NAs will be included in
+\item{fill_incomplete}{Logical. Either reports raw data from incomplete trapping sessions
+(fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
+[note that if level="plot" and fill.incomplete=FALSE, NAs will be included in
  periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
@@ -60,7 +60,7 @@ records from that individual or species, where possible}
 
 \item{na_drop}{logical, drop NA values (representing insufficient sampling)}
 
-\item{zero_drop}{logica, drop 0s (representing sufficient sampling, but no
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
 detections)}
 
 \item{min_traps}{minimum number of traps for a plot to be included}

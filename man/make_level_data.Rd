@@ -4,10 +4,13 @@
 \alias{make_level_data}
 \title{Rodent data summarized at the relevant level (plot, treatment, site)}
 \usage{
-make_level_data(plot_data, level, output, min_plots)
+make_level_data(plot_data, trapping_table, level, output, min_plots = 1,
+  min_traps = 1)
 }
 \arguments{
 \item{plot_data}{rodent data summarized at the plot level}
+
+\item{trapping_table}{trapping table with trap effort per plot per census}
 
 \item{level}{specify level of interest ("plot", "treatment", "site")}
 
@@ -15,6 +18,9 @@ make_level_data(plot_data, level, output, min_plots)
 or "energy"}
 
 \item{min_plots}{minimum number of plots within a period for an
+observation to be included}
+
+\item{min_traps}{minimum number of plots within a period for an
 observation to be included}
 }
 \value{

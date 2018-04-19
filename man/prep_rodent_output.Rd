@@ -21,7 +21,7 @@ included in the output}
 
 \item{na_drop}{logical, drop NA values (representing insufficient sampling)}
 
-\item{zero_drop}{logica, drop 0s (representing sufficient sampling, but no
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
 detections)}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
