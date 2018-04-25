@@ -29,7 +29,7 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 download_observations <- function(base_folder = '~')
 {
   # Try and parse the download link from Zenodo
-  resp <- httr::GET("https://zenodo.org/record/1219752")
+  resp <- httr::GET("https://zenodo.org/record/1215988")
   if (httr::http_type(resp) != "text/html") # check for errors
   {
     stop("Zenodo response was not in text format", call. = FALSE)
