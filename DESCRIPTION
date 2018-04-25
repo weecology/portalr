@@ -17,7 +17,8 @@ Imports:
     httr, 
     rlang,
 	forecast,
-	htmltab
+	htmltab,
+	lunar
 Suggests:
     testthat,
     digest,
