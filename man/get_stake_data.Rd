@@ -4,13 +4,15 @@
 \alias{get_stake_data}
 \title{Return cleaned Portal rodent individual data}
 \usage{
-get_stake_data(path = "~", type = "Rodents", length = "all",
-  unknowns = FALSE, fill_incomplete = FALSE, time = "period",
-  fillweight = FALSE, min_plots = 1, min_traps = 1)
+get_stake_data(path = "~", clean = TRUE, type = "Rodents",
+  length = "all", unknowns = FALSE, fill_incomplete = FALSE,
+  time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
+
+\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
 
 \item{type}{specify subset of species; either all "Rodents" or only
 "Granivores"}

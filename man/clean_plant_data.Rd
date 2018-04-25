@@ -35,8 +35,6 @@ This function does basic quality control of the Portal plant
         \code{link{process_annuals}}
     (3) remove records for unidentified species via
         \code{\link{process_unknownsp_plants}}
-    (4) exclude incomplete trapping sessions via
-        \code{\link{remove_incomplete_censuses}}
     (5) exclude the plots that aren't long-term treatments via
         \code{\link{filter_plots}}
 }
