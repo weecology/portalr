@@ -65,13 +65,7 @@ test_that("does process_unknownsp work properly?", {
   expect_false("other" %in% rodents$species)
 })
 
-test_that("does remove_incomplete_censuses work properly?", {
-  rodents_with_incompletes <- clean_rodent_data(data_tables, incomplete = TRUE)
-  expect_gt(nrow(dplyr::filter(rodents_with_incompletes, plot == 24)),
-            nrow(dplyr::filter(rodents, plot == 24)))
-})
-
 test_that("does filter_plots work properly?", {
-  rodents_longterm <- clean_rodent_data(data_tables, length = "longterm")
+  rodents_longterm <- filter_plots(data_tables$trapping, length = "longterm")
   expect_equal(sort(unique(rodents_longterm$plot)), c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
 })

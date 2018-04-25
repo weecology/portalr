@@ -6,7 +6,7 @@ test_that("get_stake_data returns expected columns", {
                                      "stake","species","sex","hfl","wgt","tag","ltag")))
 
   filled_stake_data = get_stake_data(path = '.', type = "granivores",
-                               length = "all", unknowns = T, incomplete = T,
+                               length = "all", unknowns = T, min_plots = 1,
                                time = "newmoon", fillweight = T)
   expect_true(all(names(filled_stake_data) == c("newmoonnumber","month","day","year","treatment","plot",
                                          "stake","species","sex","hfl","wgt","tag","ltag")))

@@ -4,10 +4,14 @@
 \alias{find_incomplete_censuses}
 \title{Period code for incomplete censuses}
 \usage{
-find_incomplete_censuses(trapping_table)
+find_incomplete_censuses(trapping_table, min_plots, min_traps)
 }
 \arguments{
-\item{trapping_table}{Data table. Data on when each plot was trapped.}
+\item{trapping_table}{Data table that contains sampled column (1 for sampled, 0 for unsampled)}
+
+\item{min_plots}{minimum number of plots in a census for a census to count as sampled}
+
+\item{min_traps}{minimum number of traps on a plot for a census to count as sampled}
 }
 \value{
 Data.table of period codes when not all plots were trapped.
