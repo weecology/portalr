@@ -180,19 +180,23 @@ process_granivores <- function(rodent_species_merge, type) {
 
 #' @title Period code for incomplete censuses
 #' @description Determines incomplete censuses by finding dates when some plots were trapped, but others were not.
-#' @param trapping_table Data table. Data on when each plot was trapped.
+#' @param trapping_table Data table that contains sampled column (1 for sampled, 0 for unsampled)
+#' @param min_plots minimum number of plots in a census for a census to count as sampled
+#' @param min_traps minimum number of traps on a plot for a census to count as sampled
 #'
 #' @return Data.table of period codes when not all plots were trapped.
 #'
 #' @export
-find_incomplete_censuses <- function(trapping_table) {
+find_incomplete_censuses <- function(trapping_table,min_plots,min_traps) {
   trapping_table %>%
-    dplyr::filter(sampled == 0) %>%
-    dplyr::filter(period > 26) %>%
-    dplyr::distinct(period)
+    dplyr::group_by(period) %>%
+    dplyr::mutate(replace(sampled, effort < min_traps, 0)) %>%
+    dplyr::summarise(nplots=sum(sampled)) %>%
+    dplyr::filter(nplots<min_plots) %>%
+    dplyr::select(period)
 }
 
-#' @title Remove incomplete censuses
+#' @title Process incomplete censuses
 #'
 #' @description
 #' In some months, not all plots are trapped. Using this data can result in
@@ -200,21 +204,19 @@ find_incomplete_censuses <- function(trapping_table) {
 #'
 #' @param rodent_species_merge Data table. Merge of raw rodent records and
 #'                             species information.
-#' @param trapping_table Data table. Data on when each plot was trapped.
-#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' @param fill_incomplete Logical. Denotes if users wants to keep incomplete censuses
+#'         or fill with corrected estimates.
 #'
 #' @return Data.table of merged rodent records and species info with incomplete
-#'         censuses processed according to argument imcomplete.
+#'         censuses processed according to argument fill_incomplete.
 #'
 #' @export
-remove_incomplete_censuses <- function(rodent_species_merge,
-                                       trapping_table,
-                                       incomplete) {
-  if (!incomplete) {
-    incompsampling <- find_incomplete_censuses(trapping_table)
-    rodent_species_merge <- dplyr::filter(rodent_species_merge,
-                                          !period %in% incompsampling$period)
-  }
+process_incomplete_censuses <- function(rodent_species_merge,
+                                       fill_incomplete) {
+  if (fill_incomplete) {
+    #incompsampling <- find_incomplete_censuses(rodent_species_merge,trapping_table)
+    warning("fill_incomplete not done")
+    }
   return(rodent_species_merge)
 }
 
@@ -261,19 +263,23 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
 #' @description Joins rodent data with list of trapping dates, by period and plot
 #' @param rodent_data Data.table with raw rodent data.
 #' @param trapping_table Data_table of when plots were censused.
-#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' @param min_plots minimum number of plots within a period for an
+#'   observation to be included
+#' @param min_traps minimum number of plots within a period for an
+#'   observation to be included
 #'
 #' @return Data.table of raw rodent data with trapping info added.
 #'
 #' @export
-join_trapping_to_rodents <- function(rodent_data, trapping_table, incomplete) {
-  if (!incomplete) {
-    incompsampling <- find_incomplete_censuses(trapping_table)
-    trapping_table <- dplyr::filter(trapping_table,
-                                    !period %in% incompsampling$period)
-  }
-  join_by <- c(year = "year", month = "month", period = "period", plot = "plot")
-  dplyr::right_join(rodent_data, trapping_table, by = join_by)
+
+join_trapping_to_rodents = function(rodent_data, trapping_table, min_plots, min_traps){
+
+    incompsampling = find_incomplete_censuses(trapping_table, min_plots, min_traps)
+    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
+
+  rodent_table = dplyr::right_join(rodent_data, trapping_table,
+                                   by=c("month"="month","year"="year","period"="period","plot"="plot"))
+  return(rodent_table)
 }
 
 #' Join plots and trapping tables
@@ -293,8 +299,7 @@ join_plots_to_trapping <- function(trapping, plots) {
     dplyr::select(year, month, plot, treatment)
 
   join_by <- c(year = "year", month = "month", plot = "plot")
-  dplyr::left_join(trapping, plots_table, by = join_by) %>%
-    dplyr::select(-sampled)
+  dplyr::left_join(trapping, plots_table, by = join_by)
 }
 
 #' @title Add User-specified time column
@@ -430,7 +435,7 @@ fill_weight <- function(rodent_data, tofill)
 #'         \code{\link{process_unknownsp}}
 #'     (4) exclude non-granivores via \code{\link{process_granivores}}
 #'     (5) exclude incomplete trapping sessions via
-#'         \code{\link{remove_incomplete_censuses}}
+#'         \code{\link{process_incomplete_censuses}}
 #'     (6) exclude the plots that aren't long-term treatments via
 #'         \code{\link{filter_plots}}
 #'
@@ -442,13 +447,13 @@ fill_weight <- function(rodent_data, tofill)
 #'   "Granivores"
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param incomplete either removes all data from incomplete trapping sessions
-#'   (incomplete = FALSE) or includes them (incomplete = TRUE)
+#' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
+#'   (fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
 #'
 #' @export
 #'
 clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
-                              unknowns = FALSE, incomplete = FALSE)
+                              unknowns = FALSE, fill_incomplete = FALSE)
 {
   data_tables$rodent_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
@@ -456,7 +461,7 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     remove_suspect_entries() %>%
     process_unknownsp(unknowns) %>%
     process_granivores(type) %>%
-    remove_incomplete_censuses(data_tables$trapping_table, incomplete) %>%
+    process_incomplete_censuses(fill_incomplete) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
                   energy = wgt ^ 0.75)

@@ -2,7 +2,7 @@
 
 #' @title Length of non-missing values in a vector
 #'
-#' How many values in the given vector are not NAs
+#' @description How many values in the given vector are not NAs
 #'
 #' @param x vector of values
 #' @return integer of how many non-NA values in x
@@ -22,7 +22,7 @@ true_length <- function(x) {
 #' @param min_traps minimum number of traps for a plot to be included
 #'
 #' @return fully crossed period x plot x species flat table of observations
-#'   with effort (number of traps) and treatment columns. Any plots not
+#'   with effort (number of traps) and treatment columns. Any plot not
 #'   sufficiently (as defined by min_traps) sampled is returned with NA
 #'   for effort and the output value of interest
 #'
@@ -51,10 +51,13 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 #' Rodent data summarized at the relevant level (plot, treatment, site)
 #'
 #' @param plot_data rodent data summarized at the plot level
+#' @param trapping_table trapping table with trap effort per plot per census
 #' @param level specify level of interest ("plot", "treatment", "site")
 #' @param output specify whether to return "abundance", or "biomass",
 #'   or "energy"
 #' @param min_plots minimum number of plots within a period for an
+#'   observation to be included
+#' @param min_traps minimum number of plots within a period for an
 #'   observation to be included
 #'
 #' @return fully crossed flat table of observations with effort (number of
@@ -67,7 +70,7 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 #'
 #' @export
 #'
-make_level_data <- function(plot_data, level, output, min_plots) {
+make_level_data <- function(plot_data, trapping_table, level, output, min_plots = 1, min_traps = 1) {
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
@@ -80,12 +83,12 @@ make_level_data <- function(plot_data, level, output, min_plots) {
                      ntraps = sum(effort, na.rm = TRUE),
                      nplots = portalr::true_length(effort))
 
-  if (length(min_plots) > 0) {
+  incomplete <- find_incomplete_censuses(trapping_table,min_plots,min_traps)
+
     level_data <- level_data %>%
-      dplyr::mutate(n = replace(n, nplots < min_plots, NA),
-                    ntraps = replace(ntraps, nplots < min_plots, NA),
-                    nplots = replace(nplots, nplots < min_plots, NA))
-  }
+      dplyr::mutate(n = replace(n, period %in% incomplete$period, NA),
+                    ntraps = replace(ntraps, period %in% incomplete$period, NA),
+                    nplots = replace(nplots, period %in% incomplete$period, NA))
 
   level_data %>%
     dplyr::rename(!!output := n) %>%
@@ -102,7 +105,7 @@ make_level_data <- function(plot_data, level, output, min_plots) {
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
 #' @param na_drop logical, drop NA values (representing insufficient sampling)
-#' @param zero_drop logica, drop 0s (representing sufficient sampling, but no
+#' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
 #'   detections)
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param level specify level of interest ("plot", "treatment", "site")
@@ -171,9 +174,9 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   plots (plots that have had same treatment for entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param incomplete either removes all data from incomplete trapping sessions
-#'   (incomplete = FALSE) or includes them (incomplete = TRUE)
-#'   [note that if level="plot" and incomplete=T, NAs will be included in
+#' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
+#'   (fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
+#'   [note that if level="plot" and fill.incomplete=FALSE, NAs will be included in
 #'    periods where trapping was incomplete]
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time specify the format of the time index in the output, either
@@ -199,7 +202,8 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rodents",
                             length = "all", unknowns = FALSE,
-                            incomplete = FALSE, shape = "crosstab",
+                            fill_incomplete = FALSE,
+                            shape = "crosstab",
                             time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
                             na_drop = switch(tolower(level),
@@ -210,7 +214,7 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
                                                "plot" = FALSE,
                                                "treatment" = TRUE,
                                                "site" = TRUE),
-                            min_traps = 1, min_plots = 1, effort = FALSE) {
+                            min_traps = 1, min_plots = 24, effort = FALSE) {
 
   data_tables <- portalr::load_data(path, clean = clean)
 
@@ -221,13 +225,13 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
   time <- tolower(time)
   output <- tolower(output)
 
-  trapping_data <- portalr::filter_plots(data_tables$trapping, length) %>%
+  trapping_data <- portalr::filter_plots(data_tables$trapping_table, length) %>%
     portalr::join_plots_to_trapping(data_tables$plots_table)
 
   out <- portalr::clean_rodent_data(data_tables, fillweight, type,
-                                    unknowns, incomplete) %>%
+                                    unknowns, fill_incomplete) %>%
     portalr::make_plot_data(trapping_data, output, min_traps) %>%
-    portalr::make_level_data(level, output, min_plots) %>%
+    portalr::make_level_data(trapping_data, level, output, min_plots, min_traps) %>%
     portalr::prep_rodent_output(data_tables, time, effort, na_drop,
                                      zero_drop, shape, level, output)
 

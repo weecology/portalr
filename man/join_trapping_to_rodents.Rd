@@ -4,14 +4,18 @@
 \alias{join_trapping_to_rodents}
 \title{Join rodent and trapping tables}
 \usage{
-join_trapping_to_rodents(rodent_data, trapping_table, incomplete)
+join_trapping_to_rodents(rodent_data, trapping_table, min_plots, min_traps)
 }
 \arguments{
 \item{rodent_data}{Data.table with raw rodent data.}
 
 \item{trapping_table}{Data_table of when plots were censused.}
 
-\item{incomplete}{Boolean. Denotes if users wants to keep incomplete censuses.}
+\item{min_plots}{minimum number of plots within a period for an
+observation to be included}
+
+\item{min_traps}{minimum number of plots within a period for an
+observation to be included}
 }
 \value{
 Data.table of raw rodent data with trapping info added.
