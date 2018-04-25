@@ -111,6 +111,7 @@ make_level_data <- function(plot_data, trapping_table, level, output, min_plots 
 #' @param level specify level of interest ("plot", "treatment", "site")
 #' @param output specify whether to return "abundance", or "biomass",
 #'   or "energy"
+#'
 #' @return fully crossed flat table of observations with effort (number of
 #'   traps and number of plots). The crossing depends on the level:
 #'   "plot" is period x treatment x plot x species, "treatment" is
@@ -231,7 +232,7 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
   out <- portalr::clean_rodent_data(data_tables, fillweight, type,
                                     unknowns, fill_incomplete) %>%
     portalr::make_plot_data(trapping_data, output, min_traps) %>%
-    portalr::make_level_data(trapping_data, level, output, min_plots, min_traps) %>%
+    portalr::make_level_data(data_tables$trapping_table, level, output, min_plots, min_traps) %>%
     portalr::prep_rodent_output(data_tables, time, effort, na_drop,
                                      zero_drop, shape, level, output)
 

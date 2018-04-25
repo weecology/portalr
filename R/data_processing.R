@@ -187,7 +187,8 @@ process_granivores <- function(rodent_species_merge, type) {
 #' @return Data.table of period codes when not all plots were trapped.
 #'
 #' @export
-find_incomplete_censuses <- function(trapping_table,min_plots,min_traps) {
+find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
+
   trapping_table %>%
     dplyr::group_by(period) %>%
     dplyr::mutate(replace(sampled, effort < min_traps, 0)) %>%
@@ -233,7 +234,7 @@ process_incomplete_censuses <- function(rodent_species_merge,
 #'
 #' @export
 filter_plots <- function(data, length) {
-  if (length %in% c("Longterm", "longterm")) {
+  if (length %in% c("longterm","long-term")) {
     if ("plot" %in% colnames(data)) {
       data <- data %>%
         dplyr::filter(plot %in% c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
@@ -263,6 +264,7 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
 #' @description Joins rodent data with list of trapping dates, by period and plot
 #' @param rodent_data Data.table with raw rodent data.
 #' @param trapping_table Data_table of when plots were censused.
+#' @param full_trapping Unfiltered data_table of when plots were censused.
 #' @param min_plots minimum number of plots within a period for an
 #'   observation to be included
 #' @param min_traps minimum number of plots within a period for an
@@ -272,9 +274,9 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
 #'
 #' @export
 
-join_trapping_to_rodents = function(rodent_data, trapping_table, min_plots, min_traps){
+join_trapping_to_rodents = function(rodent_data, trapping_table, full_trapping, min_plots, min_traps){
 
-    incompsampling = find_incomplete_censuses(trapping_table, min_plots, min_traps)
+    incompsampling = find_incomplete_censuses(full_trapping, min_plots, min_traps)
     trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
 
   rodent_table = dplyr::right_join(rodent_data, trapping_table,
@@ -672,8 +674,6 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'         \code{link{process_annuals}}
 #'     (3) remove records for unidentified species via
 #'         \code{\link{process_unknownsp_plants}}
-#'     (4) exclude incomplete trapping sessions via
-#'         \code{\link{remove_incomplete_censuses}}
 #'     (5) exclude the plots that aren't long-term treatments via
 #'         \code{\link{filter_plots}}
 #'
