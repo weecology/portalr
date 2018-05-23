@@ -14,3 +14,7 @@ test_that("load_data works", {
   expect_equal(length(data_tables), 5)
 })
 
+test_that("check_for_newer_data works", {
+  download_observations(".")
+  expect_false(check_for_newer_data("."))
+})

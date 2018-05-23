@@ -26,7 +26,7 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #' @param base_folder Folder into which data will be downloaded
 #' @return None
 #' @export
-download_observations <- function(base_folder = '~')
+download_observations <- function(base_folder = "~")
 {
   # Try and parse the download link from Zenodo
   resp <- httr::GET("https://zenodo.org/record/1215988")
@@ -72,3 +72,52 @@ download_observations <- function(base_folder = '~')
   file.remove(zip_download_dest)
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
+
+
+#' @title Check for latest version of data files
+#' @description Check the latest version against the data that exists on
+#'   the GitHub repo
+#' @param base_folder Folder in which data will be checked
+#' @return bool TRUE if there is a newer version of the data online
+#' @export
+#'
+check_for_newer_data <- function(base_folder = "~")
+{
+  # first see if the folder for the data files exist
+  tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
+           error = function(e) stop("Unable to find data files in specified path: ", base_folder,
+                                    ". Download the data first using `download_observations()`."),
+           warning = function(w) w)
+
+  # check for `version.txt``
+  version_file <- file.path(base_path, "version.txt")
+  if (!file.exists(version_file)) # old version of data is missing this metadata file
+    return(TRUE)
+
+  pattern <- "([0-9]+)\\.([0-9]+)\\.([0-9]+)"
+  version_str <- as.character(read.table(version_file)[1, 1])
+  local_version <- c(as.numeric(gsub(pattern, "\\1", version_str)),
+                     as.numeric(gsub(pattern, "\\2", version_str)),
+                     as.numeric(gsub(pattern, "\\3", version_str)))
+
+  github_version_file <- "https://raw.githubusercontent.com/weecology/PortalData/master/version.txt"
+  github_version_str <- as.character(read.table(github_version_file)[1, 1])
+  github_version <- c(as.numeric(gsub(pattern, "\\1", github_version_str)),
+                      as.numeric(gsub(pattern, "\\2", github_version_str)),
+                      as.numeric(gsub(pattern, "\\3", github_version_str)))
+
+  if (github_version[1] > local_version[1])
+    return(TRUE)
+
+  if (github_version[1] == local_version[1] &&
+      github_version[2] > local_version[2])
+    return(TRUE)
+
+  if (github_version[1] == local_version[1] &&
+      github_version[2] == local_version[2] &&
+      github_version[3] > local_version[3])
+    return(TRUE)
+
+  return(FALSE)
+}
+
