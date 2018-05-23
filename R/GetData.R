@@ -46,15 +46,15 @@ download_observations <- function(base_folder = '~')
 
   # Attemt to download the zip file
   zip_download_path <- match_text[[1]][1]
-  zip_download_dest = FullPath("PortalData.zip", base_folder)
+  zip_download_dest <- FullPath("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder = FullPath("PortalData", base_folder)
+  final_data_folder <- FullPath("PortalData", base_folder)
 
   # Clear out the old files in the data folder without doing potentially dangerous
   # recursive deleting.
   if (file.exists(final_data_folder)) {
-    old_files = list.files(
+    old_files <- list.files(
       final_data_folder,
       full.names = TRUE,
       all.files = TRUE,
