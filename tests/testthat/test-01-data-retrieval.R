@@ -14,3 +14,12 @@ test_that("load_data works", {
   expect_equal(length(data_tables), 5)
 })
 
+test_that("check_for_newer_data works", {
+  data_tables <- load_data(".") # should be latest release based on previous tests
+  expect_false(check_for_newer_data(data_tables$newmoons_table))
+  expect_true(check_for_newer_data(data_tables$newmoons_table, release_only = FALSE))
+
+  data_tables <- load_data("repo")
+  expect_false(check_for_newer_data(data_tables$newmoons_table))
+  expect_false(check_for_newer_data(data_tables$newmoons_table, release_only = FALSE))
+})
