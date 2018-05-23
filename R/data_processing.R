@@ -685,9 +685,11 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_plant_data}}
-#' @param type specify subset of species; either "All" - includes annuals,
-#'  perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-#'  annuals and perennials but not shrubs
+#' @param type specify subset of species;
+#'              If type=Annuals, removes all non-annual species.
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}
