@@ -1,5 +1,3 @@
-#' @importFrom magrittr "%>%"
-
 #' @title Loads the Portal rodent data files
 #'
 #' @description Loads main Portal rodent data files from either a user-defined
@@ -61,15 +59,16 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
   }
 
   ## read in CSV files
-  rodent_data = read.csv(rodent_data_file,
-                         na.strings = c(""), colClasses = c('tag' = 'character'),
-                         stringsAsFactors = FALSE)
-  species_table = read.csv(species_table_file,
-                           na.strings = c(""),
-                           stringsAsFactors = FALSE)
-  trapping_table = read.csv(trapping_table_file)
-  newmoons_table = read.csv(newmoons_table_file)
-  plots_table = read.csv(plots_table_file)
+  rodent_data <- read.csv(rodent_data_file,
+                          na.strings = c(""),
+                          colClasses = c("tag" = "character"),
+                          stringsAsFactors = FALSE)
+  species_table <- read.csv(species_table_file,
+                            na.strings = c(""),
+                            stringsAsFactors = FALSE)
+  trapping_table <- read.csv(trapping_table_file)
+  newmoons_table <- read.csv(newmoons_table_file)
+  plots_table <- read.csv(plots_table_file)
 
   ## reformat
   if (!"species" %in% names(species_table))
@@ -123,9 +122,9 @@ clean_data = function(full_data,trapping_table) {
 #'
 #' @export
 #'
-remove_suspect_entries = function(rodent_data) {
-  rodent_data = rodent_data[rodent_data$period > 0,]
-  rodent_data = rodent_data[!is.na(rodent_data$plot),]
+remove_suspect_entries <- function(rodent_data) {
+   rodent_data %>%
+    dplyr::filter(period > 0, !is.na(plot))
 }
 
 #' @title Processes unknown species.
@@ -143,16 +142,16 @@ remove_suspect_entries = function(rodent_data) {
 #'
 #' @export
 #'
-process_unknownsp = function(rodent_data, unknowns) {
+process_unknownsp <- function(rodent_data, unknowns) {
   if (unknowns)
   {
     #Rename all unknowns and non-target rodents to "other"
-    rodent_species_merge = rodent_data %>%
+    rodent_species_merge <- rodent_data %>%
       dplyr::filter(rodent == 1) %>%
       dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
       dplyr::mutate(species = replace(species, censustarget == 0, "other"))
   } else {
-    rodent_species_merge = rodent_data %>%
+    rodent_species_merge <- rodent_data %>%
       dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
   }
   return(rodent_species_merge)
@@ -169,9 +168,9 @@ process_unknownsp = function(rodent_data, unknowns) {
 #'
 #' @export
 #'
-process_granivores = function(rodent_species_merge, type) {
+process_granivores <- function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
-    granivore_data = rodent_species_merge %>%
+    granivore_data <- rodent_species_merge %>%
       dplyr::filter(granivore == 1)
     return(granivore_data)
   } else {
@@ -181,17 +180,24 @@ process_granivores = function(rodent_species_merge, type) {
 
 #' @title Period code for incomplete censuses
 #' @description Determines incomplete censuses by finding dates when some plots were trapped, but others were not.
-#' @param trapping_table Data table. Data on when each plot was trapped.
+#' @param trapping_table Data table that contains sampled column (1 for sampled, 0 for unsampled)
+#' @param min_plots minimum number of plots in a census for a census to count as sampled
+#' @param min_traps minimum number of traps on a plot for a census to count as sampled
 #'
 #' @return Data.table of period codes when not all plots were trapped.
 #'
 #' @export
-find_incomplete_censuses = function(trapping_table) {
-  incompsampling = trapping_table %>% dplyr::filter(sampled==0 ) %>%
-    dplyr::filter(period > 26) %>% dplyr::distinct(period)
+find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
+
+  trapping_table %>%
+    dplyr::group_by(period) %>%
+    dplyr::mutate(replace(sampled, effort < min_traps, 0)) %>%
+    dplyr::summarise(nplots=sum(sampled)) %>%
+    dplyr::filter(nplots<min_plots) %>%
+    dplyr::select(period)
 }
 
-#' @title Remove incomplete censuses
+#' @title Process incomplete censuses
 #'
 #' @description
 #' In some months, not all plots are trapped. Using this data can result in
@@ -199,21 +205,19 @@ find_incomplete_censuses = function(trapping_table) {
 #'
 #' @param rodent_species_merge Data table. Merge of raw rodent records and
 #'                             species information.
-#' @param trapping_table Data table. Data on when each plot was trapped.
-#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' @param fill_incomplete Logical. Denotes if users wants to keep incomplete censuses
+#'         or fill with corrected estimates.
 #'
 #' @return Data.table of merged rodent records and species info with incomplete
-#'         censuses processed according to argument imcomplete.
+#'         censuses processed according to argument fill_incomplete.
 #'
 #' @export
-remove_incomplete_censuses = function(rodent_species_merge,
-                                      trapping_table,
-                                      incomplete) {
-  if (!incomplete) {
-    incompsampling = find_incomplete_censuses(trapping_table)
-    rodent_species_merge = dplyr::filter(rodent_species_merge,
-                                         !period %in% incompsampling$period)
-  }
+process_incomplete_censuses <- function(rodent_species_merge,
+                                       fill_incomplete) {
+  if (fill_incomplete) {
+    #incompsampling <- find_incomplete_censuses(rodent_species_merge,trapping_table)
+    warning("fill_incomplete not done")
+    }
   return(rodent_species_merge)
 }
 
@@ -229,11 +233,12 @@ remove_incomplete_censuses = function(rodent_species_merge,
 #' @return Data.table filtered to the desired subset of plots.
 #'
 #' @export
-filter_plots = function(data, length) {
-  if (length %in% c("Longterm", "longterm")) {
-    if("plot" %in% colnames(data)){
-      data = data %>% dplyr::filter(plot %in%
-                                      c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))}
+filter_plots <- function(data, length) {
+  if (length %in% c("longterm","long-term")) {
+    if ("plot" %in% colnames(data)) {
+      data <- data %>%
+        dplyr::filter(plot %in% c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
+    }
   }
   return(data)
 }
@@ -246,31 +251,57 @@ filter_plots = function(data, length) {
 #' @return Data.table of raw rodent data with treatment info added.
 #'
 #' @export
-join_plots_to_rodents = function(rodent_data, plots_table){
-  plots_table = plots_table %>% dplyr::group_by(year,plot) %>%
-    dplyr::select(year,month,plot,treatment)
-  rodent_table = dplyr::left_join(rodent_data,plots_table,
-                                  by=c("year"="year","month"="month","plot"="plot"))
-  return(rodent_table)
+join_plots_to_rodents <- function(rodent_data, plots_table) {
+  plots_table <- plots_table %>%
+    dplyr::group_by(year, plot) %>%
+    dplyr::select(year, month, plot, treatment)
+
+  join_by <- c(year = "year", month = "month", plot = "plot")
+  dplyr::left_join(rodent_data, plots_table, by = join_by)
 }
 
 #' @title Join rodent and trapping tables
 #' @description Joins rodent data with list of trapping dates, by period and plot
 #' @param rodent_data Data.table with raw rodent data.
 #' @param trapping_table Data_table of when plots were censused.
-#' @param incomplete Boolean. Denotes if users wants to keep incomplete censuses.
+#' @param full_trapping Unfiltered data_table of when plots were censused.
+#' @param min_plots minimum number of plots within a period for an
+#'   observation to be included
+#' @param min_traps minimum number of plots within a period for an
+#'   observation to be included
 #'
 #' @return Data.table of raw rodent data with trapping info added.
 #'
 #' @export
-join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
-  if (incomplete== F){
-    incompsampling = find_incomplete_censuses(trapping_table)
+
+join_trapping_to_rodents = function(rodent_data, trapping_table, full_trapping, min_plots, min_traps){
+
+    incompsampling = find_incomplete_censuses(full_trapping, min_plots, min_traps)
     trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
-  }
+
   rodent_table = dplyr::right_join(rodent_data, trapping_table,
                                    by=c("month"="month","year"="year","period"="period","plot"="plot"))
   return(rodent_table)
+}
+
+#' Join plots and trapping tables
+#'
+#' @param trapping trapping_table from Portal data (can be filtered)
+#' @param plots plots_table from Portal data
+#'
+#' @return trapping table with sampled column removed and treatment column
+#'   added
+#'
+#' @export
+#'
+join_plots_to_trapping <- function(trapping, plots) {
+
+  plots_table <- plots %>%
+    dplyr::group_by(year, plot) %>%
+    dplyr::select(year, month, plot, treatment)
+
+  join_by <- c(year = "year", month = "month", plot = "plot")
+  dplyr::left_join(trapping, plots_table, by = join_by)
 }
 
 #' @title Add User-specified time column
@@ -295,21 +326,22 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, incomplete){
 #' @export
 #'
 
-add_time = function(summary_table, newmoon_table, time='period'){
-  newmoon_table$censusdate = as.Date(newmoon_table$censusdate)
-  join_summary_newmoon = dplyr::right_join(newmoon_table,summary_table,
-                                           by=c("period" = "period")) %>%
-    dplyr::filter(period <= max(period,na.rm=T))
-  if(time %in% c("NewMoon","Newmoon","newmoon")){
-    join_summary_newmoon = dplyr::select(join_summary_newmoon, -newmoondate,
-                                         -period,-censusdate)
-  } else if (time %in% c("Date","date")) {
-    join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate,
-                                         -period,-newmoonnumber)
-  } else if (time %in% c("All","all")) {
-    join_summary_newmoon = dplyr::select(join_summary_newmoon,-newmoondate)
+add_time <- function(summary_table, newmoon_table, time = "period") {
+  newmoon_table$censusdate <- as.Date(newmoon_table$censusdate)
+  join_summary_newmoon <- dplyr::right_join(newmoon_table, summary_table,
+                                           by = c("period" = "period")) %>%
+    dplyr::filter(period <= max(period, na.rm = TRUE))
+
+  if (tolower(time) == "newmoon") {
+    join_summary_newmoon <- dplyr::select(join_summary_newmoon, -newmoondate,
+                                         -period, -censusdate)
+  } else if (tolower(time) == "date") {
+    join_summary_newmoon <- dplyr::select(join_summary_newmoon, -newmoondate,
+                                         -period, -newmoonnumber)
+  } else if (tolower(time) == "all") {
+    join_summary_newmoon <- dplyr::select(join_summary_newmoon, -newmoondate)
   } else
-    join_summary_newmoon = summary_table
+    join_summary_newmoon <- summary_table
 
   return(join_summary_newmoon)
 }
@@ -332,14 +364,15 @@ make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
 
 #' @title Fill Weight
 #'
-#' @description fill in missing weight values with either a recently recorded weight for that individual or species average
+#' @description fill in missing weight values with either a recently recorded
+#'   weight for that individual or species average
 #'
 #' @param rodent_data raw rodent data
 #' @param tofill logical whether to fill in missing values or not
 #'
 #' @export
 #'
-fill_weight = function(rodent_data, tofill)
+fill_weight <- function(rodent_data, tofill)
 {
   if (!tofill) return(rodent_data)
 
@@ -350,15 +383,15 @@ fill_weight = function(rodent_data, tofill)
        rodent_data$tag != "-1" & rodent_data$tag != "0.00E+00")
 
   ## [2] substitute from same species and tag and valid weights
-  for(this_row in which(missing_wgt_idx))
+  for (this_row in which(missing_wgt_idx))
   {
     rodents_with_wgt <- dplyr::filter(rodent_data,
-                                    tag == rodent_data$tag[this_row],
-                                    species == rodent_data$species[this_row],
-                                    wgt > 0)
+                                      tag == rodent_data$tag[this_row],
+                                      species == rodent_data$species[this_row],
+                                      wgt > 0)
 
     # if there are weights for the same individual
-    if(nrow(rodents_with_wgt) > 0) {
+    if (nrow(rodents_with_wgt) > 0) {
       period_dist <- abs(rodent_data$period[this_row] - rodents_with_wgt$period)
       closest_records <- rodents_with_wgt$wgt[which.min(period_dist)]
       rodent_data$wgt[this_row] <- mean(closest_records, na.rm = TRUE)
@@ -370,7 +403,7 @@ fill_weight = function(rodent_data, tofill)
   missing_wgt_idx <- is.na(rodent_data$wgt) | rodent_data$wgt <= 0
 
   #      (ii) see who is a juvenile and species has juvenile weight
-  juv_idx <- !is.na(rodent_data$age) & (rodent_data$age == 'J') &
+  juv_idx <- !is.na(rodent_data$age) & (rodent_data$age == "J") &
     !is.na(rodent_data$juvwgt)
 
   #      (iii) fill in juvenile weight for known juveniles
@@ -404,7 +437,7 @@ fill_weight = function(rodent_data, tofill)
 #'         \code{\link{process_unknownsp}}
 #'     (4) exclude non-granivores via \code{\link{process_granivores}}
 #'     (5) exclude incomplete trapping sessions via
-#'         \code{\link{remove_incomplete_censuses}}
+#'         \code{\link{process_incomplete_censuses}}
 #'     (6) exclude the plots that aren't long-term treatments via
 #'         \code{\link{filter_plots}}
 #'
@@ -416,15 +449,13 @@ fill_weight = function(rodent_data, tofill)
 #'   "Granivores"
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param incomplete either removes all data from incomplete trapping sessions
-#'   (incomplete = FALSE) or includes them (incomplete = TRUE)
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
+#' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
+#'   (fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
 #'
 #' @export
 #'
 clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
-                              unknowns = FALSE, incomplete = FALSE, length = "all")
+                              unknowns = FALSE, fill_incomplete = FALSE)
 {
   data_tables$rodent_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
@@ -432,12 +463,10 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     remove_suspect_entries() %>%
     process_unknownsp(unknowns) %>%
     process_granivores(type) %>%
-    remove_incomplete_censuses(data_tables$trapping_table, incomplete) %>%
-    filter_plots(length) %>%
+    process_incomplete_censuses(fill_incomplete) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
-                  energy = wgt ^ 0.75) %>%
-    return()
+                  energy = wgt ^ 0.75)
 }
 
 #' @title Loads Portal plant data files.
@@ -496,19 +525,19 @@ load_plant_data <- function(path = "~") {
   }
 
   ## read in CSV files
-  quadrat_data = read.csv(quadrat_data_file,
-                         na.strings = c(""),
-                         stringsAsFactors = FALSE)
-  species_table = read.csv(species_table_file,
+  quadrat_data <- read.csv(quadrat_data_file,
                            na.strings = c(""),
                            stringsAsFactors = FALSE)
-  census_table = read.csv(census_table_file,
+  species_table <- read.csv(species_table_file,
+                            na.strings = c(""),
+                            stringsAsFactors = FALSE)
+  census_table <- read.csv(census_table_file,
+                           stringsAsFactors = FALSE)
+  date_table <- read.csv(date_table_file,
+                         stringsAsFactors = FALSE,
+                         na.strings = c("", "none", "unknown"))
+  plots_table <- read.csv(plots_table_file,
                           stringsAsFactors = FALSE)
-  date_table = read.csv(date_table_file,
-                        stringsAsFactors = FALSE,
-                        na.strings = c('','none','unknown'))
-  plots_table = read.csv(plots_table_file,
-                         stringsAsFactors = FALSE)
 
   ## reformat
   if (!"sp" %in% names(species_table))
@@ -540,11 +569,11 @@ load_plant_data <- function(path = "~") {
 #'
 #' @export
 #'
-rename_species_plants = function(quadrat_data, correct_sp) {
+rename_species_plants <- function(quadrat_data, correct_sp) {
   if (correct_sp) {
-    quadrat_data$species <- gsub('acac greg','mimo acul',quadrat_data$species)
-    quadrat_data$species <- gsub('tali angu','tali aura',quadrat_data$species)
-    quadrat_data$species <- gsub('lyci torr','lyci ande',quadrat_data$species)
+    quadrat_data$species <- gsub("acac greg", "mimo acul", quadrat_data$species)
+    quadrat_data$species <- gsub("tali angu", "tali aura", quadrat_data$species)
+    quadrat_data$species <- gsub("lyci torr", "lyci ande", quadrat_data$species)
   }
 
   return(quadrat_data)
@@ -565,22 +594,24 @@ rename_species_plants = function(quadrat_data, correct_sp) {
 #'
 #' @export
 #'
-process_unknownsp_plants = function(quadrat_data, unknowns) {
+process_unknownsp_plants <- function(quadrat_data, unknowns) {
   if (unknowns)
   {
     #Rename all unknowns to "other"
-    quadrat_species_merge = quadrat_data %>%
+    quadrat_species_merge <- quadrat_data %>%
       dplyr::mutate(species = replace(species, commonname == "Unknown", "other"))
   } else {
-    quadrat_species_merge = quadrat_data %>%
+    quadrat_species_merge <- quadrat_data %>%
       dplyr::filter(commonname != "Unknown")
   }
   return(quadrat_species_merge)
 }
 
-#' @title Restricts species to annuals or non-woody as specified
-#' @description If type=Annuals, removes all non-annual species.
-#'              If type=Non-woody, removes shrub species
+#' @title Restricts species to specified community group
+#' @description If type=Annuals, returns all annual species
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param quadrat_sp_data Data table with raw quadrat plant data
 #'                             merged with species attributes from
 #'                             species_table.
@@ -590,15 +621,15 @@ process_unknownsp_plants = function(quadrat_data, unknowns) {
 #'
 #' @export
 #'
-process_annuals = function(quadrat_sp_data, type) {
-  if (type %in% c("Annuals", "annuals")) {
-    annual_data = quadrat_sp_data %>%
-      dplyr::filter(duration == 'Annual')
-    return(annual_data)
-  } else if (type %in% c("Non-woody", "non-woody")) {
-    nonwoody_data = quadrat_sp_data %>%
-      dplyr::filter(!(community %in% c("Shrub","Subshrub")))
-    return(nonwoody_data)
+process_annuals <- function(quadrat_sp_data, type) {
+  if (tolower(type) == "annuals") {
+    return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
+  } else if (tolower(type) == "non-woody") {
+    return(dplyr::filter(quadrat_sp_data, !community %in% c("Shrub", "Subshrub")))
+  } else if (tolower(type) == "perennials") {
+    return(dplyr::filter(quadrat_sp_data, duration  == "Perennial"))
+  } else if (tolower(type) == "shrubs") {
+    return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
   } else {
     return(quadrat_sp_data)
   }
@@ -613,12 +644,10 @@ process_annuals = function(quadrat_sp_data, type) {
 #' @return Data.table of quadrat data with treatment info added.
 #'
 #' @export
-join_census_to_dates = function(census_table, date_table, plots_table){
-  census_dates = dplyr::left_join(census_table,date_table,
-                                  by=c("year"="year","season"="season"))
-  census_plots = dplyr::left_join(census_dates,plots_table,
-                                  by=c("year"="year","start_month"="month","plot"="plot"))
-  return(census_plots)
+join_census_to_dates <- function(census_table, date_table, plots_table) {
+  census_table %>%
+    dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
+    dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot"))
 }
 
 #' @title Join quadrat and census tables
@@ -629,11 +658,11 @@ join_census_to_dates = function(census_table, date_table, plots_table){
 #' @return Data.table of raw quadrat data with census info added.
 #'
 #' @export
-join_census_to_quadrats = function(quadrat_data, census_table){
-  quadrat_table = dplyr::right_join(quadrat_data, census_table,
-                                    by=c("year"="year","season"="season",
-                                         "plot"="plot","quadrat"="quadrat"))
-  return(quadrat_table)
+join_census_to_quadrats <- function(quadrat_data, census_table) {
+  quadrat_data %>%
+    dplyr::right_join(census_table,
+                      by = c(year = "year", season = "season",
+                             plot = "plot", quadrat = "quadrat"))
 }
 
 #' @name clean_plant_data
@@ -645,22 +674,22 @@ join_census_to_quadrats = function(quadrat_data, census_table){
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:
-#'     (1) remove records with "bad" period codes or plot numbers via
-#'         \code{\link{remove_suspect_entries}}
+#'     (1) correct species names according to recent vouchers, if requested, via
+#'         \code{\link{rename_species_plants}}
 #'     (2) restrict species to annuals or non-woody via
 #'         \code{link{process_annuals}}
 #'     (3) remove records for unidentified species via
 #'         \code{\link{process_unknownsp_plants}}
-#'     (4) exclude incomplete trapping sessions via
-#'         \code{\link{remove_incomplete_censuses}}
 #'     (5) exclude the plots that aren't long-term treatments via
 #'         \code{\link{filter_plots}}
 #'
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_plant_data}}
-#' @param type specify subset of species; either "All" - includes annuals,
-#'  perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-#'  annuals and perennials but not shrubs
+#' @param type specify subset of species;
+#'              If type=Annuals, removes all non-annual species.
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}
@@ -677,9 +706,5 @@ clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(length) %>%
-
-    return()
+    filter_plots(length)
 }
-
-

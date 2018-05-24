@@ -8,23 +8,24 @@ Depends: R (>= 3.2.3)
 License: MIT + file LICENSE
 LazyData: true
 Imports:
-    dplyr,
-    ggplot2,
-    tidyr,
-    zoo,
-    lubridate,
-    magrittr,
-    httr, 
-    rlang,
+  dplyr,
+  ggplot2,
+  tidyr,
+  zoo,
+  lubridate,
+  magrittr,
+  httr, 
+  rlang,
 	forecast,
-	htmltab, 
+	htmltab,
+  lunar,
 	jsonlite
 Suggests:
-    testthat,
-    digest,
-    tidyverse, 
-    cowplot, 
-    knitr,
-    rmarkdown
+  testthat,
+  digest,
+  tidyverse, 
+  cowplot, 
+  knitr,
+  rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

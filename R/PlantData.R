@@ -19,9 +19,11 @@
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
 #' @param level summarize by "Plot", "Treatment", or "Site"
-#' @param type specify subset of species; either "All" - includes annuals,
-#'   perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-#'   annuals and perennials, not shrubs or subshrubs
+#' @param type specify subset of species;
+#'              If type=Annuals, removes all non-annual species.
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param length specify subset of plots; use "All" plots or only "Longterm"
 #'   plots (plots that have had same treatment for entire time series)
 #' @param unknowns either removes all individuals not identified to species
@@ -54,9 +56,11 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   #### Summarize data ----
 
   # make master census info table from census_table, date_table and plots_table [filters out un-censused quadrats]
-  census_info_table <- join_census_to_dates(data_tables$census_table, data_tables$date_table, data_tables$plots_table) %>%
-                          filter_plots(length=length) %>%
-                          dplyr::filter(censused==1)
+  census_info_table <- join_census_to_dates(data_tables$census_table,
+                                            data_tables$date_table,
+                                            data_tables$plots_table) %>%
+                          filter_plots(length = length) %>%
+                          dplyr::filter(censused == 1)
 
   # join census info to quadrat data
   quadrats <- join_census_to_quadrats(quadrats, census_info_table)
@@ -72,7 +76,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 
   ## [4] summarize
   out_df <- quadrats %>%
-    dplyr::count(!!!grouping,wt = abundance) %>%
+    dplyr::count(!!!grouping, wt = abundance) %>%
     dplyr::select(!!!grouping, n)
 
   ## [5] rename output variable correctly
