@@ -26,26 +26,54 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #' @param base_folder Folder into which data will be downloaded
 #' @return None
 #' @export
-download_observations <- function(base_folder = "~")
+download_observations <- function(base_folder = "~", version = "latest")
 {
-  # Try and parse the download link from Zenodo
-  resp <- httr::GET("https://zenodo.org/record/1215988")
-  if (httr::http_type(resp) != "text/html") # check for errors
+  if (version == "latest")
   {
-    stop("Zenodo response was not in text format", call. = FALSE)
-  }
-  page_content <- httr::content(resp, "text")
-  match_pos <- regexec("(https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+)zip",
-                       page_content)
-  match_text <- regmatches(page_content, match_pos)
+    # Try and parse the download link from Zenodo
+    resp <- httr::GET("https://zenodo.org/record/1215988")
+    if (httr::http_type(resp) != "text/html") # check for errors
+    {
+      stop("Zenodo response was not in text format", call. = FALSE)
+    }
+    page_content <- httr::content(resp, "text")
+    match_pos <- regexec("(https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+)zip",
+                         page_content)
+    match_text <- regmatches(page_content, match_pos)
 
-  if (length(match_text) != 1)
-  {
-    stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
+    if (length(match_text) != 1)
+    {
+      stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
+    }
+    zip_download_path <- match_text[[1]][1]
+  } else {
+    # Try to normalize version number
+    if (grepl("^[0-9]+\\.[0-9]+$", version))
+    {
+      version <- paste0(version, ".0")
+    }
+    if (!grepl("^[0-9]+\\.[0-9]+\\.0$", version))
+    {
+      stop("Invalid version number given, ", version, call. = FALSE)
+    }
+
+    ## try to get links to all versions from GitHub
+    resp <- httr::GET("https://api.github.com/repos/weecology/PortalData/releases")
+    if (httr::http_type(resp) != "application/json") # check for errors
+    {
+      stop("GitHub response was not in JSON format", call. = FALSE)
+    }
+    release_df <- jsonlite::fromJSON(httr::content(resp, "text"))
+
+    idx <- match(version, release_df$tag_name)
+    if (length(idx) != 1 || is.na(idx))
+    {
+      stop("Did not find a version of the data matching, ", version, call. = FALSE)
+    }
+    zip_download_path <- release_df$zipball_url[idx]
   }
 
   # Attemt to download the zip file
-  zip_download_path <- match_text[[1]][1]
   zip_download_dest <- FullPath("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 

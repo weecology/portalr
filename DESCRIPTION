@@ -17,7 +17,8 @@ Imports:
     httr, 
     rlang,
 	forecast,
-	htmltab
+	htmltab, 
+	jsonlite
 Suggests:
     testthat,
     digest,

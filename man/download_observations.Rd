@@ -4,7 +4,7 @@
 \alias{download_observations}
 \title{Download the PortalData repo}
 \usage{
-download_observations(base_folder = "~")
+download_observations(base_folder = "~", version = "latest")
 }
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
