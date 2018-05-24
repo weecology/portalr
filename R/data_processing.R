@@ -607,9 +607,11 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
   return(quadrat_species_merge)
 }
 
-#' @title Restricts species to annuals or non-woody as specified
-#' @description If type=Annuals, removes all non-annual species.
-#'              If type=Non-woody, removes shrub species
+#' @title Restricts species to specified community group
+#' @description If type=Annuals, returns all annual species
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param quadrat_sp_data Data table with raw quadrat plant data
 #'                             merged with species attributes from
 #'                             species_table.
@@ -624,6 +626,10 @@ process_annuals <- function(quadrat_sp_data, type) {
     return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
   } else if (tolower(type) == "non-woody") {
     return(dplyr::filter(quadrat_sp_data, !community %in% c("Shrub", "Subshrub")))
+  } else if (tolower(type) == "perennials") {
+    return(dplyr::filter(quadrat_sp_data, duration  == "Perennial"))
+  } else if (tolower(type) == "shrubs") {
+    return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
   } else {
     return(quadrat_sp_data)
   }
@@ -668,8 +674,8 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:
-#'     (1) remove records with "bad" period codes or plot numbers via
-#'         \code{\link{remove_suspect_entries}}
+#'     (1) correct species names according to recent vouchers, if requested, via
+#'         \code{\link{rename_species_plants}}
 #'     (2) restrict species to annuals or non-woody via
 #'         \code{link{process_annuals}}
 #'     (3) remove records for unidentified species via
@@ -679,9 +685,11 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_plant_data}}
-#' @param type specify subset of species; either "All" - includes annuals,
-#'  perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-#'  annuals and perennials but not shrubs
+#' @param type specify subset of species;
+#'              If type=Annuals, removes all non-annual species.
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}
