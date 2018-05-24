@@ -17,9 +17,11 @@ retrieve data from github repo}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
-\item{type}{specify subset of species; either "All" - includes annuals,
-perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-annuals and perennials, not shrubs or subshrubs}
+\item{type}{specify subset of species;
+If type=Annuals, removes all non-annual species.
+If type=Non-woody, removes shrub and subshrub species
+If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+If type=Shrubs, returns only shrubs and subshrubs}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (plots that have had same treatment for entire time series)}

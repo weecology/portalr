@@ -11,9 +11,11 @@ clean_plant_data(data_tables, type = "All", unknowns = FALSE, correct_sp,
 \item{data_tables}{the list of data_tables, returned from calling
 \code{\link{load_plant_data}}}
 
-\item{type}{specify subset of species; either "All" - includes annuals,
-perennials, and shrubs; "Annuals" - only annuals; or "Non-woody" - includes
-annuals and perennials but not shrubs}
+\item{type}{specify subset of species;
+If type=Annuals, removes all non-annual species.
+If type=Non-woody, removes shrub and subshrub species
+If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+If type=Shrubs, returns only shrubs and subshrubs}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
@@ -29,8 +31,8 @@ This function does basic quality control of the Portal plant
   several arguments passed along.
 
   The specific steps it does are, in order:
-    (1) remove records with "bad" period codes or plot numbers via
-        \code{\link{remove_suspect_entries}}
+    (1) correct species names according to recent vouchers, if requested, via
+        \code{\link{rename_species_plants}}
     (2) restrict species to annuals or non-woody via
         \code{link{process_annuals}}
     (3) remove records for unidentified species via
