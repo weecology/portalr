@@ -8,6 +8,8 @@ download_observations(base_folder = "~", version = "latest")
 }
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
+
+\item{version}{Version of the data to download (default = "latest")}
 }
 \value{
 None

@@ -1,6 +1,6 @@
 #' @importFrom graphics plot
 #' @importFrom stats aggregate
-#' @importFrom utils download.file read.csv unzip
+#' @importFrom utils download.file read.csv unzip read.table tail
 
 #' @title Full Path
 #' @description Return normalized path for all operating systems
@@ -24,6 +24,7 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
+#' @param version Version of the data to download (default = "latest")
 #' @return None
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
@@ -57,8 +58,16 @@ download_observations <- function(base_folder = "~", version = "latest")
       stop("Invalid version number given, ", version, call. = FALSE)
     }
 
+    pat <- Sys.getenv("GITHUB_PAT")
+    if (identical(pat, ""))
+    {
+      github_auth <- NULL
+    } else {
+      github_auth <- httr::authenticate(pat, "x-oauth-basic", "basic")
+    }
+
     ## try to get links to all versions from GitHub
-    resp <- httr::GET("https://api.github.com/repos/weecology/PortalData/releases")
+    resp <- httr::GET("https://api.github.com/repos/weecology/PortalData/releases", github_auth)
     if (httr::http_type(resp) != "application/json") # check for errors
     {
       stop("GitHub response was not in JSON format", call. = FALSE)
