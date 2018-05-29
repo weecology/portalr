@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_processing.R
 \name{process_annuals}
 \alias{process_annuals}
-\title{Restricts species to annuals or non-woody as specified}
+\title{Restricts species to specified community group}
 \usage{
 process_annuals(quadrat_sp_data, type)
 }
@@ -17,6 +17,8 @@ species_table.}
 data.table with species processed according to argument 'type'.
 }
 \description{
-If type=Annuals, removes all non-annual species.
-             If type=Non-woody, removes shrub species
+If type=Annuals, returns all annual species
+             If type=Non-woody, removes shrub and subshrub species
+             If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+             If type=Shrubs, returns only shrubs and subshrubs
 }
