@@ -22,6 +22,6 @@ a data.frame with time and ndvi values
 Forecast ndvi using a seasonal auto ARIMA
 }
 \details{
-ndvi values are forecast using auto.arima with seasonality (using 
+ndvi values are forecast using auto.arima with seasonality (using
  a Fourier transform)
 }

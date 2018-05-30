@@ -8,14 +8,13 @@
 #' @param BasePath Current working directory else path given
 #'
 #' @return Full path
-#' @export
 #' @examples
-#' FullPath('PortalData/Rodents/Portal_rodent.csv')
-#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
-FullPath <- function(ReferencePath, BasePath = getwd()) {
-  BasePath = normalizePath(BasePath)
-  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
-  return (Path)
+#' full_path('PortalData/Rodents/Portal_rodent.csv')
+#' full_path('PortalData/Rodents/Portal_rodent.csv', '~')
+full_path <- function(ReferencePath, BasePath = getwd()) {
+  BasePath <- normalizePath(BasePath)
+  Path <- normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
+  return(Path)
 }
 
 #' @title Download the PortalData repo
@@ -68,10 +67,10 @@ download_observations <- function(base_folder = "~", version = "latest")
   }
 
   # Attemt to download the zip file
-  zip_download_dest <- FullPath("PortalData.zip", tempdir())
+  zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder <- FullPath("PortalData", base_folder)
+  final_data_folder <- full_path("PortalData", base_folder)
 
   # Clear out the old files in the data folder without doing potentially dangerous
   # recursive deleting.
@@ -92,7 +91,7 @@ download_observations <- function(base_folder = "~", version = "latest")
   unzip(zip_download_dest, exdir = base_folder)
   Sys.sleep(10)
   file.remove(zip_download_dest)
-  file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
+  file.rename(full_path(primary_data_folder, base_folder), final_data_folder)
 }
 
 #' @title get GitHub Release Info for PortalData
