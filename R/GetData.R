@@ -1,6 +1,6 @@
 #' @importFrom graphics plot
 #' @importFrom stats aggregate
-#' @importFrom utils download.file read.csv unzip
+#' @importFrom utils download.file read.csv unzip read.table tail
 
 #' @title Full Path
 #' @description Return normalized path for all operating systems
@@ -24,19 +24,74 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
+#' @param version Version of the data to download (default = "latest")
 #' @return None
 #' @export
-download_observations <- function(base_folder = '~') {
-  zip_download_path <- 'https://github.com/weecology/PortalData/archive/master.zip'
-  zip_download_dest = FullPath('PortalData.zip', base_folder)
+download_observations <- function(base_folder = "~", version = "latest")
+{
+  if (version == "latest")
+  {
+    # Try and parse the download link from Zenodo
+    resp <- httr::GET("https://zenodo.org/record/1215988")
+    if (httr::http_type(resp) != "text/html") # check for errors
+    {
+      stop("Zenodo response was not in text format", call. = FALSE)
+    }
+    page_content <- httr::content(resp, "text")
+    match_pos <- regexec("(https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+)zip",
+                         page_content)
+    match_text <- regmatches(page_content, match_pos)
+
+    if (length(match_text) != 1)
+    {
+      stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
+    }
+    zip_download_path <- match_text[[1]][1]
+  } else {
+    # Try to normalize version number
+    if (grepl("^[0-9]+\\.[0-9]+$", version))
+    {
+      version <- paste0(version, ".0")
+    }
+    if (!grepl("^[0-9]+\\.[0-9]+\\.0$", version))
+    {
+      stop("Invalid version number given, ", version, call. = FALSE)
+    }
+
+    pat <- Sys.getenv("GITHUB_PAT")
+    if (identical(pat, ""))
+    {
+      github_auth <- NULL
+    } else {
+      github_auth <- httr::authenticate(pat, "x-oauth-basic", "basic")
+    }
+
+    ## try to get links to all versions from GitHub
+    resp <- httr::GET("https://api.github.com/repos/weecology/PortalData/releases", github_auth)
+    if (httr::http_type(resp) != "application/json") # check for errors
+    {
+      stop("GitHub response was not in JSON format", call. = FALSE)
+    }
+    release_df <- jsonlite::fromJSON(httr::content(resp, "text"))
+
+    idx <- match(version, release_df$tag_name)
+    if (length(idx) != 1 || is.na(idx))
+    {
+      stop("Did not find a version of the data matching, ", version, call. = FALSE)
+    }
+    zip_download_path <- release_df$zipball_url[idx]
+  }
+
+  # Attemt to download the zip file
+  zip_download_dest <- FullPath("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder = FullPath('PortalData', base_folder)
+  final_data_folder <- FullPath("PortalData", base_folder)
 
-  #Clear out the old files in the data folder without doing potentially dangerous
-  #recursive deleting.
+  # Clear out the old files in the data folder without doing potentially dangerous
+  # recursive deleting.
   if (file.exists(final_data_folder)) {
-    old_files = list.files(
+    old_files <- list.files(
       final_data_folder,
       full.names = TRUE,
       all.files = TRUE,
@@ -55,34 +110,51 @@ download_observations <- function(base_folder = '~') {
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
 
-#' #' @title Find new observations
-#' #' @description Check if there are new rodent observations. This only checks the
-#' #'   Portal_rodent.csv file. (If other data (non-rodent) are updated this function
-#' #'   will not show that there is new data available.)
-#' #' @param base_folder Folder into which data will be downloaded
-#' #' @return bool True if new observations are available
-#' #' @export
-#' observations_are_new = function(base_folder = '~') {
-#'   md5_file = './Portal_rodent.md5'
-#'   rodent_file = FullPath('PortalData/Rodents/Portal_rodent.csv', base_folder)
-#'   if (!file.exists(rodent_file))
-#'     stop('Rodent observations not present. Please run download_observations()')
+
+#' @title Check for latest version of data files
+#' @description Check the latest version against the data that exists on
+#'   the GitHub repo
+#' @param base_folder Folder in which data will be checked
+#' @return bool TRUE if there is a newer version of the data online
+#' @export
 #'
-#'   if (!file.exists(md5_file)) {
-#'     old_md5 = ''
-#'   } else {
-#'     old_md5 = read.csv(md5_file, header = FALSE, stringsAsFactors = FALSE)$V1
-#'   }
-#'
-#'   new_md5 = as.character(tools::md5sum(rodent_file))
-#'
-#'   if (old_md5 == new_md5) {
-#'     return(FALSE)
-#'   } else {
-#'     sink(md5_file)
-#'     writeLines(new_md5)
-#'     sink()
-#'     return(TRUE)
-#'   }
-#'
-#' }
+check_for_newer_data <- function(base_folder = "~")
+{
+  # first see if the folder for the data files exist
+  tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
+           error = function(e) stop("Unable to find data files in specified path: ", base_folder,
+                                    ". Download the data first using `download_observations()`."),
+           warning = function(w) w)
+
+  # check for `version.txt``
+  version_file <- file.path(base_path, "version.txt")
+  if (!file.exists(version_file)) # old version of data is missing this metadata file
+    return(TRUE)
+
+  pattern <- "([0-9]+)\\.([0-9]+)\\.([0-9]+)"
+  version_str <- as.character(read.table(version_file)[1, 1])
+  local_version <- c(as.numeric(gsub(pattern, "\\1", version_str)),
+                     as.numeric(gsub(pattern, "\\2", version_str)),
+                     as.numeric(gsub(pattern, "\\3", version_str)))
+
+  github_version_file <- "https://raw.githubusercontent.com/weecology/PortalData/master/version.txt"
+  github_version_str <- as.character(read.table(github_version_file)[1, 1])
+  github_version <- c(as.numeric(gsub(pattern, "\\1", github_version_str)),
+                      as.numeric(gsub(pattern, "\\2", github_version_str)),
+                      as.numeric(gsub(pattern, "\\3", github_version_str)))
+
+  if (github_version[1] > local_version[1])
+    return(TRUE)
+
+  if (github_version[1] == local_version[1] &&
+      github_version[2] > local_version[2])
+    return(TRUE)
+
+  if (github_version[1] == local_version[1] &&
+      github_version[2] == local_version[2] &&
+      github_version[3] > local_version[3])
+    return(TRUE)
+
+  return(FALSE)
+}
+
