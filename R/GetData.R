@@ -58,28 +58,13 @@ download_observations <- function(base_folder = "~", version = "latest")
       stop("Invalid version number given, ", version, call. = FALSE)
     }
 
-    pat <- Sys.getenv("GITHUB_PAT")
-    if (identical(pat, ""))
-    {
-      github_auth <- NULL
-    } else {
-      github_auth <- httr::authenticate(pat, "x-oauth-basic", "basic")
-    }
-
-    ## try to get links to all versions from GitHub
-    resp <- httr::GET("https://api.github.com/repos/weecology/PortalData/releases", github_auth)
-    if (httr::http_type(resp) != "application/json") # check for errors
-    {
-      stop("GitHub response was not in JSON format", call. = FALSE)
-    }
-    release_df <- jsonlite::fromJSON(httr::content(resp, "text"))
-
-    idx <- match(version, release_df$tag_name)
+    releases <- get_github_releases()
+    idx <- match(version, releases$tag_name)
     if (length(idx) != 1 || is.na(idx))
     {
       stop("Did not find a version of the data matching, ", version, call. = FALSE)
     }
-    zip_download_path <- release_df$zipball_url[idx]
+    zip_download_path <- releases$zipball_url[idx]
   }
 
   # Attemt to download the zip file
@@ -110,6 +95,47 @@ download_observations <- function(base_folder = "~", version = "latest")
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
 }
 
+#' @title get GitHub Release Info for PortalData
+#'
+#' @description Use the GitHub API to get info about the releases of the
+#'   PortalData repo.
+#' @return A data.frame with two columns, `tag_name` (name of the tags) and
+#'   `zipball_url` (download URLs for the corresponding zipped release)
+get_github_releases <- function()
+{
+  pat <- Sys.getenv("GITHUB_PAT")
+  if (identical(pat, ""))
+  {
+    github_auth <- NULL
+  } else {
+    github_auth <- httr::authenticate(pat, "x-oauth-basic", "basic")
+  }
+
+  ## try to get links to all versions from GitHub
+  releases <- data.frame(tag_name = character(),
+                         zipball_url = character())
+  match_text <- "next"
+  page_idx <- 1
+
+  # keep getting info until no more `next` pages
+  while (match_text == "next")
+  {
+    resp <- httr::GET(paste0("https://api.github.com/repos/weecology/PortalData/releases?page=", page_idx), github_auth)
+    link_str <- httr::headers(resp)$link
+    match_pos <- regexec("^<.+>; rel=\"([a-z]+)\", <.+>; rel=\"([a-z]+)\"$", link_str)
+    match_text <- regmatches(link_str, match_pos)[[1]][2]
+    if (httr::http_type(resp) != "application/json") # check for errors
+    {
+      stop("GitHub response was not in JSON format", call. = FALSE)
+    }
+
+    releases <- rbind(releases,
+                  jsonlite::fromJSON(httr::content(resp, "text"))[, c("tag_name", "zipball_url")])
+    page_idx <- page_idx + 1
+  }
+
+  return(releases)
+}
 
 #' @title Check for latest version of data files
 #' @description Check the latest version against the data that exists on
