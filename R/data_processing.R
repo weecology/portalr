@@ -558,8 +558,7 @@ load_plant_data <- function(path = "~") {
 #'
 #' @return Data.table with suspected incorrect plant species names replaced
 #'
-#' @export
-#'
+#' @noRd
 rename_species_plants <- function(quadrat_data, correct_sp) {
   if (correct_sp) {
     quadrat_data$species <- gsub("acac greg", "mimo acul", quadrat_data$species)
@@ -583,8 +582,7 @@ rename_species_plants <- function(quadrat_data, correct_sp) {
 #' @return Data.table with species info added and unknown species processed
 #' according to the argument unknowns.
 #'
-#' @export
-#'
+#' @noRd
 process_unknownsp_plants <- function(quadrat_data, unknowns) {
   if (unknowns)
   {
@@ -610,8 +608,7 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 #'
 #' @return data.table with species processed according to argument 'type'.
 #'
-#' @export
-#'
+#' @noRd
 process_annuals <- function(quadrat_sp_data, type) {
   if (tolower(type) == "annuals") {
     return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
@@ -634,7 +631,7 @@ process_annuals <- function(quadrat_sp_data, type) {
 #'
 #' @return Data.table of quadrat data with treatment info added.
 #'
-#' @export
+#' @noRd
 join_census_to_dates <- function(census_table, date_table, plots_table) {
   census_table %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
@@ -648,7 +645,7 @@ join_census_to_dates <- function(census_table, date_table, plots_table) {
 #'
 #' @return Data.table of raw quadrat data with census info added.
 #'
-#' @export
+#' @noRd
 join_census_to_quadrats <- function(quadrat_data, census_table) {
   quadrat_data %>%
     dplyr::right_join(census_table,
