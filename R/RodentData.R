@@ -81,7 +81,7 @@ make_level_data <- function(plot_data, trapping_table, level, output, min_plots 
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
     dplyr::summarise(n = sum(n, na.rm = TRUE),
                      ntraps = sum(effort, na.rm = TRUE),
-                     nplots = portalr::true_length(effort))
+                     nplots = true_length(effort))
 
   incomplete <- find_incomplete_censuses(trapping_table,min_plots,min_traps)
 
@@ -125,7 +125,7 @@ make_level_data <- function(plot_data, trapping_table, level, output, min_plots 
 prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
                                zero_drop, shape, level, output) {
 
-  out_data <- portalr::add_time(level_data, data_tables$newmoons_table, time)
+  out_data <- add_time(level_data, data_tables$newmoons_table, time)
 
   if (effort == FALSE) {
     out_data <- dplyr::select(out_data, -nplots, -ntraps)
@@ -138,7 +138,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
   }
 
   if (shape == "crosstab") {
-    out_data <- portalr::make_crosstab(out_data, output, NA)
+    out_data <- make_crosstab(out_data, output, NA)
   }
 
   if (zero_drop) {
@@ -217,7 +217,7 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
                                                "site" = TRUE),
                             min_traps = 1, min_plots = 24, effort = FALSE) {
 
-  data_tables <- portalr::load_data(path, clean = clean)
+  data_tables <- load_data(path, clean = clean)
 
   level <- tolower(level)
   type <- tolower(type)
@@ -226,14 +226,14 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
   time <- tolower(time)
   output <- tolower(output)
 
-  trapping_data <- portalr::filter_plots(data_tables$trapping_table, length) %>%
-    portalr::join_plots_to_trapping(data_tables$plots_table)
+  trapping_data <- filter_plots(data_tables$trapping_table, length) %>%
+    join_plots_to_trapping(data_tables$plots_table)
 
-  out <- portalr::clean_rodent_data(data_tables, fillweight, type,
+  out <- clean_rodent_data(data_tables, fillweight, type,
                                     unknowns, fill_incomplete) %>%
-    portalr::make_plot_data(trapping_data, output, min_traps) %>%
-    portalr::make_level_data(data_tables$trapping_table, level, output, min_plots, min_traps) %>%
-    portalr::prep_rodent_output(data_tables, time, effort, na_drop,
+    make_plot_data(trapping_data, output, min_traps) %>%
+    make_level_data(data_tables$trapping_table, level, output, min_plots, min_traps) %>%
+    prep_rodent_output(data_tables, time, effort, na_drop,
                                      zero_drop, shape, level, output)
 
   return(out)
