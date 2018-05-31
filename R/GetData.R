@@ -4,17 +4,20 @@
 
 #' @title Full Path
 #' @description Return normalized path for all operating systems
-#' @param ReferencePath a path to join with current working directory
-#' @param BasePath Current working directory else path given
+#' @param reference_path a path to join with current working directory
+#' @param base_path Current working directory else path given
 #'
 #' @return Full path
+#'
 #' @examples
 #' full_path('PortalData/Rodents/Portal_rodent.csv')
 #' full_path('PortalData/Rodents/Portal_rodent.csv', '~')
-full_path <- function(ReferencePath, BasePath = getwd()) {
-  BasePath <- normalizePath(BasePath)
-  Path <- normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
-  return(Path)
+#'
+#' @noRd
+full_path <- function(reference_path, base_path = getwd()) {
+  base_path <- normalizePath(base_path)
+  path <- normalizePath(file.path(base_path, reference_path), mustWork = FALSE)
+  return(path)
 }
 
 #' @title Download the PortalData repo
@@ -24,7 +27,9 @@ full_path <- function(ReferencePath, BasePath = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#'
 #' @return None
+#'
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
 {
@@ -98,8 +103,11 @@ download_observations <- function(base_folder = "~", version = "latest")
 #'
 #' @description Use the GitHub API to get info about the releases of the
 #'   PortalData repo.
+#'
 #' @return A data.frame with two columns, `tag_name` (name of the tags) and
 #'   `zipball_url` (download URLs for the corresponding zipped release)
+#'
+#' @noRd
 get_github_releases <- function()
 {
   pat <- Sys.getenv("GITHUB_PAT")
@@ -140,9 +148,10 @@ get_github_releases <- function()
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
 #' @param base_folder Folder in which data will be checked
-#' @return bool TRUE if there is a newer version of the data online
-#' @export
 #'
+#' @return bool TRUE if there is a newer version of the data online
+#'
+#' @export
 check_for_newer_data <- function(base_folder = "~")
 {
   # first see if the folder for the data files exist
@@ -182,4 +191,3 @@ check_for_newer_data <- function(base_folder = "~")
 
   return(FALSE)
 }
-

@@ -99,11 +99,11 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 #'
 #' @return Data.table with latest 12 months of data removed.
 #'
-#'
-clean_data = function(full_data,trapping_table) {
-  names = colnames(full_data)
-  full_data = dplyr::left_join(full_data,trapping_table) %>%
-    dplyr::filter(qcflag==1) %>%
+#' @noRd
+clean_data <- function(full_data, trapping_table) {
+  names <- colnames(full_data)
+  full_data <- dplyr::left_join(full_data, trapping_table) %>%
+    dplyr::filter(qcflag == 1) %>%
     dplyr::select(names) %>%
     unique()
 
@@ -120,10 +120,9 @@ clean_data = function(full_data,trapping_table) {
 #'
 #' @return Data.table with suspect data removed.
 #'
-#' @export
-#'
+#' @noRd
 remove_suspect_entries <- function(rodent_data) {
-   rodent_data %>%
+  rodent_data %>%
     dplyr::filter(period > 0, !is.na(plot))
 }
 
@@ -140,8 +139,7 @@ remove_suspect_entries <- function(rodent_data) {
 #' @return Data.table with species info added and unknown species processed
 #' according to the argument unknowns.
 #'
-#' @export
-#'
+#' @noRd
 process_unknownsp <- function(rodent_data, unknowns) {
   if (unknowns)
   {
@@ -166,8 +164,7 @@ process_unknownsp <- function(rodent_data, unknowns) {
 #'
 #' @return data.table with granivores processed according to argument 'type'.
 #'
-#' @export
-#'
+#' @noRd
 process_granivores <- function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data <- rodent_species_merge %>%
@@ -232,7 +229,7 @@ process_incomplete_censuses <- function(rodent_species_merge,
 #'
 #' @return Data.table filtered to the desired subset of plots.
 #'
-#' @export
+#' @noRd
 filter_plots <- function(data, length) {
   if (length %in% c("longterm","long-term")) {
     if ("plot" %in% colnames(data)) {
@@ -250,7 +247,7 @@ filter_plots <- function(data, length) {
 #'
 #' @return Data.table of raw rodent data with treatment info added.
 #'
-#' @export
+#' @noRd
 join_plots_to_rodents <- function(rodent_data, plots_table) {
   plots_table <- plots_table %>%
     dplyr::group_by(year, plot) %>%
@@ -272,16 +269,15 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
 #'
 #' @return Data.table of raw rodent data with trapping info added.
 #'
-#' @export
+#' @noRd
+join_trapping_to_rodents <- function(rodent_data, trapping_table,
+                                     full_trapping, min_plots, min_traps) {
 
-join_trapping_to_rodents = function(rodent_data, trapping_table, full_trapping, min_plots, min_traps){
+  incomplete_samples <- find_incomplete_censuses(full_trapping, min_plots, min_traps)
+  trapping_table <- dplyr::filter(trapping_table, !period %in% incomplete_samples$period)
 
-    incompsampling = find_incomplete_censuses(full_trapping, min_plots, min_traps)
-    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
-
-  rodent_table = dplyr::right_join(rodent_data, trapping_table,
-                                   by=c("month"="month","year"="year","period"="period","plot"="plot"))
-  return(rodent_table)
+  dplyr::right_join(rodent_data, trapping_table,
+                    by = c("month", "year", "period", "plot"))
 }
 
 #' Join plots and trapping tables
@@ -292,8 +288,7 @@ join_trapping_to_rodents = function(rodent_data, trapping_table, full_trapping, 
 #' @return trapping table with sampled column removed and treatment column
 #'   added
 #'
-#' @export
-#'
+#' @noRd
 join_plots_to_trapping <- function(trapping, plots) {
 
   plots_table <- plots %>%
@@ -323,9 +318,7 @@ join_plots_to_trapping <- function(trapping, plots) {
 #'
 #' @return Data.table of summarized rodent data with user-specified time format
 #'
-#' @export
-#'
-
+#' @noRd
 add_time <- function(summary_table, newmoon_table, time = "period") {
   newmoon_table$censusdate <- as.Date(newmoon_table$censusdate)
   join_summary_newmoon <- dplyr::right_join(newmoon_table, summary_table,
@@ -354,13 +347,12 @@ add_time <- function(summary_table, newmoon_table, time = "period") {
 #' @param variable_name what variable to spread (default is "abundance")
 #' @param ... other arguments to pass on to tidyr::spread
 #'
-#' @export
+#' @noRd
 make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
   summary_data %>%
     tidyr::spread(species, !!variable_name, ...) %>%
     dplyr::ungroup()
 }
-
 
 #' @title Fill Weight
 #'
@@ -370,8 +362,7 @@ make_crosstab <- function(summary_data, variable_name = quo(abundance), ...){
 #' @param rodent_data raw rodent data
 #' @param tofill logical whether to fill in missing values or not
 #'
-#' @export
-#'
+#' @noRd
 fill_weight <- function(rodent_data, tofill)
 {
   if (!tofill) return(rodent_data)
