@@ -31,6 +31,7 @@ download_observations <- function(base_folder = "~", version = "latest")
 {
   if (version == "latest")
   {
+    message("Downloading the latest version of the data...")
     # Try and parse the download link from Zenodo
     resp <- httr::GET("https://zenodo.org/record/1215988")
     if (httr::http_type(resp) != "text/html") # check for errors
@@ -48,7 +49,7 @@ download_observations <- function(base_folder = "~", version = "latest")
     }
     zip_download_path <- match_text[[1]][1]
   } else {
-    # Try to normalize version number
+    # Normalize version number
     if (grepl("^[0-9]+\\.[0-9]+$", version))
     {
       version <- paste0(version, ".0")
@@ -64,6 +65,7 @@ download_observations <- function(base_folder = "~", version = "latest")
     {
       stop("Did not find a version of the data matching, ", version, call. = FALSE)
     }
+    message("Downloading version ", version, " of the data...")
     zip_download_path <- releases$zipball_url[idx]
   }
 
@@ -93,14 +95,19 @@ download_observations <- function(base_folder = "~", version = "latest")
   Sys.sleep(10)
   file.remove(zip_download_dest)
   file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
+
+  return()
 }
 
 #' @title get GitHub Release Info for PortalData
 #'
 #' @description Use the GitHub API to get info about the releases of the
 #'   PortalData repo.
+#'
 #' @return A data.frame with two columns, `tag_name` (name of the tags) and
 #'   `zipball_url` (download URLs for the corresponding zipped release)
+#'
+#' @noRd
 get_github_releases <- function()
 {
   pat <- Sys.getenv("GITHUB_PAT")
@@ -148,8 +155,7 @@ check_for_newer_data <- function(base_folder = "~")
 {
   # first see if the folder for the data files exist
   tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
-           error = function(e) stop("Unable to find data files in specified path: ", base_folder,
-                                    ". Download the data first using `download_observations()`."),
+           error = function(e) stop("Unable to use the specified path: ", base_folder, call. = FALSE),
            warning = function(w) w)
 
   # check for `version.txt``
