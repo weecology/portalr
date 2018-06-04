@@ -622,13 +622,13 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 #' @export
 #'
 process_annuals <- function(quadrat_sp_data, type) {
-  if (tolower(type) == "annuals") {
+  if (type %in% c("annuals","annual")) {
     return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
-  } else if (tolower(type) == "non-woody") {
+  } else if (type %in% c("non-woody","nonwoody")) {
     return(dplyr::filter(quadrat_sp_data, !community %in% c("Shrub", "Subshrub")))
-  } else if (tolower(type) == "perennials") {
+  } else if (type %in% c("perennials","perennial")) {
     return(dplyr::filter(quadrat_sp_data, duration  == "Perennial"))
-  } else if (tolower(type) == "shrubs") {
+  } else if (type %in% c("shrubs","shrub")) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
   } else {
     return(quadrat_sp_data)
