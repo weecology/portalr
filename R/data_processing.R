@@ -76,10 +76,10 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 
   ## remove data still under quality control
   if(clean) {
-    rodent_data = clean_data(rodent_data,trapping_table)
-    newmoons_table = clean_data(newmoons_table,trapping_table)
-    plots_table = clean_data(plots_table,trapping_table)
-    trapping_table = dplyr::filter(trapping_table,qcflag==1)
+    rodent_data <- clean_data(rodent_data,trapping_table)
+    newmoons_table <- clean_data(newmoons_table,trapping_table)
+    plots_table <- clean_data(plots_table,trapping_table)
+    trapping_table <- dplyr::filter(trapping_table,qcflag==1)
   }
 
   return(list(rodent_data = rodent_data,
@@ -100,9 +100,9 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 #' @return Data.table with latest 12 months of data removed.
 #'
 #'
-clean_data = function(full_data,trapping_table) {
-  names = colnames(full_data)
-  full_data = dplyr::left_join(full_data,trapping_table) %>%
+clean_data <- function(full_data, trapping_table) {
+  names <- colnames(full_data)
+  full_data <- dplyr::left_join(full_data,trapping_table) %>%
     dplyr::filter(qcflag==1) %>%
     dplyr::select(names) %>%
     unique()
@@ -608,27 +608,26 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 }
 
 #' @title Restricts species to specified community group
-#' @description If type=Annuals, returns all annual species
-#'              If type=Non-woody, removes shrub and subshrub species
-#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
-#'              If type=Shrubs, returns only shrubs and subshrubs
+#' @description Filters the plant data to a specific group. 
 #' @param quadrat_sp_data Data table with raw quadrat plant data
-#'                             merged with species attributes from
-#'                             species_table.
-#' @param type String. Either "Annuals" or "Non-woody" results in filtering
+#'   merged with species attributes from species_table.
+#' @param type String. If `type == "Annuals"`, returns all annual species
+#'              If `type == "Non-woody"`, removes shrub and subshrub species
+#'              If `type == "Perennials"`, returns all perennial species (includes shrubs and subshrubs)
+#'              If `type == "Shrubs"`, returns only shrubs and subshrubs
 #'
-#' @return data.table with species processed according to argument 'type'.
+#' @return data.table with species processed according to argument `type`.
 #'
 #' @export
 #'
 process_annuals <- function(quadrat_sp_data, type) {
-  if (tolower(type) == "annuals") {
+  if (type %in% c("annuals", "annual")) {
     return(dplyr::filter(quadrat_sp_data, duration == "Annual"))
-  } else if (tolower(type) == "non-woody") {
+  } else if (type %in% c("non-woody", "nonwoody")) {
     return(dplyr::filter(quadrat_sp_data, !community %in% c("Shrub", "Subshrub")))
-  } else if (tolower(type) == "perennials") {
-    return(dplyr::filter(quadrat_sp_data, duration  == "Perennial"))
-  } else if (tolower(type) == "shrubs") {
+  } else if (type %in% c("perennials", "perennial")) {
+    return(dplyr::filter(quadrat_sp_data, duration == "Perennial"))
+  } else if (type %in% c("shrubs", "shrub")) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
   } else {
     return(quadrat_sp_data)
