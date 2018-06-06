@@ -191,9 +191,9 @@ find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
 
   trapping_table %>%
     dplyr::group_by(period) %>%
-    dplyr::mutate(replace(sampled, effort < min_traps, 0)) %>%
-    dplyr::summarise(nplots=sum(sampled)) %>%
-    dplyr::filter(nplots<min_plots) %>%
+    dplyr::mutate(sampled = as.numeric(effort >= min_traps)) %>%
+    dplyr::summarise(nplots = sum(sampled)) %>%
+    dplyr::filter(nplots < min_plots) %>%
     dplyr::select(period)
 }
 
@@ -608,7 +608,7 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 }
 
 #' @title Restricts species to specified community group
-#' @description Filters the plant data to a specific group. 
+#' @description Filters the plant data to a specific group.
 #' @param quadrat_sp_data Data table with raw quadrat plant data
 #'   merged with species attributes from species_table.
 #' @param type String. If `type == "Annuals"`, returns all annual species
