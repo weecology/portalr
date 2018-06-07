@@ -8,17 +8,16 @@ process_annuals(quadrat_sp_data, type)
 }
 \arguments{
 \item{quadrat_sp_data}{Data table with raw quadrat plant data
-merged with species attributes from
-species_table.}
+merged with species attributes from species_table.}
 
-\item{type}{String. Either "Annuals" or "Non-woody" results in filtering}
+\item{type}{String. If `type == "Annuals"`, returns all annual species
+If `type == "Non-woody"`, removes shrub and subshrub species
+If `type == "Perennials"`, returns all perennial species (includes shrubs and subshrubs)
+If `type == "Shrubs"`, returns only shrubs and subshrubs}
 }
 \value{
-data.table with species processed according to argument 'type'.
+data.table with species processed according to argument `type`.
 }
 \description{
-If type=Annuals, returns all annual species
-             If type=Non-woody, removes shrub and subshrub species
-             If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
-             If type=Shrubs, returns only shrubs and subshrubs
+Filters the plant data to a specific group.
 }

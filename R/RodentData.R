@@ -85,10 +85,10 @@ make_level_data <- function(plot_data, trapping_table, level, output, min_plots 
 
   incomplete <- find_incomplete_censuses(trapping_table, min_plots, min_traps)
 
-    level_data <- level_data %>%
-      dplyr::mutate(n = replace(n, period %in% incomplete$period, NA),
-                    ntraps = replace(ntraps, period %in% incomplete$period, NA),
-                    nplots = replace(nplots, period %in% incomplete$period, NA))
+  level_data <- level_data %>%
+    dplyr::mutate(n = replace(n, period %in% incomplete$period, NA),
+                  ntraps = replace(ntraps, period %in% incomplete$period, NA),
+                  nplots = replace(nplots, period %in% incomplete$period, NA))
 
   level_data %>%
     dplyr::rename(!!output := n) %>%
@@ -216,7 +216,6 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
                                                "treatment" = TRUE,
                                                "site" = TRUE),
                             min_traps = 1, min_plots = 24, effort = FALSE) {
-
   data_tables <- portalr::load_data(path, clean = clean)
 
   level <- tolower(level)

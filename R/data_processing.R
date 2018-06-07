@@ -234,7 +234,7 @@ process_incomplete_censuses <- function(rodent_species_merge,
 #'
 #' @export
 filter_plots <- function(data, length) {
-  if (length %in% c("longterm","long-term")) {
+  if (length %in% c("longterm", "long-term")) {
     if ("plot" %in% colnames(data)) {
       data <- data %>%
         dplyr::filter(plot %in% c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
@@ -274,13 +274,15 @@ join_plots_to_rodents <- function(rodent_data, plots_table) {
 #'
 #' @export
 
-join_trapping_to_rodents = function(rodent_data, trapping_table, full_trapping, min_plots, min_traps){
+join_trapping_to_rodents <- function(rodent_data, trapping_table,
+                                     full_trapping, min_plots, min_traps)
+{
 
-    incompsampling = find_incomplete_censuses(full_trapping, min_plots, min_traps)
-    trapping_table = dplyr::filter(trapping_table, !period %in% incompsampling$period)
+  incompsampling <- find_incomplete_censuses(full_trapping, min_plots, min_traps)
+  trapping_table <- dplyr::filter(trapping_table, !period %in% incompsampling$period)
 
-  rodent_table = dplyr::right_join(rodent_data, trapping_table,
-                                   by=c("month"="month","year"="year","period"="period","plot"="plot"))
+  rodent_table <- dplyr::right_join(rodent_data, trapping_table,
+                                    by = c("month", "year", "period", "plot"))
   return(rodent_table)
 }
 
