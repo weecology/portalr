@@ -35,6 +35,7 @@ download_observations <- function(base_folder = "~", version = "latest")
 {
   if (version == "latest")
   {
+    message("Downloading the latest version of the data...")
     # Try and parse the download link from Zenodo
     resp <- httr::GET("https://zenodo.org/record/1215988")
     if (httr::http_type(resp) != "text/html") # check for errors
@@ -52,7 +53,7 @@ download_observations <- function(base_folder = "~", version = "latest")
     }
     zip_download_path <- match_text[[1]][1]
   } else {
-    # Try to normalize version number
+    # Normalize version number
     if (grepl("^[0-9]+\\.[0-9]+$", version))
     {
       version <- paste0(version, ".0")
@@ -68,6 +69,7 @@ download_observations <- function(base_folder = "~", version = "latest")
     {
       stop("Did not find a version of the data matching, ", version, call. = FALSE)
     }
+    message("Downloading version ", version, " of the data...")
     zip_download_path <- releases$zipball_url[idx]
   }
 
@@ -156,8 +158,7 @@ check_for_newer_data <- function(base_folder = "~")
 {
   # first see if the folder for the data files exist
   tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
-           error = function(e) stop("Unable to find data files in specified path: ", base_folder,
-                                    ". Download the data first using `download_observations()`."),
+           error = function(e) stop("Unable to use the specified path: ", base_folder, call. = FALSE),
            warning = function(w) w)
 
   # check for `version.txt``

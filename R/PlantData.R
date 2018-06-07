@@ -43,8 +43,11 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
                            shape = "flat", output = "abundance")
 {
   #### Clean inputs ----
-  output <- tolower(output)
   level <- tolower(level)
+  type <- tolower(type)
+  length <- tolower(length)
+  shape <- tolower(shape)
+  output <- tolower(output)
 
   #### Get Data ----
   data_tables <- load_plant_data(path)
