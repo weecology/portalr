@@ -1,17 +1,28 @@
 context("Check rodent data summaries")
 
-test_that("get_rodent_data returns expected results", {
+test_that("get_rodent_data returns expected results, and filters by plots correctly", {
   ab_all_plots <- get_rodent_data(path = ".", level = "plot",
                                   na_drop = TRUE)
 
   rodent_counts <- ab_all_plots %>%
-    dplyr::filter(plot == 4) %>%
-    select(-treatment, -plot)
+    dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
 
-  ab_plot_1 <- get_rodent_data(path = ".", plots = 4,
+  ab_plot_4 <- get_rodent_data(path = ".", plots = 4,
                                na_drop = TRUE, zero_drop = FALSE)
 
-  expect_equal(rodent_counts, ab_plot_1)
+  expect_equal(rodent_counts, ab_plot_4)
+
+  rodent_counts <- ab_all_plots %>%
+    dplyr::filter(plot %in% c(4, 8, 10, 12)) %>%
+    dplyr::select(-treatment, -plot) %>%
+    tidyr::gather(species, abundance, BA:SO) %>%
+    count(period, species, wt = abundance) %>%
+    tidyr::spread(species, n)
+
+  ab_plots_4_8_10_12 <- get_rodent_data(path = ".", plots = c(4, 8, 10, 12),
+                               na_drop = TRUE, zero_drop = FALSE)
+
+  expect_equal(rodent_counts, ab_plots_4_8_10_12)
 })
 
 test_that("abundance returns expected results", {
