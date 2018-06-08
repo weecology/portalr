@@ -16,7 +16,7 @@ test_that("get_rodent_data returns expected results, and filters by plots correc
     dplyr::filter(plot %in% c(4, 8, 10, 12)) %>%
     dplyr::select(-treatment, -plot) %>%
     tidyr::gather(species, abundance, BA:SO) %>%
-    count(period, species, wt = abundance) %>%
+    dplyr::count(period, species, wt = abundance) %>%
     tidyr::spread(species, n)
 
   ab_plots_4_8_10_12 <- get_rodent_data(path = ".", plots = c(4, 8, 10, 12),
