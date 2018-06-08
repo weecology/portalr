@@ -192,3 +192,181 @@ check_for_newer_data <- function(base_folder = "~")
 
   return(FALSE)
 }
+
+#' @title Loads the Portal rodent data files
+#'
+#' @description Loads main Portal rodent data files from either a user-defined
+#'   path or the online Github repository. If the user-defined path is un-
+#'   available, the default option is to download to that location.
+#'
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
+#' @param download_if_missing if the specified file path doesn't have the
+#'   PortalData folder, then download it
+#' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
+#'
+#' @return List of 5 dataframes:
+#'   \itemize{
+#'     \item rodent_data. raw data on rodent captures
+#'     \item species_table. species code, names, types
+#'     \item trapping_table. when each plot was trapped
+#'     \item newmoons_table. pairs census periods with newmoons
+#'     \item plots_table. rodent treatment assignments for each plot.
+#'   }
+#'
+#' @examples
+#' portal_data <- load_data("repo")
+#'
+#' @export
+#'
+load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
+{
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+  } else {
+    tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+             error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
+             warning = function(w) w)
+  }
+
+  rodent_data_file <- file.path(base_path, "Rodents", "Portal_rodent.csv")
+  species_table_file <- file.path(base_path, "Rodents", "Portal_rodent_species.csv")
+  trapping_table_file <- file.path(base_path, "Rodents", "Portal_rodent_trapping.csv")
+  newmoons_table_file <- file.path(base_path, "Rodents", "moon_dates.csv")
+  plots_table_file <- file.path(base_path, "SiteandMethods", "Portal_plots.csv")
+
+  ## check if files exist and download if appropriate
+  if (tolower(path) != "repo" &&
+      any(!file.exists(rodent_data_file),
+          !file.exists(species_table_file),
+          !file.exists(trapping_table_file),
+          !file.exists(newmoons_table_file),
+          !file.exists(plots_table_file)))
+  {
+    if (download_if_missing) {
+      warning("Proceeding to download data into specified path", path)
+      download_observations(path)
+    } else {
+      stop("Data files were not found in specified path", path)
+    }
+  }
+
+  ## read in CSV files
+  rodent_data <- read.csv(rodent_data_file,
+                          na.strings = c(""),
+                          colClasses = c("tag" = "character"),
+                          stringsAsFactors = FALSE)
+  species_table <- read.csv(species_table_file,
+                            na.strings = c(""),
+                            stringsAsFactors = FALSE)
+  trapping_table <- read.csv(trapping_table_file)
+  newmoons_table <- read.csv(newmoons_table_file)
+  plots_table <- read.csv(plots_table_file)
+
+  ## reformat
+  if (!"species" %in% names(species_table))
+    species_table <- dplyr::rename(species_table, species = speciescode)
+
+  ## remove data still under quality control
+  if(clean) {
+    rodent_data <- clean_data(rodent_data,trapping_table)
+    newmoons_table <- clean_data(newmoons_table,trapping_table)
+    plots_table <- clean_data(plots_table,trapping_table)
+    trapping_table <- dplyr::filter(trapping_table,qcflag==1)
+  }
+
+  return(list(rodent_data = rodent_data,
+              species_table = species_table,
+              trapping_table = trapping_table,
+              newmoons_table = newmoons_table,
+              plots_table = plots_table))
+}
+
+#' @title Loads Portal plant data files.
+#'
+#' @description Loads main Portal plant data files from either
+#' a user defined path or the online Github repository.
+#'
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
+#' @param download_if_missing if the specified file path doesn't have the
+#'   PortalData folder, then download it
+#'
+#' @return       List of 5 dataframes:
+#'   \itemize{
+#'     \item quadrat_data. raw plant quadrat data
+#'     \item species_table. species code, names, types
+#'     \item census_table. indicates whether each quadrat was counted in each
+#'       census; area of each quadrat
+#'     \item date_table. start and end date of each plant census
+#'     \item plots_table. rodent treatment assignments for each plot.
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' portal_plant_data <- load_plant_data("repo")
+#'
+
+load_plant_data <- function(path = "~", download_if_missing = TRUE)
+{
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+  } else {
+    tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+             error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
+             warning = function(w) w)
+  }
+
+  quadrat_data_file <- file.path(base_path, "Plants", "Portal_plant_quadrats.csv")
+  species_table_file <- file.path(base_path, "Plants", "Portal_plant_species.csv")
+  census_table_file <- file.path(base_path, "Plants", "Portal_plant_censuses.csv")
+  date_table_file <- file.path(base_path, "Plants", "Portal_plant_census_dates.csv")
+  plots_table_file <- file.path(base_path, "SiteandMethods", "Portal_plots.csv")
+
+  ## check if files exist and download if appropriate
+  if (tolower(path) != "repo" &&
+      any(!file.exists(quadrat_data_file),
+          !file.exists(species_table_file),
+          !file.exists(census_table_file),
+          !file.exists(date_table_file),
+          !file.exists(plots_table_file)))
+  {
+    if (download_if_missing) {
+      warning("Proceeding to download data into specified path", path)
+      download_observations(path)
+    } else {
+      stop("Data files were not found in specified path", path)
+    }
+  }
+
+  ## read in CSV files
+  quadrat_data <- read.csv(quadrat_data_file,
+                           na.strings = c(""),
+                           stringsAsFactors = FALSE)
+  species_table <- read.csv(species_table_file,
+                            na.strings = c(""),
+                            stringsAsFactors = FALSE)
+  census_table <- read.csv(census_table_file,
+                           stringsAsFactors = FALSE)
+  date_table <- read.csv(date_table_file,
+                         stringsAsFactors = FALSE,
+                         na.strings = c("", "none", "unknown"))
+  plots_table <- read.csv(plots_table_file,
+                          stringsAsFactors = FALSE)
+
+  ## reformat
+  if (!"sp" %in% names(species_table))
+    species_table <- dplyr::rename(species_table, sp = species,
+                                   species = speciescode)
+
+  return(list(quadrat_data = quadrat_data,
+              species_table = species_table,
+              census_table = census_table,
+              date_table = date_table,
+              plots_table = plots_table))
+}

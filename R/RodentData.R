@@ -7,7 +7,7 @@
 #' @param x vector of values
 #' @return integer of how many non-NA values in x
 #'
-#' @export
+#' @noRd
 #'
 true_length <- function(x) {
   length(which(!is.na(x)))
@@ -68,9 +68,9 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 #'   hierarchically by min_traps) sampled are returned with NA
 #'   for ntraps, nplots, and the output value of interest
 #'
-#' @export
-#'
-make_level_data <- function(plot_data, trapping_table, level, output, min_plots = 1, min_traps = 1) {
+#' @noRd
+make_level_data <- function(plot_data, trapping_table, level, output,
+                            min_plots = 1, min_traps = 1) {
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
@@ -83,12 +83,19 @@ make_level_data <- function(plot_data, trapping_table, level, output, min_plots 
                      ntraps = sum(effort, na.rm = TRUE),
                      nplots = true_length(effort))
 
+  # set data for incomplete censuses to NA
   incomplete <- find_incomplete_censuses(trapping_table, min_plots, min_traps)
 
   level_data <- level_data %>%
     dplyr::mutate(n = replace(n, period %in% incomplete$period, NA),
                   ntraps = replace(ntraps, period %in% incomplete$period, NA),
                   nplots = replace(nplots, period %in% incomplete$period, NA))
+
+  if (level == "plot")
+  {
+    level_data <- level_data %>%
+      dplyr::mutate(n = replace(n, ntraps < min_traps, NA))
+  }
 
   level_data %>%
     dplyr::rename(!!output := n) %>%
@@ -215,8 +222,9 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
                                                "plot" = FALSE,
                                                "treatment" = TRUE,
                                                "site" = TRUE),
-                            min_traps = 1, min_plots = 24, effort = FALSE) {
-  data_tables <- portalr::load_data(path, clean = clean)
+                            min_traps = 1, min_plots = 24, effort = FALSE)
+{
+  data_tables <- load_data(path, clean = clean)
 
   level <- tolower(level)
   type <- tolower(type)
@@ -229,11 +237,11 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
     join_plots_to_trapping(data_tables$plots_table)
 
   out <- clean_rodent_data(data_tables, fillweight, type,
-                                    unknowns, fill_incomplete) %>%
+                           unknowns, fill_incomplete) %>%
     make_plot_data(trapping_data, output, min_traps) %>%
     make_level_data(data_tables$trapping_table, level, output, min_plots, min_traps) %>%
     prep_rodent_output(data_tables, time, effort, na_drop,
-                                     zero_drop, shape, level, output)
+                       zero_drop, shape, level, output)
 
   return(out)
 }
