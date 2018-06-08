@@ -7,7 +7,7 @@
 #' @param x vector of values
 #' @return integer of how many non-NA values in x
 #'
-#' @export
+#' @noRd
 #'
 true_length <- function(x) {
   length(which(!is.na(x)))
