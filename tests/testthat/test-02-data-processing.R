@@ -81,3 +81,51 @@ test_that("does find_incomplete_censuses work properly?", {
   idx <- periods_47_traps > 320 & periods_47_traps < 450
   expect_equal(sum(idx), 115)
 })
+
+plant_tables <- load_plant_data(".")
+
+test_that("quadrat data.frame has correct column names", {
+  quadrats <- plant_tables[[1]]
+  quadrat_cols <- colnames(quadrats)
+  expect_true('year' %in% quadrat_cols)
+  expect_true('season' %in% quadrat_cols)
+  expect_true('plot' %in% quadrat_cols)
+  expect_true('quadrat' %in% quadrat_cols)
+  expect_true('species' %in% quadrat_cols)
+  expect_true('abundance' %in% quadrat_cols)
+  expect_true('cover' %in% quadrat_cols)
+})
+
+test_that("species data.frame has correct column names", {
+  sp <- plant_tables[[2]]
+  sp_cols <- colnames(sp)
+  expect_true('species' %in% sp_cols)
+  expect_true('genus' %in% sp_cols)
+  expect_true('sp' %in% sp_cols)
+  expect_true('duration' %in% sp_cols)
+  expect_true('community' %in% sp_cols)
+})
+
+test_that("clean_plant_data works", {
+  expect_error(plants <- clean_plant_data(plant_tables), NA)
+})
+
+plants <- clean_plant_data(plant_tables)
+
+test_that("clean_plant_data has correct columns", {
+  plant_cols <- names(plants)
+  expect_true("year" %in% plant_cols)
+  expect_true("season" %in% plant_cols)
+  expect_true("plot" %in% plant_cols)
+  expect_true("quadrat" %in% plant_cols)
+  expect_true("species" %in% plant_cols)
+  expect_true("abundance" %in% plant_cols)
+  expect_true("cover" %in% plant_cols)
+  expect_true("sp" %in% plant_cols)
+  expect_true('duration' %in% sp_cols)
+  expect_true('community' %in% sp_cols)
+
+  expect_is(plants$species, "factor")
+  expect_is(plants$abundance, "integer")
+  expect_is(plants$cover, "numeric")
+})

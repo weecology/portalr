@@ -13,8 +13,8 @@
 #'
 clean_data <- function(full_data, trapping_table) {
   names <- colnames(full_data)
-  full_data <- dplyr::left_join(full_data,trapping_table) %>%
-    dplyr::filter(qcflag==1) %>%
+  full_data <- dplyr::left_join(full_data, trapping_table) %>%
+    dplyr::filter(qcflag == 1) %>%
     dplyr::select(names) %>%
     unique()
 
@@ -519,19 +519,21 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param correct_sp T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}
+#' @param correct_sp T/F whether or not to use likely corrected plant IDs,
+#'   passed to \code{rename_species_plants}
 #' @param length specify subset of plots; use "All" plots or only "Longterm"
 #'   plots (plots that have had same treatment for entire time series)
 #'
 #' @export
 #'
 clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
-                             correct_sp, length = "all")
+                             correct_sp = TRUE, length = "all")
 {
   data_tables$quadrat_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(length)
+    filter_plots(length) %>%
+    dplyr::mutate(species = as.factor(species))
 }

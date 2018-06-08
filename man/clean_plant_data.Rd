@@ -4,8 +4,8 @@
 \alias{clean_plant_data}
 \title{Do basic cleaning of Portal plant data}
 \usage{
-clean_plant_data(data_tables, type = "All", unknowns = FALSE, correct_sp,
-  length = "all")
+clean_plant_data(data_tables, type = "All", unknowns = FALSE,
+  correct_sp = TRUE, length = "all")
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -20,7 +20,8 @@ If type=Shrubs, returns only shrubs and subshrubs}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{correct_sp}{T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}}
+\item{correct_sp}{T/F whether or not to use likely corrected plant IDs,
+passed to \code{rename_species_plants}}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (plots that have had same treatment for entire time series)}
