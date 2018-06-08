@@ -122,8 +122,8 @@ test_that("clean_plant_data has correct columns", {
   expect_true("abundance" %in% plant_cols)
   expect_true("cover" %in% plant_cols)
   expect_true("sp" %in% plant_cols)
-  expect_true('duration' %in% sp_cols)
-  expect_true('community' %in% sp_cols)
+  expect_true('duration' %in% plant_cols)
+  expect_true('community' %in% plant_cols)
 
   expect_is(plants$species, "factor")
   expect_is(plants$abundance, "integer")
