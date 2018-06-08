@@ -222,8 +222,8 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
                                                "plot" = FALSE,
                                                "treatment" = TRUE,
                                                "site" = TRUE),
-                            min_traps = 1, min_plots = 24, effort = FALSE) {
-
+                            min_traps = 1, min_plots = 24, effort = FALSE)
+{
   data_tables <- load_data(path, clean = clean)
 
   level <- tolower(level)

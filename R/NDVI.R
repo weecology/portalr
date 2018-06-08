@@ -7,28 +7,28 @@
 #' @description Summarize NDVI data to monthly or lunar monthly level
 #'
 #' @param level specify "monthly" or "newmoon"
-#' @param fill specify if missing data should be filled, passed to 
+#' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
 #' @param path specify where to locate Portal data
 #'
 #' @export
 #'
 ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
-  NDVI <- read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), 
+  NDVI <- read.csv(full_path('PortalData/NDVI/monthly_NDVI.csv', path),
                    na.strings = c(""), stringsAsFactors = FALSE)
-  moon_dates <- read.csv(FullPath('PortalData/Rodents/moon_dates.csv', path),
+  moon_dates <- read.csv(full_path('PortalData/Rodents/moon_dates.csv', path),
                          na.strings = c(""), stringsAsFactors = FALSE)
 
-  if(!all(c("year", "month") %in% names(NDVI))){
+  if (!all(c("year", "month") %in% names(NDVI))) {
     NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
     NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))
     NDVI$ndvi <- NDVI$NDVI
   }
-  if(!"date" %in% names(NDVI)){
+  if (!"date" %in% names(NDVI)) {
     NDVI$date <- as.Date(paste(NDVI$year, NDVI$month, "01", sep = "-"))
   }
 
-  if(level == "monthly"){
+  if (level == "monthly") {
 
     NDVI <- NDVI %>%
       dplyr::group_by(year, month) %>%
@@ -36,7 +36,7 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
       dplyr::arrange(date) %>%
       dplyr::ungroup() %>%
       dplyr::select(ndvi, date)
-    if(fill == TRUE){
+    if (fill == TRUE) {
        curr_yearmonth <- format(Sys.Date(), "%Y-%m")
        last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
        NDVI <- fill_missing_ndvi(NDVI, "monthly", last_time)
@@ -48,12 +48,12 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
     nm_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
     nm_end <- as.Date(moon_dates$newmoondate[-1])
     nm_match_number <- NULL
-    nm_match_date <- NULL   
+    nm_match_date <- NULL
     for(i in 1:length(nm_number)){
       temp_dates <- as.character(seq.Date(nm_start[i] + 1, nm_end[i], 1))
       temp_numbers <- rep(nm_number[i], length(temp_dates))
       nm_match_date <- c(nm_match_date, temp_dates)
-      nm_match_number <- c(nm_match_number, temp_numbers)       
+      nm_match_number <- c(nm_match_number, temp_numbers)
     }
     nm_match_date <- as.Date(nm_match_date)
 
@@ -78,7 +78,7 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
 ##############################################################################
 #' Fill in historic ndvi data to the complete timeseries being fit
 #'
-#' @details missing values during the time series are replaced using 
+#' @details missing values during the time series are replaced using
 #'  na.interp, missing values at the end of the time series are forecast using
 #'   auto.arima with seasonality (using Fourier transform)
 #'
@@ -107,7 +107,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     if(max_hist_time < last_time){
       lead_fcast <- length(seq.Date(max_hist_time, last_time , "month")[-1])
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "monthly", lead_fcast)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)  
+      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
     }
   }
   if(level == "newmoon"){
@@ -124,7 +124,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     if(max_hist_time < last_time){
       lead_fcast <- length((max_hist_time + 1):last_time)
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "newmoon", lead_fcast, moons)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)  
+      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
     }
   }
 
@@ -134,7 +134,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
 ############################################################################
 #' Forecast ndvi using a seasonal auto ARIMA
 #'
-#' @details ndvi values are forecast using auto.arima with seasonality (using 
+#' @details ndvi values are forecast using auto.arima with seasonality (using
 #'  a Fourier transform)
 #'
 #' @param hist_ndvi historic ndvi data

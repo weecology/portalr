@@ -4,18 +4,20 @@
 
 #' @title Full Path
 #' @description Return normalized path for all operating systems
-#' @param ReferencePath a path to join with current working directory
-#' @param BasePath Current working directory else path given
+#' @param reference_path a path to join with current working directory
+#' @param base_path Current working directory else path given
 #'
 #' @return Full path
-#' @export
+#'
 #' @examples
-#' FullPath('PortalData/Rodents/Portal_rodent.csv')
-#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
-FullPath <- function(ReferencePath, BasePath = getwd()) {
-  BasePath = normalizePath(BasePath)
-  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
-  return (Path)
+#' full_path('PortalData/Rodents/Portal_rodent.csv')
+#' full_path('PortalData/Rodents/Portal_rodent.csv', '~')
+#'
+#' @noRd
+full_path <- function(reference_path, base_path = getwd()) {
+  base_path <- normalizePath(base_path)
+  path <- normalizePath(file.path(base_path, reference_path), mustWork = FALSE)
+  return(path)
 }
 
 #' @title Download the PortalData repo
@@ -25,7 +27,9 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#'
 #' @return None
+#'
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
 {
@@ -70,10 +74,10 @@ download_observations <- function(base_folder = "~", version = "latest")
   }
 
   # Attemt to download the zip file
-  zip_download_dest <- FullPath("PortalData.zip", tempdir())
+  zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder <- FullPath("PortalData", base_folder)
+  final_data_folder <- full_path("PortalData", base_folder)
 
   # Clear out the old files in the data folder without doing potentially dangerous
   # recursive deleting.
@@ -94,9 +98,7 @@ download_observations <- function(base_folder = "~", version = "latest")
   unzip(zip_download_dest, exdir = base_folder)
   Sys.sleep(10)
   file.remove(zip_download_dest)
-  file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
-
-  return()
+  file.rename(full_path(primary_data_folder, base_folder), final_data_folder)
 }
 
 #' @title get GitHub Release Info for PortalData
@@ -148,9 +150,10 @@ get_github_releases <- function()
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
 #' @param base_folder Folder in which data will be checked
-#' @return bool TRUE if there is a newer version of the data online
-#' @export
 #'
+#' @return bool TRUE if there is a newer version of the data online
+#'
+#' @export
 check_for_newer_data <- function(base_folder = "~")
 {
   # first see if the folder for the data files exist

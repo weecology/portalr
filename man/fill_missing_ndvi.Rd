@@ -22,7 +22,7 @@ a data.frame with time and ndvi values
 Fill in historic ndvi data to the complete timeseries being fit
 }
 \details{
-missing values during the time series are replaced using 
+missing values during the time series are replaced using
  na.interp, missing values at the end of the time series are forecast using
   auto.arima with seasonality (using Fourier transform)
 }
