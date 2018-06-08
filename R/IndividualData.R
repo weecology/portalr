@@ -37,7 +37,7 @@ get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
                            time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1) {
 
   #### Get Data ----
-  data_tables <- portalr::load_data(path, clean = clean)
+  data_tables <- load_data(path, clean = clean)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,

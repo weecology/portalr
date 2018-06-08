@@ -43,7 +43,7 @@ test_that("biomass returns expected results", {
   expect_equal(floor(dplyr::filter(biom_notfilled, period == 447, plot == 3,
                                    species == "BA")$biomass), 15)
   expect_equal(floor(dplyr::filter(biom_filled, period == 447, plot == 3,
-                                      species == "BA")$biomass), 24)
+                                   species == "BA")$biomass), 24)
 })
 
 test_that("energy returns expected results", {
@@ -74,56 +74,56 @@ test_that("energy returns expected results", {
 test_that("abundance filters at the plot level correctly", {
   incomplete_plots <- abundance(path = ".", level = "plot",
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
-    filter(ntraps < 1)
+    dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 238)
 
   incomplete_plots <- abundance(path = ".", level = "plot",
                                 min_plots = 24, min_traps = 49, effort = TRUE) %>%
-    filter(ntraps < 1)
+    dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
-    incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
-    filter(ntraps < 1)
+    dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 47, effort = TRUE) %>%
-    filter(ntraps < 47)
+    dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 49, effort = TRUE) %>%
-    filter(ntraps < 49)
+    dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 1, effort = TRUE) %>%
-    filter(ntraps < 1)
+    dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 47, effort = TRUE) %>%
-    filter(ntraps < 47)
+    dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 49, effort = TRUE) %>%
-    filter(ntraps < 49)
+    dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 1, effort = TRUE) %>%
-    filter(ntraps < 1)
+    dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 47, effort = TRUE) %>%
-    filter(ntraps < 47)
+    dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 49, effort = TRUE) %>%
-    filter(ntraps < 49)
+    dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
 })
