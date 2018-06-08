@@ -29,14 +29,11 @@ This function does basic quality control of the Portal rodent
   several arguments passed along.
 
   The specific steps it does are, in order:
-    (1) add in missing weight data via \code{\link{fill_weight}})
-    (2) remove records with "bad" period codes or plot numbers via
-        \code{\link{remove_suspect_entries}}
-    (3) remove records for unidentified species via
-        \code{\link{process_unknownsp}}
-    (4) exclude non-granivores via \code{\link{process_granivores}}
+    (1) add in missing weight data
+    (2) remove records with "bad" period codes or plot numbers
+    (3) remove records for unidentified species
+    (4) exclude non-granivores
     (5) exclude incomplete trapping sessions via
         \code{\link{process_incomplete_censuses}}
-    (6) exclude the plots that aren't long-term treatments via
-        \code{\link{filter_plots}}
+    (6) exclude the plots that aren't long-term treatments
 }
