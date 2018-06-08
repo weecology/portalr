@@ -1,8 +1,22 @@
 context("Check rodent data summaries")
 
+test_that("get_rodent_data returns expected results", {
+  ab_all_plots <- get_rodent_data(path = ".", level = "plot",
+                                  na_drop = TRUE)
+
+  rodent_counts <- ab_all_plots %>%
+    dplyr::filter(plot == 4) %>%
+    select(-treatment, -plot)
+
+  ab_plot_1 <- get_rodent_data(path = ".", plots = 4,
+                               na_drop = TRUE, zero_drop = FALSE)
+
+  expect_equal(rodent_counts, ab_plot_1)
+})
+
 test_that("abundance returns expected results", {
   ab_notfilled <- abundance(path = ".", level = "Plot", type = "Rodents",
-                            length = "all", unknowns = FALSE,
+                            plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                             min_plots = 24, effort = FALSE)
@@ -14,7 +28,7 @@ test_that("abundance returns expected results", {
   expect_false(anyNA(test_ab))
 
   ab_filled <- abundance(path = ".", level = "Plot", type = "Rodents",
-                         length = "all", unknowns = FALSE,
+                         plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = 24, effort = FALSE)
@@ -24,14 +38,14 @@ test_that("abundance returns expected results", {
 test_that("biomass returns expected results", {
 
   biom_filled <- biomass(path = ".", level = "Plot", type = "Rodents",
-                         length = "all", unknowns = FALSE,
+                         plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
   biom_notfilled <- biomass(path = ".", level = "Plot", type = "Rodents",
-                            length = "all", unknowns = FALSE,
+                            plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                             min_plots = 24, effort = FALSE) %>%
@@ -49,14 +63,14 @@ test_that("biomass returns expected results", {
 test_that("energy returns expected results", {
 
   energy_filled <- energy(path = ".", level = "Plot", type = "Rodents",
-                          length = "all", unknowns = FALSE,
+                          plots = "all", unknowns = FALSE,
                           shape = "flat", time = "period", fillweight = TRUE,
                           na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                           min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
   energy_notfilled <- energy(path = ".", level = "Plot", type = "Rodents",
-                             length = "all", unknowns = FALSE,
+                             plots = "all", unknowns = FALSE,
                              shape = "flat", time = "period", fillweight = FALSE,
                              na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                              min_plots = 24, effort = FALSE) %>%

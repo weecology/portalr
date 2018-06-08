@@ -132,23 +132,35 @@ process_incomplete_censuses <- function(rodent_species_merge,
 #' @title Filter plots
 #'
 #' @description
-#' Removes plots not needed for analysis. Currently only returns long-term
-#' plots but could be adjusted in the future to return other subsets as well.
+#'   Removes plots not needed for analysis. Specific groups, such as "all" or
+#'   "longterm" can be specified, as well as manual selection of plots.
 #'
-#' @param data Data table. Any data with a plot column.
-#' @param length Character. Denotes if user wants only long-term plots.
-#'
+#' @param data any data.frame with a plot column.
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #' @return Data.table filtered to the desired subset of plots.
 #'
 #' @noRd
-filter_plots <- function(data, length) {
-  if (length %in% c("longterm", "long-term")) {
-    if ("plot" %in% colnames(data)) {
-      data <- data %>%
-        dplyr::filter(plot %in% c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
+filter_plots <- function(data, plots = NULL)
+{
+  if (is.character(plots))
+  {
+    plots <- tolower(plots)
+    if (plots %in% c("longterm", "long-term"))
+    {
+      plots <- c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23)
+    } else if (plots == "all") {
+      plots <- NULL
     }
   }
-  return(data)
+
+  # if no selection then return unaltered data
+  if (is.null(plots))
+    return(data)
+
+  # otherwise return filtered data
+  dplyr::filter(data, plot %in% plots)
 }
 
 #' @title Join rodent and plot tables
