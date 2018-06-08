@@ -26,7 +26,7 @@ true_length <- function(x) {
 #'   sufficiently (as defined by min_traps) sampled is returned with NA
 #'   for effort and the output value of interest
 #'
-#' @export
+#' @noRd
 #'
 make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 
@@ -127,7 +127,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
 #'   hierarchically by min_traps) sampled are returned with NA
 #'   for ntraps, nplots, and the output value of interest
 #'
-#' @export
+#' @noRd
 #'
 prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
                                zero_drop, shape, level, output) {
