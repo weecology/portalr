@@ -474,24 +474,29 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
 #' @description Loads main Portal plant data files from either
 #' a user defined path or the online Github repository.
 #'
-#' @param path string Containing path to PortalData folder
-#'              should include ending /; if path = 'repo',
-#'              data is pulled from PortalData GitHub repository.
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
+#' @param download_if_missing if the specified file path doesn't have the
+#'   PortalData folder, then download it
 #'
-#' @return       List of 4 dataframes:
-#' \itemize{
-#' \item quadrat_data. raw plant quadrat data
-#' \item species_table. species code, names, types
-#' \item census_table. indicates whether each quadrat was counted in each census; area of each quadrat
-#' \item date_table. start and end date of each plant census
-#' \item plots_table. rodent treatment assignments for each plot.
-#' }
+#' @return       List of 5 dataframes:
+#'   \itemize{
+#'     \item quadrat_data. raw plant quadrat data
+#'     \item species_table. species code, names, types
+#'     \item census_table. indicates whether each quadrat was counted in each
+#'       census; area of each quadrat
+#'     \item date_table. start and end date of each plant census
+#'     \item plots_table. rodent treatment assignments for each plot.
+#'   }
 #'
 #' @export
 #'
 #' @examples
 #' portal_plant_data <- load_plant_data("repo")
-load_plant_data <- function(path = "~") {
+#'
+
+load_plant_data <- function(path = "~", download_if_missing = TRUE)
+{
   ## define file paths
   if (tolower(path) == "repo")
   {
@@ -550,7 +555,6 @@ load_plant_data <- function(path = "~") {
               date_table = date_table,
               plots_table = plots_table))
 }
-
 
 #' @title Rename plant species
 #'
