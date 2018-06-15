@@ -125,5 +125,54 @@ plant_abundance <- function(..., shape = "flat") {
 
 }
 
+#' @name shrub_cover
+#'
+#' @title Generate % cover from Portal plant transect data
+#'
+#' @description This function calculates % cover from transect data.
+#' It handles the pre-2015 data differently from the current transects,
+#' becase they are collected differently. But it returns a single time-series
+#' with all years of transect data available.
+#'
+#' @param path path to location of downloaded Portal data; or "repo" to
+#'   retrieve data from github repo
+#' @param level summarize by "Plot", "Treatment", or "Site"
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (plots that have had same treatment for entire time series)
+#' @param unknowns either removes all individuals not identified to species
+#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
+#' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
+#' @param shape return data as a "flat" list or "crosstab"
+#'
+#' @return a data.frame in either "long" or "wide" format, depending on the
+#'   value of `shape`
+#'
+#' @export
+#'
+shrub_cover <- function(path = '~', level = "Site",
+                           length = "all", unknowns = FALSE, correct_sp = TRUE,
+                           shape = "flat") {
 
+  #### Clean inputs ----
+  output <- tolower(output)
 
+  #### Get Data ----
+  data_tables <- load_plant_data(path)
+
+  #### Do initial cleaning ----
+  transects <- clean_plant_data(data_tables, type="Shrubs", unknowns, correct_sp, length)
+
+ #Calculate for point method (old data)
+  transect_totals=transects %>%
+    group_by(year, plot) %>%
+    summarize(totalPoints=n())
+
+  df=df %>%
+    group_by(Year, Plot, Species.Name, Group) %>%
+    summarize(n=n())
+
+  df=merge(df, transectTotals, by=c('Year','Plot'))
+  df=df %>% mutate(cover = n/totalPoints)
+
+  return(select(df, -n, -totalPoints))
+}
