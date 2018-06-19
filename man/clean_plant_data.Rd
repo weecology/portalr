@@ -33,12 +33,8 @@ This function does basic quality control of the Portal plant
   several arguments passed along.
 
   The specific steps it does are, in order:
-    (1) correct species names according to recent vouchers, if requested, via
-        \code{\link{rename_species_plants}}
-    (2) restrict species to annuals or non-woody via
-        \code{link{process_annuals}}
-    (3) remove records for unidentified species via
-        \code{\link{process_unknownsp_plants}}
-    (5) exclude the plots that aren't long-term treatments via
-        \code{\link{filter_plots}}
+    (1) correct species names according to recent vouchers, if requested
+    (2) restrict species to annuals or non-woody
+    (3) remove records for unidentified species
+    (5) exclude the plots that aren't long-term treatments
 }

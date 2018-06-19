@@ -344,17 +344,12 @@ fill_weight <- function(rodent_data, tofill)
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:
-#'     (1) add in missing weight data via \code{\link{fill_weight}})
-#'     (2) remove records with "bad" period codes or plot numbers via
-#'         \code{\link{remove_suspect_entries}}
-#'     (3) remove records for unidentified species via
-#'         \code{\link{process_unknownsp}}
-#'     (4) exclude non-granivores via \code{\link{process_granivores}}
-#'     (5) exclude incomplete trapping sessions via
-#'         \code{\link{process_incomplete_censuses}}
-#'     (6) exclude the plots that aren't long-term treatments via
-#'         \code{\link{filter_plots}}
-#'
+#'     (1) add in missing weight data
+#'     (2) remove records with "bad" period codes or plot numbers
+#'     (3) remove records for unidentified species
+#'     (4) exclude non-granivores
+#'     (5) exclude incomplete trapping sessions
+#'     (6) exclude the plots that aren't long-term treatments
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_data}}
 #' @param fillweight specify whether to fill in unknown weights with other
@@ -501,14 +496,10 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:
-#'     (1) correct species names according to recent vouchers, if requested, via
-#'         \code{\link{rename_species_plants}}
-#'     (2) restrict species to annuals or non-woody via
-#'         \code{link{process_annuals}}
-#'     (3) remove records for unidentified species via
-#'         \code{\link{process_unknownsp_plants}}
-#'     (5) exclude the plots that aren't long-term treatments via
-#'         \code{\link{filter_plots}}
+#'     (1) correct species names according to recent vouchers, if requested
+#'     (2) restrict species to annuals or non-woody
+#'     (3) remove records for unidentified species
+#'     (5) exclude the plots that aren't long-term treatments
 #'
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_plant_data}}
