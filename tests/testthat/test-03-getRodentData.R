@@ -25,6 +25,11 @@ test_that("get_rodent_data returns expected results, and filters by plots correc
   expect_equal(rodent_counts, ab_plots_4_8_10_12)
 })
 
+test_that("get_rodent_data gives warning for using length", {
+  expect_warning(dat <- get_rodent_data(path = ".", length = "all"))
+  expect_equal(dat, get_rodent_data(path = ".", plots = "all"))
+})
+
 test_that("abundance returns expected results", {
   ab_notfilled <- abundance(path = ".", level = "Plot", type = "Rodents",
                             plots = "all", unknowns = FALSE,

@@ -178,6 +178,8 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (to be deprecated)
 #' @param plots specify subset of plots; can be a vector of plots, or specific
 #'   sets: "all" plots or "Longterm" plots (plots that have had the same
 #'   treatment for the entire time series)
@@ -210,7 +212,8 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #' @export
 #'
 get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
-                            type = "Rodents", plots = "all", unknowns = FALSE,
+                            type = "Rodents", length = "all", plots = length,
+                            unknowns = FALSE,
                             fill_incomplete = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
@@ -231,6 +234,11 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
   shape <- tolower(shape)
   time <- tolower(time)
   output <- tolower(output)
+
+  if (!missing("length"))
+  {
+    warning("The `length` argument is deprecated; please use `plots` instead.")
+  }
 
   trapping_data <- filter_plots(data_tables$trapping_table, plots) %>%
     join_plots_to_trapping(data_tables$plots_table)
