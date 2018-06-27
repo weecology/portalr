@@ -11,6 +11,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Introduction
 
 This vignette is a basic guide to begin exploring the Portal data. We load in the data (making sure that we're using the most recent copy from GitHub), and then explore the rodent abundances over time, with a comparison between the "control" and "kangaroo rat exclosure" treatments.
