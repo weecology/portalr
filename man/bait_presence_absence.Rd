@@ -13,7 +13,7 @@ retrieve data from github repo}
 \item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
 }
 \value{
-data frame with year, species, (plot if applicable), and presence [1,0]
+data frame with year, species, (plot if applicable), and presence [1, 0]
 }
 \description{
 Get ant species presence/absence by year/plot/stake from bait census data

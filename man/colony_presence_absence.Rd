@@ -19,7 +19,7 @@ Rare species may or may not have been censused in all years. Setting rare_sp=F g
 \item{unknowns}{include unknown species (T) or not (F). Unknowns include those only identified to genus.}
 }
 \value{
-data frame with year, species, (plot if applicable), and presence [1,0,NA]
+data frame with year, species, (plot if applicable), and presence [1, 0, NA]
 }
 \description{
 Get ant species presence/absence by year/plot/stake from colony census data
