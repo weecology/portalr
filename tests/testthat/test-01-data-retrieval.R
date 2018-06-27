@@ -61,6 +61,7 @@ test_that("load_plant_data downloads data if missing", {
   expect_equal(names(data_tables),
                c("quadrat_data", "species_table", "census_table",
                  "date_table", "plots_table"))
+  unlink(file.path(tempdir(), "PortalData"), recursive = TRUE)
 })
 
 test_that("load_ant_data works", {
