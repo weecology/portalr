@@ -5,7 +5,7 @@
 \alias{plant_abundance}
 \title{Generate summaries of Portal plant data}
 \usage{
-get_plant_data(path = "~", level = "Site", type = "All", length = "all",
+get_plant_data(path = "~", level = "Site", type = "All", plots = "all",
   unknowns = FALSE, correct_sp = TRUE, shape = "flat",
   output = "abundance")
 
@@ -23,8 +23,9 @@ If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 If type=Shrubs, returns only shrubs and subshrubs}
 
-\item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+\item{plots}{specify subset of plots; can be a vector of plots, or specific
+sets: "all" plots or "Longterm" plots (plots that have had the same
+treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}

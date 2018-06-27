@@ -1,19 +1,22 @@
 context("Check plant data summaries")
 
 test_that("plant_abundance returns expected results", {
-  plantabundance.all = plant_abundance(path = '.', level = "Plot", type = "All",
-                                  length = "all", unknowns = T, correct_sp= F,
-                                  shape = "flat")
-  test.plantabundance = dplyr::filter(plantabundance.all, year %in% 1996:1998)
-  expect_true(sum(test.plantabundance$abundance, na.rm = T) == 88422)
-  test.plantabundance = dplyr::filter(plantabundance.all, species == 'erod cicu', abundance > 0, year < 2017)
-  expect_equal(max(test.plantabundance$abundance, na.rm = T), 3369)
-  expect_false(anyNA(test.plantabundance))
-  expect_equal(nrow(test.plantabundance), 592)
+  plants_all <- plant_abundance(path = '.', level = "Plot", type = "All",
+                                plots = "all", unknowns = TRUE,
+                                correct_sp = FALSE, shape = "flat")
+  plants_9698 <- dplyr::filter(plants_all, year %in% 1996:1998)
+  expect_true(sum(plants_9698$abundance, na.rm = TRUE) == 88422)
 
-  plantabundance.fixnames = plant_abundance(path = '.', level = "Plot", type = "All",
-                                            length = "all", unknowns = T, correct_sp= T,
-                                            shape = "flat")
-  expect_equal(sum(plantabundance.all$abundance,na.rm=T), sum(plantabundance.fixnames$abundance,na.rm=T))
+  plants_erod <- plants_all %>%
+    dplyr::filter(species == 'erod cicu', abundance > 0, year < 2017)
+  expect_equal(max(plants_erod$abundance, na.rm = TRUE), 3369)
+  expect_false(anyNA(plants_erod))
+  expect_equal(nrow(plants_erod), 592)
+
+  plants_fix_names <- plant_abundance(path = '.', level = "Plot", type = "All",
+                                      plots = "all", unknowns = TRUE,
+                                      correct_sp = TRUE, shape = "flat")
+  expect_equal(sum(plants_all$abundance, na.rm = TRUE),
+               sum(plants_fix_names$abundance, na.rm = TRUE))
 
 })

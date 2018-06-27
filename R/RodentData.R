@@ -179,7 +179,10 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
 #' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
+#'   plots (to be deprecated)
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
@@ -208,10 +211,10 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 #' @export
 #'
-get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rodents",
-                            length = "all", unknowns = FALSE,
-                            fill_incomplete = FALSE,
-                            shape = "crosstab",
+get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
+                            type = "Rodents", length = "all", plots = length,
+                            unknowns = FALSE,
+                            fill_incomplete = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
                             na_drop = switch(tolower(level),
@@ -228,12 +231,16 @@ get_rodent_data <- function(path = "~", clean=TRUE, level = "Site", type = "Rode
 
   level <- tolower(level)
   type <- tolower(type)
-  length <- tolower(length)
   shape <- tolower(shape)
   time <- tolower(time)
   output <- tolower(output)
 
-  trapping_data <- filter_plots(data_tables$trapping_table, length) %>%
+  if (!missing("length"))
+  {
+    warning("The `length` argument is deprecated; please use `plots` instead.")
+  }
+
+  trapping_data <- filter_plots(data_tables$trapping_table, plots) %>%
     join_plots_to_trapping(data_tables$plots_table)
 
   out <- clean_rodent_data(data_tables, fillweight, type,

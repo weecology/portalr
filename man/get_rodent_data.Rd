@@ -11,7 +11,7 @@
 \title{Generate summaries of Portal rodent data}
 \usage{
 get_rodent_data(path = "~", clean = TRUE, level = "Site",
-  type = "Rodents", length = "all", unknowns = FALSE,
+  type = "Rodents", length = "all", plots = length, unknowns = FALSE,
   fill_incomplete = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
@@ -36,7 +36,11 @@ retrieve data from github repo}
 "Granivores"}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+plots (to be deprecated)}
+
+\item{plots}{specify subset of plots; can be a vector of plots, or specific
+sets: "all" plots or "Longterm" plots (plots that have had the same
+treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
