@@ -370,3 +370,82 @@ load_plant_data <- function(path = "~", download_if_missing = TRUE)
               date_table = date_table,
               plots_table = plots_table))
 }
+
+#' @title Loads Portal ant data files.
+#'
+#' @description Loads main Portal ant data files from either
+#' a user defined path or the online Github repository.
+#'
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
+#' @param download_if_missing if the specified file path doesn't have the
+#'   PortalData folder, then download it
+#'
+#' @return       List of 4 dataframes:
+#'   \itemize{
+#'     \item bait_data. raw ant bait data
+#'     \item colony_data. raw ant colony data
+#'     \item species_table. species code, names, types
+#'     \item plots_table. treatment assignments for each plot.
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' portal_ant_data <- load_ant_data("repo")
+#'
+
+load_ant_data <- function(path = "~", download_if_missing = TRUE)
+{
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+  } else {
+    tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+             error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
+             warning = function(w) w)
+  }
+
+  bait_data_file <- file.path(base_path, "Ants", "Portal_ant_bait.csv")
+  colony_data_file <- file.path(base_path, "Ants", "Portal_ant_colony.csv")
+  species_table_file <- file.path(base_path, "Ants", "Portal_ant_species.csv")
+  plots_table_file <- file.path(base_path, "SiteandMethods", "Portal_plots.csv")
+
+  ## check if files exist and download if appropriate
+  if (tolower(path) != "repo" &&
+      any(!file.exists(bait_data_file),
+          !file.exists(colony_data_file),
+          !file.exists(species_table_file),
+          !file.exists(plots_table_file)))
+  {
+    if (download_if_missing) {
+      warning("Proceeding to download data into specified path", path)
+      download_observations(path)
+    } else {
+      stop("Data files were not found in specified path", path)
+    }
+  }
+
+  ## read in CSV files
+  bait_data <- read.csv(bait_data_file,
+                        na.strings = c(""),
+                        stringsAsFactors = FALSE)
+  colony_data <- read.csv(colony_data_file,
+                          na.strings = c(""),
+                          stringsAsFactors = FALSE)
+  species_table <- read.csv(species_table_file,
+                            stringsAsFactors = FALSE)
+  plots_table <- read.csv(plots_table_file,
+                          stringsAsFactors = FALSE)
+
+  ## reformat
+  if (!"sp" %in% names(species_table))
+    species_table <- dplyr::rename(species_table, sp = species,
+                                   species = speciescode)
+
+  return(list(bait_data = bait_data,
+              colony_data = colony_data,
+              species_table = species_table,
+              plots_table = plots_table))
+}

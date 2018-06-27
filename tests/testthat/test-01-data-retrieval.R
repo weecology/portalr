@@ -61,4 +61,28 @@ test_that("load_plant_data downloads data if missing", {
   expect_equal(names(data_tables),
                c("quadrat_data", "species_table", "census_table",
                  "date_table", "plots_table"))
+  unlink(file.path(tempdir(), "PortalData"), recursive = TRUE)
+})
+
+test_that("load_ant_data works", {
+  expect_error(data_tables <- load_ant_data("repo"), NA)
+  expect_equal(length(data_tables), 4)
+  expect_equal(names(data_tables),
+               c("bait_data", "colony_data", "species_table",
+                 "plots_table"))
+
+  expect_error(data_tables <- load_ant_data("."), NA)
+  expect_equal(length(data_tables), 4)
+  expect_equal(names(data_tables),
+               c("bait_data", "colony_data", "species_table",
+                 "plots_table"))
+})
+
+test_that("load_ant_data downloads data if missing", {
+  expect_error(data_tables <- load_ant_data(tempdir(), download_if_missing = FALSE))
+  expect_warning(data_tables <- load_ant_data(tempdir()))
+  expect_equal(length(data_tables), 4)
+  expect_equal(names(data_tables),
+               c("bait_data", "colony_data", "species_table",
+                 "plots_table"))
 })
