@@ -66,7 +66,7 @@ test_that("does process_unknownsp work properly?", {
 })
 
 test_that("does filter_plots work properly?", {
-  rodents_longterm <- filter_plots(data_tables$trapping, length = "longterm")
+  rodents_longterm <- filter_plots(data_tables$trapping, plots = "longterm")
   expect_equal(sort(unique(rodents_longterm$plot)), c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
 })
 

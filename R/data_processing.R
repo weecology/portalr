@@ -132,23 +132,35 @@ process_incomplete_censuses <- function(rodent_species_merge,
 #' @title Filter plots
 #'
 #' @description
-#' Removes plots not needed for analysis. Currently only returns long-term
-#' plots but could be adjusted in the future to return other subsets as well.
+#'   Removes plots not needed for analysis. Specific groups, such as "all" or
+#'   "longterm" can be specified, as well as manual selection of plots.
 #'
-#' @param data Data table. Any data with a plot column.
-#' @param length Character. Denotes if user wants only long-term plots.
-#'
+#' @param data any data.frame with a plot column.
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #' @return Data.table filtered to the desired subset of plots.
 #'
 #' @noRd
-filter_plots <- function(data, length) {
-  if (length %in% c("longterm", "long-term")) {
-    if ("plot" %in% colnames(data)) {
-      data <- data %>%
-        dplyr::filter(plot %in% c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23))
+filter_plots <- function(data, plots = NULL)
+{
+  if (is.character(plots))
+  {
+    plots <- tolower(plots)
+    if (plots %in% c("longterm", "long-term"))
+    {
+      plots <- c(3, 4, 10, 11, 14, 15, 16, 17, 19, 21, 23)
+    } else if (plots == "all") {
+      plots <- NULL
     }
   }
-  return(data)
+
+  # if no selection then return unaltered data
+  if (is.null(plots))
+    return(data)
+
+  # otherwise return filtered data
+  dplyr::filter(data, plot %in% plots)
 }
 
 #' @title Join rodent and plot tables
@@ -336,8 +348,7 @@ fill_weight <- function(rodent_data, tofill)
 #'     (2) remove records with "bad" period codes or plot numbers
 #'     (3) remove records for unidentified species
 #'     (4) exclude non-granivores
-#'     (5) exclude incomplete trapping sessions via
-#'         \code{\link{process_incomplete_censuses}}
+#'     (5) exclude incomplete trapping sessions
 #'     (6) exclude the plots that aren't long-term treatments
 #'
 #' @param data_tables the list of data_tables, returned from calling
@@ -500,20 +511,22 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'              If type=Shrubs, returns only shrubs and subshrubs
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param correct_sp T/F whether or not to use likely corrected plant IDs
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
+#' @param correct_sp T/F whether or not to use likely corrected plant IDs,
+#'   passed to \code{rename_species_plants}
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #'
 #' @export
 #'
 clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
-                             correct_sp = TRUE, length = "all")
+                             correct_sp = TRUE, plots = "all")
 {
   data_tables$quadrat_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(length) %>%
+    filter_plots(plots) %>%
     dplyr::mutate(species = as.factor(species))
 }

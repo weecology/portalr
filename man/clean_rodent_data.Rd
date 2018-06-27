@@ -33,7 +33,6 @@ This function does basic quality control of the Portal rodent
     (2) remove records with "bad" period codes or plot numbers
     (3) remove records for unidentified species
     (4) exclude non-granivores
-    (5) exclude incomplete trapping sessions via
-        \code{\link{process_incomplete_censuses}}
+    (5) exclude incomplete trapping sessions
     (6) exclude the plots that aren't long-term treatments
 }

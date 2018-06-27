@@ -1,8 +1,38 @@
 context("Check rodent data summaries")
 
+test_that("get_rodent_data returns expected results, and filters by plots correctly", {
+  ab_all_plots <- get_rodent_data(path = ".", level = "plot",
+                                  na_drop = TRUE)
+
+  rodent_counts <- ab_all_plots %>%
+    dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
+
+  ab_plot_4 <- get_rodent_data(path = ".", plots = 4,
+                               na_drop = TRUE, zero_drop = FALSE)
+
+  expect_equal(rodent_counts, ab_plot_4)
+
+  rodent_counts <- ab_all_plots %>%
+    dplyr::filter(plot %in% c(4, 8, 10, 12)) %>%
+    dplyr::select(-treatment, -plot) %>%
+    tidyr::gather(species, abundance, BA:SO) %>%
+    dplyr::count(period, species, wt = abundance) %>%
+    tidyr::spread(species, n)
+
+  ab_plots_4_8_10_12 <- get_rodent_data(path = ".", plots = c(4, 8, 10, 12),
+                               na_drop = TRUE, zero_drop = FALSE)
+
+  expect_equal(rodent_counts, ab_plots_4_8_10_12)
+})
+
+test_that("get_rodent_data gives warning for using length", {
+  expect_warning(dat <- get_rodent_data(path = ".", length = "all"))
+  expect_equal(dat, get_rodent_data(path = ".", plots = "all"))
+})
+
 test_that("abundance returns expected results", {
   ab_notfilled <- abundance(path = ".", level = "Plot", type = "Rodents",
-                            length = "all", unknowns = FALSE,
+                            plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                             min_plots = 24, effort = FALSE)
@@ -14,7 +44,7 @@ test_that("abundance returns expected results", {
   expect_false(anyNA(test_ab))
 
   ab_filled <- abundance(path = ".", level = "Plot", type = "Rodents",
-                         length = "all", unknowns = FALSE,
+                         plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = 24, effort = FALSE)
@@ -24,14 +54,14 @@ test_that("abundance returns expected results", {
 test_that("biomass returns expected results", {
 
   biom_filled <- biomass(path = ".", level = "Plot", type = "Rodents",
-                         length = "all", unknowns = FALSE,
+                         plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
   biom_notfilled <- biomass(path = ".", level = "Plot", type = "Rodents",
-                            length = "all", unknowns = FALSE,
+                            plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                             min_plots = 24, effort = FALSE) %>%
@@ -49,14 +79,14 @@ test_that("biomass returns expected results", {
 test_that("energy returns expected results", {
 
   energy_filled <- energy(path = ".", level = "Plot", type = "Rodents",
-                          length = "all", unknowns = FALSE,
+                          plots = "all", unknowns = FALSE,
                           shape = "flat", time = "period", fillweight = TRUE,
                           na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                           min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
   energy_notfilled <- energy(path = ".", level = "Plot", type = "Rodents",
-                             length = "all", unknowns = FALSE,
+                             plots = "all", unknowns = FALSE,
                              shape = "flat", time = "period", fillweight = FALSE,
                              na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                              min_plots = 24, effort = FALSE) %>%

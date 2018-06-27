@@ -24,8 +24,9 @@
 #'              If type=Non-woody, removes shrub and subshrub species
 #'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 #'              If type=Shrubs, returns only shrubs and subshrubs
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
@@ -39,13 +40,12 @@
 #' @export
 #'
 get_plant_data <- function(path = '~', level = "Site", type = "All",
-                           length = "all", unknowns = FALSE, correct_sp = TRUE,
+                           plots = "all", unknowns = FALSE, correct_sp = TRUE,
                            shape = "flat", output = "abundance")
 {
   #### Clean inputs ----
   level <- tolower(level)
   type <- tolower(type)
-  length <- tolower(length)
   shape <- tolower(shape)
   output <- tolower(output)
 
@@ -54,7 +54,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 
   #### Do initial cleaning ----
   quadrats <- clean_plant_data(data_tables, type,
-                               unknowns, correct_sp, length)
+                               unknowns, correct_sp, plots)
 
   #### Summarize data ----
 
@@ -62,7 +62,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   census_info_table <- join_census_to_dates(data_tables$census_table,
                                             data_tables$date_table,
                                             data_tables$plots_table) %>%
-                          filter_plots(length = length) %>%
+                          filter_plots(plots = plots) %>%
                           dplyr::filter(censused == 1)
 
   # join census info to quadrat data
