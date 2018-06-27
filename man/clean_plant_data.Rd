@@ -20,8 +20,7 @@ If type=Shrubs, returns only shrubs and subshrubs}
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{correct_sp}{T/F whether or not to use likely corrected plant IDs,
-passed to \code{rename_species_plants}}
+\item{correct_sp}{T/F whether or not to use likely corrected plant IDs}
 
 \item{plots}{specify subset of plots; can be a vector of plots, or specific
 sets: "all" plots or "Longterm" plots (plots that have had the same

@@ -350,6 +350,7 @@ fill_weight <- function(rodent_data, tofill)
 #'     (4) exclude non-granivores
 #'     (5) exclude incomplete trapping sessions
 #'     (6) exclude the plots that aren't long-term treatments
+#'
 #' @param data_tables the list of data_tables, returned from calling
 #'   \code{\link{load_data}}
 #' @param fillweight specify whether to fill in unknown weights with other
