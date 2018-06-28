@@ -1,7 +1,9 @@
 context("Check plant data summaries")
 
+portal_data_path <- tempdir()
+
 test_that("plant_abundance returns expected results", {
-  plants_all <- plant_abundance(path = '.', level = "Plot", type = "All",
+  plants_all <- plant_abundance(path = portal_data_path, level = "Plot", type = "All",
                                 plots = "all", unknowns = TRUE,
                                 correct_sp = FALSE, shape = "flat")
   plants_9698 <- dplyr::filter(plants_all, year %in% 1996:1998)
@@ -13,7 +15,7 @@ test_that("plant_abundance returns expected results", {
   expect_false(anyNA(plants_erod))
   expect_equal(nrow(plants_erod), 592)
 
-  plants_fix_names <- plant_abundance(path = '.', level = "Plot", type = "All",
+  plants_fix_names <- plant_abundance(path = portal_data_path, level = "Plot", type = "All",
                                       plots = "all", unknowns = TRUE,
                                       correct_sp = TRUE, shape = "flat")
   expect_equal(sum(plants_all$abundance, na.rm = TRUE),
