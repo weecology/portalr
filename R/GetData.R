@@ -250,16 +250,23 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
   # convert rodent tags to characters if not already
   data_tables$rodent_data$tag <- as.character(data_tables$rodent_data$tag)
 
+  # data_tables$newmoons_table$newmoondate <- as.factor(data_tables$newmoons_table$newmoondate)
+  # data_tables$newmoons_table$censusdate <- as.factor(data_tables$newmoons_table$censusdate)
+  # data_tables$plots_table$treatment <- as.factor(data_tables$plots_table$treatment)
+  # data_tables$plots_table$resourcetreatment <- as.factor(data_tables$plots_table$resourcetreatment)
+  # data_tables$plots_table$anttreatment <- as.factor(data_tables$plots_table$anttreatment)
+
+
   # remove data still under quality control
   if (clean)
   {
     data_tables$rodent_data <- clean_data(data_tables$rodent_data,
                                           data_tables$trapping_table)
-    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table, qcflag==1)
     data_tables$newmoons_table <- clean_data(data_tables$newmoons_table,
                                              data_tables$trapping_table)
     data_tables$plots_table <- clean_data(data_tables$plots_table,
                                           data_tables$trapping_table)
+    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table, qcflag==1)
   }
 
   return(data_tables)
