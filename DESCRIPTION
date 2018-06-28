@@ -1,12 +1,25 @@
 Package: portalr
 Title: Creates useful summaries of the Portal data
-Version: 0.0.0.9000
-Authors@R: person("Morgan", "Ernest", email = "morgan@weecology.org", role = c("aut", "cre"))
-Description: This package will download the latest Portal data. It includes functions to create 
-  useful summaries of the rodent, plant, ant and weather data. 
-Depends: R (>= 3.2.3)
+Version: 0.0.1
+Authors@R: c(
+    person("Glenda", "Yenni", email = "glenda@weecology.org", role = "aut"), 
+    person("Ellen", "Bledsoe", role = "aut"), 
+    person("Erica", "Christensen", role = "aut"), 
+    person("Renata", "Diaz", role = "aut"), 
+    person("Morgan", "Ernest", role = c("aut", "cre")), 
+    person("Juniper", "Simonis", role = "aut"), 
+    person("Shawn", "Taylor", role = "aut"), 
+    person("Ethan", "White", role = "aut"), 
+    person("Hao", "Ye", role = "aut")
+    )
+Description: This package contains functions for downloading the latest 
+    version of the Portal data and to generate summaries of the rodent, 
+    plant, ant, and weather data. 
 License: MIT + file LICENSE
+URL: https://github.com/weecology/portalr
+BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
+Depends: R (>= 3.2.3)
 Imports:
   dplyr,
   ggplot2,
