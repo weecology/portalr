@@ -1,13 +1,15 @@
 context("Check rodent data summaries")
 
+portal_data_path <- tempdir()
+
 test_that("get_rodent_data returns expected results, and filters by plots correctly", {
-  ab_all_plots <- get_rodent_data(path = ".", level = "plot",
+  ab_all_plots <- get_rodent_data(path = portal_data_path, level = "plot",
                                   na_drop = TRUE)
 
   rodent_counts <- ab_all_plots %>%
     dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
 
-  ab_plot_4 <- get_rodent_data(path = ".", plots = 4,
+  ab_plot_4 <- get_rodent_data(path = portal_data_path, plots = 4,
                                na_drop = TRUE, zero_drop = FALSE)
 
   expect_equal(rodent_counts, ab_plot_4)
@@ -19,19 +21,19 @@ test_that("get_rodent_data returns expected results, and filters by plots correc
     dplyr::count(period, species, wt = abundance) %>%
     tidyr::spread(species, n)
 
-  ab_plots_4_8_10_12 <- get_rodent_data(path = ".", plots = c(4, 8, 10, 12),
+  ab_plots_4_8_10_12 <- get_rodent_data(path = portal_data_path, plots = c(4, 8, 10, 12),
                                na_drop = TRUE, zero_drop = FALSE)
 
   expect_equal(rodent_counts, ab_plots_4_8_10_12)
 })
 
 test_that("get_rodent_data gives warning for using length", {
-  expect_warning(dat <- get_rodent_data(path = ".", length = "all"))
-  expect_equal(dat, get_rodent_data(path = ".", plots = "all"))
+  expect_warning(dat <- get_rodent_data(path = portal_data_path, length = "all"))
+  expect_equal(dat, get_rodent_data(path = portal_data_path, plots = "all"))
 })
 
 test_that("abundance returns expected results", {
-  ab_notfilled <- abundance(path = ".", level = "Plot", type = "Rodents",
+  ab_notfilled <- abundance(path = portal_data_path, level = "Plot", type = "Rodents",
                             plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
@@ -43,7 +45,7 @@ test_that("abundance returns expected results", {
   expect_equal(max(test_ab$abundance, na.rm = TRUE), 17)
   expect_false(anyNA(test_ab))
 
-  ab_filled <- abundance(path = ".", level = "Plot", type = "Rodents",
+  ab_filled <- abundance(path = portal_data_path, level = "Plot", type = "Rodents",
                          plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
@@ -53,14 +55,14 @@ test_that("abundance returns expected results", {
 
 test_that("biomass returns expected results", {
 
-  biom_filled <- biomass(path = ".", level = "Plot", type = "Rodents",
+  biom_filled <- biomass(path = portal_data_path, level = "Plot", type = "Rodents",
                          plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
                          na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                          min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
-  biom_notfilled <- biomass(path = ".", level = "Plot", type = "Rodents",
+  biom_notfilled <- biomass(path = portal_data_path, level = "Plot", type = "Rodents",
                             plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
@@ -78,14 +80,14 @@ test_that("biomass returns expected results", {
 
 test_that("energy returns expected results", {
 
-  energy_filled <- energy(path = ".", level = "Plot", type = "Rodents",
+  energy_filled <- energy(path = portal_data_path, level = "Plot", type = "Rodents",
                           plots = "all", unknowns = FALSE,
                           shape = "flat", time = "period", fillweight = TRUE,
                           na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
                           min_plots = 24, effort = FALSE) %>%
     dplyr::filter(period %in% 400:450)
 
-  energy_notfilled <- energy(path = ".", level = "Plot", type = "Rodents",
+  energy_notfilled <- energy(path = portal_data_path, level = "Plot", type = "Rodents",
                              plots = "all", unknowns = FALSE,
                              shape = "flat", time = "period", fillweight = FALSE,
                              na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
@@ -102,57 +104,57 @@ test_that("energy returns expected results", {
 })
 
 test_that("abundance filters at the plot level correctly", {
-  incomplete_plots <- abundance(path = ".", level = "plot",
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot",
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
     dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 238)
 
-  incomplete_plots <- abundance(path = ".", level = "plot",
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot",
                                 min_plots = 24, min_traps = 49, effort = TRUE) %>%
     dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
     dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 47, effort = TRUE) %>%
     dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 1, min_traps = 49, effort = TRUE) %>%
     dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 1, effort = TRUE) %>%
     dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 47, effort = TRUE) %>%
     dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 12, min_traps = 49, effort = TRUE) %>%
     dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 1, effort = TRUE) %>%
     dplyr::filter(ntraps < 1)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 47, effort = TRUE) %>%
     dplyr::filter(ntraps < 47)
   expect_equal(NROW(incomplete_plots), 0)
 
-  incomplete_plots <- abundance(path = ".", level = "plot", na_drop = TRUE,
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot", na_drop = TRUE,
                                 min_plots = 24, min_traps = 49, effort = TRUE) %>%
     dplyr::filter(ntraps < 49)
   expect_equal(NROW(incomplete_plots), 0)
