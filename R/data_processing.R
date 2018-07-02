@@ -436,7 +436,10 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
 #' @description Filters the plant data to a specific group.
 #' @param quadrat_sp_data Data table with raw quadrat plant data
 #'   merged with species attributes from species_table.
-#' @param type String. If `type == "Annuals"`, returns all annual species
+#' @param type String.
+#'              If `type == "Annuals"`, returns all annual species
+#'              If `type == "Summer Annuals"`, returns all annual species that can be found in the summer
+#'              If `type == "Winter Annuals"`, returns all annual species that can be found in the winter
 #'              If `type == "Non-woody"`, removes shrub and subshrub species
 #'              If `type == "Perennials"`, returns all perennial species (includes shrubs and subshrubs)
 #'              If `type == "Shrubs"`, returns only shrubs and subshrubs
@@ -453,6 +456,14 @@ process_annuals <- function(quadrat_sp_data, type) {
     return(dplyr::filter(quadrat_sp_data, duration == "Perennial"))
   } else if (type %in% c("shrubs", "shrub")) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
+  } else if (type %in% c("summer annual", "summer annuals", "summer-annual", "summer-annuals")) {
+    return(dplyr::filter(quadrat_sp_data, community %in% c("Summer Annual",
+                                                           "Summer and Winter Annual",
+                                                           "Winter and Summer Annual")))
+  } else if (type %in% c("winter annual", "winter annuals", "winter-annual", "winter-annuals")) {
+    return(dplyr::filter(quadrat_sp_data, community %in% c("Winter Annual",
+                                                           "Summer and Winter Annual",
+                                                           "Winter and Summer Annual")))
   } else {
     return(quadrat_sp_data)
   }
