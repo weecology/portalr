@@ -108,7 +108,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 
   if (effort == FALSE) {
     out_data <- dplyr::select(out_data, -nplots, -quads)
-  } else if (level == "plot") {
+  } else if (level %in% c("plot","site")) {
     out_data <- dplyr::select(out_data, -nplots)
   }
 
@@ -179,7 +179,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 get_plant_data <- function(path = '~', level = "Site", type = "All",
                            length = "all", plots = length, unknowns = FALSE,
                            correct_sp = TRUE,
-                           shape = "crosstab", output = "abundance",
+                           shape = "flat", output = "abundance",
                            na_drop = switch(tolower(level),
                                             "plot" = FALSE,
                                             "treatment" = TRUE,
@@ -188,7 +188,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
                                               "plot" = FALSE,
                                               "treatment" = TRUE,
                                               "site" = TRUE),
-                           min_quads = 1, effort = FALSE)
+                           min_quads = 1, effort = TRUE)
 {
   #### Clean inputs ----
   level <- tolower(level)
