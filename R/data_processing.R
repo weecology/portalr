@@ -485,9 +485,18 @@ join_census_to_dates <- function(census_table, date_table, plots_table) {
                                                                 year=census_table$year),
                                   FUN=sum) %>%
     dplyr::rename(nquads=x)
+  # add column to date_table for month for determining treatment
+  date_table$treat_month = date_table$start_month
+  # start month was unknown for 1986-1987 but treatments don't change by month
+  date_table$treat_month[date_table$year %in% c(1986,1987)] <- 1
+  # start month was unknown for 1985; plant treatment changed in August but other treatments were same
+  date_table$treat_month[(date_table$year == 1985 & date_table$season == 'winter')] <- 3
+  # Samson et al 1992 says the summer plant census of 1985 was in either august or september
+  date_table$treat_month[(date_table$year == 1985 & date_table$season == 'summer')] <- 8
+
   census_table_nquads %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
-    dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot"))
+    dplyr::left_join(plots_table, by = c(year = "year", treat_month = "month", plot = "plot"))
 }
 
 #' @title Join quadrat and census tables

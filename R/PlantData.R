@@ -23,11 +23,13 @@ make_plant_plot_data <- function(plant_data, census_info_table, output, min_quad
 
   grouping <- rlang::quos(year, season, plot, species)
   wt <- switch(output,
-                  "abundance" = rlang::quo(abundance),
-                  "cover" = rlang::quo(cover))
+               "abundance" = rlang::quo(abundance),
+               "cover" = rlang::quo(cover))
   filler <- list(n = as.integer(0))
 
- plant_data %>%
+
+
+  plant_data %>%
     dplyr::group_by(!!!grouping) %>%
     dplyr::summarise(n = sum(!!wt))  %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
