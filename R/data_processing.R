@@ -479,7 +479,13 @@ process_annuals <- function(quadrat_sp_data, type) {
 #'
 #' @noRd
 join_census_to_dates <- function(census_table, date_table, plots_table) {
-  census_table %>%
+  # add column for number of quadrats censused per plot per census
+  census_table_nquads = aggregate(census_table$censused,by=list(plot=census_table$plot,
+                                                                season=census_table$season,
+                                                                year=census_table$year),
+                                  FUN=sum) %>%
+    dplyr::rename(nquads=x)
+  census_table_nquads %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
     dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot"))
 }
@@ -524,20 +530,16 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs,
 #'   passed to \code{rename_species_plants}
-#' @param plots specify subset of plots; can be a vector of plots, or specific
-#'   sets: "all" plots or "Longterm" plots (plots that have had the same
-#'   treatment for the entire time series)
 #'
 #' @export
 #'
 clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
-                             correct_sp = TRUE, plots = "all")
+                             correct_sp = TRUE)
 {
   data_tables$quadrat_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(plots) %>%
     dplyr::mutate(species = as.factor(species))
 }

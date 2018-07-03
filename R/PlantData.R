@@ -5,8 +5,137 @@
 #' @importFrom rlang quo
 #' @importFrom rlang quos
 
-#' @name get_plant_data
+#' Plot-level plant data
+#'
+#' @param plant_data cleaned plant data
+#' @param census_info_table table of plant census dates, with treatment column
+#' @param output specify whether to return "abundance" or "cover"
+#' @param min_quads minimum number of quadrats (out of 16) for a plot to be included
+#'
+#' @return fully crossed year x season x plot x species flat table of observations
+#'   with effort (number of quadrats) and treatment columns. Any plot not
+#'   sufficiently (as defined by min_quads) sampled is returned with NA
+#'   for effort and the output value of interest
+#'
+#' @noRd
+#'
+make_plant_plot_data <- function(plant_data, census_info_table, output, min_quads = 1) {
 
+  grouping <- rlang::quos(year, season, plot, species)
+  wt <- switch(output,
+                  "abundance" = rlang::quo(abundance),
+                  "cover" = rlang::quo(cover))
+  filler <- list(n = as.integer(0))
+
+ plant_data %>%
+    dplyr::group_by(!!!grouping) %>%
+    dplyr::summarise(n = sum(!!wt))  %>%
+    tidyr::complete(!!!grouping, fill = filler) %>%
+    dplyr::right_join(census_info_table, by = c("year", "season", "plot")) %>%
+    dplyr::select(year, season, plot, species, n, nquads, treatment) %>%
+    dplyr::filter(!is.na(species)) %>%
+    dplyr::mutate(n = replace(n, nquads < min_quads, NA),
+                  nquads = replace(nquads, nquads < min_quads, NA)) %>%
+    dplyr::rename(!!output := n)
+}
+
+#' Plant data summarized at the relevant level (plot, treatment, site)
+#'
+#' @param plot_data plant data summarized at the plot level
+#' @param level specify level of interest ("plot", "treatment", "site")
+#' @param output specify whether to return "abundance" or "cover" [n.b. cover measurement started in 2015]
+#' @param min_quads minimum number of quadrats (out of 16) for a plot to be included
+#'
+#' @return fully crossed flat table of observations with effort (number of
+#'   quadrats). The crossing depends on the level:
+#'   "plot" is year x season x treatment x plot x species, "treatment" is
+#'   year x season x treatment x species, and "site" is period x species. Any
+#'   observations not sufficiently (as defined by min_quads) sampled are returned with NA
+#'   for nquads, nplots, and the output value of interest
+#'
+#' @noRd
+make_plant_level_data <- function(plot_data, level, output,
+                            min_quads = 1) {
+
+  plot_data <- dplyr::rename(plot_data, n := !!output)
+  grouping <- switch(level,
+                     "plot" = rlang::quos(year, season, treatment, plot, species),
+                     "treatment" = rlang::quos(year, season, treatment, species),
+                     "site" = rlang::quos(year, season, species))
+
+  level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
+    dplyr::summarise(n = sum(n, na.rm = TRUE),
+                     quads = sum(nquads, na.rm = TRUE),
+                     nplots = true_length(nquads))
+
+  if (level == "plot")
+  {
+    level_data <- level_data %>%
+      dplyr::mutate(n = replace(n, quads < min_quads, NA))
+  }
+
+  level_data %>%
+    dplyr::rename(!!output := n) %>%
+    dplyr::as.tbl()
+}
+
+#' Plant data prepared for output
+#'
+#' @param level_data plant data summarized at the level of interest
+#' @param effort logical as to whether or not the effort columns should be
+#'   included in the output
+#' @param na_drop logical, drop NA values (representing insufficient sampling)
+#' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
+#'   detections)
+#' @param shape return data as a "crosstab" or "flat" list
+#' @param level specify level of interest ("plot", "treatment", "site")
+#' @param output specify whether to return "abundance" or "cover"
+#'
+#' @return fully crossed flat table of observations with effort (number of
+#'   traps and number of plots). The crossing depends on the level:
+#'   "plot" is period x treatment x plot x species, "treatment" is
+#'   period x treatment x species, and "site" is period x species. Any
+#'   observations not sufficiently (as defined by min_plots, and
+#'   hierarchically by min_traps) sampled are returned with NA
+#'   for ntraps, nplots, and the output value of interest
+#'
+#' @noRd
+#'
+prep_plant_output <- function(level_data, effort, na_drop,
+                               zero_drop, shape, level, output) {
+
+  out_data <- level_data
+
+  if (effort == FALSE) {
+    out_data <- dplyr::select(out_data, -nplots, -quads)
+  } else if (level == "plot") {
+    out_data <- dplyr::select(out_data, -nplots)
+  }
+
+  if (na_drop) {
+    out_data <- na.omit(out_data)
+  }
+
+  if (shape == "crosstab") {
+    out_data <- make_crosstab(out_data, output, NA)
+  }
+
+  if (zero_drop) {
+    if (shape == "crosstab") {
+      species <- as.character(unique(level_data$species))
+      out_data <- out_data %>%
+        dplyr::filter(rowSums(dplyr::select(., species)) != 0)
+    } else { # shape == "flat"
+      out_data <- out_data %>%
+        dplyr::filter(output != 0)
+    }
+  }
+
+  return(out_data)
+}
+
+#' @name get_plant_data
+#' @aliases plant_abundance
 #'
 #' @title Generate summaries of Portal plant data
 #'
@@ -35,6 +164,12 @@
 #' @param shape return data as a "flat" list or "crosstab"
 #' @param output specify whether to return "abundance", or "cover" [cover data
 #'    starts in summer 2015]
+#' @param na_drop logical, drop NA values (representing insufficient sampling)
+#' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
+#'    detections)
+#' @param min_quads numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included
+#' @param effort logical as to whether or not the effort columns should be
+#'    included in the output
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
 #'   value of `shape`
@@ -42,8 +177,18 @@
 #' @export
 #'
 get_plant_data <- function(path = '~', level = "Site", type = "All",
-                           plots = "all", unknowns = FALSE, correct_sp = TRUE,
-                           shape = "flat", output = "abundance")
+                           length = "all", plots = length, unknowns = FALSE,
+                           correct_sp = TRUE,
+                           shape = "crosstab", output = "abundance",
+                           na_drop = switch(tolower(level),
+                                            "plot" = FALSE,
+                                            "treatment" = TRUE,
+                                            "site" = TRUE),
+                           zero_drop = switch(tolower(level),
+                                              "plot" = FALSE,
+                                              "treatment" = TRUE,
+                                              "site" = TRUE),
+                           min_quads = 1, effort = FALSE)
 {
   #### Clean inputs ----
   level <- tolower(level)
@@ -51,56 +196,28 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   shape <- tolower(shape)
   output <- tolower(output)
 
+  if (!missing("length"))
+  {
+    warning("The `length` argument is deprecated; please use `plots` instead.")
+  }
+
   #### Get Data ----
   data_tables <- load_plant_data(path)
 
-  #### Do initial cleaning ----
-  quadrats <- clean_plant_data(data_tables, type,
-                               unknowns, correct_sp, plots)
-
   #### Summarize data ----
 
-  # make master census info table from census_table, date_table and plots_table [filters out un-censused quadrats]
+  # make master census info table from census_table, date_table and plots_table
   census_info_table <- join_census_to_dates(data_tables$census_table,
                                             data_tables$date_table,
                                             data_tables$plots_table) %>%
-                          filter_plots(plots = plots) %>%
-                          dplyr::filter(censused == 1)
+                          filter_plots(plots = plots)
 
-  # join census info to quadrat data
-  quadrats <- join_census_to_quadrats(quadrats, census_info_table)
-
-  ## summarize over each plot
-  if(level == "plot") {
-    grouping <- quos(year, season, plot, species)
-  } else if(level == "treatment") {
-    grouping <- quos(year, season, treatment, species)
-  } else { # level == "site"
-    grouping <- quos(year, season, species)
-  }
-
-  ## [4] summarize
-  out_df <- quadrats %>%
-    dplyr::count(!!!grouping, wt = abundance) %>%
-    dplyr::select(!!!grouping, n)
-
-  ## [5] rename output variable correctly
-  out_df <- dplyr::rename(out_df, !!output := n)
-
-  ## [6] post-process
-  # add column for number of quadrats that went into summary
-  nquads <- census_info_table %>%
-              dplyr::count(!!!head(grouping,-1),wt = censused)
-  nquads <- dplyr::rename(nquads, "nquads"="n")
-  out_df <- dplyr::left_join(out_df,nquads)
-
-
-  #### Reshape data into crosstab ----
-  if(shape %in% c("Crosstab", "crosstab"))
-  {
-    crosstab_fill <- if(output == "abundance") 0L else NA
-    out_df <- make_crosstab(out_df, output, crosstab_fill)
-  }
+  #### Clean data and prepare output ----
+  out_df <- clean_plant_data(data_tables, type,
+                             unknowns, correct_sp) %>%
+    make_plant_plot_data(census_info_table, output, min_quads) %>%
+    make_plant_level_data(level, output, min_quads) %>%
+    prep_plant_output(effort, na_drop, zero_drop, shape, level, output)
 
   return(out_df)
 }
