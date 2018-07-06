@@ -458,12 +458,10 @@ process_annuals <- function(quadrat_sp_data, type) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Shrub", "Subshrub")))
   } else if (type %in% c("summer annual", "summer annuals", "summer-annual", "summer-annuals")) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Summer Annual",
-                                                           "Summer and Winter Annual",
-                                                           "Winter and Summer Annual")))
+                                                           "Summer and Winter Annual")))
   } else if (type %in% c("winter annual", "winter annuals", "winter-annual", "winter-annuals")) {
     return(dplyr::filter(quadrat_sp_data, community %in% c("Winter Annual",
-                                                           "Summer and Winter Annual",
-                                                           "Winter and Summer Annual")))
+                                                           "Summer and Winter Annual")))
   } else {
     return(quadrat_sp_data)
   }
@@ -520,6 +518,8 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'              If type=Non-woody, removes shrub and subshrub species
 #'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 #'              If type=Shrubs, returns only shrubs and subshrubs
+#'              If type=Winter-annual, returns all annuals found in winter
+#'              IF type=Summer-annual, returns all annuals found in summer
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs,
