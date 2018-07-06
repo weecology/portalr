@@ -29,9 +29,10 @@ make_plant_plot_data <- function(plant_data, census_info_table, output, min_quad
 
 
 
-  plant_data %>%
+  test <- plant_data %>%
     dplyr::group_by(!!!grouping) %>%
     dplyr::summarise(n = sum(!!wt))  %>%
+    dplyr::right_join(census_info_table[,c("year","season","plot")], by = c("year", "season", "plot")) %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::right_join(census_info_table, by = c("year", "season", "plot")) %>%
     dplyr::select(year, season, plot, species, n, nquads, treatment) %>%
@@ -68,7 +69,7 @@ make_plant_level_data <- function(plot_data, level, output,
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
     dplyr::summarise(n = sum(n, na.rm = TRUE),
                      quads = sum(nquads, na.rm = TRUE),
-                     nplots = true_length(nquads))
+                     nplots = n_distinct(plot))
 
   if (level == "plot")
   {
