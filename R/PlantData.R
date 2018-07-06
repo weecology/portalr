@@ -31,10 +31,10 @@ make_plant_plot_data <- function(plant_data, census_info_table, output, min_quad
 
   test <- plant_data %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::summarise(n = sum(!!wt))  %>%
+    dplyr::summarise(n = sum(!!wt,na.rm=T))  %>%
     dplyr::right_join(census_info_table[,c("year","season","plot")], by = c("year", "season", "plot")) %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
-    dplyr::right_join(census_info_table, by = c("year", "season", "plot")) %>%
+    dplyr::full_join(census_info_table, by = c("year", "season", "plot")) %>%
     dplyr::select(year, season, plot, species, n, nquads, treatment) %>%
     dplyr::filter(!is.na(species)) %>%
     dplyr::mutate(n = replace(n, nquads < min_quads, NA),
@@ -62,7 +62,7 @@ make_plant_level_data <- function(plot_data, level, output,
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
-                     "plot" = rlang::quos(year, season, treatment, plot, species),
+                     "plot" = rlang::quos(year, season, plot, species),
                      "treatment" = rlang::quos(year, season, treatment, species),
                      "site" = rlang::quos(year, season, species))
 
@@ -218,7 +218,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   #### Clean data and prepare output ----
   out_df <- clean_plant_data(data_tables, type,
                              unknowns, correct_sp) %>%
-    make_plant_plot_data(census_info_table, output, min_quads) %>%
+    make_plant_plot_data(census_info_table, output, min_quads) #%>%
     make_plant_level_data(level, output, min_quads) %>%
     prep_plant_output(effort, na_drop, zero_drop, shape, level, output)
 
