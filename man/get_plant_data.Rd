@@ -19,6 +19,8 @@ retrieve data from github repo}
 
 \item{type}{specify subset of species;
 If type=Annuals, removes all non-annual species.
+If type=Summer Annuals, returns all annual species that can be found in the summer
+If type=Winter Annuals, returns all annual species that can be found in the winter
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 If type=Shrubs, returns only shrubs and subshrubs}

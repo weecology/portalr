@@ -85,7 +85,8 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
 #' @param ndvi ndvi data
 #' @param level specify "monthly" or "newmoon"
 #' @param last_time the last time step to have been completed
-#' @param moons moon data (required if level = "newmoons")
+#' @param moons moon data (required if level = "newmoons" and forecasts are
+#'   needed)
 #'
 #' @return a data.frame with time and ndvi values
 #'

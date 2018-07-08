@@ -13,7 +13,8 @@ fill_missing_ndvi(ndvi, level, last_time, moons = NULL)
 
 \item{last_time}{the last time step to have been completed}
 
-\item{moons}{moon data (required if level = "newmoons")}
+\item{moons}{moon data (required if level = "newmoons" and forecasts are
+needed)}
 }
 \value{
 a data.frame with time and ndvi values
