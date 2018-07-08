@@ -49,7 +49,7 @@ Note that the `path` argument in the `get_rodent_data` function has been set to 
 
 The data structure will look like this, with columns for the date, treatment, plot number, and each species:
 ```{r, echo = FALSE, results='asis'}
-knitr::kable(tail(biomass_data))
+knitr::kable(tail(biomass_data[, 1:10]))
 ```
 
 ## Working with the Data
@@ -95,7 +95,7 @@ ggplot(biomass_ratio, aes(year, EX_to_CO_ratio, group = 1)) +
            xmin = 2008, xmax = 2010,
            ymin = -Inf, ymax = Inf) +
   geom_point(size = 3) +
-  geom_line()+
+  geom_line() +
   ylab("Kangaroo Rat Exlcosure:Control Biomass") +
   xlab("Year") + 
   theme_classic() +
@@ -118,7 +118,7 @@ While the rodent community data is the most frequently utilized data from the Po
 Our site has two rainy periods and, therefore, to communities of annual plants. Let's say we want to take a look at the abundance of the _winter_ annuals in the system, and we want to see if they differ by plot. We can use the `get_plant_data` function to get the appropriate data.
 
 ```{r, warning = FALSE, message = FALSE}
-plant_data <- portalr::get_plant_data(path = 'repo', level = 'Plot',
+plant_data <- portalr::get_plant_data(path = 'repo', level = 'plot',
                                       type = 'winter-annual', correct_sp = TRUE,
                                       unknowns = FALSE, shape = 'flat', 
                                       output = 'abundance')
@@ -132,7 +132,8 @@ knitr::kable(head(plant_data))
 
 Wait a second! Didn't we ask for winter annuals? So why are the first few rows all from a summer plant census?
 
-As it turns out, while we have two annual communities of plants, some of the annuals in our system can be found in both summer AND winter. Hypothetically, someone might want to know about any and all annual plants that could be found in the winter: how many of them show up in the summer, for example? 
+As it turns out, while we have two annual communities of plants, some of the annuals in our system can be found in both summer AND winter. Hypothetically, someone might want to know about any and all annual plants that could be found in the winter: how many of them show up in the summer, for example?
+
 To get the data we want--just winter annuals found only in the winter season--we just need one more quick like of code.
 ```{r, warning = FALSE, message = FALSE}
 plant_data_winter <- dplyr::filter(plant_data, season == 'winter')
