@@ -218,7 +218,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   #### Clean data and prepare output ----
   out_df <- clean_plant_data(data_tables, type,
                              unknowns, correct_sp) %>%
-    make_plant_plot_data(census_info_table, output, min_quads) #%>%
+    make_plant_plot_data(census_info_table, output, min_quads) %>%
     make_plant_level_data(level, output, min_quads) %>%
     prep_plant_output(effort, na_drop, zero_drop, shape, level, output)
 
