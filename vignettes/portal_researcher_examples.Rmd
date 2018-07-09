@@ -71,18 +71,17 @@ biomass_data <- biomass_data %>%
 We can get the total biomass for each plot per census by summing the mass of all the species per row. From there, we will sum by year for each treatment type. Then, we can create the exclosure:control ratio.
 
 ```{r, warning = FALSE, message = FALSE}
-# sum across rows and rename column
-biomass_data_rowSums <- as.data.frame(rowSums(biomass_data[,6:26], na.rm = TRUE))
-colnames(biomass_data_rowSums) <- c("rowSums")
-
-# summarise biomass to get total by period and plot type
-biomass_total <- cbind(biomass_data, biomass_data_rowSums) %>%
+# compute total biomass per year and treatment
+biomass_total <- biomass_data %>%
+  gather(species, biomass, BA:SO) %>%
   group_by(year, treatment) %>%
-  summarise(totals = sum(rowSums))
+  summarize(totals = sum(biomass, na.rm = TRUE))
 
 # make a column with the exclosure:control ratio
-biomass_ratio <- tidyr::spread(biomass_total, treatment, totals) %>% 
-  mutate(EX_to_CO_ratio = exclosure/control)
+biomass_ratio <- biomass_total %>%
+  spread(treatment, totals) %>%
+  mutate(EX_to_CO_ratio = exclosure / control) %>%
+  ungroup()
 ```
 
 ## Plotting the Ratios
@@ -91,7 +90,7 @@ We can finally plot the data!
 
 ```{r, echo = FALSE, fig.width = 6, fig.height = 4}
 biomass_ratio$year <- as.numeric(biomass_ratio$year)
-ggplot(biomass_ratio, aes(year, EX_to_CO_ratio, group = 1)) +
+ggplot(biomass_ratio, aes(year, EX_to_CO_ratio)) +
   annotate(geom = "rect", fill = "grey", alpha = 0.4,
            xmin = 1995, xmax = 1998,
            ymin = -Inf, ymax = Inf) +
@@ -100,7 +99,7 @@ ggplot(biomass_ratio, aes(year, EX_to_CO_ratio, group = 1)) +
            ymin = -Inf, ymax = Inf) +
   geom_point(size = 3) +
   geom_line() +
-  ylab("Kangaroo Rat Exlcosure:Control Biomass") +
+  ylab("Kangaroo Rat Exclosure:Control Biomass") +
   xlab("Year") + 
   theme_classic() +
   theme(panel.border = element_rect(fill = NA, colour = "black"),
@@ -144,10 +143,11 @@ To get the data we want--just winter annuals found only in the winter season--we
 ```{r, warning = FALSE, message = FALSE}
 plant_data_winter <- dplyr::filter(plant_data, season == 'winter')
 ```
+
 ```{r, echo = FALSE, results = 'asis'}
 knitr::kable(head(plant_data_winter))
 ```
 
 That's more like it! Now we have the data we want to run some multivariate statistics or whatever else you might want to do with the data.
 
-##Happy coding!
+## Happy coding!
