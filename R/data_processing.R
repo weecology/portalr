@@ -546,7 +546,7 @@ clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
                              correct_sp = TRUE)
 {
   data_tables$quadrat_data %>%
-    filter(!grepl(3,notes)) %>%
+    dplyr::filter(!grepl(3,notes)) %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
