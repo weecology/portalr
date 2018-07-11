@@ -41,15 +41,13 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
        last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
        NDVI <- fill_missing_ndvi(NDVI, "monthly", last_time)
     }
-  }
-
-  if(level == "newmoon"){
+  } else if (level == "newmoon") {
     nm_number <- moon_dates$newmoonnumber[-1]
     nm_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
     nm_end <- as.Date(moon_dates$newmoondate[-1])
     nm_match_number <- NULL
     nm_match_date <- NULL
-    for(i in 1:length(nm_number)){
+    for (i in 1:length(nm_number)) {
       temp_dates <- as.character(seq.Date(nm_start[i] + 1, nm_end[i], 1))
       temp_numbers <- rep(nm_number[i], length(temp_dates))
       nm_match_date <- c(nm_match_date, temp_dates)
@@ -63,7 +61,7 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
       dplyr::summarize(ndvi = mean(ndvi, na.rm = T)) %>%
       dplyr::arrange(newmoonnumber)
 
-    if(fill == TRUE){
+    if (fill == TRUE) {
        today <- Sys.Date()
        prev_time <- moon_dates$newmoonnumber[moon_dates$newmoondate < today]
        last_time <- tail(prev_time, 1)
@@ -92,9 +90,9 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
 #'
 #' @export
 #'
-fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
-
-  if(level == "monthly"){
+fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL)
+{
+  if (level == "monthly") {
     hist_time_obs <- ndvi$date
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
@@ -105,13 +103,13 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
     hist_ndvi$ndvi <- as.numeric(ndvi_interp)
 
-    if(max_hist_time < last_time){
+    if (max_hist_time < last_time) {
       lead_fcast <- length(seq.Date(max_hist_time, last_time , "month")[-1])
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "monthly", lead_fcast)
       hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
     }
   }
-  if(level == "newmoon"){
+  if (level == "newmoon") {
     hist_time_obs <- ndvi$newmoonnumber
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
@@ -122,7 +120,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
     hist_ndvi$ndvi <- as.numeric(ndvi_interp)
 
-    if(max_hist_time < last_time){
+    if (max_hist_time < last_time) {
       lead_fcast <- length((max_hist_time + 1):last_time)
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "newmoon", lead_fcast, moons)
       hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
@@ -149,17 +147,16 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
 #'
 fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
 
-  if(lead == 0){
+  if (lead == 0) {
     return(hist_ndvi)
   }
 
-  if(level == "monthly"){
+  if (level == "monthly") {
     date_fit <- hist_ndvi$date
     last_date <- max(date_fit)
     date_fcast <- last_date %m+% months(1:lead)
     time_to_fcast <- date_fcast
-  }
-  if(level == "newmoon"){
+  } else if (level == "newmoon") {
     nm_to_fit <- hist_ndvi$newmoonnumber
     which_nm_fit <- which(moons$newmoonnumber %in% nm_to_fit)
     date_fit <- moons$newmoondate[which_nm_fit]
@@ -168,7 +165,7 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
     last_nm <- max(nm_to_fit)
     time_to_fcast <- last_nm + 1:lead
     which_nm_fcast <- which(moons$newmoonnumber %in% time_to_fcast)
-    if(length(which_nm_fcast) < length(time_to_fcast)){
+    if (length(which_nm_fcast) < length(time_to_fcast)) {
       nfuture_nm <- length(time_to_fcast) - length(which_nm_fcast)
       future_nm <- get_future_moons(moons, nfuture_nm)
       moons$newmoondate <- as.character(moons$newmoondate)
@@ -202,10 +199,9 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   fcast <- forecast::forecast(mod, xreg = xreg_fcast)
   fcast_ndvi <- as.numeric(fcast$mean)
 
-  if(level == "newmoon"){
+  if (level == "newmoon") {
     ndvi_tab <- data.frame(newmoonnumber = time_to_fcast, ndvi = fcast_ndvi)
-  }
-  if(level == "monthly"){
+  } else if (level == "monthly") {
     ndvi_tab <- data.frame(date = time_to_fcast, ndvi = fcast_ndvi)
   }
 
