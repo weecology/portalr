@@ -15,7 +15,9 @@ clean_plant_data(data_tables, type = "All", unknowns = FALSE,
 If type=Annuals, removes all non-annual species.
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
-If type=Shrubs, returns only shrubs and subshrubs}
+If type=Shrubs, returns only shrubs and subshrubs
+If type=Winter-annual, returns all annuals found in winter
+IF type=Summer-annual, returns all annuals found in summer}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
