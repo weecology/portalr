@@ -3,11 +3,14 @@
 \name{get_plant_data}
 \alias{get_plant_data}
 \alias{plant_abundance}
+\alias{plant_abundance}
 \title{Generate summaries of Portal plant data}
 \usage{
-get_plant_data(path = "~", level = "Site", type = "All", plots = "all",
-  unknowns = FALSE, correct_sp = TRUE, shape = "flat",
-  output = "abundance")
+get_plant_data(path = "~", level = "Site", type = "All", length = "all",
+  plots = length, unknowns = FALSE, correct_sp = TRUE, shape = "flat",
+  output = "abundance", na_drop = switch(tolower(level), plot = FALSE,
+  treatment = TRUE, site = TRUE), zero_drop = switch(tolower(level), plot =
+  FALSE, treatment = TRUE, site = TRUE), min_quads = 1, effort = TRUE)
 
 plant_abundance(..., shape = "flat")
 }
@@ -38,6 +41,16 @@ treatment for the entire time series)}
 
 \item{output}{specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]}
+
+\item{na_drop}{logical, drop NA values (representing insufficient sampling)}
+
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
+detections)}
+
+\item{min_quads}{numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included}
+
+\item{effort}{logical as to whether or not the effort columns should be
+included in the output}
 
 \item{...}{arguments passed to \code{\link{get_plant_data}}}
 }

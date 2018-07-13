@@ -477,17 +477,34 @@ process_annuals <- function(quadrat_sp_data, type) {
 #'
 #' @noRd
 join_census_to_dates <- function(census_table, date_table, plots_table) {
+
+  # add column to date_table for month for determining treatment
+  date_table$treat_month <- date_table$start_month
+
+  # start month was unknown for 1986-1987 but treatments don't change by month
+  date_table$treat_month[date_table$year %in% c(1986, 1987)] <- 1
+
+  # start month was unknown for 1985; plant treatment changed in August but other treatments were same
+  date_table$treat_month[(date_table$year == 1985 & date_table$season == 'winter')] <- 3
+
+  # Samson et al 1992 says the summer plant census of 1985 was in either august or september
+  date_table$treat_month[(date_table$year == 1985 & date_table$season == 'summer')] <- 8
+
+  # add column for number of quadrats censused per plot per census
+  #   and join date and plot info
   census_table %>%
+    dplyr::group_by(year, season, plot) %>%
+    dplyr::summarize(nquads = sum(censused)) %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
-    dplyr::left_join(plots_table, by = c(year = "year", start_month = "month", plot = "plot"))
+    dplyr::left_join(plots_table, by = c(year = "year", treat_month = "month", plot = "plot"))
 }
 
 #' @title Join quadrat and census tables
 #' @description Joins quadrat data with list of census dates
-#' @param quadrat_data Data.table with raw rodent data.
-#' @param census_table Data_table of when plots were censused.
+#' @param quadrat_data Data table with raw quadrat data.
+#' @param census_table Data table of when plots were censused.
 #'
-#' @return Data.table of raw quadrat data with census info added.
+#' @return Data table of raw quadrat data with census info added.
 #'
 #' @noRd
 join_census_to_quadrats <- function(quadrat_data, census_table) {
@@ -524,20 +541,17 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp T/F whether or not to use likely corrected plant IDs,
 #'   passed to \code{rename_species_plants}
-#' @param plots specify subset of plots; can be a vector of plots, or specific
-#'   sets: "all" plots or "Longterm" plots (plots that have had the same
-#'   treatment for the entire time series)
 #'
 #' @export
 #'
 clean_plant_data <- function(data_tables, type = "All", unknowns = FALSE,
-                             correct_sp = TRUE, plots = "all")
+                             correct_sp = TRUE)
 {
   data_tables$quadrat_data %>%
+    dplyr::filter(!grepl(3,notes)) %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
     rename_species_plants(correct_sp) %>%
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
-    filter_plots(plots) %>%
     dplyr::mutate(species = as.factor(species))
 }

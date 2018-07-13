@@ -5,7 +5,7 @@
 \title{Do basic cleaning of Portal plant data}
 \usage{
 clean_plant_data(data_tables, type = "All", unknowns = FALSE,
-  correct_sp = TRUE, plots = "all")
+  correct_sp = TRUE)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -24,10 +24,6 @@ IF type=Summer-annual, returns all annuals found in summer}
 
 \item{correct_sp}{T/F whether or not to use likely corrected plant IDs,
 passed to \code{rename_species_plants}}
-
-\item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had the same
-treatment for the entire time series)}
 }
 \description{
 This function does basic quality control of the Portal plant
