@@ -5,7 +5,7 @@
 #' @importFrom rlang quo
 #' @importFrom rlang quos
 
-#' Plot-level plant data
+#' @title Plot-level plant data
 #'
 #' @param plant_data cleaned plant data
 #' @param census_info_table table of plant census dates, with treatment column
@@ -69,7 +69,7 @@ make_plant_level_data <- function(plot_data, level, output,
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
     dplyr::summarise(n = sum(n, na.rm = TRUE),
                      quads = sum(nquads, na.rm = TRUE),
-                     nplots = n_distinct(plot))
+                     nplots = dplyr::n_distinct(plot))
 
   if (level == "plot")
   {

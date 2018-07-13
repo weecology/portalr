@@ -477,22 +477,24 @@ process_annuals <- function(quadrat_sp_data, type) {
 #'
 #' @noRd
 join_census_to_dates <- function(census_table, date_table, plots_table) {
-  # add column for number of quadrats censused per plot per census
-  census_table_nquads = aggregate(census_table$censused,by=list(plot=census_table$plot,
-                                                                season=census_table$season,
-                                                                year=census_table$year),
-                                  FUN=sum) %>%
-    dplyr::rename(nquads=x)
+
   # add column to date_table for month for determining treatment
-  date_table$treat_month = date_table$start_month
+  date_table$treat_month <- date_table$start_month
+
   # start month was unknown for 1986-1987 but treatments don't change by month
-  date_table$treat_month[date_table$year %in% c(1986,1987)] <- 1
+  date_table$treat_month[date_table$year %in% c(1986, 1987)] <- 1
+
   # start month was unknown for 1985; plant treatment changed in August but other treatments were same
   date_table$treat_month[(date_table$year == 1985 & date_table$season == 'winter')] <- 3
+
   # Samson et al 1992 says the summer plant census of 1985 was in either august or september
   date_table$treat_month[(date_table$year == 1985 & date_table$season == 'summer')] <- 8
 
-  census_table_nquads %>%
+  # add column for number of quadrats censused per plot per census
+  #   and join date and plot info
+  census_table %>%
+    dplyr::group_by(year, season, plot) %>%
+    dplyr::summarize(nquads = sum(censused)) %>%
     dplyr::left_join(date_table, by = c(year = "year", season = "season")) %>%
     dplyr::left_join(plots_table, by = c(year = "year", treat_month = "month", plot = "plot"))
 }
