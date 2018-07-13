@@ -2,5 +2,6 @@ CONTRIBUTING.md
 .travis.yml
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.zenodo.json
 ^README\.Rmd$
 ^README-.*\.png$

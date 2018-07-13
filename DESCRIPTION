@@ -14,7 +14,7 @@ Author: Ellen Bledsoe [aut],
 Description: This package contains functions for downloading the latest 
     version of the Portal data and to generate summaries of the rodent, 
     plant, ant, and weather data. 
-License: MIT + file LICENSE
+License: MIT
 URL: https://github.com/weecology/portalr
 BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
