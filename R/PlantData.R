@@ -158,6 +158,8 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'              If type=Non-woody, removes shrub and subshrub species
 #'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 #'              If type=Shrubs, returns only shrubs and subshrubs
+#' @param length specify subset of plots; use "All" plots or only "Longterm"
+#'   plots (to be deprecated)
 #' @param plots specify subset of plots; can be a vector of plots, or specific
 #'   sets: "all" plots or "Longterm" plots (plots that have had the same
 #'   treatment for the entire time series)
