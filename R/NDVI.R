@@ -185,6 +185,7 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   cos_fit <- cos(2 * pi * fr_of_yr_fit)
   sin_fit <- sin(2 * pi * fr_of_yr_fit)
   xreg_fit <- data.frame(cos_seas = cos_fit, sin_seas = sin_fit)
+  xreg_fit <- as.matrix(xreg_fit)
 
   jday_fcast <- as.numeric(format(date_fcast, "%j"))
   yr_fcast <- format(date_fcast, "%Y")
@@ -194,6 +195,7 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   cos_fcast <- cos(2 * pi * fr_of_yr_fcast)
   sin_fcast <- sin(2 * pi * fr_of_yr_fcast)
   xreg_fcast <- data.frame(cos_seas = cos_fcast, sin_seas = sin_fcast)
+  xreg_fcast <- as.matrix(xreg_fcast)
 
   mod <- forecast::auto.arima(hist_ndvi$ndvi, xreg = xreg_fit)
   fcast <- forecast::forecast(mod, xreg = xreg_fcast)
