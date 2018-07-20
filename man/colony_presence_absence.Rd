@@ -5,7 +5,7 @@
 \title{Ant Colony Presence Absence}
 \usage{
 colony_presence_absence(path = "~", level = "Site", rare_sp = F,
-  unknowns = F)
+  unknowns = F, download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
@@ -17,6 +17,9 @@ retrieve data from github repo}
 Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence}
 
 \item{unknowns}{include unknown species (T) or not (F). Unknowns include those only identified to genus.}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 }
 \value{
 data frame with year, species, (plot if applicable), and presence [1, 0, NA]

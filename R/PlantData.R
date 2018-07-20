@@ -175,6 +175,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #' @param min_quads numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included
 #' @param effort logical as to whether or not the effort columns should be
 #'    included in the output
+#' @inheritParams load_plant_data
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
 #'   value of `shape`
@@ -193,7 +194,8 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
                                               "plot" = FALSE,
                                               "treatment" = TRUE,
                                               "site" = TRUE),
-                           min_quads = 1, effort = TRUE)
+                           min_quads = 1, effort = TRUE,
+                           download_if_missing = TRUE)
 {
   #### Clean inputs ----
   level <- tolower(level)
@@ -207,7 +209,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   }
 
   #### Get Data ----
-  data_tables <- load_plant_data(path)
+  data_tables <- load_plant_data(path, download_if_missing = download_if_missing)
 
   #### Summarize data ----
 

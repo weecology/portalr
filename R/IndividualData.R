@@ -9,7 +9,6 @@
 #'
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
-#' @param clean passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
 #' @param length specify subset of plots; use "All" plots or only "Longterm"
@@ -27,6 +26,7 @@
 #'   observation to be included
 #' @param min_traps minimum number of plots within a period for an
 #'   observation to be included
+#' @inheritParams load_data
 #'
 #' @return a data.frame
 #'
@@ -34,10 +34,13 @@
 #'
 get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
                            length = "all", unknowns = FALSE, fill_incomplete = FALSE,
-                           time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1) {
+                           time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1,
+                           download_if_missing = TRUE)
+{
 
   #### Get Data ----
-  data_tables <- load_data(path, clean = clean)
+  data_tables <- load_data(path, download_if_missing = download_if_missing,
+                           clean = clean)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,

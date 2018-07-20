@@ -16,15 +16,17 @@
 #' @param rare_sp include rare species (T) or not (F).
 #'                    Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence
 #' @param unknowns include unknown species (T) or not (F). Unknowns include those only identified to genus.
+#' @inheritParams load_ant_data
 #'
 #' @return data frame with year, species, (plot if applicable), and presence [1, 0, NA]
 #'
 #' @export
 #'
 colony_presence_absence <- function(path = '~', level = 'Site',
-                                    rare_sp = F, unknowns = F) {
+                                    rare_sp = F, unknowns = F,
+                                    download_if_missing = TRUE) {
 
-  data_tables <- load_ant_data(path)
+  data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
 
   colony <- data_tables$colony_data
   antsp <- data_tables$species_table
@@ -109,14 +111,17 @@ colony_presence_absence <- function(path = '~', level = 'Site',
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
 #' @param level level at which to summarize data: 'Site', 'Plot', or 'Stake'
+#' @inheritParams load_ant_data
 #'
 #' @return data frame with year, species, (plot if applicable), and presence [1, 0]
 #'
 #' @export
 #'
-bait_presence_absence= function(path = '~', level='Site') {
+bait_presence_absence= function(path = '~', level = 'Site',
+                                download_if_missing = TRUE)
+{
 
-  data_tables <- load_ant_data(path)
+  data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
 
   bait <- data_tables$bait_data
 

@@ -6,13 +6,14 @@
 \usage{
 get_stake_data(path = "~", clean = TRUE, type = "Rodents",
   length = "all", unknowns = FALSE, fill_incomplete = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1)
+  time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1,
+  download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
 
-\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
+\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
 \item{type}{specify subset of species; either all "Rodents" or only
 "Granivores"}
@@ -38,6 +39,9 @@ observation to be included}
 
 \item{min_traps}{minimum number of plots within a period for an
 observation to be included}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 }
 \value{
 a data.frame

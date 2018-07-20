@@ -4,13 +4,17 @@
 \alias{bait_presence_absence}
 \title{Ant Bait Presence Absence}
 \usage{
-bait_presence_absence(path = "~", level = "Site")
+bait_presence_absence(path = "~", level = "Site",
+  download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
 
 \item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 }
 \value{
 data frame with year, species, (plot if applicable), and presence [1, 0]

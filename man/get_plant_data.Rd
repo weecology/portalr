@@ -10,7 +10,8 @@ get_plant_data(path = "~", level = "Site", type = "All", length = "all",
   plots = length, unknowns = FALSE, correct_sp = TRUE, shape = "flat",
   output = "abundance", na_drop = switch(tolower(level), plot = FALSE,
   treatment = TRUE, site = TRUE), zero_drop = switch(tolower(level), plot =
-  FALSE, treatment = TRUE, site = TRUE), min_quads = 1, effort = TRUE)
+  FALSE, treatment = TRUE, site = TRUE), min_quads = 1, effort = TRUE,
+  download_if_missing = TRUE)
 
 plant_abundance(..., shape = "flat")
 }
@@ -54,6 +55,9 @@ detections)}
 
 \item{effort}{logical as to whether or not the effort columns should be
 included in the output}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 
 \item{...}{arguments passed to \code{\link{get_plant_data}}}
 }

@@ -174,7 +174,6 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
-#' @param clean passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"
@@ -205,6 +204,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   observation to be included
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
+#' @inheritParams load_data
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
 #'   value of `shape`
@@ -225,9 +225,11 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
                                                "plot" = FALSE,
                                                "treatment" = TRUE,
                                                "site" = TRUE),
-                            min_traps = 1, min_plots = 24, effort = FALSE)
+                            min_traps = 1, min_plots = 24, effort = FALSE,
+                            download_if_missing = TRUE)
 {
-  data_tables <- load_data(path, clean = clean)
+  data_tables <- load_data(path, download_if_missing = download_if_missing,
+                           clean = clean)
 
   level <- tolower(level)
   type <- tolower(type)

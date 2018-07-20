@@ -16,7 +16,8 @@ get_rodent_data(path = "~", clean = TRUE, level = "Site",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE,
-  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE)
+  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
+  download_if_missing = TRUE)
 
 abundance(...)
 
@@ -28,7 +29,7 @@ energy(...)
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
 
-\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
+\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
@@ -74,6 +75,9 @@ observation to be included}
 
 \item{effort}{logical as to whether or not the effort columns should be
 included in the output}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
 }
