@@ -88,7 +88,7 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
 #' @param weather a dataframe of daily weather data
 #' @param path specify where to locate regional data
 #'
-#' @export
+#' @noRd
 #'
 fill_missing_weather <- function(weather, path = "~") {
   portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
