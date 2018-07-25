@@ -4,10 +4,10 @@
 \alias{fill_missing_weather}
 \title{Fill missing weather with regional data}
 \usage{
-fill_missing_weather(daily, path = "~")
+fill_missing_weather(weather, path = "~")
 }
 \arguments{
-\item{daily}{a dataframe of daily weather data}
+\item{weather}{a dataframe of daily weather data}
 
 \item{path}{specify where to locate regional data}
 }

@@ -44,7 +44,7 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
                        battery_low = all(battery_low, na.rm = TRUERUE)) %>%
       dplyr::arrange(year, month) %>%
       dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, locally_measured, battery_low) %>%
-      dplyr::mutate(battery_low = ifelse(year<2003, NA, battery_low))
+      dplyr::mutate(battery_low = ifelse(year < 2003, NA, battery_low))
   } else if (level == 'newmoon') {
 
     ##########Summarise by lunar month -----------------
@@ -85,12 +85,12 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
 #' @description Use two weather stations in San Simon valley to fill in
 #' missing weather data in the daily time series
 #'
-#' @param daily a dataframe of daily weather data
+#' @param weather a dataframe of daily weather data
 #' @param path specify where to locate regional data
 #'
 #' @export
 #'
-fill_missing_weather <- function(daily, path = "~") {
+fill_missing_weather <- function(weather, path = "~") {
   portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
                         na.strings = c(""), header = TRUE,
                         colClasses = c("character", rep("integer", 3), "character",
@@ -103,32 +103,22 @@ fill_missing_weather <- function(daily, path = "~") {
                                c("date", "year", "month", "day", "element")) %>%
     dplyr::filter(date >= "1980-01-01")
 
-  precip <- region %>%
-    dplyr::filter(element == "PRCP") %>%
-    dplyr::mutate(precip = rowMeans(cbind(value.x / 10, value.y / 10), na.rm = TRUE)) %>%
-    dplyr::select(year, month, day, precip)
-  tmin <- region %>%
-    dplyr::filter(element == "TMIN") %>%
-    dplyr::mutate(tmin = rowMeans(cbind(value.x / 10, value.y / 10), na.rm = TRUE)) %>%
-    dplyr::select(year, month, day, tmin)
-  tmax <- region %>%
-    dplyr::filter(element == "TMAX") %>%
-    dplyr::mutate(tmax = rowMeans(cbind(value.x / 10, value.y / 10), na.rm = TRUE)) %>%
-    dplyr::select(year, month, day, tmax)
-  tobs <- region %>%
-    dplyr::filter(element == "TOBS") %>%
-    dplyr::mutate(tobs = rowMeans(cbind(value.x / 10, value.y / 10), na.rm = TRUE)) %>%
-    dplyr::select(year, month, day, tobs)
+  regionmeans <- region %>%
+    dplyr::group_by(date, element) %>%
+    dplyr::summarize(value = mean(c(value.x, value.y), na.rm = TRUE) / 10) %>%
+    dplyr::ungroup() %>%
+    tidyr::spread(element, value) %>%
+    dplyr::mutate(tmin = TMIN,
+                  tmax = TMAX,
+                  tobs = TOBS,
+                  precip = PRCP,
+                  year = as.integer(lubridate::year(date)),
+                  month = as.integer(lubridate::month(date)),
+                  day = lubridate::day(date)) %>%
+    dplyr::filter(!(is.na(tmin) & is.na(tmax) & is.na(tobs) & is.na(precip))) %>%
+    dplyr::select(year, month, day, precip, tmin, tmax, tobs)
 
-  regionmeans <- precip %>%
-    dplyr::group_by(year, month, day) %>%
-    dplyr::full_join(tmin, by = c("year", "month", "day")) %>%
-    dplyr::full_join(tmax, by = c("year", "month", "day")) %>%
-    dplyr::full_join(tobs, by = c("year", "month", "day")) %>%
-    dplyr::arrange(year, month, day) %>%
-    dplyr::distinct(.)
-
-  filled_data <- dplyr::full_join(regionmeans, daily, by = c("year", "month", "day")) %>%
+  filled_data <- dplyr::full_join(regionmeans, weather, by = c("year", "month", "day")) %>%
     dplyr::arrange(year, month, day) %>%
     dplyr::mutate(locally_measured = ifelse(any(is.na(c(mintemp, maxtemp, meantemp, precipitation))), FALSE, TRUE),
                   mintemp = ifelse(is.na(mintemp), tmin, mintemp),
