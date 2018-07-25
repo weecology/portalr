@@ -41,7 +41,7 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
       dplyr::group_by(year, month) %>%
       dplyr::summarize(mintemp = min(mintemp, na.rm = TRUE), maxtemp = max(maxtemp, na.rm = TRUE), meantemp = mean(meantemp, na.rm = TRUE),
                        precipitation = sum(precipitation, na.rm = TRUE), locally_measured = all(locally_measured),
-                       battery_low = all(battery_low, na.rm = TRUERUE)) %>%
+                       battery_low = all(battery_low, na.rm = TRUE)) %>%
       dplyr::arrange(year, month) %>%
       dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, locally_measured, battery_low) %>%
       dplyr::mutate(battery_low = ifelse(year < 2003, NA, battery_low))
