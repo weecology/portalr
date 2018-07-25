@@ -250,13 +250,6 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
   # convert rodent tags to characters if not already
   data_tables$rodent_data$tag <- as.character(data_tables$rodent_data$tag)
 
-  # data_tables$newmoons_table$newmoondate <- as.factor(data_tables$newmoons_table$newmoondate)
-  # data_tables$newmoons_table$censusdate <- as.factor(data_tables$newmoons_table$censusdate)
-  # data_tables$plots_table$treatment <- as.factor(data_tables$plots_table$treatment)
-  # data_tables$plots_table$resourcetreatment <- as.factor(data_tables$plots_table$resourcetreatment)
-  # data_tables$plots_table$anttreatment <- as.factor(data_tables$plots_table$anttreatment)
-
-
   # remove data still under quality control
   if (clean)
   {
@@ -266,7 +259,8 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
                                              data_tables$trapping_table)
     data_tables$plots_table <- clean_data(data_tables$plots_table,
                                           data_tables$trapping_table)
-    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table, qcflag==1)
+    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table,
+                                                qcflag == 1)
   }
 
   return(data_tables)
@@ -388,6 +382,15 @@ load_generic_data <- function(data_files, na_strings, path = "~", download_if_mi
   }
   stopifnot(length(na_strings) == length(data_files))
 
+  ## output message about data version
+  version_file <- file.path(base_path, "version.txt")
+  if (tolower(path) != "repo" && !file.exists(version_file))
+  {
+    message("Loading in data version < 1.1.0")
+  } else {
+    message("Loading in data version ", read.table(version_file)[1, 1])
+  }
+  ## read in data tables
   data_tables <- lapply(seq(data_files), function(i) {
     read.csv(data_files[i], na.strings = na_strings[[i]], stringsAsFactors = FALSE)
   })
