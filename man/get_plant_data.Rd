@@ -3,11 +3,15 @@
 \name{get_plant_data}
 \alias{get_plant_data}
 \alias{plant_abundance}
+\alias{plant_abundance}
 \title{Generate summaries of Portal plant data}
 \usage{
 get_plant_data(path = "~", level = "Site", type = "All", length = "all",
-  unknowns = FALSE, correct_sp = TRUE, shape = "flat",
-  output = "abundance")
+  plots = length, unknowns = FALSE, correct_sp = TRUE, shape = "flat",
+  output = "abundance", na_drop = switch(tolower(level), plot = FALSE,
+  treatment = TRUE, site = TRUE), zero_drop = switch(tolower(level), plot =
+  FALSE, treatment = TRUE, site = TRUE), min_quads = 1, effort = TRUE,
+  download_if_missing = TRUE)
 
 plant_abundance(..., shape = "flat")
 }
@@ -19,12 +23,18 @@ retrieve data from github repo}
 
 \item{type}{specify subset of species;
 If type=Annuals, removes all non-annual species.
+If type=Summer Annuals, returns all annual species that can be found in the summer
+If type=Winter Annuals, returns all annual species that can be found in the winter
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 If type=Shrubs, returns only shrubs and subshrubs}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+plots (to be deprecated)}
+
+\item{plots}{specify subset of plots; can be a vector of plots, or specific
+sets: "all" plots or "Longterm" plots (plots that have had the same
+treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
@@ -35,6 +45,19 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{output}{specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]}
+
+\item{na_drop}{logical, drop NA values (representing insufficient sampling)}
+
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
+detections)}
+
+\item{min_quads}{numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included}
+
+\item{effort}{logical as to whether or not the effort columns should be
+included in the output}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 
 \item{...}{arguments passed to \code{\link{get_plant_data}}}
 }

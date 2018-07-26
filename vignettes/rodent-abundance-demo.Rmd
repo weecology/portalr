@@ -11,6 +11,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Introduction
 
 This vignette is a basic guide to begin exploring the Portal data. We load in the data (making sure that we're using the most recent copy from GitHub), and then explore the rodent abundances over time, with a comparison between the "control" and "kangaroo rat exclosure" treatments.
@@ -53,36 +60,11 @@ print(summary(data_tables))
 
 # Rodent Abundances
 
-The first table that we loaded (`data_tables$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. However, going through the all of the data filtering steps helps us to get a better of what we actually end up with.
+The first table that we loaded (`data_tables$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. 
 
 ```{r}
-rodent_data <- clean_rodent_data(data_tables)
-
-summarize_abundance <- function(rodent_data)
-{
-  # within each `period`, count up instances of each species
-  return(rodent_data %>%
-           count(period, species) %>%
-           select(period, species, abundance = n)
-  )
-}
-
-rodent_abundance <- summarize_abundance(rodent_data)
-```
-
-
-We just want a basic summary of the rodent abundance data, so we can use the `abundance` function. However, by default the returned object identifies the monthly summary by `period`, which is an index, $i$, for the $i$-th sample. To convert back into an ISO date, we load up the table of sampling dates and join the two tables.
-
-```{r}
-join_census_date <- function(rodent_abundance,
-                             newmoons_table = data_tables$newmoons_table)
-{
-  return(rodent_abundance %>%
-           add_time(newmoons_table, "date") %>%
-           rename(census_date = censusdate))
-}
-
-rodent_abundance <- join_census_date(rodent_abundance)
+rodent_abundance <- abundance(time = "date") %>%
+  gather(species, abundance, -censusdate)
 print(summary(rodent_abundance))
 ```
 
@@ -107,7 +89,7 @@ rodent_abundance <- join_scientific_name(rodent_abundance)
 make_abundance_plot_over_time <- function(rodent_abundance)
 {
   return(ggplot(rodent_abundance, 
-                aes(x = census_date, y = abundance)) + 
+                aes(x = censusdate, y = abundance)) + 
            geom_line() + 
            facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
            xlab("Date") + 
@@ -212,17 +194,18 @@ print(date_span)
 
 ## Abundances over control plots
 
-We are now ready to plot abundances just over the control plots and the time span in `r min(date_span$iso_date)` to `r max(date_span$iso_date)`:
+We are now ready to plot abundances just over the control plots and the time span in `r min(date_span$iso_date)` to `r max(date_span$iso_date)`. We do this by retrieving the abundance data by plot, and then filtering accordingly:
 
 ```{r, fig.cap = "Monthly abundance of rodents (control plots)", fig.width = 7.5, fig.height = 10}
-rodent_data %>%
-  mutate(capture_date = as.Date(paste0(year, "-", month, "-", day))) %>%
-  filter(capture_date >= min(date_span$iso_date), 
-         capture_date <= max(date_span$iso_date), 
-         plot %in% mostly_control_plots$plot) %>%
-  summarize_abundance() %>%
-  join_census_date() %>%
-  join_scientific_name() %>%
+abundance(time = "date", level = "plot") %>%
+  filter(censusdate >= min(date_span$iso_date), 
+         censusdate <= max(date_span$iso_date), 
+         plot %in% mostly_control_plots$plot) %>% 
+  select(-treatment, -plot) %>%
+  gather(species, abundance, -censusdate) %>%
+  count(censusdate, species, wt = abundance) %>%
+  rename(abundance = n) %>%
+  join_scientific_name() %>% 
   {.} -> rodent_abundance_control
 
 rodent_abundance_control %>%
@@ -261,14 +244,15 @@ print(date_span)
 Finally, the figure:
 
 ```{r, fig.cap = "Monthly abundance of rodents (exclosure plots)", fig.width = 7.5, fig.height = 10}
-rodent_data %>%
-  mutate(capture_date = as.Date(paste0(year, "-", month, "-", day))) %>%
-  filter(capture_date >= min(date_span$iso_date), 
-         capture_date <= max(date_span$iso_date), 
-         plot %in% mostly_exclosure_plots$plot) %>%
-  summarize_abundance() %>%
-  join_census_date() %>%
-  join_scientific_name() %>%
+abundance(time = "date", level = "plot") %>%
+  filter(censusdate >= min(date_span$iso_date), 
+         censusdate <= max(date_span$iso_date), 
+         plot %in% mostly_exclosure_plots$plot) %>% 
+  select(-treatment, -plot) %>%
+  gather(species, abundance, -censusdate) %>%
+  count(censusdate, species, wt = abundance) %>%
+  rename(abundance = n) %>%
+  join_scientific_name() %>% 
   {.} -> rodent_abundance_exclosure
 
 rodent_abundance_exclosure %>%
@@ -288,7 +272,7 @@ rodent_abundance_merged <- bind_rows(
   mutate(rodent_abundance_exclosure, treatment = "exclosure"))
 
 merged_plot <- ggplot(rodent_abundance_merged, 
-                      aes(x = census_date, y = abundance, color = treatment)) + 
+                      aes(x = censusdate, y = abundance, color = treatment)) + 
   geom_line() + 
   facet_wrap(~scientific_name, scales = "free_y", ncol = 3) + 
   xlab("Date") + 
@@ -306,7 +290,3 @@ print(merged_plot)
 ```
 
 As expected, there are substantially lower counts of kangaroo rats (*Dipodomys spp.*) in the "exclosure" plots. We also observe very similar abundances for some species, but increases in others (e.g. "Chaetodipus baileyi", "Perognathus flavus", "Reithrodontomys megalotis")
-
-
-
-

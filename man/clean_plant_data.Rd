@@ -4,8 +4,8 @@
 \alias{clean_plant_data}
 \title{Do basic cleaning of Portal plant data}
 \usage{
-clean_plant_data(data_tables, type = "All", unknowns = FALSE, correct_sp,
-  length = "all")
+clean_plant_data(data_tables, type = "All", unknowns = FALSE,
+  correct_sp = TRUE)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -15,15 +15,15 @@ clean_plant_data(data_tables, type = "All", unknowns = FALSE, correct_sp,
 If type=Annuals, removes all non-annual species.
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
-If type=Shrubs, returns only shrubs and subshrubs}
+If type=Shrubs, returns only shrubs and subshrubs
+If type=Winter-annual, returns all annuals found in winter
+IF type=Summer-annual, returns all annuals found in summer}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
-\item{correct_sp}{T/F whether or not to use likely corrected plant IDs, passed to \code{rename_species_plants}}
-
-\item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+\item{correct_sp}{T/F whether or not to use likely corrected plant IDs,
+passed to \code{rename_species_plants}}
 }
 \description{
 This function does basic quality control of the Portal plant
@@ -31,12 +31,8 @@ This function does basic quality control of the Portal plant
   several arguments passed along.
 
   The specific steps it does are, in order:
-    (1) correct species names according to recent vouchers, if requested, via
-        \code{\link{rename_species_plants}}
-    (2) restrict species to annuals or non-woody via
-        \code{link{process_annuals}}
-    (3) remove records for unidentified species via
-        \code{\link{process_unknownsp_plants}}
-    (5) exclude the plots that aren't long-term treatments via
-        \code{\link{filter_plots}}
+    (1) correct species names according to recent vouchers, if requested
+    (2) restrict species to annuals or non-woody
+    (3) remove records for unidentified species
+    (5) exclude the plots that aren't long-term treatments
 }

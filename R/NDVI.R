@@ -7,28 +7,28 @@
 #' @description Summarize NDVI data to monthly or lunar monthly level
 #'
 #' @param level specify "monthly" or "newmoon"
-#' @param fill specify if missing data should be filled, passed to 
+#' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
 #' @param path specify where to locate Portal data
 #'
 #' @export
 #'
 ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
-  NDVI <- read.csv(FullPath('PortalData/NDVI/monthly_NDVI.csv', path), 
+  NDVI <- read.csv(full_path('PortalData/NDVI/monthly_NDVI.csv', path),
                    na.strings = c(""), stringsAsFactors = FALSE)
-  moon_dates <- read.csv(FullPath('PortalData/Rodents/moon_dates.csv', path),
+  moon_dates <- read.csv(full_path('PortalData/Rodents/moon_dates.csv', path),
                          na.strings = c(""), stringsAsFactors = FALSE)
 
-  if(!all(c("year", "month") %in% names(NDVI))){
+  if (!all(c("year", "month") %in% names(NDVI))) {
     NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
     NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))
     NDVI$ndvi <- NDVI$NDVI
   }
-  if(!"date" %in% names(NDVI)){
+  if (!"date" %in% names(NDVI)) {
     NDVI$date <- as.Date(paste(NDVI$year, NDVI$month, "01", sep = "-"))
   }
 
-  if(level == "monthly"){
+  if (level == "monthly") {
 
     NDVI <- NDVI %>%
       dplyr::group_by(year, month) %>%
@@ -36,24 +36,22 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
       dplyr::arrange(date) %>%
       dplyr::ungroup() %>%
       dplyr::select(ndvi, date)
-    if(fill == TRUE){
+    if (fill == TRUE) {
        curr_yearmonth <- format(Sys.Date(), "%Y-%m")
        last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
        NDVI <- fill_missing_ndvi(NDVI, "monthly", last_time)
     }
-  }
-
-  if(level == "newmoon"){
+  } else if (level == "newmoon") {
     nm_number <- moon_dates$newmoonnumber[-1]
     nm_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
     nm_end <- as.Date(moon_dates$newmoondate[-1])
     nm_match_number <- NULL
-    nm_match_date <- NULL   
-    for(i in 1:length(nm_number)){
+    nm_match_date <- NULL
+    for (i in 1:length(nm_number)) {
       temp_dates <- as.character(seq.Date(nm_start[i] + 1, nm_end[i], 1))
       temp_numbers <- rep(nm_number[i], length(temp_dates))
       nm_match_date <- c(nm_match_date, temp_dates)
-      nm_match_number <- c(nm_match_number, temp_numbers)       
+      nm_match_number <- c(nm_match_number, temp_numbers)
     }
     nm_match_date <- as.Date(nm_match_date)
 
@@ -63,7 +61,7 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
       dplyr::summarize(ndvi = mean(ndvi, na.rm = T)) %>%
       dplyr::arrange(newmoonnumber)
 
-    if(fill == TRUE){
+    if (fill == TRUE) {
        today <- Sys.Date()
        prev_time <- moon_dates$newmoonnumber[moon_dates$newmoondate < today]
        last_time <- tail(prev_time, 1)
@@ -78,22 +76,23 @@ ndvi <- function(level = "monthly", fill = FALSE, path = '~') {
 ##############################################################################
 #' Fill in historic ndvi data to the complete timeseries being fit
 #'
-#' @details missing values during the time series are replaced using 
+#' @details missing values during the time series are replaced using
 #'  na.interp, missing values at the end of the time series are forecast using
 #'   auto.arima with seasonality (using Fourier transform)
 #'
 #' @param ndvi ndvi data
 #' @param level specify "monthly" or "newmoon"
 #' @param last_time the last time step to have been completed
-#' @param moons moon data (required if level = "newmoons")
+#' @param moons moon data (required if level = "newmoons" and forecasts are
+#'   needed)
 #'
 #' @return a data.frame with time and ndvi values
 #'
 #' @export
 #'
-fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
-
-  if(level == "monthly"){
+fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL)
+{
+  if (level == "monthly") {
     hist_time_obs <- ndvi$date
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
@@ -104,13 +103,13 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
     hist_ndvi$ndvi <- as.numeric(ndvi_interp)
 
-    if(max_hist_time < last_time){
+    if (max_hist_time < last_time) {
       lead_fcast <- length(seq.Date(max_hist_time, last_time , "month")[-1])
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "monthly", lead_fcast)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)  
+      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
     }
   }
-  if(level == "newmoon"){
+  if (level == "newmoon") {
     hist_time_obs <- ndvi$newmoonnumber
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
@@ -121,10 +120,10 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
     hist_ndvi$ndvi <- as.numeric(ndvi_interp)
 
-    if(max_hist_time < last_time){
+    if (max_hist_time < last_time) {
       lead_fcast <- length((max_hist_time + 1):last_time)
       ndvi_fcast <- fcast_ndvi(hist_ndvi, "newmoon", lead_fcast, moons)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)  
+      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
     }
   }
 
@@ -134,7 +133,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
 ############################################################################
 #' Forecast ndvi using a seasonal auto ARIMA
 #'
-#' @details ndvi values are forecast using auto.arima with seasonality (using 
+#' @details ndvi values are forecast using auto.arima with seasonality (using
 #'  a Fourier transform)
 #'
 #' @param hist_ndvi historic ndvi data
@@ -148,17 +147,16 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL){
 #'
 fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
 
-  if(lead == 0){
+  if (lead == 0) {
     return(hist_ndvi)
   }
 
-  if(level == "monthly"){
+  if (level == "monthly") {
     date_fit <- hist_ndvi$date
     last_date <- max(date_fit)
     date_fcast <- last_date %m+% months(1:lead)
     time_to_fcast <- date_fcast
-  }
-  if(level == "newmoon"){
+  } else if (level == "newmoon") {
     nm_to_fit <- hist_ndvi$newmoonnumber
     which_nm_fit <- which(moons$newmoonnumber %in% nm_to_fit)
     date_fit <- moons$newmoondate[which_nm_fit]
@@ -167,7 +165,7 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
     last_nm <- max(nm_to_fit)
     time_to_fcast <- last_nm + 1:lead
     which_nm_fcast <- which(moons$newmoonnumber %in% time_to_fcast)
-    if(length(which_nm_fcast) < length(time_to_fcast)){
+    if (length(which_nm_fcast) < length(time_to_fcast)) {
       nfuture_nm <- length(time_to_fcast) - length(which_nm_fcast)
       future_nm <- get_future_moons(moons, nfuture_nm)
       moons$newmoondate <- as.character(moons$newmoondate)
@@ -187,6 +185,7 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   cos_fit <- cos(2 * pi * fr_of_yr_fit)
   sin_fit <- sin(2 * pi * fr_of_yr_fit)
   xreg_fit <- data.frame(cos_seas = cos_fit, sin_seas = sin_fit)
+  xreg_fit <- as.matrix(xreg_fit)
 
   jday_fcast <- as.numeric(format(date_fcast, "%j"))
   yr_fcast <- format(date_fcast, "%Y")
@@ -196,15 +195,15 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   cos_fcast <- cos(2 * pi * fr_of_yr_fcast)
   sin_fcast <- sin(2 * pi * fr_of_yr_fcast)
   xreg_fcast <- data.frame(cos_seas = cos_fcast, sin_seas = sin_fcast)
+  xreg_fcast <- as.matrix(xreg_fcast)
 
   mod <- forecast::auto.arima(hist_ndvi$ndvi, xreg = xreg_fit)
   fcast <- forecast::forecast(mod, xreg = xreg_fcast)
   fcast_ndvi <- as.numeric(fcast$mean)
 
-  if(level == "newmoon"){
+  if (level == "newmoon") {
     ndvi_tab <- data.frame(newmoonnumber = time_to_fcast, ndvi = fcast_ndvi)
-  }
-  if(level == "monthly"){
+  } else if (level == "monthly") {
     ndvi_tab <- data.frame(date = time_to_fcast, ndvi = fcast_ndvi)
   }
 

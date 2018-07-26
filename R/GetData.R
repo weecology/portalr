@@ -4,18 +4,20 @@
 
 #' @title Full Path
 #' @description Return normalized path for all operating systems
-#' @param ReferencePath a path to join with current working directory
-#' @param BasePath Current working directory else path given
+#' @param reference_path a path to join with current working directory
+#' @param base_path Current working directory else path given
 #'
 #' @return Full path
-#' @export
+#'
 #' @examples
-#' FullPath('PortalData/Rodents/Portal_rodent.csv')
-#' FullPath('PortalData/Rodents/Portal_rodent.csv', '~')
-FullPath <- function(ReferencePath, BasePath = getwd()) {
-  BasePath = normalizePath(BasePath)
-  Path = normalizePath(file.path(BasePath, ReferencePath), mustWork = FALSE)
-  return (Path)
+#' full_path('PortalData/Rodents/Portal_rodent.csv')
+#' full_path('PortalData/Rodents/Portal_rodent.csv', '~')
+#'
+#' @noRd
+full_path <- function(reference_path, base_path = getwd()) {
+  base_path <- normalizePath(base_path)
+  path <- normalizePath(file.path(base_path, reference_path), mustWork = FALSE)
+  return(path)
 }
 
 #' @title Download the PortalData repo
@@ -25,12 +27,15 @@ FullPath <- function(ReferencePath, BasePath = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#'
 #' @return None
+#'
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
 {
   if (version == "latest")
   {
+    message("Downloading the latest version of the data...")
     # Try and parse the download link from Zenodo
     resp <- httr::GET("https://zenodo.org/record/1215988")
     if (httr::http_type(resp) != "text/html") # check for errors
@@ -48,7 +53,7 @@ download_observations <- function(base_folder = "~", version = "latest")
     }
     zip_download_path <- match_text[[1]][1]
   } else {
-    # Try to normalize version number
+    # Normalize version number
     if (grepl("^[0-9]+\\.[0-9]+$", version))
     {
       version <- paste0(version, ".0")
@@ -64,14 +69,15 @@ download_observations <- function(base_folder = "~", version = "latest")
     {
       stop("Did not find a version of the data matching, ", version, call. = FALSE)
     }
+    message("Downloading version ", version, " of the data...")
     zip_download_path <- releases$zipball_url[idx]
   }
 
   # Attemt to download the zip file
-  zip_download_dest <- FullPath("PortalData.zip", tempdir())
+  zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE)
 
-  final_data_folder <- FullPath("PortalData", base_folder)
+  final_data_folder <- full_path("PortalData", base_folder)
 
   # Clear out the old files in the data folder without doing potentially dangerous
   # recursive deleting.
@@ -92,15 +98,18 @@ download_observations <- function(base_folder = "~", version = "latest")
   unzip(zip_download_dest, exdir = base_folder)
   Sys.sleep(10)
   file.remove(zip_download_dest)
-  file.rename(FullPath(primary_data_folder, base_folder), final_data_folder)
+  file.rename(full_path(primary_data_folder, base_folder), final_data_folder)
 }
 
 #' @title get GitHub Release Info for PortalData
 #'
 #' @description Use the GitHub API to get info about the releases of the
 #'   PortalData repo.
+#'
 #' @return A data.frame with two columns, `tag_name` (name of the tags) and
 #'   `zipball_url` (download URLs for the corresponding zipped release)
+#'
+#' @noRd
 get_github_releases <- function()
 {
   pat <- Sys.getenv("GITHUB_PAT")
@@ -130,7 +139,7 @@ get_github_releases <- function()
     }
 
     releases <- rbind(releases,
-                  jsonlite::fromJSON(httr::content(resp, "text"))[, c("tag_name", "zipball_url")])
+                      jsonlite::fromJSON(httr::content(resp, "text"))[, c("tag_name", "zipball_url")])
     page_idx <- page_idx + 1
   }
 
@@ -141,15 +150,15 @@ get_github_releases <- function()
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
 #' @param base_folder Folder in which data will be checked
-#' @return bool TRUE if there is a newer version of the data online
-#' @export
 #'
+#' @return bool TRUE if there is a newer version of the data online
+#'
+#' @export
 check_for_newer_data <- function(base_folder = "~")
 {
   # first see if the folder for the data files exist
   tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
-           error = function(e) stop("Unable to find data files in specified path: ", base_folder,
-                                    ". Download the data first using `download_observations()`."),
+           error = function(e) stop("Unable to use the specified path: ", base_folder, call. = FALSE),
            warning = function(w) w)
 
   # check for `version.txt``
@@ -184,3 +193,208 @@ check_for_newer_data <- function(base_folder = "~")
   return(FALSE)
 }
 
+#' @name load_data
+#' @aliases load_plant_data, load_ant_data
+#'
+#' @title Read in the Portal data files
+#'
+#' @description Loads Portal data files from either a user-defined
+#'   path or the online Github repository. If the user-defined path is un-
+#'   available, the default option is to download to that location.
+#'
+#' @param path either the file path that contains the PortalData folder or
+#'  "repo", which then pulls data from the PortalData GitHub repository
+#' @param download_if_missing if the specified file path doesn't have the
+#'   PortalData folder, then download it
+
+
+#' @rdname load_data
+#' @description \code{\link{load_data}} loads the rodent data files
+#'
+#' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
+#'
+#' @return \code{\link{load_data}} returns a list of 5 dataframes:
+#'   \tabular{ll}{
+#'     \code{rodent_data} \tab raw data on rodent captures\cr
+#'     \code{species_table} \tab species code, names, types\cr
+#'     \code{trapping_table} \tab when each plot was trapped\cr
+#'     \code{newmoons_table} \tab pairs census periods with newmoons\cr
+#'     \code{plots_table} \tab rodent treatment assignments for each plot\cr
+#'   }
+#'
+#' @examples
+#' portal_data <- load_data("repo")
+#'
+#' @export
+#'
+load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
+{
+  # set up files and NA options
+  data_files <- c("rodent_data" = file.path("Rodents", "Portal_rodent.csv"),
+                  "species_table" = file.path("Rodents", "Portal_rodent_species.csv"),
+                  "trapping_table" = file.path("Rodents", "Portal_rodent_trapping.csv"),
+                  "newmoons_table" = file.path("Rodents", "moon_dates.csv"),
+                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
+  na_strings <- list(c(""), c(""), c("NA"), c("NA"), c("NA"))
+
+  # retrieve data
+  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+
+  # reformat species columns
+  if (!"species" %in% names(data_tables$species_table))
+  {
+    data_tables$species_table <- dplyr::rename(data_tables$species_table,
+                                               species = speciescode)
+  }
+
+  # convert rodent tags to characters if not already
+  data_tables$rodent_data$tag <- as.character(data_tables$rodent_data$tag)
+
+  # remove data still under quality control
+  if (clean)
+  {
+    data_tables$rodent_data <- clean_data(data_tables$rodent_data,
+                                          data_tables$trapping_table)
+    data_tables$newmoons_table <- clean_data(data_tables$newmoons_table,
+                                             data_tables$trapping_table)
+    data_tables$plots_table <- clean_data(data_tables$plots_table,
+                                          data_tables$trapping_table)
+    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table,
+                                                qcflag == 1)
+  }
+
+  return(data_tables)
+}
+
+#' @rdname load_data
+#' @description \code{\link{load_plant_data}} loads the plant data files
+#'
+#' @return \code{\link{load_plant_data}} returns a list of 5 dataframes:
+#'   \tabular{ll}{
+#'     \code{quadrat_data} \tab raw plant quadrat data\cr
+#'     \code{species_table} \tab species code, names, types\cr
+#'     \code{census_table} \tab indicates whether each quadrat was counted in each
+#'       census; area of each quadrat\cr
+#'     \code{date_table} \tab start and end date of each plant census\cr
+#'     \code{plots_table} \tab rodent treatment assignments for each plot\cr
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' portal_plant_data <- load_plant_data("repo")
+#'
+
+load_plant_data <- function(path = "~", download_if_missing = TRUE)
+{
+  # set up files and NA options
+  data_files <- c("quadrat_data" = file.path("Plants", "Portal_plant_quadrats.csv"),
+                  "species_table" = file.path("Plants", "Portal_plant_species.csv"),
+                  "census_table" = file.path("Plants", "Portal_plant_censuses.csv"),
+                  "date_table" = file.path("Plants", "Portal_plant_census_dates.csv"),
+                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
+  na_strings <- list(c(""), c(""), c("NA"), c("", "none", "unknown"), c("NA"))
+
+  # retrieve data
+  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+
+  # reformat species columns
+  if (!"sp" %in% names(data_tables$species_table))
+  {
+    data_tables$species_table <- dplyr::rename(data_tables$species_table,
+                                               sp = species,
+                                               species = speciescode)
+  }
+
+  return(data_tables)
+}
+
+#' @rdname load_data
+#' @description \code{\link{load_ant_data}} loads the ant data files
+#'
+#' @return \code{\link{load_ant_data}} returns a list of 4 dataframes:
+#'   \tabular{ll}{
+#'     \code{bait_data} \tab raw ant bait data\cr
+#'     \code{colony_data} \tab raw ant colony data\cr
+#'     \code{species_table} \tab species code, names, types\cr
+#'     \code{plots_table} \tab treatment assignments for each plot\cr
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' portal_ant_data <- load_ant_data("repo")
+#'
+
+load_ant_data <- function(path = "~", download_if_missing = TRUE)
+{
+  # set up files and NA options
+  data_files <- c("bait_data" = file.path("Ants", "Portal_ant_bait.csv"),
+                  "colony_data" = file.path("Ants", "Portal_ant_colony.csv"),
+                  "species_table" = file.path("Ants", "Portal_ant_species.csv"),
+                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
+  na_strings <- list(c(""), c(""), c("NA"), c("NA"))
+
+  # retrieve data
+  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+
+  # reformat species columns
+  if (!"sp" %in% names(data_tables$species_table))
+  {
+    data_tables$species_table <- dplyr::rename(data_tables$species_table,
+                                               sp = species,
+                                               species = speciescode)
+  }
+
+  return(data_tables)
+}
+
+#' @title generic data loading function
+#'
+#' @description does checking for whether data exists and then reads it in,
+#'   using na_strings to determine what gets converted to NA,
+#'   and then returning a list of the data.frames as output
+#'
+#' @noRd
+load_generic_data <- function(data_files, na_strings, path = "~", download_if_missing = TRUE)
+{
+
+  ## define file paths
+  if (tolower(path) == "repo")
+  {
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+  } else {
+    tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+             error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
+             warning = function(w) w)
+  }
+  data_files <- sapply(data_files, function(x) file.path(base_path, x))
+
+  ## check if files exist and download if appropriate
+  if (tolower(path) != "repo" && any(!sapply(data_files, file.exists)))
+  {
+    if (download_if_missing) {
+      warning("Proceeding to download data into specified path", path)
+      download_observations(path)
+    } else {
+      stop("Data files were not found in specified path", path)
+    }
+  }
+  stopifnot(length(na_strings) == length(data_files))
+
+  ## output message about data version
+  version_file <- file.path(base_path, "version.txt")
+  if (tolower(path) != "repo" && !file.exists(version_file))
+  {
+    message("Loading in data version < 1.1.0")
+  } else {
+    message("Loading in data version ", read.table(version_file)[1, 1])
+  }
+  ## read in data tables
+  data_tables <- lapply(seq(data_files), function(i) {
+    read.csv(data_files[i], na.strings = na_strings[[i]], stringsAsFactors = FALSE)
+  })
+  names(data_tables) <- names(data_files)
+
+  return(data_tables)
+}

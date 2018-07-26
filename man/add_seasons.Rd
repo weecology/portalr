@@ -6,7 +6,7 @@
 \title{Add Seasons}
 \usage{
 add_seasons(data, level = "site", season_level = 2, date_column = yearmon,
-  summarize = NA, path = "~")
+  summarize = NA, path = "~", download_if_missing = TRUE, clean = TRUE)
 
 yearly(...)
 }
@@ -32,6 +32,11 @@ Default is NA (returned with seasons added but not summarized).}
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
 
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
+
+\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
+
 \item{...}{arguments passed to \code{\link{add_seasons}}}
 }
 \value{
@@ -44,6 +49,6 @@ Also applies specified functions to the specified summary level.
 \code{yearly} generates a table of yearly means
 }
 \examples{
-yearly(abundance(path = "repo",time = "newmoon"), date_column = "newmoonnumber", path = "repo")
+yearly(abundance(path = "repo", time = "newmoon"), date_column = "newmoonnumber", path = "repo")
 
 }

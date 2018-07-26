@@ -11,12 +11,13 @@
 \title{Generate summaries of Portal rodent data}
 \usage{
 get_rodent_data(path = "~", clean = TRUE, level = "Site",
-  type = "Rodents", length = "all", unknowns = FALSE,
+  type = "Rodents", length = "all", plots = length, unknowns = FALSE,
   fill_incomplete = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE,
-  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE)
+  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
+  download_if_missing = TRUE)
 
 abundance(...)
 
@@ -28,7 +29,7 @@ energy(...)
 \item{path}{path to location of downloaded Portal data; or "repo" to
 retrieve data from github repo}
 
-\item{clean}{passed to load_data (logical, load only QA/QC rodent data (TRUE) or all data (FALSE))}
+\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
@@ -36,7 +37,11 @@ retrieve data from github repo}
 "Granivores"}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+plots (to be deprecated)}
+
+\item{plots}{specify subset of plots; can be a vector of plots, or specific
+sets: "all" plots or "Longterm" plots (plots that have had the same
+treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
@@ -70,6 +75,9 @@ observation to be included}
 
 \item{effort}{logical as to whether or not the effort columns should be
 included in the output}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 
 \item{...}{arguments passed to \code{\link{get_rodent_data}}}
 }
