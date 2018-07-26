@@ -13,13 +13,13 @@
 #'
 #' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
 #' (period code for the census) and value (numeric value to be analyzed)
-#' @param date_format format for the dattes in date column (e.g. "\%Y-\%m-\%d")
+#' @param date_format format for the dates in date column (e.g. "\%Y-\%m-\%d")
 #'
 #' @return dataframe containing 2 columns: newdate and value
 #'
 #' @export
 #'
-make_timeseries = function(data, date_format="%Y-%m-%d"){
+make_timeseries <- function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series
 
   data$date = as.Date(data$date, format=date_format)
@@ -85,23 +85,33 @@ make_timeseries = function(data, date_format="%Y-%m-%d"){
   return(data)
 }
 
+#' @title Filter period codes to match gaps between censuses
+#' @description   Returns the period code for months that match the specified diff_value.
+#' Diffs are the number of months between subsequent censuses
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#' @param diff_value the number of months between subsequent censuses
+#'
+#' @return
+#'
+filter_diffs <- function(data, diff_value){
 
-
-#####################################
-# SUPPORTING Functions
-#####################################
-
-filter_diffs = function(data, diff_value){
-  # Returns the period code for months that match
-  #   the specified diff_value. Diffs are the number
-  #   of months between subsequent censuses
   subset = data %>% dplyr::filter(mo_diff == diff_value) %>% dplyr::select(period)
   return(subset$period)
 }
 
-calc_diff = function(data){
-  # Calculates the number of months between subsequent censuses
-  #   (diff) and adds to data.frame
+#' @title Calculate census gaps
+#' @description Calculates the number of months between subsequent
+#' censuses (diff) and adds to data.frame
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#'
+#' @return
+#'
+calc_diff <- function(data){
+
   diff = diff(lubridate::month(data$newdate))
   mo_diff = append(diff, 99)
   data$mo_diff = mo_diff
@@ -111,12 +121,18 @@ calc_diff = function(data){
   return(data)
 }
 
-shift_current_month = function(data){
-  # Adjusts month for a diff pattern of:
-  #   prev_month = 2, focal_month=0, next_month=1
-  #   which matches an example trapping pattern of
-  #   Jan trapped, Feb not trapped, Mar trapped twice, Apr trapped
-  #   where the early march trapping is just late for February.
+#' @title Shift Current Month
+#' @description Adjusts month for a diff pattern of: prev_month = 2, focal_month=0, next_month=1
+#' which matches an example trapping pattern of Jan trapped, Feb not trapped, Mar trapped twice,
+#' Apr trapped where the early march trapping is just late for February.
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#'
+#' @return
+#'
+shift_current_month <- function(data){
+
   diffs = filter_diffs(data, 0)
   for(i in diffs){
     prev_period = data %>% dplyr::filter(period == i - 1)
@@ -134,12 +150,18 @@ shift_current_month = function(data){
   data = calc_diff(data)
 }
 
-shift_next_month = function(data){
-  # Adjusts month for a diff pattern of:
-  #   prev_month = 1, focal_month=0, next_month=2
-  #   which matches an example trapping pattern of
-  #   January trapped, February trapped twice, March missed
-  #   where the late February census was early for March.
+#' @title Shift Next Month
+#' @description Adjusts month for a diff pattern of: prev_month = 1, focal_month=0, next_month=2
+#' which matches an example trapping pattern of January trapped, February trapped twice, March
+#' missed where the late February census was early for March.
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#'
+#' @return
+#'
+shift_next_month <- function(data){
+
   diffs = filter_diffs(data, 0)
   for(i in diffs){
     prev_period = data %>% dplyr::filter(period == i - 1)
@@ -157,14 +179,19 @@ shift_next_month = function(data){
   data = calc_diff(data)
   }
 
+#' @title Shift Current and Next Month
+#' @description   # Adjusts month for a diff pattern of: prev_month = 2, focal_month=1, next_month=0
+#' which matches an example trapping pattern of January trapped, February missed, March trapped,
+#' April trapped twice. In this scenario, the February census was conducted in early March and March
+#' census was conducted in early April.
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#'
+#' @return
+#'
+shift_current_next <- function(data){
 
-shift_current_next = function(data){
-  # Adjusts month for a diff pattern of:
-  #   prev_month = 2, focal_month=1, next_month=0
-  #   which matches an example trapping pattern of
-  #   January trapped, February missed, March trapped, April trapped twice
-  #   In this scenario, the February census was conducted in early March and
-  #   March census was conducted in early April.
   diffs = filter_diffs(data, 1)
   print(diffs)
   for(i in diffs){
@@ -184,15 +211,33 @@ shift_current_next = function(data){
   data = calc_diff(data)
 }
 
-fix_period = function(data, i_period, adj){
-  # Returns modified monthly date for a period.
+#' @title Fix Period Date
+#' @description Returns modified monthly date for a period.
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#' @param i_period period to fix
+#' @param adj Months to adjust date by
+#'
+#' @return
+#'
+fix_period <- function(data, i_period, adj){
   modify = data %>% dplyr::filter(period==i_period) %>%
     dplyr::mutate(newdate = newdate %m+% months(adj))
   data <- data %>% dplyr::mutate(newdate = replace(newdate, period == i_period,
                                             modify$newdate))
 }
 
-insert_missing_months = function(data, i_period){
+#' @title Insert Missing Months
+#' @description Insert missing month
+#'
+#' @param data Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
+#' (period code for the census) and value (numeric value to be analyzed)
+#' @param i_period period to fix
+#'
+#' @return
+#'
+insert_missing_months <- function(data, i_period){
   gap_begin = data %>% dplyr::filter(period == i_period)
   counter = gap_begin$mo_diff-1
   new_records = c()

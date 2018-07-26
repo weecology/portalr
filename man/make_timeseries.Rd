@@ -10,7 +10,7 @@ make_timeseries(data, date_format = "\%Y-\%m-\%d")
 \item{data}{Dataframe with columns date (date of the period (e.g. 2016-01-01)), period
 (period code for the census) and value (numeric value to be analyzed)}
 
-\item{date_format}{format for the dattes in date column (e.g. "\%Y-\%m-\%d")}
+\item{date_format}{format for the dates in date column (e.g. "\%Y-\%m-\%d")}
 }
 \value{
 dataframe containing 2 columns: newdate and value
