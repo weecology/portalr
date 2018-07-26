@@ -256,52 +256,76 @@ plant_abundance <- function(..., shape = "flat") {
 
 #' @name shrub_cover
 #'
-#' @title Generate % cover from Portal plant transect data
+#' @title Generate percent cover from Portal plant transect data
 #'
-#' @description This function calculates % cover from transect data.
+#' @description This function calculates percent cover from transect data.
 #' It handles the pre-2015 data differently from the current transects,
 #' becase they are collected differently. But it returns a single time-series
-#' with all years of transect data available.
+#' with all years of transect data available. It also returns mean height
+#' beginning in 2015.
 #'
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'   retrieve data from github repo
-#' @param level summarize by "Plot", "Treatment", or "Site"
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
+#' @param type specify subset of species;
+#'              If type=Annuals, removes all non-annual species.
+#'              If type=Summer Annuals, returns all annual species that can be found in the summer
+#'              If type=Winter Annuals, returns all annual species that can be found in the winter
+#'              If type=Non-woody, removes shrub and subshrub species
+#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
+#'              If type=Shrubs, returns only shrubs and subshrubs
+#' @param plots specify subset of plots; can be a vector of plots, or specific
+#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   treatment for the entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
-#' @param shape return data as a "flat" list or "crosstab"
 #'
-#' @return a data.frame in either "long" or "wide" format, depending on the
-#'   value of `shape`
+#' @inheritParams load_plant_data
+#'
+#' @return a data.frame of percent cover and mean height
 #'
 #' @export
 #'
-shrub_cover <- function(path = '~', level = "Site",
-                           length = "all", unknowns = FALSE, correct_sp = TRUE,
-                           shape = "flat") {
+shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
+                        unknowns = FALSE, correct_sp = TRUE)
+  {
 
   #### Clean inputs ----
-  output <- tolower(output)
+  type <- tolower(type)
 
   #### Get Data ----
   data_tables <- load_plant_data(path)
 
   #### Do initial cleaning ----
-  transects <- clean_plant_data(data_tables, type="Shrubs", unknowns, correct_sp, length)
+  oldtransect_data = data_tables$oldtransect_data %>%
+    dplyr::mutate("month" = 8) %>%
+    dplyr::left_join(data_tables$species_table, by = "species") %>%
+    dplyr::left_join(data_tables$plots_table, by = c("year","month","plot")) %>%
+    rename_species_plants(correct_sp) %>%
+    process_annuals(type) %>%
+    process_unknownsp_plants(unknowns) %>%
+    filter_plots(plots) %>%
+    dplyr::mutate(treatment = as.character(treatment), species = as.factor(species)) %>%
+    dplyr::group_by(year, treatment, plot, species) %>%
+    dplyr::summarize(count=n()) %>%
+    dplyr::mutate(cover = count/1000, height=NA, species = as.character(species)) %>%
+    dplyr::select(-count)
 
- #Calculate for point method (old data)
-  transect_totals=transects %>%
-    group_by(year, plot) %>%
-    summarize(totalPoints=n())
+  transect_data = data_tables$transect_data %>%
+    dplyr::filter(!grepl(3,notes)) %>%
+    dplyr::left_join(data_tables$species_table, by = "species") %>%
+    dplyr::left_join(data_tables$plots_table, by = c("year","month","plot")) %>%
+    rename_species_plants(correct_sp) %>%
+    process_annuals(type) %>%
+    process_unknownsp_plants(unknowns) %>%
+    filter_plots(plots) %>%
+    dplyr::mutate(stop = replace(stop, stop>7071.1, 7071.1)) %>%
+    dplyr::mutate(treatment = as.character(treatment), species = as.factor(species), length=stop-start) %>%
+    dplyr::group_by(year, treatment, plot, species) %>%
+    dplyr::summarize(length=sum(length, na.rm=TRUE), height = mean(height, na.rm=TRUE)) %>%
+    dplyr::mutate(cover = length/(2*7071.1), species = as.character(species)) %>%
+    dplyr::select(year,treatment,plot,species,cover,height)
 
-  df=df %>%
-    group_by(Year, Plot, Species.Name, Group) %>%
-    summarize(n=n())
+  return(dplyr::bind_rows(oldtransect_data,transect_data))
 
-  df=merge(df, transectTotals, by=c('Year','Plot'))
-  df=df %>% mutate(cover = n/totalPoints)
-
-  return(select(df, -n, -totalPoints))
 }

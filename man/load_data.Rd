@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetData.R
 \name{load_data}
 \alias{load_data}
-\alias{load_plant_data,}
+\alias{load_plant_data}
 \alias{load_ant_data}
 \alias{load_plant_data}
 \alias{load_ant_data}
@@ -33,7 +33,7 @@ PortalData folder, then download it}
     \code{plots_table} \tab rodent treatment assignments for each plot\cr
   }
 
-\code{\link{load_plant_data}} returns a list of 5 dataframes:
+\code{\link{load_plant_data}} returns a list of 7 dataframes:
   \tabular{ll}{
     \code{quadrat_data} \tab raw plant quadrat data\cr
     \code{species_table} \tab species code, names, types\cr
@@ -41,6 +41,8 @@ PortalData folder, then download it}
       census; area of each quadrat\cr
     \code{date_table} \tab start and end date of each plant census\cr
     \code{plots_table} \tab rodent treatment assignments for each plot\cr
+    \code{transect_data} \tab raw plant transect data with length and height (2015-present)\cr
+    \code{oldtransect_data} \tab raw plant transect data as point counts (1989-2009)\cr
   }
 
 \code{\link{load_ant_data}} returns a list of 4 dataframes:
