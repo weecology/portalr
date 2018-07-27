@@ -1,6 +1,6 @@
 Package: portalr
-Title: Creates useful summaries of the Portal data
-Version: 0.0.1
+Title: Create useful summaries of the Portal data
+Version: 0.1.0
 Maintainer: Glenda Yenni <glenda@weecology.org>
 Author: Ellen Bledsoe [aut], 
     Erica Christensen [aut], 
@@ -28,10 +28,10 @@ Imports:
   magrittr,
   httr, 
   rlang,
-	forecast,
-	htmltab,
+  forecast,
+  htmltab,
   lunar,
-	jsonlite
+  jsonlite
 Suggests:
   testthat,
   digest,
