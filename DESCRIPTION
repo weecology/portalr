@@ -1,15 +1,15 @@
 Package: portalr
 Title: Create useful summaries of the Portal data
 Version: 0.1.0
-Maintainer: Glenda Yenni <glenda@weecology.org>
-Author: Glenda Yenni [aut], 
-    Ellen Bledsoe [aut], 
-    Erica Christensen [aut], 
-    Renata Diaz [aut], 
-    Morgan Ernest [aut, cre], 
-    Juniper Simonis [aut], 
-    Shawn Taylor [aut], 
-    Ethan White [aut], 
+Maintainer: Glenda M. Yenni <glenda@weecology.org>
+Author:     Glenda M. Yenni [aut],
+    Ellen K. Bledsoe [aut],
+    Erica M. Christensen [aut],
+    Renata M. Diaz [aut],
+    S.K. Morgan Ernest [aut, cre],
+    Juniper L. Simonis [aut],
+    Shawn D. Taylor [aut],
+    Ethan P. White [aut],
     Hao Ye [aut]
 Description: This package contains functions for downloading the latest 
     version of the Portal data and to generate summaries of the rodent, 
