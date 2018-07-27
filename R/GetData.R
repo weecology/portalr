@@ -194,7 +194,7 @@ check_for_newer_data <- function(base_folder = "~")
 }
 
 #' @name load_data
-#' @aliases load_plant_data, load_ant_data
+#' @aliases load_plant_data load_ant_data
 #'
 #' @title Read in the Portal data files
 #'
@@ -269,7 +269,7 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 #' @rdname load_data
 #' @description \code{\link{load_plant_data}} loads the plant data files
 #'
-#' @return \code{\link{load_plant_data}} returns a list of 5 dataframes:
+#' @return \code{\link{load_plant_data}} returns a list of 7 dataframes:
 #'   \tabular{ll}{
 #'     \code{quadrat_data} \tab raw plant quadrat data\cr
 #'     \code{species_table} \tab species code, names, types\cr
@@ -277,6 +277,8 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 #'       census; area of each quadrat\cr
 #'     \code{date_table} \tab start and end date of each plant census\cr
 #'     \code{plots_table} \tab rodent treatment assignments for each plot\cr
+#'     \code{transect_data} \tab raw plant transect data with length and height (2015-present)\cr
+#'     \code{oldtransect_data} \tab raw plant transect data as point counts (1989-2009)\cr
 #'   }
 #'
 #' @export
@@ -292,8 +294,10 @@ load_plant_data <- function(path = "~", download_if_missing = TRUE)
                   "species_table" = file.path("Plants", "Portal_plant_species.csv"),
                   "census_table" = file.path("Plants", "Portal_plant_censuses.csv"),
                   "date_table" = file.path("Plants", "Portal_plant_census_dates.csv"),
-                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
-  na_strings <- list(c(""), c(""), c("NA"), c("", "none", "unknown"), c("NA"))
+                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"),
+                  "transect_data" = file.path("Plants", "Portal_plant_transects_2015_present.csv"),
+                  "oldtransect_data" = file.path("Plants", "Portal_plant_transects_1989_2009.csv"))
+  na_strings <- list(c(""), c(""), c("NA"), c("", "none", "unknown"), c("NA"),c(""), c(""))
 
   # retrieve data
   data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)

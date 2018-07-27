@@ -40,16 +40,16 @@ test_that("load_data has the right format", {
 
 test_that("load_plant_data has the right format", {
   expect_error(data_tables <- load_plant_data("repo"), NA)
-  expect_equal(length(data_tables), 5)
+  expect_equal(length(data_tables), 7)
   expect_equal(names(data_tables),
                c("quadrat_data", "species_table", "census_table",
-                 "date_table", "plots_table"))
+                 "date_table", "plots_table", "transect_data", "oldtransect_data"))
 
   expect_error(data_tables <- load_plant_data(portal_data_path), NA)
-  expect_equal(length(data_tables), 5)
+  expect_equal(length(data_tables), 7)
   expect_equal(names(data_tables),
                c("quadrat_data", "species_table", "census_table",
-                 "date_table", "plots_table"))
+                 "date_table", "plots_table", "transect_data", "oldtransect_data"))
 })
 
 test_that("load_ant_data works", {
