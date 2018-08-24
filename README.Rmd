@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 
-<div style="width:200px">
-![portalr Logo](portalr.png)
-</div>
+<img src="portalr.png" width="200px">
 
 ## Overview 
 
