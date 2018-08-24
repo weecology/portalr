@@ -17,6 +17,10 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 
+<div style="width:200px">
+![portalr Logo](portalr.png)
+</div>
+
 ## Overview 
 
 The **portalr** package provides collection of basic functions to summarize the Portal porject data on rodents, plants, ants, and weather at our long-term field site in the Chihuahuan Desert. The data begin in 1977 and are continuously updated today. There are functions to summarize rodent abundance, biomass, or energy and by site, plot, or treatment type. There are functions to summarize the weather data collected from our automated weather stations and plant data that is collected each summer and fall.

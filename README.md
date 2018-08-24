@@ -7,6 +7,12 @@
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 
+<div style="width:200px">
+
+![portalr Logo](portalr.png)
+
+</div>
+
 ## Overview
 
 The **portalr** package provides collection of basic functions to
