@@ -11,9 +11,9 @@
 #' @return Data.table with latest 12 months of data removed.
 #'
 #' @noRd
-clean_data <- function(full_data, trapping_table) {
+clean_data <- function(full_data, trapping_table, ...) {
   names <- colnames(full_data)
-  full_data <- dplyr::left_join(full_data, trapping_table) %>%
+  full_data <- dplyr::left_join(full_data, trapping_table, ...) %>%
     dplyr::filter(qcflag == 1) %>%
     dplyr::select(names) %>%
     unique()
