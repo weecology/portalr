@@ -12,11 +12,11 @@
 \usage{
 get_rodent_data(path = "~", clean = TRUE, level = "Site",
   type = "Rodents", length = "all", plots = length, unknowns = FALSE,
-  fill_incomplete = FALSE, shape = "crosstab", time = "period",
-  output = "abundance", fillweight = (output != "abundance"),
-  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE,
-  site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
+  shape = "crosstab", time = "period", output = "abundance",
+  fillweight = (output != "abundance"), na_drop = switch(tolower(level),
+  plot = FALSE, treatment = TRUE, site = TRUE),
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
+  TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
   download_if_missing = TRUE)
 
 abundance(...)
@@ -45,11 +45,6 @@ treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
-
-\item{fill_incomplete}{Logical. Either reports raw data from incomplete trapping sessions
-(fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
-[note that if level="plot" and fill.incomplete=FALSE, NAs will be included in
- periods where trapping was incomplete]}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 

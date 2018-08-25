@@ -5,9 +5,8 @@
 \title{Return cleaned Portal rodent individual data}
 \usage{
 get_stake_data(path = "~", clean = TRUE, type = "Rodents",
-  length = "all", unknowns = FALSE, fill_incomplete = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1,
-  download_if_missing = TRUE)
+  length = "all", unknowns = FALSE, time = "period", fillweight = FALSE,
+  min_plots = 1, min_traps = 1, download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to
@@ -23,9 +22,6 @@ plots (plots that have had same treatment for entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
-
-\item{fill_incomplete}{either reports raw data from incomplete trapping sessions
-(fill_incomplete = FALSE) or estimates adjusted values (fill_incomplete = TRUE)}
 
 \item{time}{specify the format of the time index in the output, either
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),

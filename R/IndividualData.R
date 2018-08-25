@@ -15,8 +15,6 @@
 #'   plots (plots that have had same treatment for entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param fill_incomplete either reports raw data from incomplete trapping sessions
-#'   (fill_incomplete = FALSE) or estimates adjusted values (fill_incomplete = TRUE)
 #' @param time specify the format of the time index in the output, either
 #'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
 #'   "date" (calendar date)
@@ -33,8 +31,8 @@
 #' @export
 #'
 get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
-                           length = "all", unknowns = FALSE, fill_incomplete = FALSE,
-                           time = "period", fillweight = FALSE, min_plots = 1, min_traps = 1,
+                           length = "all", unknowns = FALSE, time = "period",
+                           fillweight = FALSE, min_plots = 1, min_traps = 1,
                            download_if_missing = TRUE)
 {
 
@@ -44,11 +42,12 @@ get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,
-                               unknowns, fill_incomplete)
+                               unknowns)
 
   #### Filter by length and add treatment types ----
   trapping <- filter_plots(data_tables$trapping, length)
-  rodents <- join_trapping_to_rodents(rodents, trapping, data_tables$trapping, min_plots, min_traps) %>%
+  rodents <- join_trapping_to_rodents(rodents, trapping, data_tables$trapping,
+                                      min_plots, min_traps) %>%
     join_plots_to_rodents(data_tables$plots_table) %>%
     dplyr::select(period, month, day = day.x, year, treatment, plot, stake,
                   species, sex, hfl, wgt, tag, ltag)

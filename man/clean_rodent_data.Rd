@@ -5,7 +5,7 @@
 \title{Do basic cleaning of Portal rodent data}
 \usage{
 clean_rodent_data(data_tables, fillweight = FALSE, type = "Rodents",
-  unknowns = FALSE, fill_incomplete = FALSE)
+  unknowns = FALSE)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
@@ -19,9 +19,6 @@ records from that individual or species, where possible}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
-
-\item{fill_incomplete}{Logical. Either reports raw data from incomplete trapping sessions
-(fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)}
 }
 \description{
 This function does basic quality control of the Portal rodent

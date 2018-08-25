@@ -184,10 +184,6 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   treatment for the entire time series)
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
-#'   (fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
-#'   [note that if level="plot" and fill.incomplete=FALSE, NAs will be included in
-#'    periods where trapping was incomplete]
 #' @param shape return data as a "crosstab" or "flat" list
 #' @param time specify the format of the time index in the output, either
 #'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
@@ -213,8 +209,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
                             type = "Rodents", length = "all", plots = length,
-                            unknowns = FALSE,
-                            fill_incomplete = FALSE, shape = "crosstab",
+                            unknowns = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
                             fillweight = (output != "abundance"),
                             na_drop = switch(tolower(level),
@@ -245,8 +240,7 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
   trapping_data <- filter_plots(data_tables$trapping_table, plots) %>%
     join_plots_to_trapping(data_tables$plots_table)
 
-  out <- clean_rodent_data(data_tables, fillweight, type,
-                           unknowns, fill_incomplete) %>%
+  out <- clean_rodent_data(data_tables, fillweight, type, unknowns) %>%
     make_plot_data(trapping_data, output, min_traps) %>%
     make_level_data(data_tables$trapping_table, level, output, min_plots, min_traps) %>%
     prep_rodent_output(data_tables, time, effort, na_drop,

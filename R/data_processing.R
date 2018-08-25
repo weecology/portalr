@@ -105,30 +105,6 @@ find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
     dplyr::select(period)
 }
 
-#' @title Process incomplete censuses
-#'
-#' @description
-#' In some months, not all plots are trapped. Using this data can result in
-#' biased monthly data, especially if summarizing for site or treatment.
-#'
-#' @param rodent_species_merge Data table. Merge of raw rodent records and
-#'                             species information.
-#' @param fill_incomplete Logical. Denotes if users wants to keep incomplete censuses
-#'         or fill with corrected estimates.
-#'
-#' @return Data.table of merged rodent records and species info with incomplete
-#'         censuses processed according to argument fill_incomplete.
-#'
-#' @export
-process_incomplete_censuses <- function(rodent_species_merge,
-                                       fill_incomplete) {
-  if (fill_incomplete) {
-    #incompsampling <- find_incomplete_censuses(rodent_species_merge,trapping_table)
-    warning("fill_incomplete not done")
-    }
-  return(rodent_species_merge)
-}
-
 #' @title Filter plots
 #'
 #' @description
@@ -359,13 +335,11 @@ fill_weight <- function(rodent_data, tofill)
 #'   "Granivores"
 #' @param unknowns either removes all individuals not identified to species
 #'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param fill_incomplete Logical. Either reports raw data from incomplete trapping sessions
-#'   (fill_incomplete = FALSE) or estimates corrected values (fill_incomplete = TRUE)
 #'
 #' @export
 #'
 clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
-                              unknowns = FALSE, fill_incomplete = FALSE)
+                              unknowns = FALSE)
 {
   data_tables$rodent_data %>%
     dplyr::left_join(data_tables$species_table, by = "species") %>%
@@ -373,7 +347,6 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     remove_suspect_entries() %>%
     process_unknownsp(unknowns) %>%
     process_granivores(type) %>%
-    process_incomplete_censuses(fill_incomplete) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
                   energy = wgt ^ 0.75)
