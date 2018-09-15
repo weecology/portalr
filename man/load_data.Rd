@@ -65,10 +65,13 @@ Loads Portal data files from either a user-defined
 \code{\link{load_ant_data}} loads the ant data files
 }
 \examples{
+\donttest{
 portal_data <- load_data("repo")
-
+}
+\donttest{
 portal_plant_data <- load_plant_data("repo")
-
+}
+\donttest{
 portal_ant_data <- load_ant_data("repo")
-
+}
 }

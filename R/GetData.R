@@ -223,8 +223,9 @@ check_for_newer_data <- function(base_folder = "~")
 #'   }
 #'
 #' @examples
+#' \donttest{
 #' portal_data <- load_data("repo")
-#'
+#' }
 #' @export
 #'
 load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
@@ -287,8 +288,9 @@ load_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' portal_plant_data <- load_plant_data("repo")
-#'
+#' }
 
 load_plant_data <- function(path = "~", download_if_missing = TRUE)
 {
@@ -330,8 +332,9 @@ load_plant_data <- function(path = "~", download_if_missing = TRUE)
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' portal_ant_data <- load_ant_data("repo")
-#'
+#' }
 
 load_ant_data <- function(path = "~", download_if_missing = TRUE)
 {

@@ -237,8 +237,9 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 #' @param ... arguments passed to \code{\link{get_plant_data}}
 #'
 #' @examples
+#' \donttest{
 #' plant_abundance("repo")
-#'
+#' }
 #' @export
 #'
 plant_abundance <- function(..., shape = "flat") {
@@ -319,7 +320,7 @@ shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
     process_annuals(type) %>%
     process_unknownsp_plants(unknowns) %>%
     filter_plots(plots) %>%
-    dplyr::mutate(stop = replace(stop, stop>7071.1, 7071.1)) %>%
+    dplyr::mutate(stop = replace(stop, stop > 7071.1, 7071.1)) %>%
     dplyr::mutate(treatment = as.character(treatment), species = as.factor(species), length=stop-start) %>%
     dplyr::group_by(year, treatment, plot, species) %>%
     dplyr::summarize(length=sum(length, na.rm=TRUE), height = mean(height, na.rm=TRUE)) %>%

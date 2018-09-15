@@ -1,6 +1,6 @@
 Package: portalr
-Title: Create useful summaries of the Portal data
-Version: 0.1.0
+Title: Create Useful Summaries of the Portal Data
+Version: 0.1.1
 Maintainer: Glenda M. Yenni <glenda@weecology.org>
 Author:     Glenda M. Yenni [aut],
     Hao Ye [aut], 
@@ -11,10 +11,9 @@ Author:     Glenda M. Yenni [aut],
     Shawn D. Taylor [aut],
     Ethan P. White [aut],
     S.K. Morgan Ernest [aut, cre]
-Description: This package contains functions for downloading the latest 
-    version of the Portal data and to generate summaries of the rodent, 
-    plant, ant, and weather data. 
-License: MIT
+Description: Contains functions for downloading the latest version of the Portal 
+    data and to generate summaries of the rodent, plant, ant, and weather data. 
+License: MIT + file LICENSE
 URL: https://github.com/weecology/portalr
 BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
@@ -29,7 +28,6 @@ Imports:
   httr, 
   rlang,
   forecast,
-  htmltab,
   lunar,
   jsonlite
 Suggests:

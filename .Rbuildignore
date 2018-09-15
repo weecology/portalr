@@ -5,3 +5,4 @@ CONTRIBUTING.md
 ^.zenodo.json
 ^README\.Rmd$
 ^README-.*\.png$
+^portalr.png

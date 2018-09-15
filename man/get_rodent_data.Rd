@@ -94,10 +94,13 @@ This function is a generic interface into creating summaries
   (computed as biomass ^ 0.75)
 }
 \examples{
+\donttest{
 abundance("repo")
-
+}
+\donttest{
 biomass("repo")
-
+}
+\donttest{
 energy("repo")
-
+}
 }

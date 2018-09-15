@@ -119,10 +119,13 @@ add_seasons <- function(data, level = "site", season_level = 2,
 #'
 #' @param ... arguments passed to \code{\link{add_seasons}}
 #'
-#' @examples yearly(abundance(path = "repo", time = "newmoon"), date_column = "newmoonnumber", path = "repo")
-#'
+#' @examples
+#' \donttest{
+#' yearly(abundance(path = "repo", time = "newmoon"),
+#'        date_column = "newmoonnumber", path = "repo")
+#' }
 #' @export
 #'
 yearly <- function(...) {
-  add_seasons(..., season_level="year", summarize="mean")
+  add_seasons(..., season_level = "year", summarize = "mean")
 }
