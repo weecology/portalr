@@ -289,7 +289,7 @@ biomass <- function(...) {
 #' @rdname get_rodent_data
 #'
 #' @description * \code{energy()} generates a table of rodent energy
-#'   (computed as biomass ^ 0.75)
+#'   (computed as (biomass * 5.69) ^ 0.75 after White et al 2004)
 #'
 #' @inheritParams abundance
 #'

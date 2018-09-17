@@ -349,7 +349,7 @@ clean_rodent_data <- function(data_tables, fillweight = FALSE, type = "Rodents",
     process_granivores(type) %>%
     dplyr::mutate(species = as.factor(species),
                   wgt = as.numeric(wgt),
-                  energy = wgt ^ 0.75)
+                  energy = ((wgt * 5.69)  ^ 0.75))
 }
 
 #' @title Rename plant species
