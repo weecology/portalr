@@ -4,5 +4,4 @@ CONTRIBUTING.md
 ^\.Rproj\.user$
 ^.zenodo.json
 ^README\.Rmd$
-^README-.*\.png$
-^portalr.png
+^LICENSE
