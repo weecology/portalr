@@ -11,8 +11,10 @@ Author:     Glenda M. Yenni [aut],
     Shawn D. Taylor [aut],
     Ethan P. White [aut],
     S.K. Morgan Ernest [aut, cre]
-Description: Contains functions for downloading the latest version of the Portal 
-    data and to generate summaries of the rodent, plant, ant, and weather data. 
+Description: Download and generate summaries for the rodent, plant, ant, and 
+    weather data from the Portal Project. Portal is a long-term (and ongoing) 
+    experimental monitoring site in the Chihuahua desert. The raw data files 
+    can be found at <https://github.com/weecology/portalData>.
 License: MIT + file LICENSE
 URL: https://github.com/weecology/portalr
 BugReports: https://github.com/weecology/portalr/issues
