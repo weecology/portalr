@@ -91,7 +91,7 @@ This function is a generic interface into creating summaries
 * \code{biomass()} generates a table of rodent biomass
 
 * \code{energy()} generates a table of rodent energy
-  (computed as biomass ^ 0.75)
+  (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)
 }
 \examples{
 \donttest{

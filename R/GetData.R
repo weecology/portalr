@@ -75,7 +75,7 @@ download_observations <- function(base_folder = "~", version = "latest")
 
   # Attemt to download the zip file
   zip_download_dest <- full_path("PortalData.zip", tempdir())
-  download.file(zip_download_path, zip_download_dest, quiet = TRUE)
+  download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
 
   final_data_folder <- full_path("PortalData", base_folder)
 
