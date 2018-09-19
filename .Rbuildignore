@@ -1,7 +1,7 @@
+^LICENSE\.md$
 CONTRIBUTING.md
 .travis.yml
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.zenodo.json
 ^README\.Rmd$
-^LICENSE
