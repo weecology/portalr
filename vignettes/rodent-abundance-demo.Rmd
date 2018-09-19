@@ -8,7 +8,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{Portal Rodent Abundance Demo}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
