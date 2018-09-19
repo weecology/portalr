@@ -1,7 +1,9 @@
 context("Check get_future_moons")
 
+portal_data_path <- tempdir()
+
 test_that("get_future_moons returns expected results using current newmoons_table", {
-  moons <- load_data()$newmoons_table
+  moons <- load_data(portal_data_path)$newmoons_table
 
   expect_error(newmoons <- get_future_moons(moons, num_future_moons = 12), NA)
   expect_equal(dim(newmoons), c(12, 4))
