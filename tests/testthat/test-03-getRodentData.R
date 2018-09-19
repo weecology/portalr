@@ -98,9 +98,9 @@ test_that("energy returns expected results", {
   expect_equal(dim(energy_filled), dim(energy_notfilled))
   expect_equal(energy_filled$species, energy_notfilled$species)
   expect_equal(floor(dplyr::filter(energy_notfilled, period == 447, plot == 3,
-                                   species == "BA")$energy), 9)
+                                   species == "BA")$energy), 51)
   expect_equal(floor(dplyr::filter(energy_filled, period == 447, plot == 3,
-                                   species == "BA")$energy), 14)
+                                   species == "BA")$energy), 82)
 })
 
 test_that("abundance filters at the plot level correctly", {

@@ -41,7 +41,7 @@ test_that("clean_rodent_data has correct columns", {
   expect_is(rodents$wgt, "numeric")
   expect_is(rodents$energy, "numeric")
   expect_equal(is.na(rodents$wgt), is.na(rodents$energy))
-  expect_equal(rodents$wgt[!is.na(rodents$wgt)] ^ 0.75,
+  expect_equal(5.69 * rodents$wgt[!is.na(rodents$wgt)] ^ 0.75,
                rodents$energy[!is.na(rodents$energy)])
 })
 
