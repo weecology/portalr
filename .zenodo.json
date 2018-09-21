@@ -1,5 +1,5 @@
 {
-"title": "Creates useful summaries of the Portal data",
+"title": "Create Useful Summaries of the Portal Data",
 "creators": [
     {
       "affiliation": "University of Florida",
@@ -47,11 +47,11 @@
       "orcid": "0000-0002-6026-8530"
     }
 ],
-    "description": "This package contains functions for downloading the latest version of the Portal data and to generate summaries of the rodent, plant, ant, and weather data. ",
+    "description": "Download and generate summaries for the rodent, plant, ant, and weather data from the Portal Project. Portal is a long-term (and ongoing) experimental monitoring site in the Chihuahua desert. The raw data files can be found at <https://github.com/weecology/portalData>.",
     "keywords": [
     "ecology",
     "time-series",
-    "long-term",
+    "long-term"
   ],
     "access_right": "open",
     "license": "mit-license",
