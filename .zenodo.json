@@ -47,7 +47,7 @@
       "orcid": "0000-0002-6026-8530"
     }
 ],
-    "description": "Download and generate summaries for the rodent, plant, ant, and weather data from the Portal Project. Portal is a long-term (and ongoing) experimental monitoring site in the Chihuahua desert. The raw data files can be found at <https://github.com/weecology/portalData>.",
+    "description": "Download and generate summaries for the rodent, plant, ant, and weather data from the Portal Project. Portal is a long-term (and ongoing) experimental monitoring site in the Chihuahua desert. The raw data files can be found at https://github.com/weecology/portalData.",
     "keywords": [
     "ecology",
     "time-series",
