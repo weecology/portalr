@@ -5,6 +5,7 @@
 
 [![Build
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 
 <img src="man/figures/portalr.png" width="200px">
