@@ -34,11 +34,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 download_observations <- function(base_folder = "~", version = "latest")
 {
   # get version info
-  releases <- get_data_versions(version == "latest")
-  if (is.null(releases))
-  {
-    stop("Unable to retrieve version info.\n", status)
-  }
+  releases <- get_data_versions(version == "latest", halt_on_error = TRUE)
 
   # match version
   if (version == "latest")
@@ -98,13 +94,13 @@ download_observations <- function(base_folder = "~", version = "latest")
 #'   for PortalData.
 #'
 #' @param from_zenodo logical; if `TRUE`, get info from Zenodo, otherwise GitHub
-#' @param catch_error logical; if `TRUE`, return NULL on errors, otherwise
+#' @param halt_on_error logical; if `FALSE`, return NULL on errors, otherwise
 #'   whatever got returned (could be an error or warning)
 #' @return A data.frame with two columns, `version` (string with the version #) and
 #'   `zipball_url` (download URLs for the corresponding zipped release).
 #'
 #' @noRd
-get_data_versions <- function(from_zenodo = TRUE, catch_error = TRUE)
+get_data_versions <- function(from_zenodo = TRUE, halt_on_error = FALSE)
 {
   releases <- tryCatch(
     {
@@ -115,10 +111,16 @@ get_data_versions <- function(from_zenodo = TRUE, catch_error = TRUE)
         get_github_releases()
       }
     },
-    error = function(e) e,
+    error = function(e) {
+      if (halt_on_error) {
+        stop(e)
+      } else {
+        e
+      }
+    },
     warning = function(w) w
   )
-  if (catch_error && !is.data.frame(releases))
+  if (!is.data.frame(releases))
   {
     return(NULL)
   }
