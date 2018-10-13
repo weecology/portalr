@@ -33,25 +33,13 @@ full_path <- function(reference_path, base_path = getwd()) {
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
 {
+  # get version info
+  releases <- get_data_versions(version == "latest", halt_on_error = TRUE)
+
+  # match version
   if (version == "latest")
   {
-    message("Downloading the latest version of the data...")
-    # Try and parse the download link from Zenodo
-    resp <- httr::GET("https://zenodo.org/record/1215988")
-    if (httr::http_type(resp) != "text/html") # check for errors
-    {
-      stop("Zenodo response was not in text format", call. = FALSE)
-    }
-    page_content <- httr::content(resp, "text")
-    match_pos <- regexec("(https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+)zip",
-                         page_content)
-    match_text <- regmatches(page_content, match_pos)
-
-    if (length(match_text) != 1 || length(match_text[[1]]) <= 0)
-    {
-      stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
-    }
-    zip_download_path <- match_text[[1]][1]
+    match_idx <- 1
   } else {
     # Normalize version number
     if (grepl("^[0-9]+\\.[0-9]+$", version))
@@ -60,20 +48,19 @@ download_observations <- function(base_folder = "~", version = "latest")
     }
     if (!grepl("^[0-9]+\\.[0-9]+\\.0$", version))
     {
-      stop("Invalid version number given, ", version, call. = FALSE)
+      stop("Invalid version number; given, ", version, call. = FALSE)
     }
 
-    releases <- get_github_releases()
-    idx <- match(version, releases$tag_name)
-    if (length(idx) != 1 || is.na(idx))
+    match_idx <- match(version, releases$version)
+    if (length(match_idx) != 1 || is.na(match_idx))
     {
       stop("Did not find a version of the data matching, ", version, call. = FALSE)
     }
-    message("Downloading version ", version, " of the data...")
-    zip_download_path <- releases$zipball_url[idx]
   }
 
   # Attemt to download the zip file
+  message("Downloading version ", releases$version[match_idx], " of the data...")
+  zip_download_path <- releases$zipball_url[match_idx]
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
 
@@ -101,13 +88,93 @@ download_observations <- function(base_folder = "~", version = "latest")
   file.rename(full_path(primary_data_folder, base_folder), final_data_folder)
 }
 
+#' @title get version and download info for PortalData
+#'
+#' @description Check either Zenodo or GitHub for the version and download link
+#'   for PortalData.
+#'
+#' @param from_zenodo logical; if `TRUE`, get info from Zenodo, otherwise GitHub
+#' @param halt_on_error logical; if `FALSE`, return NULL on errors, otherwise
+#'   whatever got returned (could be an error or warning)
+#' @return A data.frame with two columns, `version` (string with the version #) and
+#'   `zipball_url` (download URLs for the corresponding zipped release).
+#'
+#' @noRd
+get_data_versions <- function(from_zenodo = TRUE, halt_on_error = FALSE)
+{
+  releases <- tryCatch(
+    {
+      if (from_zenodo)
+      {
+        get_zenodo_latest_release()
+      } else {
+        get_github_releases()
+      }
+    },
+    error = function(e) {
+      if (halt_on_error) {
+        stop(e)
+      } else {
+        e
+      }
+    },
+    warning = function(w) w
+  )
+  if (!is.data.frame(releases))
+  {
+    return(NULL)
+  }
+  return(releases)
+}
+
+#' @title get Zenodo download link for PortalData
+#'
+#' @description Check Zenodo for the link and version for the latest release of
+#'   PortalData.
+#'
+#' @return A data.frame with two columns, `version` (string with the version #) and
+#'   `zipball_url` (download URLs for the corresponding zipped release).
+#'
+#' @noRd
+get_zenodo_latest_release <- function()
+{
+  # Try and parse the download link from Zenodo
+  resp <- httr::GET("https://zenodo.org/record/1215988")
+  if (httr::http_type(resp) != "text/html") # check for errors
+  {
+    stop("Zenodo response was not in text format", call. = FALSE)
+  }
+  page_content <- httr::content(resp, "text")
+  match_pos <- regexec("https://zenodo.org/api/files/[0-9a-f\\-]+/weecology/[0-9a-zA-z.\\-]+zip",
+                       page_content)
+  match_text <- regmatches(page_content, match_pos)
+
+  if (length(match_text) != 1 || length(match_text[[1]]) <= 0)
+  {
+    stop("Wasn't able to parse Zenodo for the download link.", call. = FALSE)
+  }
+  zip_download_path <- match_text[[1]][1]
+
+  pattern <- "([0-9]+\\.[0-9]+\\.[0-9]+)\\.zip"
+  match_pos <- regexec(pattern, zip_download_path)
+  match_text <- regmatches(zip_download_path, match_pos)
+  if (length(match_text) != 1 || length(match_text[[1]]) <= 0)
+  {
+    stop("Wasn't able to parse Zenodo for the version.", call. = FALSE)
+  }
+
+  return(data.frame(version = match_text[[1]][2],
+                    zipball_url = zip_download_path,
+                    stringsAsFactors = FALSE))
+}
+
 #' @title get GitHub Release Info for PortalData
 #'
 #' @description Use the GitHub API to get info about the releases of the
 #'   PortalData repo.
 #'
-#' @return A data.frame with two columns, `tag_name` (name of the tags) and
-#'   `zipball_url` (download URLs for the corresponding zipped release)
+#' @return A data.frame with two columns, `version` (string with the version #) and
+#'   `zipball_url` (download URLs for the corresponding zipped release).
 #'
 #' @noRd
 get_github_releases <- function()
@@ -129,20 +196,33 @@ get_github_releases <- function()
   # keep getting info until no more `next` pages
   while (match_text == "next")
   {
-    resp <- httr::GET(paste0("https://api.github.com/repos/weecology/PortalData/releases?page=", page_idx), github_auth)
-    link_str <- httr::headers(resp)$link
-    match_pos <- regexec("^<.+>; rel=\"([a-z]+)\", <.+>; rel=\"([a-z]+)\"$", link_str)
-    match_text <- regmatches(link_str, match_pos)[[1]][2]
-    if (httr::http_type(resp) != "application/json") # check for errors
+    github_path <- paste0("https://api.github.com/repos/weecology/PortalData/releases?page=", page_idx)
+    resp <- httr::GET(github_path, github_auth)
+
+    # check if problems with retrieving info
+    if (httr::headers(resp)$status == "403 Forbidden" &&
+        httr::headers(resp)$"x-ratelimit-remaining" == "0") # rate limit exceeded
+    {
+      stop("Exceeded GitHub rate limit, please try again in an hour or consult the documentation for details.\n",
+           "https://developer.github.com/v3/#rate-limiting")
+    } else if (httr::http_type(resp) != "application/json") # check for errors
     {
       stop("GitHub response was not in JSON format", call. = FALSE)
     }
 
+    # extract release info
     releases <- rbind(releases,
                       jsonlite::fromJSON(httr::content(resp, "text"))[, c("tag_name", "zipball_url")])
-    page_idx <- page_idx + 1
-  }
 
+    # update page count
+    page_idx <- page_idx + 1
+
+    # check for next page of results
+    link_str <- httr::headers(resp)$link
+    match_pos <- regexec("^<.+>; rel=\"([a-z]+)\", <.+>; rel=\"([a-z]+)\"$", link_str)
+    match_text <- regmatches(link_str, match_pos)[[1]][2]
+  }
+  names(releases) <- c("version", "zipball_url")
   return(releases)
 }
 
@@ -172,8 +252,13 @@ check_for_newer_data <- function(base_folder = "~")
                      as.numeric(gsub(pattern, "\\2", version_str)),
                      as.numeric(gsub(pattern, "\\3", version_str)))
 
-  github_version_file <- "https://raw.githubusercontent.com/weecology/PortalData/master/version.txt"
-  github_version_str <- as.character(read.table(github_version_file)[1, 1])
+  # pull github version from list of releases
+  github_releases <- get_data_versions(from_zenodo = FALSE)
+  if (is.null(github_releases)) # if unable to access github releases
+  {
+    return(FALSE)
+  }
+  github_version_str <- github_releases$version[1]
   github_version <- c(as.numeric(gsub(pattern, "\\1", github_version_str)),
                       as.numeric(gsub(pattern, "\\2", github_version_str)),
                       as.numeric(gsub(pattern, "\\3", github_version_str)))
@@ -384,10 +469,10 @@ load_generic_data <- function(data_files, na_strings, path = "~", download_if_mi
   if (tolower(path) != "repo" && any(!sapply(data_files, file.exists)))
   {
     if (download_if_missing) {
-      warning("Proceeding to download data into specified path", path)
+      warning("Proceeding to download data into specified path", path, "\n")
       download_observations(path)
     } else {
-      stop("Data files were not found in specified path", path)
+      stop("Data files were not found in specified path", path, "\n")
     }
   }
   stopifnot(length(na_strings) == length(data_files))
