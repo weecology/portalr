@@ -162,7 +162,8 @@ get_zenodo_latest_release <- function()
   }
 
   return(data.frame(version = match_text[[1]][2],
-                    zipball_url = zip_download_path))
+                    zipball_url = zip_download_path,
+                    stringsAsFactors = FALSE))
 }
 
 #' @title get GitHub Release Info for PortalData
@@ -466,10 +467,10 @@ load_generic_data <- function(data_files, na_strings, path = "~", download_if_mi
   if (tolower(path) != "repo" && any(!sapply(data_files, file.exists)))
   {
     if (download_if_missing) {
-      warning("Proceeding to download data into specified path", path)
+      warning("Proceeding to download data into specified path", path, "\n")
       download_observations(path)
     } else {
-      stop("Data files were not found in specified path", path)
+      stop("Data files were not found in specified path", path, "\n")
     }
   }
   stopifnot(length(na_strings) == length(data_files))
