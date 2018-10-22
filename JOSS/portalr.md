@@ -4,12 +4,38 @@ tags:
   - Portal Project
   - 
 authors:
-  - name: Erica Christensen
+  - name: Erica M. Christensen
     orcid: 0000-0002-5635-2502
+    affiliation: "1, 2"
+  - name: Glenda M. Yenni
+    orcid: 0000-0001-6969-1848
+    affiliation: 1
+  - name: Hao Ye
+    orcid: 0000-0002-8630-1458
+    affiliation: 1
+  - name: Juniper L. Simonis
+    orcid: 0000-0001-9798-0460
+    affiliation: 1
+  - name: Ellen K. Bledsoe
+    orcid: 0000-0002-3629-7235
+    affiliation: 1
+  - name: Renata Diaz
+    orcid: 0000-0003-0803-4734
+    affiliation: 1
+  - name: Shawn D. Taylor
+    orcid: 0000-0002-6178-6903
+    affiliation: 1
+  - name: Ethan P. White
+    orcid: 0000-0001-6728-7745
+    affiliation: 1
+  - name: S. K. Morgan Ernest
+    orcid: 0000-0002-6026-8530
     affiliation: 1
 affiliations:
-  - name: University of Florida, Wildlife Ecology and Conservation Department
+  - name: University of Florida
     index: 1
+  - name: Jornada Experimental Range, New Mexico State University
+    index: 2
 date: 22 October 2018
 bibliography: paper.bib
 ---
@@ -23,5 +49,6 @@ The Portal Project is a long-term ecological study site located in the Chihuahua
 The ``portalr`` package contains functions to download the most up-to-date version of the data from GitHub and Zenodo, and to summarize or manipulate the data in several common ways. For example, plant abundance data can be obtained at the plot level or aggregated to site level; small mammal data can be obtained as time series of abundances, biomass, or metabolic energy; and records for "unknown" species or incomplete records (containing "NAs") can be stripped from the data if desired. See [CRAN address] for documentation. 
 
 # Acknowledgements
+This project was supported by the National Science Foundation through grant 1622425 to S.K.M.E and by the Gordon and Betty Moore Foundation's Data-Driven Discovery Initiative through grant GBMF4563 to E.P.W. E.M.C. was also supported by appropriated funds to the USDA-ARS Jornada Experimental Range 3050-11210-009-00-D.
 
 # References
