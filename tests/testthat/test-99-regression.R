@@ -152,5 +152,11 @@ test_that("get_future_moons returns identical table using sample input", {
 
   newmoons <- get_future_moons(moons, num_future_moons = 10)
   attributes(newmoons) <- attributes(newmoons)[sort(names(attributes(newmoons)))]
-  expect_identical(digest::digest(newmoons), "bec7d2ca15a8dad4d44775daf5239c53")
+
+    # correct for NAs in output
+  expect_identical(digest::digest(is.na(newmoons)), "1d6e5a1db8768bfdae56a30819211df2")
+  newmoons$newmoondate[is.na(newmoons$newmoondate)] <- as.Date("0000-01-01")
+  newmoons$period[is.na(newmoons$period)] <- -999999
+  newmoons$censusdate[is.na(newmoons$censusdate)] <- as.Date("0000-01-01")
+  expect_identical(digest::digest(newmoons), "aa0ddfd4ee3133525e5c5aedcb21a9a5")
 })
