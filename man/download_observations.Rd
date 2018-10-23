@@ -19,3 +19,10 @@ This downloads the latest portal data regardless if they are
   actually updated or not.
   TODO: incorporate data retriever into this when it's pointed at the github repo
 }
+\examples{
+\donttest{
+  download_observations()
+  download_observations("~/old-data", version = "1.50.0")
+}
+
+}
