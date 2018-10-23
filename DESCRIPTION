@@ -1,16 +1,25 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
 Version: 0.1.3
-Maintainer: Glenda M. Yenni <glenda@weecology.org>
-Author:     Glenda M. Yenni [aut],
-    Hao Ye [aut], 
-    Erica M. Christensen [aut],
-    Juniper L. Simonis [aut],
-    Ellen K. Bledsoe [aut],
-    Renata M. Diaz [aut],
-    Shawn D. Taylor [aut],
-    Ethan P. White [aut],
-    S.K. Morgan Ernest [aut, cre]
+Authors@R: c(person(c("Glenda", "M."), "Yenni", role = c("aut", "cre"), 
+                    email = "glenda@weecology.org", 
+                    comment = c(ORCID = "0000-0001-6969-1848")), 
+             person("Hao", "Ye", role = c("aut"), 
+                    comment = c(ORCID = "0000-0002-8630-1458")), 
+             person(c("Erica", "M."), "Christensen", role = c("aut"), 
+                    comment = c(ORCID = "0000-0002-5635-2502")), 
+             person(c("Juniper", "L."), "Simonis", role = c("aut"), 
+                    comment = c(ORCID = "0000-0001-9798-0460")), 
+             person(c("Ellen", "K."), "Bledsoe", role = c("aut"), 
+                    comment = c(ORCID = "0000-0002-3629-7235")), 
+             person(c("Renata", "M."), "Diaz", role = c("aut"), 
+                    comment = c(ORCID = "0000-0003-0803-4734")), 
+             person(c("Shawn", "D."), "Taylor", role = c("aut"), 
+                    comment = c(ORCID = "0000-0002-6178-6903")), 
+             person(c("Ethan", "P,"), "White", role = c("ctb"), 
+                    comment = c(ORCID = "0000-0001-6728-7745")), 
+             person(c("S.K.", "Morgan"), "Ernest", role = c("aut"), 
+                    comment = c(ORCID = "0000-0002-6026-8530")))
 Description: Download and generate summaries for the rodent, plant, ant, and 
     weather data from the Portal Project. Portal is a long-term (and ongoing) 
     experimental monitoring site in the Chihuahua desert. The raw data files 
