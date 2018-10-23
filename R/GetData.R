@@ -30,6 +30,12 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'
 #' @return None
 #'
+#' @examples
+#' \donttest{
+#'   download_observations()
+#'   download_observations("~/old-data", version = "1.50.0")
+#' }
+#'
 #' @export
 download_observations <- function(base_folder = "~", version = "latest")
 {

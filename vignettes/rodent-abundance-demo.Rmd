@@ -47,7 +47,7 @@ First, we try to load the data. If there isn't a Portal folder, than `load_data`
 check whether we already have the data. If we don't have the data, or if the version we have isn't the most recent, we use the `download_observations` function to download the latest copy of the data.
 
 ```{r}
-my_path <- "." # use current folder to store downloaded data
+my_path <- tempdir() # use a temporary folder to store downloaded data
 data_tables <- load_data(my_path, download_if_missing = TRUE)
 ```
 
@@ -62,7 +62,7 @@ print(summary(data_tables))
 The first table that we loaded (`data_tables$rodent_data`) is a record of the macrofauna observed, including rodents, but also other taxa. If we just wanted to get the rodent abundance data, we could use the `abundance` function. 
 
 ```{r}
-rodent_abundance <- abundance(time = "date") %>%
+rodent_abundance <- abundance(path = my_path, time = "date") %>%
   gather(species, abundance, -censusdate)
 print(summary(rodent_abundance))
 ```
@@ -196,7 +196,7 @@ print(date_span)
 We are now ready to plot abundances just over the control plots and the time span in `r min(date_span$iso_date)` to `r max(date_span$iso_date)`. We do this by retrieving the abundance data by plot, and then filtering accordingly:
 
 ```{r, fig.cap = "Monthly abundance of rodents (control plots)", fig.width = 7.5, fig.height = 10}
-abundance(time = "date", level = "plot") %>%
+abundance(path = my_path, time = "date", level = "plot") %>%
   filter(censusdate >= min(date_span$iso_date), 
          censusdate <= max(date_span$iso_date), 
          plot %in% mostly_control_plots$plot) %>% 
@@ -243,7 +243,7 @@ print(date_span)
 Finally, the figure:
 
 ```{r, fig.cap = "Monthly abundance of rodents (exclosure plots)", fig.width = 7.5, fig.height = 10}
-abundance(time = "date", level = "plot") %>%
+abundance(path = my_path, time = "date", level = "plot") %>%
   filter(censusdate >= min(date_span$iso_date), 
          censusdate <= max(date_span$iso_date), 
          plot %in% mostly_exclosure_plots$plot) %>% 
