@@ -1,8 +1,8 @@
 context("checks NDVI summary output")
 
 portal_data_path <- tempdir()
-monthly_ndvi = ndvi("monthly", path = portal_data_path)
-newmoon_ndvi = ndvi("newmoon", path = portal_data_path)
+monthly_ndvi <- ndvi("monthly", path = portal_data_path)
+newmoon_ndvi <- ndvi("newmoon", path = portal_data_path)
 
 test_that("Monthly option returns 2 columns", {
   expect_equal(NCOL(monthly_ndvi), 2)

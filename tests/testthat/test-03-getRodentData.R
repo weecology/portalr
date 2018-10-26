@@ -3,6 +3,7 @@ context("Check rodent data summaries")
 portal_data_path <- tempdir()
 
 test_that("get_rodent_data returns expected results, and filters by plots correctly", {
+  skip_on_cran() # we have a regression test for this
   ab_all_plots <- get_rodent_data(path = portal_data_path, level = "plot",
                                   na_drop = TRUE)
 
@@ -33,6 +34,7 @@ test_that("get_rodent_data gives warning for using length", {
 })
 
 test_that("abundance returns expected results", {
+  skip_on_cran()
   ab_notfilled <- abundance(path = portal_data_path, level = "Plot", type = "Rodents",
                             plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
@@ -54,7 +56,7 @@ test_that("abundance returns expected results", {
 })
 
 test_that("biomass returns expected results", {
-
+  skip_on_cran()
   biom_filled <- biomass(path = portal_data_path, level = "Plot", type = "Rodents",
                          plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
@@ -79,7 +81,7 @@ test_that("biomass returns expected results", {
 })
 
 test_that("energy returns expected results", {
-
+  skip_on_cran()
   energy_filled <- energy(path = portal_data_path, level = "Plot", type = "Rodents",
                           plots = "all", unknowns = FALSE,
                           shape = "flat", time = "period", fillweight = TRUE,
@@ -104,6 +106,7 @@ test_that("energy returns expected results", {
 })
 
 test_that("abundance filters at the plot level correctly", {
+  skip_on_cran()
   incomplete_plots <- abundance(path = portal_data_path, level = "plot",
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
     dplyr::filter(ntraps < 1, period <= 463)

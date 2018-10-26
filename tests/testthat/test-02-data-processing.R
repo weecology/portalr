@@ -1,6 +1,7 @@
 context("Check data processing")
 
-data_tables <- load_data(tempdir())
+portal_data_path <- tempdir()
+data_tables <- load_data(portal_data_path)
 
 test_that("rodent data.frame has correct column names", {
   rats <- data_tables[[1]]
