@@ -5,8 +5,9 @@
 \title{Return cleaned Portal rodent individual data}
 \usage{
 get_stake_data(path = "~", clean = TRUE, type = "Rodents",
-  length = "all", unknowns = FALSE, time = "period", fillweight = FALSE,
-  min_plots = 1, min_traps = 1, download_if_missing = TRUE)
+  length = "all", unknowns = FALSE, time = "period",
+  fillweight = FALSE, min_plots = 1, min_traps = 1,
+  download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to

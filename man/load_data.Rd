@@ -4,8 +4,6 @@
 \alias{load_data}
 \alias{load_plant_data}
 \alias{load_ant_data}
-\alias{load_plant_data}
-\alias{load_ant_data}
 \title{Read in the Portal data files}
 \usage{
 load_data(path = "~", download_if_missing = TRUE, clean = TRUE)
