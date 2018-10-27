@@ -453,7 +453,7 @@ load_ant_data <- function(path = "~", download_if_missing = TRUE)
 #' @rdname load_data
 #' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
 #'
-#' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
+#' @inheritParams load_data
 #'
 #' @return \code{\link{load_trapping_data}} returns a list of 2 dataframes:
 #'   \tabular{ll}{

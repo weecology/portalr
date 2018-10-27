@@ -25,8 +25,6 @@ load_trapping_data(path = "~", download_if_missing = TRUE, clean = TRUE)
 PortalData folder, then download it}
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
-
-\item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 }
 \value{
 \code{\link{load_data}} returns a list of 5 dataframes:

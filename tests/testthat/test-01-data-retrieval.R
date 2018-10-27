@@ -36,7 +36,6 @@ test_that("looking up data versions handle lack of a network connection", {
   })
 })
 
-
 test_that("load_data has the right format", {
   skip_on_cran()
   expect_error(data_tables <- load_data("repo"), NA)

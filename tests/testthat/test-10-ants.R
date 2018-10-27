@@ -3,6 +3,7 @@ context("Check ant data summaries")
 portal_data_path <- tempdir()
 
 test_that("colony_presence_absence returns expected results", {
+  skip_on_cran()
   colonypresabs.stake <- colony_presence_absence(path = portal_data_path, level = "Stake",
                                                 rare_sp = T, unknowns = T)
 
@@ -17,6 +18,7 @@ test_that("colony_presence_absence returns expected results", {
 })
 
 test_that("bait_presence_absence returns expected results", {
+  skip_on_cran()
   baitpresabs.stake <- bait_presence_absence(path = portal_data_path, level = "Stake")
 
   test.bait <- dplyr::filter(baitpresabs.stake, year %in% 2000:2005)

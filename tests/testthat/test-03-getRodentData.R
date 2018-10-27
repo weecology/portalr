@@ -3,7 +3,7 @@ context("Check rodent data summaries")
 portal_data_path <- tempdir()
 
 test_that("get_rodent_data returns expected results, and filters by plots correctly", {
-  skip_on_cran() # we have a regression test for this
+  skip_on_cran()
   ab_all_plots <- get_rodent_data(path = portal_data_path, level = "plot",
                                   na_drop = TRUE)
 
@@ -29,6 +29,7 @@ test_that("get_rodent_data returns expected results, and filters by plots correc
 })
 
 test_that("get_rodent_data gives warning for using length", {
+  skip_on_cran()
   expect_warning(dat <- get_rodent_data(path = portal_data_path, length = "all"))
   expect_equal(dat, get_rodent_data(path = portal_data_path, plots = "all"))
 })
