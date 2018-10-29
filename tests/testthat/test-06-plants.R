@@ -3,6 +3,7 @@ context("Check plant data summaries")
 portal_data_path <- tempdir()
 
 test_that("plant_abundance returns expected results", {
+  skip_on_cran()
   plants_all <- plant_abundance(path = portal_data_path, level = "Plot", type = "All",
                                 plots = "all", unknowns = TRUE,
                                 correct_sp = FALSE, shape = "flat")
@@ -24,6 +25,7 @@ test_that("plant_abundance returns expected results", {
 })
 
 test_that("shrub_cover returns expected results", {
+  skip_on_cran()
   shrubs_all <- shrub_cover(path = portal_data_path, type = "Shrubs",
                                 plots = "all", unknowns = FALSE,
                                 correct_sp = FALSE)

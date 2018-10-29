@@ -1,6 +1,7 @@
 context("Check data processing")
 
-data_tables <- load_data(tempdir())
+portal_data_path <- tempdir()
+data_tables <- load_data(portal_data_path)
 
 test_that("rodent data.frame has correct column names", {
   rats <- data_tables[[1]]
@@ -82,7 +83,7 @@ test_that("does find_incomplete_censuses work properly?", {
   expect_equal(sum(idx), 115)
 })
 
-plant_tables <- load_plant_data(tempdir())
+plant_tables <- load_plant_data(portal_data_path)
 
 test_that("quadrat data.frame has correct column names", {
   quadrats <- plant_tables[[1]]

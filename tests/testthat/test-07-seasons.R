@@ -4,7 +4,8 @@ portal_data_path <- tempdir()
 rodents <- abundance(path = portal_data_path, level = "plot", shape = "flat")
 test_rodents <- dplyr::filter(rodents, period %in% 21:191)
 
-test_weather <- weather("monthly", path = portal_data_path) %>% dplyr::filter(year %in% 1989:2010)
+test_weather <- weather("monthly", path = portal_data_path) %>%
+  dplyr::filter(year %in% 1989:2010)
 
 test_that("add_seasons returns expected results", {
 

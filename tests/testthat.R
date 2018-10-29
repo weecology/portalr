@@ -1,4 +1,4 @@
-library(testthat)
+library(httptest)
 library(portalr)
 
 test_check("portalr")
