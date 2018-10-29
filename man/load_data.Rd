@@ -4,6 +4,7 @@
 \alias{load_data}
 \alias{load_plant_data}
 \alias{load_ant_data}
+\alias{load_trapping_data}
 \title{Read in the Portal data files}
 \usage{
 load_data(path = "~", download_if_missing = TRUE, clean = TRUE)
@@ -11,6 +12,9 @@ load_data(path = "~", download_if_missing = TRUE, clean = TRUE)
 load_plant_data(path = "~", download_if_missing = TRUE)
 
 load_ant_data(path = "~", download_if_missing = TRUE)
+
+load_trapping_data(path = "~", download_if_missing = TRUE,
+  clean = TRUE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -50,6 +54,12 @@ PortalData folder, then download it}
     \code{species_table} \tab species code, names, types\cr
     \code{plots_table} \tab treatment assignments for each plot\cr
   }
+
+\code{\link{load_trapping_data}} returns a list of 2 dataframes:
+  \tabular{ll}{
+    \code{trapping_table} \tab when each plot was trapped\cr
+    \code{newmoons_table} \tab pairs census periods with newmoons\cr
+  }
 }
 \description{
 Loads Portal data files from either a user-defined
@@ -61,6 +71,8 @@ Loads Portal data files from either a user-defined
 \code{\link{load_plant_data}} loads the plant data files
 
 \code{\link{load_ant_data}} loads the ant data files
+
+\code{\link{load_trapping_data}} loads just the rodent trapping files
 }
 \examples{
 \donttest{
@@ -71,5 +83,8 @@ portal_plant_data <- load_plant_data("repo")
 }
 \donttest{
 portal_ant_data <- load_ant_data("repo")
+}
+\donttest{
+trapping_data <- load_trapping_data("repo")
 }
 }

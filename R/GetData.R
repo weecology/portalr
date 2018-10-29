@@ -105,7 +105,7 @@ download_observations <- function(base_folder = "~", version = "latest")
 #' @return A data.frame with two columns, `version` (string with the version #) and
 #'   `zipball_url` (download URLs for the corresponding zipped release).
 #'
-#' @noRd
+#' @export
 get_data_versions <- function(from_zenodo = TRUE, halt_on_error = FALSE)
 {
   releases <- tryCatch(
@@ -448,6 +448,43 @@ load_ant_data <- function(path = "~", download_if_missing = TRUE)
   }
 
   return(data_tables)
+}
+
+#' @rdname load_data
+#' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
+#'
+#' @inheritParams load_data
+#'
+#' @return \code{\link{load_trapping_data}} returns a list of 2 dataframes:
+#'   \tabular{ll}{
+#'     \code{trapping_table} \tab when each plot was trapped\cr
+#'     \code{newmoons_table} \tab pairs census periods with newmoons\cr
+#'   }
+#'
+#' @examples
+#' \donttest{
+#' trapping_data <- load_trapping_data("repo")
+#' }
+#' @export
+load_trapping_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
+{
+    # set up files and NA options
+    data_files <- c("trapping_table" = file.path("Rodents", "Portal_rodent_trapping.csv"),
+                    "newmoons_table" = file.path("Rodents", "moon_dates.csv"))
+    na_strings <- list(c("NA"), c("NA"))
+
+    # retrieve data
+    data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+
+    # remove data still under quality control
+    if (clean)
+    {
+      data_tables$newmoons_table <- clean_data(data_tables$newmoons_table,
+                                               data_tables$trapping_table,
+                                               by = "period")
+    }
+
+    return(data_tables)
 }
 
 #' @title generic data loading function

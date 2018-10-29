@@ -25,7 +25,19 @@ test_that("load_data downloads data if missing", {
   expect_warning(data_tables <- load_data(portal_data_path))
 })
 
+test_that("looking up data versions handle lack of a network connection", {
+  without_internet({
+    expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
+    expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
+                 "^GET https://zenodo.org/record/1215988$")
+    expect_null(get_data_versions(from_zenodo = FALSE, halt_on_error = FALSE))
+    expect_error(get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE),
+                 "^GET https://api.github.com/repos/weecology/PortalData/releases\\?page=1$")
+  })
+})
+
 test_that("load_data has the right format", {
+  skip_on_cran()
   expect_error(data_tables <- load_data("repo"), NA)
   expect_equal(length(data_tables), 5)
   expect_equal(names(data_tables),
@@ -40,6 +52,7 @@ test_that("load_data has the right format", {
 })
 
 test_that("load_plant_data has the right format", {
+  skip_on_cran()
   expect_error(data_tables <- load_plant_data("repo"), NA)
   expect_equal(length(data_tables), 7)
   expect_equal(names(data_tables),
@@ -54,6 +67,7 @@ test_that("load_plant_data has the right format", {
 })
 
 test_that("load_ant_data works", {
+  skip_on_cran()
   expect_error(data_tables <- load_ant_data("repo"), NA)
   expect_equal(length(data_tables), 4)
   expect_equal(names(data_tables),
