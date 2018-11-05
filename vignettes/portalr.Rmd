@@ -38,7 +38,20 @@ affiliations:
     index: 2
 date: 22 October 2018
 bibliography: paper.bib
+output:
+  rmarkdown::html_vignette: 
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{portalr package description}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 # Summary
 
