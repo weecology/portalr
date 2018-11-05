@@ -5,18 +5,15 @@
 \alias{abundance}
 \alias{biomass}
 \alias{energy}
-\alias{abundance}
-\alias{biomass}
-\alias{energy}
 \title{Generate summaries of Portal rodent data}
 \usage{
 get_rodent_data(path = "~", clean = TRUE, level = "Site",
-  type = "Rodents", length = "all", plots = length, unknowns = FALSE,
-  shape = "crosstab", time = "period", output = "abundance",
-  fillweight = (output != "abundance"), na_drop = switch(tolower(level),
-  plot = FALSE, treatment = TRUE, site = TRUE),
-  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
+  type = "Rodents", length = "all", plots = length,
+  unknowns = FALSE, shape = "crosstab", time = "period",
+  output = "abundance", fillweight = (output != "abundance"),
+  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
+  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
+  TRUE, site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
   download_if_missing = TRUE)
 
 abundance(...)

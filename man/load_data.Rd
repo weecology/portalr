@@ -4,8 +4,6 @@
 \alias{load_data}
 \alias{load_plant_data}
 \alias{load_ant_data}
-\alias{load_plant_data}
-\alias{load_ant_data}
 \alias{load_trapping_data}
 \title{Read in the Portal data files}
 \usage{
@@ -15,7 +13,8 @@ load_plant_data(path = "~", download_if_missing = TRUE)
 
 load_ant_data(path = "~", download_if_missing = TRUE)
 
-load_trapping_data(path = "~", download_if_missing = TRUE, clean = TRUE)
+load_trapping_data(path = "~", download_if_missing = TRUE,
+  clean = TRUE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

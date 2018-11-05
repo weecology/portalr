@@ -3,14 +3,14 @@
 \name{get_plant_data}
 \alias{get_plant_data}
 \alias{plant_abundance}
-\alias{plant_abundance}
 \title{Generate summaries of Portal plant data}
 \usage{
-get_plant_data(path = "~", level = "Site", type = "All", length = "all",
-  plots = length, unknowns = FALSE, correct_sp = TRUE, shape = "flat",
-  output = "abundance", na_drop = switch(tolower(level), plot = FALSE,
-  treatment = TRUE, site = TRUE), zero_drop = switch(tolower(level), plot =
-  FALSE, treatment = TRUE, site = TRUE), min_quads = 1, effort = TRUE,
+get_plant_data(path = "~", level = "Site", type = "All",
+  length = "all", plots = length, unknowns = FALSE,
+  correct_sp = TRUE, shape = "flat", output = "abundance",
+  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
+  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
+  TRUE, site = TRUE), min_quads = 1, effort = TRUE,
   download_if_missing = TRUE)
 
 plant_abundance(..., shape = "flat")
