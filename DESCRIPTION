@@ -47,6 +47,7 @@ Suggests:
   tidyverse, 
   cowplot, 
   knitr,
-  rmarkdown
+  rmarkdown, 
+  pkgdown
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
