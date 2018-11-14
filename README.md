@@ -23,7 +23,13 @@ collected each summer and fall.
 
 ## Installation
 
-You can install portalr from github with:
+You can install portalr from CRAN with:
+
+```
+install.packages("portalr")
+```
+
+OR from github with:
 
 ``` r
 # install.packages("devtools")
