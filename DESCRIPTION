@@ -25,7 +25,7 @@ Description: Download and generate summaries for the rodent, plant, ant, and
     experimental monitoring site in the Chihuahua desert. The raw data files 
     can be found at <https://github.com/weecology/portalData>.
 License: MIT + file LICENSE
-URL: https://github.com/weecology/portalr
+URL: https://weecology.github.io/portalr/, https://github.com/weecology/portalr
 BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
 Depends: R (>= 3.2.3)
