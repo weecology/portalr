@@ -26,7 +26,13 @@ The **portalr** package provides collection of basic functions to summarize the 
 
 ## Installation
 
-You can install portalr from github with:
+You can install portalr from CRAN with:
+
+```{r CRAN-installation, eval = FALSE}
+install.packages("portalr")
+```
+
+OR from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
