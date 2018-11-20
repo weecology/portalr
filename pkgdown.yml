@@ -3,6 +3,5 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   portal_researcher_examples: portal_researcher_examples.html
-  portalr: portalr.html
   rodent-abundance-demo: rodent-abundance-demo.html
 
