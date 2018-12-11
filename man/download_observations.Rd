@@ -9,7 +9,8 @@ download_observations(base_folder = "~", version = "latest")
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
 
-\item{version}{Version of the data to download (default = "latest")}
+\item{version}{Version of the data to download (default = "latest") "repo" is also
+an option, to download directly from the GitHub repository}
 }
 \value{
 None

@@ -26,7 +26,8 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
-#' @param version Version of the data to download (default = "latest")
+#' @param version Version of the data to download (default = "latest") "repo" is also
+#' an option, to download directly from the GitHub repository
 #'
 #' @return None
 #'
@@ -41,6 +42,15 @@ download_observations <- function(base_folder = "~", version = "latest")
 {
   # get version info
   releases <- get_data_versions(version == "latest", halt_on_error = TRUE)
+
+  # download from repo
+  if (version == "repo")
+  {
+    version = readLines(
+      "https://raw.githubusercontent.com/weecology/PortalData/master/version.txt")
+    message("Downloading version ", version, " of the data...")
+    zip_download_path <- "https://github.com/weecology/PortalData/archive/master.zip"
+  } else {
 
   # match version
   if (version == "latest")
@@ -67,6 +77,8 @@ download_observations <- function(base_folder = "~", version = "latest")
   # Attemt to download the zip file
   message("Downloading version ", releases$version[match_idx], " of the data...")
   zip_download_path <- releases$zipball_url[match_idx]
+  }
+
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
 
