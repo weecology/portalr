@@ -23,9 +23,9 @@ Authors@R: c(person(c("Glenda", "M."), "Yenni", role = c("aut", "cre"),
 Description: Download and generate summaries for the rodent, plant, ant, and 
     weather data from the Portal Project. Portal is a long-term (and ongoing) 
     experimental monitoring site in the Chihuahua desert. The raw data files 
-    can be found at <https://github.com/weecology/portalData>.
+    can be found at <https://github.com/weecology/portaldata>.
 License: MIT + file LICENSE
-URL: https://weecology.github.io/portalr/, https://github.com/weecology/portalr
+URL: https://weecology.github.io/portalr/
 BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
 Depends: R (>= 3.2.3)
