@@ -200,7 +200,7 @@ get_github_releases <- function()
   page_idx <- 1
 
   # keep getting info until no more `next` pages
-  while (match_text == "next")
+  while (match_text == "next" || match_text == "last")
   {
     github_path <- paste0("https://api.github.com/repos/weecology/PortalData/releases?page=", page_idx)
     resp <- httr::GET(github_path, github_auth)
