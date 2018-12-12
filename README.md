@@ -13,7 +13,7 @@ Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://trav
 ## Overview
 
 The **portalr** package provides collection of basic functions to
-summarize the Portal porject data on rodents, plants, ants, and weather
+summarize the Portal project data on rodents, plants, ants, and weather
 at our long-term field site in the Chihuahuan Desert. The data begin in
 1977 and are continuously updated today. There are functions to
 summarize rodent abundance, biomass, or energy and by site, plot, or
