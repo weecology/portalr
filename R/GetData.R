@@ -40,7 +40,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 download_observations <- function(base_folder = "~", version = "latest")
 {
   # get version info
-  releases <- get_data_versions(version == "latest", halt_on_error = TRUE)
+  releases <- get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE)
 
   # match version
   if (version == "latest")
@@ -106,26 +106,27 @@ download_observations <- function(base_folder = "~", version = "latest")
 #'   `zipball_url` (download URLs for the corresponding zipped release).
 #'
 #' @export
-get_data_versions <- function(from_zenodo = TRUE, halt_on_error = FALSE)
+get_data_versions <- function(from_zenodo = FALSE, halt_on_error = FALSE)
 {
-  releases <- tryCatch(
-    {
-      if (from_zenodo)
-      {
-        get_zenodo_latest_release()
-      } else {
+  releases   <- tryCatch(
+    # {
+    #   if (from_zenodo)
+    #   {
+    #     get_zenodo_latest_release()
+    #   } else {
         get_github_releases()
-      }
-    },
+    #   }
+    # }
+    ,
     error = function(e) {
       if (halt_on_error) {
         stop(e)
       } else {
         e
       }
-    },
+     },
     warning = function(w) w
-  )
+   )
   if (!is.data.frame(releases))
   {
     return(NULL)
