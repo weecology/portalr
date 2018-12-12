@@ -27,9 +27,9 @@ test_that("load_data downloads data if missing", {
 
 test_that("looking up data versions handle lack of a network connection", {
   without_internet({
-    expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
-    expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
-                 "^GET https://zenodo.org/record/1215988$")
+    #expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
+    #expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
+    #             "^GET https://zenodo.org/record/1215988$")
     expect_null(get_data_versions(from_zenodo = FALSE, halt_on_error = FALSE))
     expect_error(get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE),
                  "^GET https://api.github.com/repos/weecology/PortalData/releases\\?page=1$")
