@@ -61,7 +61,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/weecology/portalr">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -78,7 +85,7 @@
             
             <h4 class="date">2018-12-12</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/rodent-abundance-demo.Rmd"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
 
     </div>
@@ -111,7 +118,7 @@
 <p>check whether we already have the data. If we don’t have the data, or if the version we have isn’t the most recent, we use the <code>download_observations</code> function to download the latest copy of the data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">portal_data_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span>() <span class="co"># use a temporary folder to store downloaded data</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">data_tables &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_data.html">load_data</a></span>(portal_data_path, <span class="dt">download_if_missing =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Warning in load_generic_data(data_files, na_strings, path, download_if_missing): Proceeding to download data into specified path/tmp/Rtmp3IUEJs</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Warning in load_generic_data(data_files, na_strings, path, download_if_missing): Proceeding to download data into specified path/tmp/RtmppZoWoa</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; Downloading version 1.66.0 of the data...</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; Loading in data version 1.66.0</span></a></code></pre></div>
 <p>The <code>load_data</code> function reads in several tables related to the rodent abundances. We won’t necessarily use all of these tables, but loading this now gives us access later.</p>
