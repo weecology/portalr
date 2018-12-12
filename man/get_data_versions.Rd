@@ -4,7 +4,7 @@
 \alias{get_data_versions}
 \title{get version and download info for PortalData}
 \usage{
-get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE)
+get_data_versions(from_zenodo = FALSE, halt_on_error = FALSE)
 }
 \arguments{
 \item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
