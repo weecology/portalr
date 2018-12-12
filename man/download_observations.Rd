@@ -4,13 +4,15 @@
 \alias{download_observations}
 \title{Download the PortalData repo}
 \usage{
-download_observations(base_folder = "~", version = "latest")
+download_observations(base_folder = "~", version = "latest",
+  from_zenodo = TRUE)
 }
 \arguments{
 \item{base_folder}{Folder into which data will be downloaded}
 
-\item{version}{Version of the data to download (default = "latest") "repo" is also
-an option, to download directly from the GitHub repository}
+\item{version}{Version of the data to download (default = "latest")}
+
+\item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
 }
 \value{
 None
