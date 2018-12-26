@@ -66,8 +66,8 @@ The first table that we loaded (`data_tables$rodent_data`) is a record of whatev
 rodent_abundance_by_plot <- abundance(path = portal_data_path, time = "date", level = "plot") 
 
 rodent_abundance <- rodent_abundance_by_plot %>%
-  gather(species, abundance, -censusdate, -plot) %>%
-  count(species, censusdate) %>%
+  gather(species, abundance, -censusdate, -treatment, -plot) %>%
+  count(species, censusdate, wt = abundance) %>%
   rename(abundance = n)
 print(summary(rodent_abundance))
 ```
