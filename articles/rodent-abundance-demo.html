@@ -83,7 +83,7 @@
       <h1>Portal Rodent Abundance Demo</h1>
                         <h4 class="author">Hao Ye</h4>
             
-            <h4 class="date">2018-12-21</h4>
+            <h4 class="date">2018-12-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/rodent-abundance-demo.Rmd"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
@@ -118,7 +118,7 @@
 <p>check whether we already have the data. If we don’t have the data, or if the version we have isn’t the most recent, we use the <code>download_observations</code> function to download the latest copy of the data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">portal_data_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span>() <span class="co"># use a temporary folder to store downloaded data</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">data_tables &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_data.html">load_data</a></span>(portal_data_path, <span class="dt">download_if_missing =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Warning in load_generic_data(data_files, na_strings, path, download_if_missing): Proceeding to download data into specified path/tmp/RtmpmJRDHw</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Warning in load_generic_data(data_files, na_strings, path, download_if_missing): Proceeding to download data into specified path/tmp/Rtmp9bN2d1</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; Downloading version 1.66.0 of the data...</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; Loading in data version 1.66.0</span></a></code></pre></div>
 <p>The <code>load_data</code> function reads in several tables related to the rodent abundances. We won’t necessarily use all of these tables, but loading this now gives us access later.</p>
@@ -139,17 +139,17 @@
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; Loading in data version 1.66.0</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5">rodent_abundance &lt;-<span class="st"> </span>rodent_abundance_by_plot <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">gather</span>(species, abundance, <span class="op">-</span>censusdate, <span class="op">-</span>plot) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw">count</span>(species, censusdate) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">gather</span>(species, abundance, <span class="op">-</span>censusdate, <span class="op">-</span>treatment, <span class="op">-</span>plot) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw">count</span>(species, censusdate, <span class="dt">wt =</span> abundance) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-8" data-line-number="8"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">abundance =</span> n)</a>
 <a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(rodent_abundance))</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;    species            censusdate           abundance </span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  Length:10274       Min.   :1977-07-16   Min.   :24  </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  Class :character   1st Qu.:1987-11-21   1st Qu.:24  </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  Mode  :character   Median :1997-07-29   Median :24  </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;                     Mean   :1997-09-13   Mean   :24  </span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;                     3rd Qu.:2007-08-11   3rd Qu.:24  </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt;                     Max.   :2017-10-21   Max.   :24</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;    species            censusdate           abundance      </span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  Length:9807        Min.   :1977-07-16   Min.   :  0.000  </span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  Class :character   1st Qu.:1987-11-21   1st Qu.:  0.000  </span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  Mode  :character   Median :1997-07-29   Median :  0.000  </span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;                     Mean   :1997-09-13   Mean   :  5.953  </span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;                     3rd Qu.:2007-08-11   3rd Qu.:  4.000  </span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt;                     Max.   :2017-10-21   Max.   :285.000</span></a></code></pre></div>
 <p>Let’s convert the data to long format for easier facetting. Also, we want the scientific names instead of the two-letter species codes, so let’s do that matching, too:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">join_scientific_name &lt;-<span class="st"> </span><span class="cf">function</span>(rodent_abundance, </a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">                                 <span class="dt">species_table =</span> data_tables<span class="op">$</span>species_table)</a>
