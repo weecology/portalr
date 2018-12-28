@@ -42,12 +42,13 @@ Imports:
   lunar,
   jsonlite
 Suggests:
-  httptest,
-  digest,
-  tidyverse, 
-  cowplot, 
-  knitr,
-  rmarkdown, 
-  pkgdown
+    httptest,
+    digest,
+    tidyverse,
+    cowplot,
+    knitr,
+    rmarkdown,
+    pkgdown,
+    covr
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr
