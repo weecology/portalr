@@ -4,7 +4,7 @@ author: "Ellen K. Bledsoe"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Examples of How Portal Researchers Are Using the Package}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
