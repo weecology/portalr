@@ -7,6 +7,10 @@
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
+[![Coverage
+status](https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=master)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://cran.rstudio.com/web/packages/portalr/index.html)
 
 <img src="man/figures/portalr.png" width="200px">
 
@@ -25,7 +29,7 @@ collected each summer and fall.
 
 You can install portalr from CRAN with:
 
-```
+``` r
 install.packages("portalr")
 ```
 
@@ -77,19 +81,19 @@ browseVignettes("portalr")
 
 ## More Information
 
-#### [Portal Data Repo](https://github.com/weecology/PortalData)
+#### [Portal Data Repo](github.com/weecology/PortalData)
 
 The data repo contains useful details for issues with data collection,
 and background on why we handle them the way we do. Of course, it also
 contains the raw data, if you would like to create more complex data
 summaries than what is provided here.
 
-#### [The Portal Project](https://portal.weecology.org/)
+#### [The Portal Project](portal.weecology.org/)
 
 Find a list of previous publications using the Portal data at our
 website.
 
-#### [The Portal Blog](https://portalproject.wordpress.com/)
+#### [The Portal Blog](portalproject.wordpress.com/)
 
 Follow our blog to get the latest news on what is happening with our
 project and at the site.
