@@ -137,7 +137,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
   return(out_data)
 }
 
-#' @name get_plant_data
+#' @name summarize_plant_data
 #' @aliases plant_abundance
 #'
 #' @title Generate summaries of Portal plant data
@@ -182,7 +182,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'
 #' @export
 #'
-get_plant_data <- function(path = '~', level = "Site", type = "All",
+summarize_plant_data <- function(path = '~', level = "Site", type = "All",
                            length = "all", plots = length, unknowns = FALSE,
                            correct_sp = TRUE,
                            shape = "flat", output = "abundance",
@@ -229,8 +229,7 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   return(out_df)
 }
 
-
-#' @rdname get_plant_data
+#' @rdname summarize_plant_data
 #'
 #' @description \code{plant_abundance} generates a table of plant abundance
 #'
@@ -332,3 +331,7 @@ shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
   return(dplyr::bind_rows(oldtransect_data,transect_data))
 
 }
+
+#' @rdname summarize_plant_data
+#' @export
+summarise_plant_data <- summarize_plant_data

@@ -46,7 +46,7 @@ devtools::install_github("weecology/portalr")
 1. Load all data tables from the [PortalData GitHub repo](https://github.com/weecology/portalData):
 
 ```{r load data from repo, eval = FALSE}
-data_tables <- load_data("repo")
+data_tables <- load_rodent_data("repo")
 ```
 
 2. Download and generate summaries of rodent abundance and biomass:

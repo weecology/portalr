@@ -1,6 +1,6 @@
 #' @importFrom magrittr "%>%"
 
-#' @name get_stake_data
+#' @name summarize_stake_data
 #'
 #' @title Return cleaned Portal rodent individual data
 #'
@@ -24,21 +24,21 @@
 #'   observation to be included
 #' @param min_traps minimum number of plots within a period for an
 #'   observation to be included
-#' @inheritParams load_data
+#' @inheritParams load_rodent_data
 #'
 #' @return a data.frame
 #'
 #' @export
 #'
-get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
+summarize_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
                            length = "all", unknowns = FALSE, time = "period",
                            fillweight = FALSE, min_plots = 1, min_traps = 1,
                            download_if_missing = TRUE)
 {
 
   #### Get Data ----
-  data_tables <- load_data(path, download_if_missing = download_if_missing,
-                           clean = clean)
+  data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
+                                  clean = clean)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables, fillweight, type,
@@ -55,3 +55,7 @@ get_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
   #### use new moon number as time index if time == "newmoon" ----
   return(add_time(rodents, data_tables$newmoons_table, time))
 }
+
+#' @rdname summarize_stake_data
+#' @export
+summarise_stake_data <- summarize_stake_data

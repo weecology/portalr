@@ -316,7 +316,7 @@ fill_weight <- function(rodent_data, tofill)
 #' @title Do basic cleaning of Portal rodent data
 #'
 #' @description This function does basic quality control of the Portal rodent
-#'   data. It is mainly called from \code{\link{get_rodent_data}}, with
+#'   data. It is mainly called from \code{\link{summarize_rodent_data}}, with
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:
@@ -328,7 +328,7 @@ fill_weight <- function(rodent_data, tofill)
 #'     (6) exclude the plots that aren't long-term treatments
 #'
 #' @param data_tables the list of data_tables, returned from calling
-#'   \code{\link{load_data}}
+#'   \code{\link{load_rodent_data}}
 #' @param fillweight specify whether to fill in unknown weights with other
 #'   records from that individual or species, where possible
 #' @param type specify subset of species; either all "Rodents" or only

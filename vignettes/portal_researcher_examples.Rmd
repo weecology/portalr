@@ -38,13 +38,13 @@ One thing we can do with the Portal rodent data is look at the ratio of biomass 
 Because we are going to compare biomass between plot types, we need to know the biomass on each plot. To achieve this, we can set `level = "plot"` 
 
 ```{r, warning = FALSE, message = FALSE}
-biomass_data <- portalr::get_rodent_data(path = "repo", 
+biomass_data <- portalr::summarize_rodent_data(path = "repo", 
                                          level = "plot", 
                                          output = "biomass",
                                          time = "date")
 ```
 
-Note that the `path` argument in the `get_rodent_data` function has been set to "repo." While you can choose the download all of the Portal data onto your local computer and then load the data into R, you can also get the data directly from the GitHub repository by setting `path = "repo"` as we've done here.
+Note that the `path` argument in the `summarize_rodent_data` function has been set to "repo." While you can choose the download all of the Portal data onto your local computer and then load the data into R, you can also get the data directly from the GitHub repository by setting `path = "repo"` as we've done here.
 
 The data structure will look like this, with columns for the date, treatment, plot number, and each species:
 ```{r, echo = FALSE, results='asis'}
