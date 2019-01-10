@@ -1,6 +1,6 @@
 #' @importFrom magrittr "%>%"
 
-#' @name summarize_stake_data
+#' @name summarize_individual_rodents
 #'
 #' @title Return cleaned Portal rodent individual data
 #'
@@ -30,10 +30,10 @@
 #'
 #' @export
 #'
-summarize_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
-                           length = "all", unknowns = FALSE, time = "period",
-                           fillweight = FALSE, min_plots = 1, min_traps = 1,
-                           download_if_missing = TRUE)
+summarize_individual_rodents <- function(path = '~', clean=TRUE, type = "Rodents",
+                                         length = "all", unknowns = FALSE, time = "period",
+                                         fillweight = FALSE, min_plots = 1, min_traps = 1,
+                                         download_if_missing = TRUE)
 {
 
   #### Get Data ----
@@ -56,6 +56,6 @@ summarize_stake_data <- function(path = '~', clean=TRUE, type = "Rodents",
   return(add_time(rodents, data_tables$newmoons_table, time))
 }
 
-#' @rdname summarize_stake_data
+#' @rdname summarize_individual_rodents
 #' @export
-summarise_stake_data <- summarize_stake_data
+summarise_individual_rodents <- summarize_individual_rodents

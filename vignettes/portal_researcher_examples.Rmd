@@ -118,13 +118,13 @@ While the rodent community data is the most frequently utilized data from the Po
 
 ## Getting the Data We Want
 
-Our site has two rainy periods and, therefore, two communities of annual plants. Let's say we want to take a look at the abundance of the _winter_ annuals in the system, and we want to see if they differ by treatment type. We can use the `get_plant_data` function to get the appropriate data.
+Our site has two rainy periods and, therefore, two communities of annual plants. Let's say we want to take a look at the abundance of the _winter_ annuals in the system, and we want to see if they differ by treatment type. We can use the `summarize_plant_data` function to get the appropriate data.
 
 ```{r, warning = FALSE, message = FALSE}
-plant_data <- portalr::get_plant_data(path = 'repo', level = 'plot',
-                                      type = 'winter-annual', correct_sp = TRUE,
-                                      unknowns = FALSE, shape = 'flat', 
-                                      output = 'abundance')
+plant_data <- portalr::summarize_plant_data(path = 'repo', level = 'plot',
+                                            type = 'winter-annual', correct_sp = TRUE,
+                                            unknowns = FALSE, shape = 'flat', 
+                                            output = 'abundance')
 ```
 
 What do some of these arguments mean? As above, `path = 'repo'` pulls the data directly from the online repository. `level = 'plot'` indicates that we want the data to be summarized at the plot level rather than across the entire site, and `type = 'winter-annual'` will give us only annual species that can be found in the winter months. Sometimes in the past, we have misidentified a species of plant; `correct_sp = TRUE` goes through the data and corrects the species name to what we now know to be the correct species. Other times, we just don't know what a species is, so it is unknown; if we don't want those to be included, we use `unknown = FALSE`. Finally, we want the abundance of each species returned. Unlike with the rodent abundance, however, we've asked for a flat shape, so the data structure will be in long format and look like this:

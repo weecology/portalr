@@ -233,7 +233,7 @@ summarize_plant_data <- function(path = '~', level = "Site", type = "All",
 #'
 #' @description \code{plant_abundance} generates a table of plant abundance
 #'
-#' @param ... arguments passed to \code{\link{get_plant_data}}
+#' @param ... arguments passed to \code{\link{summarize_plant_data}}
 #'
 #' @examples
 #' \donttest{
@@ -245,10 +245,10 @@ plant_abundance <- function(..., shape = "flat") {
 
   if (tolower(shape) == "crosstab")
   {
-    get_plant_data(..., shape = "crosstab", output = "abundance")
+    summarize_plant_data(..., shape = "crosstab", output = "abundance")
   }
   else {
-    get_plant_data(..., shape = "flat", output = "abundance") %>%
+    summarize_plant_data(..., shape = "flat", output = "abundance") %>%
       dplyr::filter(abundance > 0)
   }
 

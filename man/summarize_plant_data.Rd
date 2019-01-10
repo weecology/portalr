@@ -68,7 +68,7 @@ included in the output}
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
 
-\item{...}{arguments passed to \code{\link{get_plant_data}}}
+\item{...}{arguments passed to \code{\link{summarize_plant_data}}}
 }
 \value{
 a data.frame in either "long" or "wide" format, depending on the

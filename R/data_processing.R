@@ -492,7 +492,7 @@ join_census_to_quadrats <- function(quadrat_data, census_table) {
 #' @title Do basic cleaning of Portal plant data
 #'
 #' @description This function does basic quality control of the Portal plant
-#'   data. It is mainly called from \code{\link{get_plant_data}}, with
+#'   data. It is mainly called from \code{\link{summarize_plant_data}}, with
 #'   several arguments passed along.
 #'
 #'   The specific steps it does are, in order:

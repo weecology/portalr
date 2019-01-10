@@ -35,44 +35,40 @@
 #'
 load_rodent_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 {
-  # set up files and NA options
-  data_files <- c("rodent_data" = file.path("Rodents", "Portal_rodent.csv"),
-                  "species_table" = file.path("Rodents", "Portal_rodent_species.csv"),
-                  "trapping_table" = file.path("Rodents", "Portal_rodent_trapping.csv"),
-                  "newmoons_table" = file.path("Rodents", "moon_dates.csv"),
-                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
-  na_strings <- list(c(""), c(""), c("NA"), c("NA"), c("NA"))
-
-  # retrieve data
-  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+  rodent_data <- load_datafile(file.path("Rodents", "Portal_rodent.csv"),
+                               na.strings = "", path, download_if_missing, version_message = TRUE)
+  species_table <- load_datafile(file.path("Rodents", "Portal_rodent_species.csv"),
+                                 na.strings = "", path, download_if_missing)
+  trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
+                                 na.strings = "NA", path, download_if_missing)
+  newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
+                                 na.strings = "NA", path, download_if_missing)
+  plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
+                               na.strings = "NA", path, download_if_missing)
 
   # reformat species columns
-  if (!"species" %in% names(data_tables$species_table))
+  if (!"species" %in% names(species_table))
   {
-    data_tables$species_table <- dplyr::rename(data_tables$species_table,
-                                               species = speciescode)
+    species_table <- dplyr::rename(species_table, species = speciescode)
   }
 
   # convert rodent tags to characters if not already
-  data_tables$rodent_data$tag <- as.character(data_tables$rodent_data$tag)
+  rodent_data$tag <- as.character(rodent_data$tag)
 
   # remove data still under quality control
   if (clean)
   {
-    data_tables$rodent_data <- clean_data(data_tables$rodent_data,
-                                          data_tables$trapping_table,
-                                          by = c("month", "day", "year", "period", "plot"))
-    data_tables$newmoons_table <- clean_data(data_tables$newmoons_table,
-                                             data_tables$trapping_table,
-                                             by = "period")
-    data_tables$plots_table <- clean_data(data_tables$plots_table,
-                                          data_tables$trapping_table,
-                                          by = c("year", "month", "plot"))
-    data_tables$trapping_table <- dplyr::filter(data_tables$trapping_table,
-                                                qcflag == 1)
+    rodent_data <- clean_data(rodent_data, trapping_table,
+                              by = c("month", "day", "year", "period", "plot"))
+    newmoons_table <- clean_data(newmoons_table, trapping_table,
+                                 by = "period")
+    plots_table <- clean_data(plots_table, trapping_table,
+                              by = c("year", "month", "plot"))
+    trapping_table <- dplyr::filter(trapping_table, qcflag == 1)
   }
 
-  return(data_tables)
+  return(mget(c("rodent_data", "species_table", "trapping_table",
+                "newmoons_table", "plots_table")))
 }
 
 #' @rdname load_rodent_data
@@ -99,28 +95,32 @@ load_rodent_data <- function(path = "~", download_if_missing = TRUE, clean = TRU
 
 load_plant_data <- function(path = "~", download_if_missing = TRUE)
 {
-  # set up files and NA options
-  data_files <- c("quadrat_data" = file.path("Plants", "Portal_plant_quadrats.csv"),
-                  "species_table" = file.path("Plants", "Portal_plant_species.csv"),
-                  "census_table" = file.path("Plants", "Portal_plant_censuses.csv"),
-                  "date_table" = file.path("Plants", "Portal_plant_census_dates.csv"),
-                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"),
-                  "transect_data" = file.path("Plants", "Portal_plant_transects_2015_present.csv"),
-                  "oldtransect_data" = file.path("Plants", "Portal_plant_transects_1989_2009.csv"))
-  na_strings <- list(c(""), c(""), c("NA"), c("", "none", "unknown"), c("NA"),c(""), c(""))
-
-  # retrieve data
-  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+  quadrat_data <- load_datafile(file.path("Plants", "Portal_plant_quadrats.csv"),
+                               na.strings = "", path, download_if_missing, version_message = TRUE)
+  species_table <- load_datafile(file.path("Plants", "Portal_plant_species.csv"),
+                                 na.strings = "", path, download_if_missing)
+  census_table <- load_datafile(file.path("Plants", "Portal_plant_censuses.csv"),
+                                  na.strings = "NA", path, download_if_missing)
+  date_table <- load_datafile(file.path("Plants", "Portal_plant_census_dates.csv"),
+                                  na.strings = c("", "none", "unknown"), path, download_if_missing)
+  plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
+                               na.strings = "NA", path, download_if_missing)
+  transect_data <- load_datafile(file.path("Plants", "Portal_plant_transects_2015_present.csv"),
+                                 na.strings = "", path, download_if_missing)
+  oldtransect_data <- load_datafile(file.path("Plants", "Portal_plant_transects_1989_2009.csv"),
+                                    na.strings = "", path, download_if_missing)
 
   # reformat species columns
-  if (!"sp" %in% names(data_tables$species_table))
+  if (!"sp" %in% names(species_table))
   {
-    data_tables$species_table <- dplyr::rename(data_tables$species_table,
-                                               sp = species,
-                                               species = speciescode)
+    species_table <- dplyr::rename(species_table,
+                                   sp = species,
+                                   species = speciescode)
   }
 
-  return(data_tables)
+  return(mget(c("quadrat_data", "species_table", "census_table",
+                "date_table", "plots_table",
+                "transect_data", "oldtransect_data")))
 }
 
 #' @rdname load_rodent_data
@@ -143,26 +143,27 @@ load_plant_data <- function(path = "~", download_if_missing = TRUE)
 
 load_ant_data <- function(path = "~", download_if_missing = TRUE)
 {
-  # set up files and NA options
-  data_files <- c("bait_data" = file.path("Ants", "Portal_ant_bait.csv"),
-                  "colony_data" = file.path("Ants", "Portal_ant_colony.csv"),
-                  "species_table" = file.path("Ants", "Portal_ant_species.csv"),
-                  "plots_table" = file.path("SiteandMethods", "Portal_plots.csv"))
-  na_strings <- list(c(""), c(""), c("NA"), c("NA"))
-
-  # retrieve data
-  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+  bait_data <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
+                                na.strings = "", path, download_if_missing, version_message = TRUE)
+  colony_data <- load_datafile(file.path("Ants", "Portal_ant_colony.csv"),
+                                 na.strings = "", path, download_if_missing)
+  species_table <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
+                                na.strings = "NA", path, download_if_missing)
+  plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
+                               na.strings = "NA", path, download_if_missing)
 
   # reformat species columns
-  if (!"sp" %in% names(data_tables$species_table))
+  if (!"sp" %in% names(species_table))
   {
-    data_tables$species_table <- dplyr::rename(data_tables$species_table,
-                                               sp = species,
-                                               species = speciescode)
+    species_table <- dplyr::rename(species_table,
+                                   sp = species,
+                                   species = speciescode)
   }
 
-  return(data_tables)
-}
+  return(mget(c("bait_data", "colony_data",
+                "species_table", "plots_table")))
+
+  }
 
 #' @rdname load_rodent_data
 #' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
@@ -182,33 +183,38 @@ load_ant_data <- function(path = "~", download_if_missing = TRUE)
 #' @export
 load_trapping_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
 {
-  # set up files and NA options
-  data_files <- c("trapping_table" = file.path("Rodents", "Portal_rodent_trapping.csv"),
-                  "newmoons_table" = file.path("Rodents", "moon_dates.csv"))
-  na_strings <- list(c("NA"), c("NA"))
-
-  # retrieve data
-  data_tables <- load_generic_data(data_files, na_strings, path, download_if_missing)
+  trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
+                                  na.strings = "NA", path, download_if_missing, version_message = TRUE)
+  newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
+                                  na.strings = "NA", path, download_if_missing)
 
   # remove data still under quality control
   if (clean)
   {
-    data_tables$newmoons_table <- clean_data(data_tables$newmoons_table,
-                                             data_tables$trapping_table,
-                                             by = "period")
+    newmoons_table <- clean_data(newmoons_table, trapping_table,
+                                 by = "period")
   }
 
-  return(data_tables)
+  return(mget(c("trapping_table", "newmoons_table")))
 }
 
-#' @title generic data loading function
+#' @name load_datafile
 #'
-#' @description does checking for whether data exists and then reads it in,
-#'   using na_strings to determine what gets converted to NA,
-#'   and then returning a list of the data.frames as output
+#' @title read in a raw datafile from the downloaded data or the GitHub repo
 #'
-#' @noRd
-load_generic_data <- function(data_files, na_strings, path = "~", download_if_missing = TRUE)
+#' @description does checking for whether a particular datafile exists and then
+#'   reads it in, using na_strings to determine what gets converted to NA. It
+#'   can also download the dataset if it's missing locally.
+#'
+#' @param datafile the path to the datafile within the folder for Portal data
+#' @param version_message whether to display a message about the data version
+#'   being loaded
+#' @inheritParams load_rodent_data
+#' @inheritParams utils::read.table
+#'
+#' @export
+load_datafile <- function(datafile, na.strings = "NA", path = "~",
+                          download_if_missing = TRUE, version_message = FALSE)
 {
 
   ## define file paths
@@ -220,10 +226,10 @@ load_generic_data <- function(data_files, na_strings, path = "~", download_if_mi
              error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
              warning = function(w) w)
   }
-  data_files <- sapply(data_files, function(x) file.path(base_path, x))
+  datafile <- file.path(base_path, datafile)
 
   ## check if files exist and download if appropriate
-  if (tolower(path) != "repo" && any(!sapply(data_files, file.exists)))
+  if (tolower(path) != "repo" && !file.exists(datafile))
   {
     if (download_if_missing) {
       warning("Proceeding to download data into specified path", path, "\n")
@@ -232,21 +238,19 @@ load_generic_data <- function(data_files, na_strings, path = "~", download_if_mi
       stop("Data files were not found in specified path", path, "\n")
     }
   }
-  stopifnot(length(na_strings) == length(data_files))
 
   ## output message about data version
-  version_file <- file.path(base_path, "version.txt")
-  if (tolower(path) != "repo" && !file.exists(version_file))
+  if (version_message)
   {
-    message("Loading in data version < 1.1.0")
-  } else {
-    message("Loading in data version ", read.table(version_file)[1, 1])
+    version_file <- file.path(base_path, "version.txt")
+    if (tolower(path) != "repo" && !file.exists(version_file))
+    {
+      message("Loading in data version < 1.1.0")
+    } else {
+      message("Loading in data version ", read.table(version_file)[1, 1])
+    }
   }
-  ## read in data tables
-  data_tables <- lapply(seq(data_files), function(i) {
-    read.csv(data_files[i], na.strings = na_strings[[i]], stringsAsFactors = FALSE)
-  })
-  names(data_tables) <- names(data_files)
 
-  return(data_tables)
+  ## read in the data table and return
+  read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE)
 }
