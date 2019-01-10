@@ -83,7 +83,7 @@
       <h1>Examples of How Portal Researchers Are Using the Package</h1>
                         <h4 class="author">Ellen K. Bledsoe</h4>
             
-            <h4 class="date">2018-12-28</h4>
+            <h4 class="date">2019-01-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/portal_researcher_examples.Rmd"><code>vignettes/portal_researcher_examples.Rmd</code></a></small>
       <div class="hidden name"><code>portal_researcher_examples.Rmd</code></div>
@@ -326,7 +326,7 @@
 <p>Wait a second! Didn’t we ask for winter annuals? So why are the first few rows all from a summer plant census?</p>
 <p>As it turns out, while we have two annual communities of plants, some of the annuals in our system can be found in both summer AND winter. Hypothetically, someone might want to know about any and all annual plants that could be found in the winter: how many of them show up in the summer, for example?</p>
 <p>To get the data we want–just winter annuals found only in the winter season–we just need one more quick line of code.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">plant_data_winter &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(plant_data, season <span class="op">==</span><span class="st"> 'winter'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">plant_data_winter &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(plant_data, season <span class="op">==</span><span class="st"> 'winter'</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">year</th>
@@ -338,52 +338,52 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">ambr arte</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">amsi inte</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">amsi tess</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">andr occi</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">astr allo</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="right">1982</td>
+<td align="right">1981</td>
 <td align="left">winter</td>
 <td align="right">1</td>
 <td align="left">astr nutt</td>
+<td align="right">NA</td>
 <td align="right">0</td>
-<td align="right">8</td>
 </tr>
 </tbody>
 </table>
