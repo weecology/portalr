@@ -2,15 +2,15 @@ context("Check rodent data summaries")
 
 portal_data_path <- tempdir()
 
-test_that("get_rodent_data returns expected results, and filters by plots correctly", {
+test_that("summarize_rodent_data returns expected results, and filters by plots correctly", {
   skip_on_cran()
-  ab_all_plots <- get_rodent_data(path = portal_data_path, level = "plot",
+  ab_all_plots <- summarize_rodent_data(path = portal_data_path, level = "plot",
                                   na_drop = TRUE)
 
   rodent_counts <- ab_all_plots %>%
     dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
 
-  ab_plot_4 <- get_rodent_data(path = portal_data_path, plots = 4,
+  ab_plot_4 <- summarize_rodent_data(path = portal_data_path, plots = 4,
                                na_drop = TRUE, zero_drop = FALSE)
 
   expect_equal(rodent_counts, ab_plot_4)
@@ -22,16 +22,16 @@ test_that("get_rodent_data returns expected results, and filters by plots correc
     dplyr::count(period, species, wt = abundance) %>%
     tidyr::spread(species, n)
 
-  ab_plots_4_8_10_12 <- get_rodent_data(path = portal_data_path, plots = c(4, 8, 10, 12),
+  ab_plots_4_8_10_12 <- summarize_rodent_data(path = portal_data_path, plots = c(4, 8, 10, 12),
                                na_drop = TRUE, zero_drop = FALSE)
 
   expect_equal(rodent_counts, ab_plots_4_8_10_12)
 })
 
-test_that("get_rodent_data gives warning for using length", {
+test_that("summarize_rodent_data gives warning for using length", {
   skip_on_cran()
-  expect_warning(dat <- get_rodent_data(path = portal_data_path, length = "all"))
-  expect_equal(dat, get_rodent_data(path = portal_data_path, plots = "all"))
+  expect_warning(dat <- summarize_rodent_data(path = portal_data_path, length = "all"))
+  expect_equal(dat, summarize_rodent_data(path = portal_data_path, plots = "all"))
 })
 
 test_that("abundance returns expected results", {

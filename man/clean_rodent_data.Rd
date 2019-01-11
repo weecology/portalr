@@ -9,7 +9,7 @@ clean_rodent_data(data_tables, fillweight = FALSE, type = "Rodents",
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
-\code{\link{load_data}}}
+\code{\link{load_rodent_data}}}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
@@ -22,7 +22,7 @@ records from that individual or species, where possible}
 }
 \description{
 This function does basic quality control of the Portal rodent
-  data. It is mainly called from \code{\link{get_rodent_data}}, with
+  data. It is mainly called from \code{\link{summarize_rodent_data}}, with
   several arguments passed along.
 
   The specific steps it does are, in order:

@@ -22,7 +22,7 @@
 #'                  Default is NA (returned with seasons added but not summarized).
 #' @param path path to location of downloaded Portal data; or "repo" to
 #'             retrieve data from github repo
-#' @inheritParams load_data
+#' @inheritParams load_rodent_data
 #'
 #' @return a data.frame with additional "season" and "year" column, and other columns summarized as specified
 #'
@@ -38,36 +38,38 @@ add_seasons <- function(data, level = "site", season_level = 2,
   summarize <- tolower(summarize)
   if (!is.na(summarize)) {sumfun <- get(summarize)}
   if (level == "plot") {grouping <- quos(year, season, treatment, plot)
-     } else if (level=="treatment") {grouping <- quos(year, season, treatment)
-     } else {grouping <- quos(year,season)}
-  if("species" %in% colnames(data)) {grouping <- c(grouping,quos(species))}
+  } else if (level == "treatment") {grouping <- quos(year, season, treatment)
+  } else {grouping <- quos(year, season)}
+  if("species" %in% colnames(data)) {grouping <- c(grouping, quos(species))}
 
-  data_tables <- load_data(path, download_if_missing = download_if_missing,
-                           clean = clean)
+  data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
+                                  clean = clean)
 
   #### Get month and year column
   if (date_column == "period") {
-    full_data = data %>% dplyr::left_join(data_tables$newmoons_table, by="period")  %>%
+    full_data <- data %>%
+      dplyr::left_join(data_tables$newmoons_table, by = "period")  %>%
       dplyr::mutate(year = lubridate::year(censusdate),
                     month = lubridate::month(censusdate)) %>%
       dplyr::select(-newmoonnumber, -newmoondate, -censusdate) %>%
       dplyr::group_by(year, month)
 
-    } else if(date_column == "newmoonnumber") {
-    full_data = data %>% dplyr::left_join(data_tables$newmoons_table, by="newmoonnumber")  %>%
+  } else if (date_column == "newmoonnumber") {
+    full_data <- data %>%
+      dplyr::left_join(data_tables$newmoons_table, by = "newmoonnumber")  %>%
       dplyr::mutate(year = lubridate::year(censusdate),
                     month = lubridate::month(censusdate)) %>%
       dplyr::select(-newmoondate, -censusdate, -period) %>%
       dplyr::group_by(year, month)
 
-    } else if(date_column == "date") {
-    full_data = data %>%
+  } else if (date_column == "date") {
+    full_data <- data %>%
       dplyr::mutate(year = lubridate::year(date), month = lubridate::month(date)) %>%
-      dplyr::group_by(year,month)
+      dplyr::group_by(year, month)
 
-    } else if(date_column == "yearmon") {
-    full_data = data %>%
-      dplyr::group_by(year,month)
+    } else if (date_column == "yearmon") {
+    full_data <- data %>%
+      dplyr::group_by(year, month)
 
     } else {
     print("date_column must equal period, newmoonnumber, date, or yearmon")

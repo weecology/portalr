@@ -165,7 +165,7 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
   return(out_data)
 }
 
-#' @name get_rodent_data
+#' @name summarize_rodent_data
 #' @aliases abundance biomass energy
 #'
 #' @title Generate summaries of Portal rodent data
@@ -203,14 +203,14 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   observation to be included
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
-#' @inheritParams load_data
+#' @inheritParams load_rodent_data
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
 #'   value of `shape`
 #'
 #' @export
 #'
-get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
+summarize_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
                             type = "Rodents", length = "all", plots = length,
                             unknowns = FALSE, shape = "crosstab",
                             time = "period", output = "abundance",
@@ -226,8 +226,8 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
                             min_traps = 1, min_plots = 24, effort = FALSE,
                             download_if_missing = TRUE)
 {
-  data_tables <- load_data(path, download_if_missing = download_if_missing,
-                           clean = clean)
+  data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
+                                  clean = clean)
 
   level <- tolower(level)
   type <- tolower(type)
@@ -253,11 +253,11 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
 }
 
 
-#' @rdname get_rodent_data
+#' @rdname summarize_rodent_data
 #'
 #' @description \code{abundance} generates a table of rodent abundance
 #'
-#' @param ... arguments passed to \code{\link{get_rodent_data}}
+#' @param ... arguments passed to \code{\link{summarize_rodent_data}}
 #'
 #' @examples
 #' \donttest{
@@ -266,10 +266,10 @@ get_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
 #' @export
 #'
 abundance <- function(...) {
-  get_rodent_data(..., output = "abundance")
+  summarize_rodent_data(..., output = "abundance")
 }
 
-#' @rdname get_rodent_data
+#' @rdname summarize_rodent_data
 #'
 #' @description * \code{biomass()} generates a table of rodent biomass
 #'
@@ -282,11 +282,11 @@ abundance <- function(...) {
 #' @export
 #'
 biomass <- function(...) {
-  get_rodent_data(..., output = "biomass")
+  summarize_rodent_data(..., output = "biomass")
 }
 
 
-#' @rdname get_rodent_data
+#' @rdname summarize_rodent_data
 #'
 #' @description * \code{energy()} generates a table of rodent energy
 #'   (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)
@@ -300,6 +300,10 @@ biomass <- function(...) {
 #' @export
 #'
 energy <- function(...) {
-  get_rodent_data(..., output = "energy")
+  summarize_rodent_data(..., output = "energy")
 }
+
+#' @rdname summarize_rodent_data
+#' @export
+summarise_rodent_data <- summarize_rodent_data
 
