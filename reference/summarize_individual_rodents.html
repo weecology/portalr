@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ant Colony Presence Absence — colony_presence_absence • portalr</title>
+<title>Return cleaned Portal rodent individual data — summarize_individual_rodents • portalr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,15 +30,10 @@
 
 
 
-<meta property="og:title" content="Ant Colony Presence Absence — colony_presence_absence" />
+<meta property="og:title" content="Return cleaned Portal rodent individual data — summarize_individual_rodents" />
 
-<meta property="og:description" content="Get ant species presence/absence by year/plot/stake from colony census data
-Anomalies in ant colony census protocol over the years means that it can be difficult to discern true absences
-of all species in all years.  This function uses information from Portal_ant_species.csv and Portal_ant_dataflags.csv
-to predict true presence/absence of species per plot per year.  If a more conservative estimate is desired,
-setting the argument 'rare_sp = T' will only include species we are confident were censused regularly. Setting
-'rare_sp = F' may include some false absences, since it is unknown if some rare species were censused in all years.
-Unknowns may also be excluded from output if desired." />
+<meta property="og:description" content="This function cleans and subsets the data based on a number
+  of arguments. It returns stake number and individual level data." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,25 +115,27 @@ Unknowns may also be excluded from output if desired." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ant Colony Presence Absence</h1>
-    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/summarize_ants.R'><code>R/summarize_ants.R</code></a></small>
-    <div class="hidden name"><code>colony_presence_absence.Rd</code></div>
+    <h1>Return cleaned Portal rodent individual data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/summarize_individual_rodents.R'><code>R/summarize_individual_rodents.R</code></a></small>
+    <div class="hidden name"><code>summarize_individual_rodents.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get ant species presence/absence by year/plot/stake from colony census data</p>
-<p>Anomalies in ant colony census protocol over the years means that it can be difficult to discern true absences
-of all species in all years.  This function uses information from Portal_ant_species.csv and Portal_ant_dataflags.csv
-to predict true presence/absence of species per plot per year.  If a more conservative estimate is desired,
-setting the argument 'rare_sp = T' will only include species we are confident were censused regularly. Setting
-'rare_sp = F' may include some false absences, since it is unknown if some rare species were censused in all years.
-Unknowns may also be excluded from output if desired.</p>
+    <p>This function cleans and subsets the data based on a number
+  of arguments. It returns stake number and individual level data.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>colony_presence_absence</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>rare_sp</span> <span class='kw'>=</span> <span class='no'>F</span>,
-  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>summarize_individual_rodents</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>summarise_individual_rodents</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,17 +146,44 @@ Unknowns may also be excluded from output if desired.</p>
 retrieve data from github repo</p></td>
     </tr>
     <tr>
-      <th>level</th>
-      <td><p>level at which to summarize data: 'Site', 'Plot', or 'Stake'</p></td>
+      <th>clean</th>
+      <td><p>logical, load only QA/QC rodent data (TRUE) or all data (FALSE)</p></td>
     </tr>
     <tr>
-      <th>rare_sp</th>
-      <td><p>include rare species (T) or not (F).
-Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence</p></td>
+      <th>type</th>
+      <td><p>specify subset of species; either all "Rodents" or only
+"Granivores"</p></td>
+    </tr>
+    <tr>
+      <th>length</th>
+      <td><p>specify subset of plots; use "All" plots or only "Longterm"
+plots (plots that have had same treatment for entire time series)</p></td>
     </tr>
     <tr>
       <th>unknowns</th>
-      <td><p>include unknown species (T) or not (F). Unknowns include those only identified to genus.</p></td>
+      <td><p>either removes all individuals not identified to species
+(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td><p>specify the format of the time index in the output, either
+"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
+"date" (calendar date)</p></td>
+    </tr>
+    <tr>
+      <th>fillweight</th>
+      <td><p>specify whether to fill in unknown weights with other
+records from that individual or species, where possible</p></td>
+    </tr>
+    <tr>
+      <th>min_plots</th>
+      <td><p>minimum number of plots within a period for an
+observation to be included</p></td>
+    </tr>
+    <tr>
+      <th>min_traps</th>
+      <td><p>minimum number of plots within a period for an
+observation to be included</p></td>
     </tr>
     <tr>
       <th>download_if_missing</th>
@@ -170,7 +194,7 @@ PortalData folder, then download it</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with year, species, (plot if applicable), and presence [1, 0, NA]</p>
+    <p>a data.frame</p>
     
 
   </div>

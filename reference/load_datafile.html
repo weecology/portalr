@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return cleaned Portal rodent individual data — get_stake_data • portalr</title>
+<title>read in a raw datafile from the downloaded data or the GitHub repo — load_datafile • portalr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,11 @@
 
 
 
-<meta property="og:title" content="Return cleaned Portal rodent individual data — get_stake_data" />
+<meta property="og:title" content="read in a raw datafile from the downloaded data or the GitHub repo — load_datafile" />
 
-<meta property="og:description" content="This function cleans and subsets the data based on a number
-  of arguments. It returns stake number and individual level data." />
+<meta property="og:description" content="does checking for whether a particular datafile exists and then
+  reads it in, using na_strings to determine what gets converted to NA. It
+  can also download the dataset if it's missing locally." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -115,91 +116,66 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return cleaned Portal rodent individual data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/IndividualData.R'><code>R/IndividualData.R</code></a></small>
-    <div class="hidden name"><code>get_stake_data.Rd</code></div>
+    <h1>read in a raw datafile from the downloaded data or the GitHub repo</h1>
+    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/load_data.R'><code>R/load_data.R</code></a></small>
+    <div class="hidden name"><code>load_datafile.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function cleans and subsets the data based on a number
-  of arguments. It returns stake number and individual level data.</p>
+    <p>does checking for whether a particular datafile exists and then
+  reads it in, using na_strings to determine what gets converted to NA. It
+  can also download the dataset if it's missing locally.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_stake_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>fillweight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>load_datafile</span>(<span class='no'>datafile</span>, <span class='kw'>na.strings</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>,
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>version_message</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>datafile</th>
+      <td><p>the path to the datafile within the folder for Portal data</p></td>
+    </tr>
+    <tr>
+      <th>na.strings</th>
+      <td><p>a character vector of strings which are to be
+    interpreted as <code><a href='https://www.rdocumentation.org/packages/base/topics/NA'>NA</a></code> values.  Blank fields are also
+    considered to be missing values in logical, integer, numeric and
+    complex fields.  Note that the test happens <em>after</em> 
+    white space is stripped from the input, so <code>na.strings</code> 
+    values may need their own white space stripped in advance.</p></td>
+    </tr>
+    <tr>
       <th>path</th>
-      <td><p>path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo</p></td>
-    </tr>
-    <tr>
-      <th>clean</th>
-      <td><p>logical, load only QA/QC rodent data (TRUE) or all data (FALSE)</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>specify subset of species; either all "Rodents" or only
-"Granivores"</p></td>
-    </tr>
-    <tr>
-      <th>length</th>
-      <td><p>specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)</p></td>
-    </tr>
-    <tr>
-      <th>unknowns</th>
-      <td><p>either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></td>
-    </tr>
-    <tr>
-      <th>time</th>
-      <td><p>specify the format of the time index in the output, either
-"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date)</p></td>
-    </tr>
-    <tr>
-      <th>fillweight</th>
-      <td><p>specify whether to fill in unknown weights with other
-records from that individual or species, where possible</p></td>
-    </tr>
-    <tr>
-      <th>min_plots</th>
-      <td><p>minimum number of plots within a period for an
-observation to be included</p></td>
-    </tr>
-    <tr>
-      <th>min_traps</th>
-      <td><p>minimum number of plots within a period for an
-observation to be included</p></td>
+      <td><p>either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository</p></td>
     </tr>
     <tr>
       <th>download_if_missing</th>
       <td><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></td>
     </tr>
+    <tr>
+      <th>version_message</th>
+      <td><p>whether to display a message about the data version
+being loaded</p></td>
+    </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame</p>
-    
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>rodent_species</span> <span class='kw'>&lt;-</span> <span class='fu'>load_datafile</span>(<span class='st'>"Rodents/Portal_rodent_species.csv"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

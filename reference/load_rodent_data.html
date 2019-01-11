@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read in the Portal data files — load_data • portalr</title>
+<title>Read in the Portal data files — load_rodent_data • portalr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,12 +30,12 @@
 
 
 
-<meta property="og:title" content="Read in the Portal data files — load_data" />
+<meta property="og:title" content="Read in the Portal data files — load_rodent_data" />
 
 <meta property="og:description" content="Loads Portal data files from either a user-defined
   path or the online Github repository. If the user-defined path is un-
   available, the default option is to download to that location.
-load_data loads the rodent data files
+load_rodent_data loads the rodent data files
 load_plant_data loads the plant data files
 load_ant_data loads the ant data files
 load_trapping_data loads just the rodent trapping files" />
@@ -69,7 +69,7 @@ load_trapping_data loads just the rodent trapping files" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -121,8 +121,8 @@ load_trapping_data loads just the rodent trapping files" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Read in the Portal data files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/GetData.R'><code>R/GetData.R</code></a></small>
-    <div class="hidden name"><code>load_data.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/load_data.R'><code>R/load_data.R</code></a></small>
+    <div class="hidden name"><code>load_rodent_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -130,14 +130,15 @@ load_trapping_data loads just the rodent trapping files" />
     <p>Loads Portal data files from either a user-defined
   path or the online Github repository. If the user-defined path is un-
   available, the default option is to download to that location.</p>
-<p><code>load_data</code> loads the rodent data files</p>
+<p><code>load_rodent_data</code> loads the rodent data files</p>
 <p><code>load_plant_data</code> loads the plant data files</p>
 <p><code>load_ant_data</code> loads the ant data files</p>
 <p><code>load_trapping_data</code> loads just the rodent trapping files</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>load_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>load_rodent_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>load_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -167,7 +168,7 @@ PortalData folder, then download it</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>load_data</code> returns a list of 5 dataframes:</p><table class='table'>
+    <p><code>load_rodent_data</code> returns a list of 5 dataframes:</p><table class='table'>
 <tr><td></td><td></td></tr>
 <tr><td><code>rodent_data</code></td><td></td></tr>
 <tr><td>raw data on rodent captures</td><td></td></tr>
@@ -236,7 +237,7 @@ PortalData folder, then download it</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>portal_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.79.0</span></div><div class='input'><span class='no'>portal_plant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_plant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.79.0</span></div><div class='input'><span class='no'>portal_ant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_ant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.79.0</span></div><div class='input'><span class='no'>trapping_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_trapping_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.79.0</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>portal_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_rodent_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.80.0</span></div><div class='input'><span class='no'>portal_plant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_plant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.80.0</span></div><div class='input'><span class='no'>portal_ant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_ant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.80.0</span></div><div class='input'><span class='no'>trapping_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_trapping_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.80.0</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
