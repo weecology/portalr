@@ -212,8 +212,12 @@ load_trapping_data <- function(path = "~", download_if_missing = TRUE, clean = T
 #' @inheritParams load_rodent_data
 #' @inheritParams utils::read.table
 #'
+#' @examples
+#' \donttest{
+#' rodent_species <- load_datafile("Rodents/Portal_rodent_species.csv")
+#' }
 #' @export
-load_datafile <- function(datafile, na.strings = "NA", path = "~",
+load_datafile <- function(datafile, na.strings = "", path = "~",
                           download_if_missing = TRUE, version_message = FALSE)
 {
 
