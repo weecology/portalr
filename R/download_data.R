@@ -27,6 +27,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param base_folder Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#' @inheritParams get_data_versions
 #'
 #' @return None
 #'
@@ -37,10 +38,14 @@ full_path <- function(reference_path, base_path = getwd()) {
 #' }
 #'
 #' @export
-download_observations <- function(base_folder = "~", version = "latest")
+download_observations <- function(base_folder = "~", version = "latest", from_zenodo = FALSE)
 {
+  # only use zenodo if version == "latest"
+  if (version != "latest")
+    from_zenodo <- FALSE
+
   # get version info
-  releases <- get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE)
+  releases <- get_data_versions(from_zenodo = from_zenodo, halt_on_error = TRUE)
 
   # match version
   if (version == "latest")
@@ -109,14 +114,14 @@ download_observations <- function(base_folder = "~", version = "latest")
 get_data_versions <- function(from_zenodo = FALSE, halt_on_error = FALSE)
 {
   releases   <- tryCatch(
-    # {
-    #   if (from_zenodo)
-    #   {
-    #     get_zenodo_latest_release()
-    #   } else {
+    {
+      if (from_zenodo)
+      {
+        get_zenodo_latest_release()
+      } else {
         get_github_releases()
-    #   }
-    # }
+      }
+    }
     ,
     error = function(e) {
       if (halt_on_error) {
