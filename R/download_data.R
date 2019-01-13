@@ -215,6 +215,8 @@ get_github_releases <- function()
     } else if (httr::http_type(resp) != "application/json") # check for errors
     {
       stop("GitHub response was not in JSON format", call. = FALSE)
+    } else if (httr::headers(resp)$status == "401 Unauthorized"){
+      stop("Bad GitHub credentials")
     }
 
     # extract release info
