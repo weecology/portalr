@@ -12,7 +12,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = Sys.getenv("portalr_vignette_build")
+  eval = nzchar(Sys.getenv("portalr_vignette_build"))
 )
 ```
 
