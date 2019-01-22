@@ -11,9 +11,11 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+date_span <- list(iso_date = 0)
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = Sys.getenv("portalr_vignette_build")
 )
 ```
 
