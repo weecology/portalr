@@ -11,9 +11,11 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+date_span <- list(iso_date = 0)
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = nzchar(Sys.getenv("portalr_vignette_build")) 
 )
 ```
 
@@ -42,16 +44,16 @@ library(portalr)
 
 Note that this package does not contain the actual Portal data, which resides online in a [GitHub repository](https://github.com/weecology/PortalData).
 
-First, we try to load the data. If there isn't a Portal folder, than `load_data` will fall back to downloading the data, as well.
+First, we try to load the data. If there isn't a Portal folder, than `load_rodent_data` will fall back to downloading the data, as well.
 
 check whether we already have the data. If we don't have the data, or if the version we have isn't the most recent, we use the `download_observations` function to download the latest copy of the data.
 
 ```{r}
 portal_data_path <- tempdir() # use a temporary folder to store downloaded data
-data_tables <- load_data(portal_data_path, download_if_missing = TRUE)
+data_tables <- load_rodent_data(portal_data_path, download_if_missing = TRUE)
 ```
 
-The `load_data` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
+The `load_rodent_data` function reads in several tables related to the rodent abundances. We won't necessarily use all of these tables, but loading this now gives us access later.
 
 ```{r}
 print(summary(data_tables))

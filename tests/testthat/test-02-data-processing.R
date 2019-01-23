@@ -1,7 +1,7 @@
 context("Check data processing")
 
 portal_data_path <- tempdir()
-data_tables <- load_data(portal_data_path)
+data_tables <- load_rodent_data(portal_data_path)
 
 test_that("rodent data.frame has correct column names", {
   rats <- data_tables[[1]]
@@ -80,7 +80,7 @@ test_that("does find_incomplete_censuses work properly?", {
   expect_gt(NROW(any_incomplete), NROW(missing_traps))
   periods_47_traps <- setdiff(any_incomplete$period, missing_traps$period)
   idx <- periods_47_traps > 320 & periods_47_traps < 450
-  expect_equal(sum(idx), 115)
+  expect_equal(sum(idx), 114)
 })
 
 plant_tables <- load_plant_data(portal_data_path)

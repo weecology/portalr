@@ -27,11 +27,10 @@ make_plant_plot_data <- function(plant_data, census_info_table, output, min_quad
                "cover" = rlang::quo(cover))
   filler <- list(n = as.integer(0))
 
-
-
-  test <- plant_data %>%
+  plant_data %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::summarise(n = sum(!!wt,na.rm=T))  %>%
+    dplyr::summarise(n = sum(!!wt, na.rm = TRUE))  %>%
+    dplyr::ungroup() %>%
     dplyr::right_join(census_info_table[,c("year","season","plot")], by = c("year", "season", "plot")) %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::full_join(census_info_table, by = c("year", "season", "plot")) %>%
@@ -69,7 +68,8 @@ make_plant_level_data <- function(plot_data, level, output,
   level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
     dplyr::summarise(n = sum(n, na.rm = TRUE),
                      quads = sum(nquads, na.rm = TRUE),
-                     nplots = dplyr::n_distinct(plot))
+                     nplots = dplyr::n_distinct(plot)) %>%
+    dplyr::ungroup()
 
   if (level == "plot")
   {
@@ -79,7 +79,7 @@ make_plant_level_data <- function(plot_data, level, output,
 
   level_data %>%
     dplyr::rename(!!output := n) %>%
-    dplyr::as.tbl()
+    tibble::as_tibble()
 }
 
 #' Plant data prepared for output
@@ -137,7 +137,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
   return(out_data)
 }
 
-#' @name get_plant_data
+#' @name summarize_plant_data
 #' @aliases plant_abundance
 #'
 #' @title Generate summaries of Portal plant data
@@ -182,7 +182,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'
 #' @export
 #'
-get_plant_data <- function(path = '~', level = "Site", type = "All",
+summarize_plant_data <- function(path = '~', level = "Site", type = "All",
                            length = "all", plots = length, unknowns = FALSE,
                            correct_sp = TRUE,
                            shape = "flat", output = "abundance",
@@ -229,12 +229,11 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
   return(out_df)
 }
 
-
-#' @rdname get_plant_data
+#' @rdname summarize_plant_data
 #'
 #' @description \code{plant_abundance} generates a table of plant abundance
 #'
-#' @param ... arguments passed to \code{\link{get_plant_data}}
+#' @param ... arguments passed to \code{\link{summarize_plant_data}}
 #'
 #' @examples
 #' \donttest{
@@ -244,13 +243,13 @@ get_plant_data <- function(path = '~', level = "Site", type = "All",
 #'
 plant_abundance <- function(..., shape = "flat") {
 
-  if(shape %in% c("Crosstab", "crosstab"))
+  if (tolower(shape) == "crosstab")
   {
-    get_plant_data(..., shape = "crosstab", output = "abundance")
+    summarize_plant_data(..., shape = "crosstab", output = "abundance")
   }
   else {
-    get_plant_data(..., shape = "flat", output = "abundance") %>%
-      dplyr::filter(abundance>0)
+    summarize_plant_data(..., shape = "flat", output = "abundance") %>%
+      dplyr::filter(abundance > 0)
   }
 
 }
@@ -309,7 +308,8 @@ shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
     dplyr::mutate(treatment = as.character(treatment), species = as.factor(species)) %>%
     dplyr::group_by(year, treatment, plot, species) %>%
     dplyr::summarize(count=n()) %>%
-    dplyr::mutate(cover = count/1000, height=NA, species = as.character(species)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(cover = count/1000, height = NA, species = as.character(species)) %>%
     dplyr::select(-count)
 
   transect_data = data_tables$transect_data %>%
@@ -324,9 +324,14 @@ shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
     dplyr::mutate(treatment = as.character(treatment), species = as.factor(species), length=stop-start) %>%
     dplyr::group_by(year, treatment, plot, species) %>%
     dplyr::summarize(length=sum(length, na.rm=TRUE), height = mean(height, na.rm=TRUE)) %>%
+    dplyr::ungroup() %>%
     dplyr::mutate(cover = length/(2*7071.1), species = as.character(species)) %>%
     dplyr::select(year,treatment,plot,species,cover,height)
 
   return(dplyr::bind_rows(oldtransect_data,transect_data))
 
 }
+
+#' @rdname summarize_plant_data
+#' @export
+summarise_plant_data <- summarize_plant_data
