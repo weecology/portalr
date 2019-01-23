@@ -1,3 +1,5 @@
+Meta
+doc
 # Ignore testing data folder
 /tests/testthat/PortalData
 
