@@ -5,12 +5,14 @@
 
 [![Build
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 [![Coverage
 status](https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=master)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://cran.rstudio.com/web/packages/portalr/index.html)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
 
 <img src="man/figures/portalr.png" width="200px">
 
