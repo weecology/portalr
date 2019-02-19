@@ -68,7 +68,7 @@ plant_abundance generates a table of plant abundance" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -135,8 +135,8 @@ plant_abundance generates a table of plant abundance" />
     
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"All"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>summarize_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"All"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>correct_sp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"flat"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>), <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span>
@@ -145,8 +145,8 @@ plant_abundance generates a table of plant abundance" />
 
 <span class='fu'>plant_abundance</span>(<span class='no'>...</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"flat"</span>)
 
-<span class='fu'>summarise_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"All"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='fu'>summarise_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"All"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>correct_sp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"flat"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>), <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span>
