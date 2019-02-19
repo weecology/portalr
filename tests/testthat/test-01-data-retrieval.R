@@ -7,7 +7,7 @@ test_that("download_observations and check_for_newer_data work", {
   expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
   expect_true(check_for_newer_data(portal_data_path))
   without_internet({
-    expect_false(check_for_newer_data())
+    expect_false(check_for_newer_data(portal_data_path))
   })
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
