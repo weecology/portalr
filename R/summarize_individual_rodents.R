@@ -1,5 +1,3 @@
-#' @importFrom magrittr "%>%"
-
 #' @name summarize_individual_rodents
 #'
 #' @title Return cleaned Portal rodent individual data

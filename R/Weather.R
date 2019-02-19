@@ -1,5 +1,3 @@
-#' @importFrom magrittr "%>%"
-
 #' @title Weather by day, calendar month, or lunar month
 #'
 #' @description Summarize hourly weather data to either daily, monthly, or lunar monthly level.

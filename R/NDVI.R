@@ -1,7 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom lubridate "%m+%"
-
-
 #' @title NDVI by calendar month or lunar month
 #'
 #' @description Summarize NDVI data to monthly or lunar monthly level

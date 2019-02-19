@@ -1,7 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang quos
-#' @importFrom utils head
-#'
 #' @title Add Seasons
 #'
 #' @description Higher-order data summaries, by 6-month seasons, 3-month seasons, or year.

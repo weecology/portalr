@@ -1,10 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang "!!"
-#' @importFrom rlang "!!!"
-#' @importFrom rlang ":="
-#' @importFrom rlang quo
-#' @importFrom rlang quos
-
 #' @title Plot-level plant data
 #'
 #' @param plant_data cleaned plant data

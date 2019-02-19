@@ -31,7 +31,6 @@ LazyData: true
 Depends: R (>= 3.2.3)
 Imports:
   dplyr,
-  ggplot2,
   tidyr,
   zoo,
   lubridate,
@@ -50,6 +49,7 @@ Suggests:
   knitr,
   rmarkdown,
   pkgdown,
-  covr
+  covr, 
+  ggplot2
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
