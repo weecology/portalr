@@ -43,13 +43,13 @@ Imports:
   jsonlite, 
   tibble
 Suggests:
-    httptest,
-    digest,
-    tidyverse,
-    cowplot,
-    knitr,
-    rmarkdown,
-    pkgdown,
-    covr
+  httptest,
+  digest,
+  tidyverse,
+  cowplot,
+  knitr,
+  rmarkdown,
+  pkgdown,
+  covr
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

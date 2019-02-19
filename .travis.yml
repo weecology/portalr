@@ -3,6 +3,8 @@ cache: packages
 sudo: required
 warnings_are_errors: false
 
+r_check_args: "--no-vignettes"
+
 r_packages:
   - covr
 
@@ -26,4 +28,4 @@ matrix:
       local-dir: docs
       on:
         branch: master
-        
+
