@@ -1,7 +1,3 @@
-#' @importFrom graphics plot
-#' @importFrom stats aggregate
-#' @importFrom utils download.file read.csv unzip read.table tail
-
 #' @title Full Path
 #' @description Return normalized path for all operating systems
 #' @param reference_path a path to join with current working directory

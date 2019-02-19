@@ -1,5 +1,3 @@
-#' @importFrom stats na.omit
-
 #' @title Length of non-missing values in a vector
 #'
 #' @description How many values in the given vector are not NAs

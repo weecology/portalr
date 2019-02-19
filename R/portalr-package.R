@@ -7,11 +7,11 @@
 #' @keywords package
 #'
 #' @importFrom lubridate "%m+%"
-#' @importFrom rlang "!!"
-#' @importFrom rlang "!!!"
-#' @importFrom rlang ":="
+#' @importFrom rlang "!!" "!!!" ":="
 #' @importFrom rlang quo quos
-#' @importFrom utils head
+#' @importFrom utils head download.file read.csv unzip read.table tail
+#' @importFrom stats median na.omit
+
 NULL
 
 ## quiets concerns of R CMD check re: variables used in NSE functions
