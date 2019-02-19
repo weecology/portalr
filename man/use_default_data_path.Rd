@@ -2,12 +2,12 @@
 % Please edit documentation in R/download_data.R
 \name{get_default_data_path}
 \alias{get_default_data_path}
-\alias{set_default_data_path}
+\alias{use_default_data_path}
 \title{Manage the default path for downloading Portal Data into}
 \usage{
 get_default_data_path(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 
-set_default_data_path(path = "~", ENV_VAR = "PORTALR_DATA_PATH")
+use_default_data_path(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
 }
 \arguments{
 \item{fallback}{the default value to use if the setting is missing}
@@ -24,7 +24,7 @@ None
 \code{get_default_data_path} gets the value of the data path
   environmental variable
 
-\code{set_default_data_path} has 3 steps. First, it checks for
+\code{use_default_data_path} has 3 steps. First, it checks for
   the presence of a pre-existing setting for the environmental variable.
   Then it checks if the folder exists and creates it, if needed. Then it
   provides instructions for setting the environmental variable.

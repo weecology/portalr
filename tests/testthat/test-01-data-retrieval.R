@@ -85,3 +85,25 @@ test_that("load_ant_data works", {
                  "plots_table"))
 })
 
+test_that("get_default_data_path works", {
+  Sys.unsetenv("PORTALR_DATA_PATH")
+  expect_true(is.na(get_default_data_path(fallback = NA)))
+
+  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
+  expect_equal(get_default_data_path(), tempdir())
+})
+
+test_that("use_default_data_path works", {
+  Sys.unsetenv("PORTALR_DATA_PATH")
+  expect_error(use_default_data_path())
+
+  expect_output(use_default_data_path(tempdir()), "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
+  expect_output(use_default_data_path(tempdir()), "Store your data path with a line like:")
+  expect_output(use_default_data_path(tempdir()), paste0("PORTALR_DATA_PATH=\"", tempdir(), "\""))
+  expect_output(use_default_data_path(tempdir()), "Make sure '.Renviron' ends with a newline!")
+
+  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
+  expect_warning(use_default_data_path(tempdir()))
+
+})
+

@@ -289,8 +289,7 @@ check_for_newer_data <- function(path = get_default_data_path())
   return(FALSE)
 }
 
-
-#' @rdname set_default_data_path
+#' @rdname use_default_data_path
 #'
 #' @description \code{get_default_data_path} gets the value of the data path
 #'   environmental variable
@@ -304,12 +303,12 @@ get_default_data_path <- function(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
   Sys.getenv(ENV_VAR, unset = fallback)
 }
 
-#' @name set_default_data_path
+#' @name use_default_data_path
 #' @aliases get_default_data_path
 #'
 #' @title Manage the default path for downloading Portal Data into
 #'
-#' @description \code{set_default_data_path} has 3 steps. First, it checks for
+#' @description \code{use_default_data_path} has 3 steps. First, it checks for
 #'   the presence of a pre-existing setting for the environmental variable.
 #'   Then it checks if the folder exists and creates it, if needed. Then it
 #'   provides instructions for setting the environmental variable.
@@ -320,13 +319,19 @@ get_default_data_path <- function(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 #' @return None
 #'
 #' @export
-set_default_data_path <- function(path = "~", ENV_VAR = "PORTALR_DATA_PATH")
+use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
 {
   # check for prexisting setting
   curr_data_path <- Sys.getenv(ENV_VAR, unset = NA)
   if (!is.na(curr_data_path))
   {
     warning("A default data path exists:", Sys.getenv(ENV_VAR), ".")
+  }
+
+  # check if a path is provided
+  if (is.null(path))
+  {
+    usethis::ui_stop("Please provide a path to store downloaded portal data.")
   }
 
   # check if path is valid
