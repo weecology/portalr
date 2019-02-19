@@ -6,11 +6,15 @@ test_that("download_observations and check_for_newer_data work", {
   skip_on_cran() # these download checks take a while to run
   expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
   expect_true(check_for_newer_data(portal_data_path))
+  without_internet({
+    expect_false(check_for_newer_data())
+  })
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
   expect_error(download_observations(portal_data_path, version = "1.6"), NA)
   expect_true(check_for_newer_data(portal_data_path))
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
+  expect_true(check_for_newer_data(portal_data_path))
 
   expect_error(download_observations(portal_data_path, version = "1.5.9"))
   expect_error(download_observations(portal_data_path, version = "1.000.0"))
