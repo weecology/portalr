@@ -208,21 +208,22 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'
 #' @export
 #'
-summarize_rodent_data <- function(path = "~", clean = TRUE, level = "Site",
-                            type = "Rodents", length = "all", plots = length,
-                            unknowns = FALSE, shape = "crosstab",
-                            time = "period", output = "abundance",
-                            fillweight = (output != "abundance"),
-                            na_drop = switch(tolower(level),
-                                             "plot" = FALSE,
-                                             "treatment" = TRUE,
-                                             "site" = TRUE),
-                            zero_drop = switch(tolower(level),
-                                               "plot" = FALSE,
-                                               "treatment" = TRUE,
-                                               "site" = TRUE),
-                            min_traps = 1, min_plots = 24, effort = FALSE,
-                            download_if_missing = TRUE)
+summarize_rodent_data <- function(path = get_default_data_path(),
+                                  clean = TRUE, level = "Site",
+                                  type = "Rodents", length = "all", plots = length,
+                                  unknowns = FALSE, shape = "crosstab",
+                                  time = "period", output = "abundance",
+                                  fillweight = (output != "abundance"),
+                                  na_drop = switch(tolower(level),
+                                                   "plot" = FALSE,
+                                                   "treatment" = TRUE,
+                                                   "site" = TRUE),
+                                  zero_drop = switch(tolower(level),
+                                                     "plot" = FALSE,
+                                                     "treatment" = TRUE,
+                                                     "site" = TRUE),
+                                  min_traps = 1, min_plots = 24, effort = FALSE,
+                                  download_if_missing = TRUE)
 {
   data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
                                   clean = clean)

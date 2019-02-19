@@ -26,7 +26,8 @@
 #' @export
 #'
 add_seasons <- function(data, level = "site", season_level = 2,
-                        date_column = "yearmon", summarize = NA, path = "~",
+                        date_column = "yearmon", summarize = NA,
+                        path = get_default_data_path(),
                         download_if_missing = TRUE, clean = TRUE)
 {
 

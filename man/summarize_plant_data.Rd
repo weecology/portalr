@@ -6,8 +6,8 @@
 \alias{summarise_plant_data}
 \title{Generate summaries of Portal plant data}
 \usage{
-summarize_plant_data(path = "~", level = "Site", type = "All",
-  length = "all", plots = length, unknowns = FALSE,
+summarize_plant_data(path = get_default_data_path(), level = "Site",
+  type = "All", length = "all", plots = length, unknowns = FALSE,
   correct_sp = TRUE, shape = "flat", output = "abundance",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
@@ -16,8 +16,8 @@ summarize_plant_data(path = "~", level = "Site", type = "All",
 
 plant_abundance(..., shape = "flat")
 
-summarise_plant_data(path = "~", level = "Site", type = "All",
-  length = "all", plots = length, unknowns = FALSE,
+summarise_plant_data(path = get_default_data_path(), level = "Site",
+  type = "All", length = "all", plots = length, unknowns = FALSE,
   correct_sp = TRUE, shape = "flat", output = "abundance",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =

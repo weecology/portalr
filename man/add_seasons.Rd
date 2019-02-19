@@ -6,8 +6,9 @@
 \title{Add Seasons}
 \usage{
 add_seasons(data, level = "site", season_level = 2,
-  date_column = "yearmon", summarize = NA, path = "~",
-  download_if_missing = TRUE, clean = TRUE)
+  date_column = "yearmon", summarize = NA,
+  path = get_default_data_path(), download_if_missing = TRUE,
+  clean = TRUE)
 
 yearly(...)
 }

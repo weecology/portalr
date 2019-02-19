@@ -33,7 +33,8 @@
 #' }
 #' @export
 #'
-load_rodent_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
+load_rodent_data <- function(path = get_default_data_path(),
+                             download_if_missing = TRUE, clean = TRUE)
 {
   rodent_data <- load_datafile(file.path("Rodents", "Portal_rodent.csv"),
                                na.strings = "", path, download_if_missing, version_message = TRUE)
@@ -93,7 +94,8 @@ load_rodent_data <- function(path = "~", download_if_missing = TRUE, clean = TRU
 #' portal_plant_data <- load_plant_data("repo")
 #' }
 
-load_plant_data <- function(path = "~", download_if_missing = TRUE)
+load_plant_data <- function(path = get_default_data_path(),
+                            download_if_missing = TRUE)
 {
   quadrat_data <- load_datafile(file.path("Plants", "Portal_plant_quadrats.csv"),
                                na.strings = "", path, download_if_missing, version_message = TRUE)
@@ -141,7 +143,8 @@ load_plant_data <- function(path = "~", download_if_missing = TRUE)
 #' portal_ant_data <- load_ant_data("repo")
 #' }
 
-load_ant_data <- function(path = "~", download_if_missing = TRUE)
+load_ant_data <- function(path = get_default_data_path(),
+                          download_if_missing = TRUE)
 {
   bait_data <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
                                 na.strings = "", path, download_if_missing, version_message = TRUE)
@@ -181,7 +184,8 @@ load_ant_data <- function(path = "~", download_if_missing = TRUE)
 #' trapping_data <- load_trapping_data("repo")
 #' }
 #' @export
-load_trapping_data <- function(path = "~", download_if_missing = TRUE, clean = TRUE)
+load_trapping_data <- function(path = get_default_data_path(),
+                               download_if_missing = TRUE, clean = TRUE)
 {
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
                                   na.strings = "NA", path, download_if_missing, version_message = TRUE)
@@ -217,7 +221,7 @@ load_trapping_data <- function(path = "~", download_if_missing = TRUE, clean = T
 #' rodent_species <- load_datafile("Rodents/Portal_rodent_species.csv")
 #' }
 #' @export
-load_datafile <- function(datafile, na.strings = "", path = "~",
+load_datafile <- function(datafile, na.strings = "", path = get_default_data_path(),
                           download_if_missing = TRUE, version_message = FALSE)
 {
 

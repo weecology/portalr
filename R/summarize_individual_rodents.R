@@ -28,7 +28,8 @@
 #'
 #' @export
 #'
-summarize_individual_rodents <- function(path = '~', clean=TRUE, type = "Rodents",
+summarize_individual_rodents <- function(path = get_default_data_path(),
+                                         clean = TRUE, type = "Rodents",
                                          length = "all", unknowns = FALSE, time = "period",
                                          fillweight = FALSE, min_plots = 1, min_traps = 1,
                                          download_if_missing = TRUE)
