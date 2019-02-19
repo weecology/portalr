@@ -1,10 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang "!!"
-#' @importFrom rlang "!!!"
-#' @importFrom rlang ":="
-#' @importFrom rlang quo
-#' @importFrom rlang quos
-
 #' @title Plot-level plant data
 #'
 #' @param plant_data cleaned plant data
@@ -57,7 +50,7 @@ make_plant_plot_data <- function(plant_data, census_info_table, output, min_quad
 #'
 #' @noRd
 make_plant_level_data <- function(plot_data, level, output,
-                            min_quads = 1) {
+                                  min_quads = 1) {
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
@@ -105,7 +98,7 @@ make_plant_level_data <- function(plot_data, level, output,
 #' @noRd
 #'
 prep_plant_output <- function(level_data, effort, na_drop,
-                               zero_drop, shape, level, output) {
+                              zero_drop, shape, level, output) {
 
   out_data <- level_data
 
@@ -182,20 +175,21 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'
 #' @export
 #'
-summarize_plant_data <- function(path = '~', level = "Site", type = "All",
-                           length = "all", plots = length, unknowns = FALSE,
-                           correct_sp = TRUE,
-                           shape = "flat", output = "abundance",
-                           na_drop = switch(tolower(level),
-                                            "plot" = FALSE,
-                                            "treatment" = TRUE,
-                                            "site" = TRUE),
-                           zero_drop = switch(tolower(level),
-                                              "plot" = FALSE,
-                                              "treatment" = TRUE,
-                                              "site" = TRUE),
-                           min_quads = 1, effort = TRUE,
-                           download_if_missing = TRUE)
+summarize_plant_data <- function(path = get_default_data_path(),
+                                 level = "Site", type = "All",
+                                 length = "all", plots = length, unknowns = FALSE,
+                                 correct_sp = TRUE,
+                                 shape = "flat", output = "abundance",
+                                 na_drop = switch(tolower(level),
+                                                  "plot" = FALSE,
+                                                  "treatment" = TRUE,
+                                                  "site" = TRUE),
+                                 zero_drop = switch(tolower(level),
+                                                    "plot" = FALSE,
+                                                    "treatment" = TRUE,
+                                                    "site" = TRUE),
+                                 min_quads = 1, effort = TRUE,
+                                 download_if_missing = TRUE)
 {
   #### Clean inputs ----
   level <- tolower(level)
@@ -217,7 +211,7 @@ summarize_plant_data <- function(path = '~', level = "Site", type = "All",
   census_info_table <- join_census_to_dates(data_tables$census_table,
                                             data_tables$date_table,
                                             data_tables$plots_table) %>%
-                          filter_plots(plots = plots)
+    filter_plots(plots = plots)
 
   #### Clean data and prepare output ----
   out_df <- clean_plant_data(data_tables, type,
@@ -286,9 +280,10 @@ plant_abundance <- function(..., shape = "flat") {
 #'
 #' @export
 #'
-shrub_cover <- function(path = '~', type = "Shrubs", plots = "all",
+shrub_cover <- function(path = get_default_data_path(),
+                        type = "Shrubs", plots = "all",
                         unknowns = FALSE, correct_sp = TRUE)
-  {
+{
 
   #### Clean inputs ----
   type <- tolower(type)

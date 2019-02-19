@@ -1,6 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom lubridate "%m+%"
-
 #' @title Makes a standardized monthly time series for Portal rodents
 #' @description The Portal rodent data is collected roughly monthly.
 #' However, some time series methods require regular monthly data with no gaps.

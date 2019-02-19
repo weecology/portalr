@@ -1,7 +1,3 @@
-#' @importFrom magrittr "%>%"
-#' @importFrom rlang quos
-#' @importFrom utils head
-#'
 #' @title Add Seasons
 #'
 #' @description Higher-order data summaries, by 6-month seasons, 3-month seasons, or year.
@@ -30,7 +26,8 @@
 #' @export
 #'
 add_seasons <- function(data, level = "site", season_level = 2,
-                        date_column = "yearmon", summarize = NA, path = "~",
+                        date_column = "yearmon", summarize = NA,
+                        path = get_default_data_path(),
                         download_if_missing = TRUE, clean = TRUE)
 {
 

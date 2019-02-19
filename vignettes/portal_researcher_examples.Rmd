@@ -9,10 +9,14 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+# check if we're running this as part of R CMD CHECK and skip if so
+is_check <- ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_",
+             "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = nzchar(Sys.getenv("portalr_vignette_build"))
+  eval = !is_check
 )
 ```
 

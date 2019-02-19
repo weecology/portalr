@@ -1,5 +1,3 @@
-#' @importFrom magrittr "%>%"
-
 #' @title Weather by day, calendar month, or lunar month
 #'
 #' @description Summarize hourly weather data to either daily, monthly, or lunar monthly level.
@@ -10,13 +8,14 @@
 #'
 #' @export
 #'
-weather <- function(level = "daily", fill = FALSE, path = '~') {
+weather <- function(level = "daily", fill = FALSE, path = get_default_data_path())
+{
   level <- tolower(level)
-  weather_new <- read.csv(full_path('PortalData/Weather/Portal_weather.csv', path),
-                       na.strings = c(""), stringsAsFactors = FALSE)
-  weather_old <- read.csv(full_path('PortalData/Weather/Portal_weather_19801989.csv', path),
-                       na.strings = c("-99"), stringsAsFactors = FALSE)
-  moon_dates <- read.csv(full_path('PortalData/Rodents/moon_dates.csv', path),
+  weather_new <- read.csv(full_path("PortalData/Weather/Portal_weather.csv", path),
+                          na.strings = c(""), stringsAsFactors = FALSE)
+  weather_old <- read.csv(full_path("PortalData/Weather/Portal_weather_19801989.csv", path),
+                          na.strings = c("-99"), stringsAsFactors = FALSE)
+  moon_dates <- read.csv(full_path("PortalData/Rodents/moon_dates.csv", path),
                          na.strings = c(""), stringsAsFactors = FALSE)
 
   ###########Summarise by Day ----------------------
@@ -33,7 +32,7 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
     weather <- fill_missing_weather(weather, path)
   }
 
-  if (level == 'monthly') {
+  if (level == "monthly") {
 
     ##########Summarise by Month -----------------
 
@@ -45,7 +44,7 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
       dplyr::arrange(year, month) %>%
       dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, locally_measured, battery_low) %>%
       dplyr::mutate(battery_low = ifelse(year < 2003, NA, battery_low))
-  } else if (level == 'newmoon') {
+  } else if (level == "newmoon") {
 
     ##########Summarise by lunar month -----------------
 
@@ -90,7 +89,8 @@ weather <- function(level = "daily", fill = FALSE, path = '~') {
 #'
 #' @noRd
 #'
-fill_missing_weather <- function(weather, path = "~") {
+fill_missing_weather <- function(weather, path = get_default_data_path())
+{
   portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
                         na.strings = c(""), header = TRUE,
                         colClasses = c("character", rep("integer", 3), "character",
