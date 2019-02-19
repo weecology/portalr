@@ -30,17 +30,18 @@ BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
 Depends: R (>= 3.2.3)
 Imports:
-  dplyr,
-  tidyr,
-  zoo,
-  lubridate,
-  magrittr,
-  httr, 
-  rlang,
-  forecast,
-  lunar,
-  jsonlite, 
-  tibble
+    dplyr,
+    tidyr,
+    zoo,
+    lubridate,
+    magrittr,
+    httr,
+    rlang,
+    forecast,
+    lunar,
+    jsonlite,
+    tibble,
+    usethis (>= 1.4.0.9000)
 Suggests:
   httptest,
   digest,
@@ -53,3 +54,5 @@ Suggests:
   ggplot2
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
+Remotes:  
+    r-lib/usethis

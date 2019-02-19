@@ -11,6 +11,7 @@
 #' @importFrom rlang quo quos
 #' @importFrom utils head download.file read.csv unzip read.table tail
 #' @importFrom stats median na.omit
+#' @importFrom usethis edit_r_environ
 
 NULL
 

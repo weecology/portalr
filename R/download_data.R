@@ -287,3 +287,60 @@ check_for_newer_data <- function(base_folder = "~")
 
   return(FALSE)
 }
+
+
+#' @rdname set_default_base_folder
+#'
+#' @description \code{get_default_base_folder} gets the value of the base_folder
+#'   environmental variable
+#'
+#' @param fallback the default value to use if the setting is missing
+#'
+#' @export
+#'
+get_default_base_folder <- function(fallback = "~", ENV_VAR = "PORTALR_BASE_FOLDER")
+{
+  Sys.getenv(ENV_VAR, unset = fallback)
+}
+
+#' @name set_default_base_folder
+#' @aliases get_default_base_folder
+#'
+#' @title Manage the default base_folder for downloading Portal Data into
+#'
+#' @description \code{set_default_base_folder} has 3 steps. First, it checks for
+#'   the presence of a pre-existing setting for the base_folder environmental
+#'   variable. Then it checks if the folder exists and creates it, if needed.
+#'   Then it provides instructions for setting the base_folder environmental
+#'   variable.
+#' @param base_folder Folder into which data will be downloaded
+#' @param ENV_VAR the environmental variable to check (by default
+#'   `"PORTALR_BASE_FOLDER"``)
+#'
+#' @return None
+#'
+#' @export
+set_default_base_folder <- function(base_folder = "~", ENV_VAR = "PORTALR_BASE_FOLDER")
+{
+  # check for prexisting setting
+  curr_data_path <- Sys.getenv(ENV_VAR, unset = NA)
+  if (!is.na(curr_data_path))
+  {
+    warning("A default data path exists:", Sys.getenv(ENV_VAR), ".")
+  }
+
+  # check if base_folder is valid
+  if (!dir.exists(base_folder))
+  {
+    dir.create(base_folder)
+  }
+
+  # copy new path setting to clipboard
+  path_setting_string <- paste0(ENV_VAR, "=", '"', base_folder, '"')
+
+  usethis::ui_todo("Call {usethis::ui_code('usethis::edit_r_environ()')} to open {usethis::ui_path('.Renviron')}")
+  usethis::ui_todo("Store your data path with a line like:")
+  usethis::ui_code_block(path_setting_string)
+  usethis::ui_todo("Make sure {usethis::ui_value('.Renviron')} ends with a newline!")
+  return()
+}
