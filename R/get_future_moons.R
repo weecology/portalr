@@ -1,6 +1,3 @@
-#' @importFrom utils tail
-#' @importFrom stats median
-
 #' @title Get future moon dates
 #' @description Get next 12 new moon dates and assign newmoon numbers for forecasting
 #' @param moons current newmoonnumber table

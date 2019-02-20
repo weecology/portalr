@@ -4,8 +4,8 @@
 \alias{shrub_cover}
 \title{Generate percent cover from Portal plant transect data}
 \usage{
-shrub_cover(path = "~", type = "Shrubs", plots = "all",
-  unknowns = FALSE, correct_sp = TRUE)
+shrub_cover(path = get_default_data_path(), type = "Shrubs",
+  plots = "all", unknowns = FALSE, correct_sp = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to

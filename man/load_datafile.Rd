@@ -4,8 +4,9 @@
 \alias{load_datafile}
 \title{read in a raw datafile from the downloaded data or the GitHub repo}
 \usage{
-load_datafile(datafile, na.strings = "", path = "~",
-  download_if_missing = TRUE, version_message = FALSE)
+load_datafile(datafile, na.strings = "",
+  path = get_default_data_path(), download_if_missing = TRUE,
+  version_message = FALSE)
 }
 \arguments{
 \item{datafile}{the path to the datafile within the folder for Portal data}

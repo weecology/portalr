@@ -6,18 +6,22 @@ test_that("download_observations and check_for_newer_data work", {
   skip_on_cran() # these download checks take a while to run
   expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
   expect_true(check_for_newer_data(portal_data_path))
+  without_internet({
+    expect_false(check_for_newer_data(portal_data_path))
+  })
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
   expect_error(download_observations(portal_data_path, version = "1.6"), NA)
   expect_true(check_for_newer_data(portal_data_path))
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
+  expect_true(check_for_newer_data(portal_data_path))
 
   expect_error(download_observations(portal_data_path, version = "1.5.9"))
-  unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
+  expect_error(download_observations(portal_data_path, version = "1.000.0"))
 
   expect_error(download_observations(portal_data_path, from_zenodo = TRUE), NA)
   expect_false(check_for_newer_data(portal_data_path))
-  unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
+  #unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
   expect_error(download_observations(portal_data_path), NA)
   expect_false(check_for_newer_data(portal_data_path))
@@ -83,5 +87,27 @@ test_that("load_ant_data works", {
   expect_equal(names(data_tables),
                c("bait_data", "colony_data", "species_table",
                  "plots_table"))
+})
+
+test_that("get_default_data_path works", {
+  Sys.unsetenv("PORTALR_DATA_PATH")
+  expect_true(is.na(get_default_data_path(fallback = NA)))
+
+  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
+  expect_equal(get_default_data_path(), tempdir())
+})
+
+test_that("use_default_data_path works", {
+  Sys.unsetenv("PORTALR_DATA_PATH")
+  expect_error(use_default_data_path())
+
+  expect_output(use_default_data_path(tempdir()), "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
+  expect_output(use_default_data_path(tempdir()), "Store your data path with a line like:")
+  expect_output(use_default_data_path(tempdir()), paste0("PORTALR_DATA_PATH=\"", tempdir(), "\""))
+  expect_output(use_default_data_path(tempdir()), "Make sure '.Renviron' ends with a newline!")
+
+  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
+  expect_warning(use_default_data_path(tempdir()))
+
 })
 

@@ -1,7 +1,3 @@
-#' @importFrom graphics plot
-#' @importFrom stats aggregate
-#' @importFrom utils download.file read.csv unzip read.table tail
-
 #' @title Full Path
 #' @description Return normalized path for all operating systems
 #' @param reference_path a path to join with current working directory
@@ -25,7 +21,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 #' @description This downloads the latest portal data regardless if they are
 #'   actually updated or not.
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
-#' @param base_folder Folder into which data will be downloaded
+#' @param path Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
 #' @inheritParams get_data_versions
 #'
@@ -38,7 +34,8 @@ full_path <- function(reference_path, base_path = getwd()) {
 #' }
 #'
 #' @export
-download_observations <- function(base_folder = "~", version = "latest", from_zenodo = FALSE)
+download_observations <- function(path = get_default_data_path(),
+                                  version = "latest", from_zenodo = FALSE)
 {
   # only use zenodo if version == "latest"
   if (version != "latest")
@@ -75,7 +72,7 @@ download_observations <- function(base_folder = "~", version = "latest", from_ze
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
 
-  final_data_folder <- full_path("PortalData", base_folder)
+  final_data_folder <- full_path("PortalData", path)
 
   # Clear out the old files in the data folder without doing potentially dangerous
   # recursive deleting.
@@ -93,10 +90,10 @@ download_observations <- function(base_folder = "~", version = "latest", from_ze
 
   #Github serves this up with the -master extension. Unzip and rename to remove that.
   primary_data_folder <- unzip(zip_download_dest, list = TRUE)$Name[1]
-  unzip(zip_download_dest, exdir = base_folder)
+  unzip(zip_download_dest, exdir = path)
   Sys.sleep(10)
   file.remove(zip_download_dest)
-  file.rename(full_path(primary_data_folder, base_folder), final_data_folder)
+  file.rename(full_path(primary_data_folder, path), final_data_folder)
 }
 
 #' @title get version and download info for PortalData
@@ -243,16 +240,16 @@ get_github_releases <- function()
 #' @title Check for latest version of data files
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
-#' @param base_folder Folder in which data will be checked
+#' @param path Folder in which data will be checked
 #'
 #' @return bool TRUE if there is a newer version of the data online
 #'
 #' @export
-check_for_newer_data <- function(base_folder = "~")
+check_for_newer_data <- function(path = get_default_data_path())
 {
   # first see if the folder for the data files exist
-  tryCatch(base_path <- file.path(normalizePath(base_folder, mustWork = TRUE), "PortalData"),
-           error = function(e) stop("Unable to use the specified path: ", base_folder, call. = FALSE),
+  tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+           error = function(e) stop("Unable to use the specified path: ", path, call. = FALSE),
            warning = function(w) w)
 
   # check for `version.txt``
@@ -290,4 +287,65 @@ check_for_newer_data <- function(base_folder = "~")
     return(TRUE)
 
   return(FALSE)
+}
+
+#' @rdname use_default_data_path
+#'
+#' @description \code{get_default_data_path} gets the value of the data path
+#'   environmental variable
+#'
+#' @param fallback the default value to use if the setting is missing
+#'
+#' @export
+#'
+get_default_data_path <- function(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
+{
+  Sys.getenv(ENV_VAR, unset = fallback)
+}
+
+#' @name use_default_data_path
+#' @aliases get_default_data_path
+#'
+#' @title Manage the default path for downloading Portal Data into
+#'
+#' @description \code{use_default_data_path} has 3 steps. First, it checks for
+#'   the presence of a pre-existing setting for the environmental variable.
+#'   Then it checks if the folder exists and creates it, if needed. Then it
+#'   provides instructions for setting the environmental variable.
+#' @param path Folder into which data will be downloaded
+#' @param ENV_VAR the environmental variable to check (by default
+#'   `"PORTALR_DATA_PATH"``)
+#'
+#' @return None
+#'
+#' @export
+use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
+{
+  # check for prexisting setting
+  curr_data_path <- Sys.getenv(ENV_VAR, unset = NA)
+  if (!is.na(curr_data_path))
+  {
+    warning("A default data path exists:", Sys.getenv(ENV_VAR), ".")
+  }
+
+  # check if a path is provided
+  if (is.null(path))
+  {
+    usethis::ui_stop("Please provide a path to store downloaded portal data.")
+  }
+
+  # check if path is valid
+  if (!dir.exists(path))
+  {
+    dir.create(path)
+  }
+
+  # copy new path setting to clipboard
+  path_setting_string <- paste0(ENV_VAR, "=", '"', path, '"')
+
+  usethis::ui_todo("Call {usethis::ui_code('usethis::edit_r_environ()')} to open {usethis::ui_path('.Renviron')}")
+  usethis::ui_todo("Store your data path with a line like:")
+  usethis::ui_code_block(path_setting_string)
+  usethis::ui_todo("Make sure {usethis::ui_value('.Renviron')} ends with a newline!")
+  return()
 }

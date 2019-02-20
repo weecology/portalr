@@ -8,8 +8,8 @@
 \alias{summarise_rodent_data}
 \title{Generate summaries of Portal rodent data}
 \usage{
-summarize_rodent_data(path = "~", clean = TRUE, level = "Site",
-  type = "Rodents", length = "all", plots = length,
+summarize_rodent_data(path = get_default_data_path(), clean = TRUE,
+  level = "Site", type = "Rodents", length = "all", plots = length,
   unknowns = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
@@ -23,8 +23,8 @@ biomass(...)
 
 energy(...)
 
-summarise_rodent_data(path = "~", clean = TRUE, level = "Site",
-  type = "Rodents", length = "all", plots = length,
+summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
+  level = "Site", type = "Rodents", length = "all", plots = length,
   unknowns = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =

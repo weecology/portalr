@@ -4,7 +4,7 @@
 \alias{bait_presence_absence}
 \title{Ant Bait Presence Absence}
 \usage{
-bait_presence_absence(path = "~", level = "Site",
+bait_presence_absence(path = get_default_data_path(), level = "Site",
   download_if_missing = TRUE)
 }
 \arguments{
