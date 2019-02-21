@@ -291,9 +291,31 @@ check_for_newer_data <- function(path = get_default_data_path())
 
 #' @rdname use_default_data_path
 #'
+#' @description \code{check_default_data_path} checks if a default data path is
+#'   set, and prompts the user to set it if it is missing.
+#'
+#' @inheritParams use_default_data_path
+#' @return FALSE if there is no path set, TRUE otherwise
+#'
+#' @export
+#'
+check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH")
+{
+  if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
+  {
+    usethis::ui_warn("No default data path set!")
+    usethis::ui_todo("Call {usethis::ui_code('use_default_data_path(\"<path>\")')} to set a default data path.")
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+#' @rdname use_default_data_path
+#'
 #' @description \code{get_default_data_path} gets the value of the data path
 #'   environmental variable
 #'
+#' @inheritParams use_default_data_path
 #' @param fallback the default value to use if the setting is missing
 #'
 #' @export
