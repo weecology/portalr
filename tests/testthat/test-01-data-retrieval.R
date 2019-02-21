@@ -91,7 +91,9 @@ test_that("load_ant_data works", {
 
 test_that("default data path functions work if unset", {
   Sys.unsetenv("PORTALR_DATA_PATH")
-  expect_warning(result <- check_default_data_path())
+  expect_warning(result <- check_default_data_path(MESSAGE_FUN = warning), "No default data path set!")
+  expect_message(check_default_data_path(), "No default data path set!")
+  expect_message(check_default_data_path(), "Call .+ to set a default data path.")
   expect_false(result)
 
   expect_error(use_default_data_path())

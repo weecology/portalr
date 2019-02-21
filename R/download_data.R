@@ -299,12 +299,14 @@ check_for_newer_data <- function(path = get_default_data_path())
 #'
 #' @export
 #'
-check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH")
+check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH", MESSAGE_FUN = message)
 {
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
-    usethis::ui_warn("No default data path set!")
-    usethis::ui_todo("Call {usethis::ui_code('use_default_data_path(\"<path>\")')} to set a default data path.")
+    MESSAGE_FUN("No default data path set!")
+    code_call_str <- (crayon::make_style("darkgrey"))(encodeString('use_default_data_path(\"<path>\")', quote = "`"))
+    MESSAGE_FUN(crayon::red(clisymbols::symbol$bullet),
+                " Call ", code_call_str, " to set a default data path.")
     return(FALSE)
   }
   return(TRUE)
