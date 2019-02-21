@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage the default path for downloading Portal Data into — get_default_data_path • portalr</title>
+<title>Manage the default path for downloading Portal Data into — check_default_data_path • portalr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Manage the default path for downloading Portal Data into — get_default_data_path" />
+<meta property="og:title" content="Manage the default path for downloading Portal Data into — check_default_data_path" />
 
-<meta property="og:description" content="get_default_data_path gets the value of the data path
+<meta property="og:description" content="check_default_data_path checks if a default data path is
+  set, and prompts the user to set it if it is missing.
+get_default_data_path gets the value of the data path
   environmental variable
 use_default_data_path has 3 steps. First, it checks for
   the presence of a pre-existing setting for the environmental variable.
@@ -68,7 +70,7 @@ use_default_data_path has 3 steps. First, it checks for
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
       </span>
     </div>
 
@@ -126,7 +128,9 @@ use_default_data_path has 3 steps. First, it checks for
 
     <div class="ref-description">
     
-    <p><code>get_default_data_path</code> gets the value of the data path
+    <p><code>check_default_data_path</code> checks if a default data path is
+  set, and prompts the user to set it if it is missing.</p>
+<p><code>get_default_data_path</code> gets the value of the data path
   environmental variable</p>
 <p><code>use_default_data_path</code> has 3 steps. First, it checks for
   the presence of a pre-existing setting for the environmental variable.
@@ -135,7 +139,9 @@ use_default_data_path has 3 steps. First, it checks for
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_default_data_path</span>(<span class='kw'>fallback</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
+    <pre class="usage"><span class='fu'>check_default_data_path</span>(<span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
+
+<span class='fu'>get_default_data_path</span>(<span class='kw'>fallback</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
 
 <span class='fu'>use_default_data_path</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)</pre>
     
@@ -143,13 +149,13 @@ use_default_data_path has 3 steps. First, it checks for
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fallback</th>
-      <td><p>the default value to use if the setting is missing</p></td>
-    </tr>
-    <tr>
       <th>ENV_VAR</th>
       <td><p>the environmental variable to check (by default
 `"PORTALR_DATA_PATH"``)</p></td>
+    </tr>
+    <tr>
+      <th>fallback</th>
+      <td><p>the default value to use if the setting is missing</p></td>
     </tr>
     <tr>
       <th>path</th>
@@ -159,7 +165,8 @@ use_default_data_path has 3 steps. First, it checks for
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>None</p>
+    <p>FALSE if there is no path set, TRUE otherwise</p>
+<p>None</p>
     
 
   </div>
