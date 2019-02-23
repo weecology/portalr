@@ -303,10 +303,12 @@ check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH", MESSAGE_FUN =
 {
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
-    MESSAGE_FUN("No default data path set!")
+    MESSAGE_FUN("You don't appear to have a defined location for storing Portal data.")
     code_call_str <- (crayon::make_style("darkgrey"))(encodeString('use_default_data_path(\"<path>\")', quote = "`"))
     MESSAGE_FUN(crayon::red(clisymbols::symbol$bullet),
-                " Call ", code_call_str, " to set a default data path.")
+                " Call ", code_call_str, " if you wish to set the default data path.")
+    default_path_str <- (crayon::make_style("darkgrey"))(encodeString(path.expand("~"), quote = "`"))
+    MESSAGE_FUN("Portal data will be downloaded into ", default_path_str, " otherwise.")
     return(FALSE)
   }
   return(TRUE)
