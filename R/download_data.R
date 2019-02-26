@@ -295,20 +295,23 @@ check_for_newer_data <- function(path = get_default_data_path())
 #'   set, and prompts the user to set it if it is missing.
 #'
 #' @inheritParams use_default_data_path
+#' @param MESSAGE_FUN the function to use to output messages
+#' @param DATA_NAME the name of the dataset to use in output messages
 #' @return FALSE if there is no path set, TRUE otherwise
 #'
 #' @export
 #'
-check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH", MESSAGE_FUN = message)
+check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH",
+                                    MESSAGE_FUN = message, DATA_NAME = "Portal data")
 {
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
-    MESSAGE_FUN("You don't appear to have a defined location for storing Portal data.")
+    MESSAGE_FUN("You don't appear to have a defined location for storing ", DATA_NAME, ".")
     code_call_str <- (crayon::make_style("darkgrey"))(encodeString('use_default_data_path(\"<path>\")', quote = "`"))
     MESSAGE_FUN(crayon::red(clisymbols::symbol$bullet),
                 " Call ", code_call_str, " if you wish to set the default data path.")
     default_path_str <- (crayon::make_style("darkgrey"))(encodeString(path.expand("~"), quote = "`"))
-    MESSAGE_FUN("Portal data will be downloaded into ", default_path_str, " otherwise.")
+    MESSAGE_FUN(DATA_NAME, " will be downloaded into ", default_path_str, " otherwise.")
     return(FALSE)
   }
   return(TRUE)
