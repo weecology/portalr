@@ -353,7 +353,7 @@ use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
   # check if a path is provided
   if (is.null(path))
   {
-    usethis::ui_stop("Please provide a path to store downloaded portal data.")
+    usethis::ui_stop("Please provide a path to store downloaded data.")
   }
 
   # check if path is valid
