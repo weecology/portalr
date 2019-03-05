@@ -91,7 +91,11 @@ test_that("load_ant_data works", {
 
 test_that("default data path functions work if unset", {
   Sys.unsetenv("PORTALR_DATA_PATH")
-  expect_warning(result <- check_default_data_path())
+  expect_warning(result <- check_default_data_path(MESSAGE_FUN = warning),
+                 "You don't appear to have a defined location for storing Portal data.")
+  expect_message(check_default_data_path(), "You don't appear to have a defined location for storing Portal data.")
+  expect_message(check_default_data_path(), "Call .+ if you wish to set the default data path.")
+  expect_message(check_default_data_path(), "Portal data will be downloaded into .+ otherwise.")
   expect_false(result)
 
   expect_error(use_default_data_path())
