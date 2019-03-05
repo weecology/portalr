@@ -139,7 +139,8 @@ use_default_data_path has 3 steps. First, it checks for
     
     </div>
 
-    <pre class="usage"><span class='fu'>check_default_data_path</span>(<span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
+    <pre class="usage"><span class='fu'>check_default_data_path</span>(<span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>,
+  <span class='kw'>MESSAGE_FUN</span> <span class='kw'>=</span> <span class='no'>message</span>, <span class='kw'>DATA_NAME</span> <span class='kw'>=</span> <span class='st'>"Portal data"</span>)
 
 <span class='fu'>get_default_data_path</span>(<span class='kw'>fallback</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
 
@@ -152,6 +153,14 @@ use_default_data_path has 3 steps. First, it checks for
       <th>ENV_VAR</th>
       <td><p>the environmental variable to check (by default
 `"PORTALR_DATA_PATH"``)</p></td>
+    </tr>
+    <tr>
+      <th>MESSAGE_FUN</th>
+      <td><p>the function to use to output messages</p></td>
+    </tr>
+    <tr>
+      <th>DATA_NAME</th>
+      <td><p>the name of the dataset to use in output messages</p></td>
     </tr>
     <tr>
       <th>fallback</th>
