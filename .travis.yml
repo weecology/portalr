@@ -7,7 +7,7 @@ r_check_args: "--no-vignettes"
 
 r_packages:
   - covr
-  - devtools
+  - callr
 
 before_install:
   - sudo apt-get update -qq
