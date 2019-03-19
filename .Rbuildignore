@@ -11,3 +11,4 @@
 ^\.Rproj\.user$
 ^paper$
 ^.Renviron$
+^_pkgdown\.yml$

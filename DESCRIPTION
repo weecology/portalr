@@ -41,7 +41,9 @@ Imports:
     lunar,
     jsonlite,
     tibble,
-    usethis (>= 1.4.0.9000)
+    usethis (>= 1.4.0.9000), 
+    crayon, 
+    clisymbols
 Suggests:
   httptest,
   digest,
