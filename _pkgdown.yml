@@ -23,7 +23,7 @@ reference:
       - shrub_cover
       - fcast_ndvi
       - get_future_moons
-  - title: "Unprocessed Data""
+  - title: "Unprocessed Data"
     desc: "Functions to load in raw or otherwise unprocessed data"
     contents:
       - load_datafile
