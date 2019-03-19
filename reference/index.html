@@ -125,22 +125,16 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-data-retrieval" class="hasAnchor"><a href="#section-data-retrieval" class="anchor"></a>Data Retrieval</h2>
+          <p class="section-desc"><p>Functions to download and update data</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="add_seasons.html">add_seasons()</a></code> <code><a href="add_seasons.html">yearly()</a></code> </p>
+          <p><code><a href="download_observations.html">download_observations()</a></code> </p>
         </td>
-        <td><p>Add Seasons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bait_presence_absence.html">bait_presence_absence()</a></code> </p>
-        </td>
-        <td><p>Ant Bait Presence Absence</p></td>
+        <td><p>Download the PortalData repo</p></td>
       </tr><tr>
         
         <td>
@@ -150,69 +144,41 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="clean_plant_data.html">clean_plant_data()</a></code> </p>
-        </td>
-        <td><p>Do basic cleaning of Portal plant data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="clean_rodent_data.html">clean_rodent_data()</a></code> </p>
-        </td>
-        <td><p>Do basic cleaning of Portal rodent data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="colony_presence_absence.html">colony_presence_absence()</a></code> </p>
-        </td>
-        <td><p>Ant Colony Presence Absence</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="download_observations.html">download_observations()</a></code> </p>
-        </td>
-        <td><p>Download the PortalData repo</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fcast_ndvi.html">fcast_ndvi()</a></code> </p>
-        </td>
-        <td><p>Forecast ndvi using a seasonal auto ARIMA</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fill_missing_ndvi.html">fill_missing_ndvi()</a></code> </p>
-        </td>
-        <td><p>Fill in historic ndvi data to the complete timeseries being fit</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_incomplete_censuses.html">find_incomplete_censuses()</a></code> </p>
-        </td>
-        <td><p>Period code for incomplete censuses</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_data_versions.html">get_data_versions()</a></code> </p>
         </td>
         <td><p>get version and download info for PortalData</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="get_future_moons.html">get_future_moons()</a></code> </p>
+          <p><code><a href="use_default_data_path.html">check_default_data_path()</a></code> <code><a href="use_default_data_path.html">get_default_data_path()</a></code> <code><a href="use_default_data_path.html">use_default_data_path()</a></code> </p>
         </td>
-        <td><p>Get future moon dates</p></td>
+        <td><p>Manage the default path for downloading Portal Data into</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-summaries" class="hasAnchor"><a href="#section-data-summaries" class="anchor"></a>Data Summaries</h2>
+          <p class="section-desc"><p>Functions to return data summaries</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="summarize_rodent_data.html">summarize_rodent_data()</a></code> <code><a href="summarize_rodent_data.html">abundance()</a></code> <code><a href="summarize_rodent_data.html">biomass()</a></code> <code><a href="summarize_rodent_data.html">energy()</a></code> <code><a href="summarize_rodent_data.html">summarise_rodent_data()</a></code> </p>
+        </td>
+        <td><p>Generate summaries of Portal rodent data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="load_datafile.html">load_datafile()</a></code> </p>
+          <p><code><a href="summarize_plant_data.html">summarize_plant_data()</a></code> <code><a href="summarize_plant_data.html">plant_abundance()</a></code> <code><a href="summarize_plant_data.html">summarise_plant_data()</a></code> </p>
         </td>
-        <td><p>read in a raw datafile from the downloaded data or the GitHub repo</p></td>
+        <td><p>Generate summaries of Portal plant data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="load_rodent_data.html">load_rodent_data()</a></code> <code><a href="load_rodent_data.html">load_plant_data()</a></code> <code><a href="load_rodent_data.html">load_ant_data()</a></code> <code><a href="load_rodent_data.html">load_trapping_data()</a></code> </p>
+          <p><code><a href="summarize_individual_rodents.html">summarize_individual_rodents()</a></code> <code><a href="summarize_individual_rodents.html">summarise_individual_rodents()</a></code> </p>
         </td>
-        <td><p>Read in the Portal data files</p></td>
+        <td><p>Return cleaned Portal rodent individual data</p></td>
       </tr><tr>
         
         <td>
@@ -228,9 +194,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="portalr.html">portalr</a></code> </p>
+          <p><code><a href="weather.html">weather()</a></code> </p>
         </td>
-        <td><p>Creates summaries of the Portal data</p></td>
+        <td><p>Weather by day, calendar month, or lunar month</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bait_presence_absence.html">bait_presence_absence()</a></code> </p>
+        </td>
+        <td><p>Ant Bait Presence Absence</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="colony_presence_absence.html">colony_presence_absence()</a></code> </p>
+        </td>
+        <td><p>Ant Colony Presence Absence</p></td>
       </tr><tr>
         
         <td>
@@ -240,33 +218,73 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="summarize_individual_rodents.html">summarize_individual_rodents()</a></code> <code><a href="summarize_individual_rodents.html">summarise_individual_rodents()</a></code> </p>
+          <p><code><a href="fcast_ndvi.html">fcast_ndvi()</a></code> </p>
         </td>
-        <td><p>Return cleaned Portal rodent individual data</p></td>
+        <td><p>Forecast ndvi using a seasonal auto ARIMA</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="summarize_plant_data.html">summarize_plant_data()</a></code> <code><a href="summarize_plant_data.html">plant_abundance()</a></code> <code><a href="summarize_plant_data.html">summarise_plant_data()</a></code> </p>
+          <p><code><a href="get_future_moons.html">get_future_moons()</a></code> </p>
         </td>
-        <td><p>Generate summaries of Portal plant data</p></td>
+        <td><p>Get future moon dates</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-unprocessed-data" class="hasAnchor"><a href="#section-unprocessed-data" class="anchor"></a>Unprocessed Data</h2>
+          <p class="section-desc"><p>Functions to load in raw or otherwise unprocessed data</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="load_datafile.html">load_datafile()</a></code> </p>
+        </td>
+        <td><p>read in a raw datafile from the downloaded data or the GitHub repo</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="summarize_rodent_data.html">summarize_rodent_data()</a></code> <code><a href="summarize_rodent_data.html">abundance()</a></code> <code><a href="summarize_rodent_data.html">biomass()</a></code> <code><a href="summarize_rodent_data.html">energy()</a></code> <code><a href="summarize_rodent_data.html">summarise_rodent_data()</a></code> </p>
+          <p><code><a href="load_rodent_data.html">load_rodent_data()</a></code> <code><a href="load_rodent_data.html">load_plant_data()</a></code> <code><a href="load_rodent_data.html">load_ant_data()</a></code> <code><a href="load_rodent_data.html">load_trapping_data()</a></code> </p>
         </td>
-        <td><p>Generate summaries of Portal rodent data</p></td>
+        <td><p>Read in the Portal data files</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-processing" class="hasAnchor"><a href="#section-data-processing" class="anchor"></a>Data Processing</h2>
+          <p class="section-desc"><p>Functions to do various data processing steps</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="add_seasons.html">add_seasons()</a></code> <code><a href="add_seasons.html">yearly()</a></code> </p>
+        </td>
+        <td><p>Add Seasons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="use_default_data_path.html">check_default_data_path()</a></code> <code><a href="use_default_data_path.html">get_default_data_path()</a></code> <code><a href="use_default_data_path.html">use_default_data_path()</a></code> </p>
+          <p><code><a href="clean_plant_data.html">clean_plant_data()</a></code> </p>
         </td>
-        <td><p>Manage the default path for downloading Portal Data into</p></td>
+        <td><p>Do basic cleaning of Portal plant data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="weather.html">weather()</a></code> </p>
+          <p><code><a href="clean_rodent_data.html">clean_rodent_data()</a></code> </p>
         </td>
-        <td><p>Weather by day, calendar month, or lunar month</p></td>
+        <td><p>Do basic cleaning of Portal rodent data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fill_missing_ndvi.html">fill_missing_ndvi()</a></code> </p>
+        </td>
+        <td><p>Fill in historic ndvi data to the complete timeseries being fit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="find_incomplete_censuses.html">find_incomplete_censuses()</a></code> </p>
+        </td>
+        <td><p>Period code for incomplete censuses</p></td>
       </tr>
     </tbody>
     </table>
@@ -275,7 +293,10 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-data-retrieval">Data Retrieval</a></li>
+      <li><a href="#section-data-summaries">Data Summaries</a></li>
+      <li><a href="#section-unprocessed-data">Unprocessed Data</a></li>
+      <li><a href="#section-data-processing">Data Processing</a></li>
     </ul>
   </div>
 </div>
