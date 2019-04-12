@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
       <h1>Examples of How Portal Researchers Are Using the Package</h1>
                         <h4 class="author">Ellen K. Bledsoe</h4>
             
-            <h4 class="date">2019-03-19</h4>
+            <h4 class="date">2019-04-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/portal_researcher_examples.Rmd"><code>vignettes/portal_researcher_examples.Rmd</code></a></small>
       <div class="hidden name"><code>portal_researcher_examples.Rmd</code></div>
@@ -114,7 +114,7 @@
 <h2 class="hasAnchor">
 <a href="#getting-the-data-we-want" class="anchor"></a>Getting the Data We Want</h2>
 <p>Because we are going to compare biomass between plot types, we need to know the biomass on each plot. To achieve this, we can set <code>level = "plot"</code></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">biomass_data &lt;-<span class="st"> </span>portalr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/portalr/topics/summarize_rodent_data">summarize_rodent_data</a></span>(<span class="dt">path =</span> <span class="st">"repo"</span>, </a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">biomass_data &lt;-<span class="st"> </span>portalr<span class="op">::</span><span class="kw"><a href="https://weecology.github.io/portalr/reference/summarize_rodent_data.html">summarize_rodent_data</a></span>(<span class="dt">path =</span> <span class="st">"repo"</span>, </a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">                                         <span class="dt">level =</span> <span class="st">"plot"</span>, </a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">                                         <span class="dt">output =</span> <span class="st">"biomass"</span>,</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4">                                         <span class="dt">time =</span> <span class="st">"date"</span>)</a></code></pre></div>
@@ -258,7 +258,7 @@
 <h2 class="hasAnchor">
 <a href="#getting-the-data-we-want-1" class="anchor"></a>Getting the Data We Want</h2>
 <p>Our site has two rainy periods and, therefore, two communities of annual plants. Let’s say we want to take a look at the abundance of the <em>winter</em> annuals in the system, and we want to see if they differ by treatment type. We can use the <code>summarize_plant_data</code> function to get the appropriate data.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">plant_data &lt;-<span class="st"> </span>portalr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/portalr/topics/summarize_plant_data">summarize_plant_data</a></span>(<span class="dt">path =</span> <span class="st">'repo'</span>, <span class="dt">level =</span> <span class="st">'plot'</span>,</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">plant_data &lt;-<span class="st"> </span>portalr<span class="op">::</span><span class="kw"><a href="https://weecology.github.io/portalr/reference/summarize_plant_data.html">summarize_plant_data</a></span>(<span class="dt">path =</span> <span class="st">'repo'</span>, <span class="dt">level =</span> <span class="st">'plot'</span>,</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">                                            <span class="dt">type =</span> <span class="st">'winter-annual'</span>, <span class="dt">correct_sp =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                                            <span class="dt">unknowns =</span> <span class="ot">FALSE</span>, <span class="dt">shape =</span> <span class="st">'flat'</span>, </a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">                                            <span class="dt">output =</span> <span class="st">'abundance'</span>)</a></code></pre></div>
