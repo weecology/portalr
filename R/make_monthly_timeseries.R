@@ -14,7 +14,7 @@
 #'
 #' @return dataframe containing 2 columns: newdate and value
 #'
-#' @export
+#' @noRd
 #'
 make_timeseries = function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series
@@ -74,7 +74,7 @@ make_timeseries = function(data, date_format="%Y-%m-%d"){
   # Rearrange data for interpolation & interpolate
   data = dplyr::arrange(data, date)
   data = calc_diff(data)
-  data$values = zoo::na.approx(data$values) # default is linear interpolation
+#  data$values = zoo::na.approx(data$values) # default is linear interpolation
 
 
   # Repeated samples in a month are averaged
