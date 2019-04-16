@@ -109,8 +109,5 @@ test_that("default data path functions work if unset", {
 test_that("default data path functions work if set", {
  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
   expect_true(check_default_data_path())
-
   expect_equal(get_default_data_path(), tempdir())
-
-  expect_warning(use_default_data_path(tempdir()))
 })
