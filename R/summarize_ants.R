@@ -68,15 +68,7 @@ colony_presence_absence <- function(path = get_default_data_path(),
     colonydat <- dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake))
   }
 
-  grouping <- switch(level,
-                     "site" = rlang::quos(year, species),
-                     "plot" = rlang::quos(year, plot, species),
-                     "stake" = rlang::quos(year, plot, stake, species))
-
-  colonypresabs <- colonydat %>%
-    dplyr::select(!!!grouping) %>%
-    dplyr::distinct() %>%
-    fill_presence(grouping)
+  colonypresabs <- compute_presence(colonydat, level)
 
   # additional checks
   colonypresabs <- colonypresabs %>%
@@ -126,15 +118,7 @@ bait_presence_absence <- function(path = get_default_data_path(),
                         na.strings = "", path = path,
                         download_if_missing = download_if_missing)
 
-  grouping <- switch(level,
-                     "site" = rlang::quos(year, species),
-                     "plot" = rlang::quos(year, plot, species),
-                     "stake" = rlang::quos(year, plot, stake, species))
-
-  baitpresabs <- bait %>%
-    dplyr::select(!!!grouping) %>%
-    dplyr::distinct() %>%
-    fill_presence(grouping)
+  baitpresabs <- compute_presence(bait, level)
 
   return(baitpresabs)
 }
@@ -145,15 +129,22 @@ bait_presence_absence <- function(path = get_default_data_path(),
 #'   \code\link{bait_presence_absence}} and \code{\link{colony_presence_absence}}
 #'
 #' @param df data.frame to modify
-#' @param ... levels to pass to tidyr::complete()
+#' @param level level at which to generate presence data
 #'
 #' @return data.frame with 1s and 0s in a new presence column
 #'
 #' @noRd
 #'
-fill_presence <- function(df, grouping)
+compute_presence <- function(df, level)
 {
+  grouping <- switch(level,
+                     "site" = rlang::quos(year, species),
+                     "plot" = rlang::quos(year, plot, species),
+                     "stake" = rlang::quos(year, plot, stake, species))
+
   df %>%
+    dplyr::select(!!!grouping) %>%
+    dplyr::distinct() %>%
     dplyr::mutate(presence = 1) %>%
     tidyr::complete(!!!grouping,
                     fill = list(presence = 0))
