@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# portalr 0.2.2
+# portalr 0.2.4
 
 [![Build
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
@@ -38,8 +38,8 @@ install.packages("portalr")
 OR from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("weecology/portalr")
+# install.packages("remotes")
+remotes::install_github("weecology/portalr")
 ```
 
 ## Examples

@@ -40,8 +40,8 @@ install.packages("portalr")
 OR from github with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("weecology/portalr")
+# install.packages("remotes")
+remotes::install_github("weecology/portalr")
 ```
 
 ## Examples

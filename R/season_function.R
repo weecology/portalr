@@ -34,26 +34,34 @@ add_seasons <- function(data, level = "site", season_level = 2,
   date_column <- tolower(date_column)
   summarize <- tolower(summarize)
   if (!is.na(summarize)) {sumfun <- get(summarize)}
-  if (level == "plot") {grouping <- quos(year, season, treatment, plot)
-  } else if (level == "treatment") {grouping <- quos(year, season, treatment)
-  } else {grouping <- quos(year, season)}
+  if (level == "plot") {
+    grouping <- quos(year, season, treatment, plot)
+  } else if (level == "treatment") {
+    grouping <- quos(year, season, treatment)
+  } else {
+    grouping <- quos(year, season)
+  }
   if("species" %in% colnames(data)) {grouping <- c(grouping, quos(species))}
 
-  data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
-                                  clean = clean)
-
+  newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
+                                  na.strings = "NA", path, download_if_missing)
   #### Get month and year column
   if (date_column == "period") {
+
+
     full_data <- data %>%
-      dplyr::left_join(data_tables$newmoons_table, by = "period")  %>%
+      dplyr::left_join(newmoons_table, by = "period")  %>%
       dplyr::mutate(year = lubridate::year(censusdate),
                     month = lubridate::month(censusdate)) %>%
       dplyr::select(-newmoonnumber, -newmoondate, -censusdate) %>%
       dplyr::group_by(year, month)
 
   } else if (date_column == "newmoonnumber") {
+    data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
+                                    clean = clean)
+
     full_data <- data %>%
-      dplyr::left_join(data_tables$newmoons_table, by = "newmoonnumber")  %>%
+      dplyr::left_join(newmoons_table, by = "newmoonnumber")  %>%
       dplyr::mutate(year = lubridate::year(censusdate),
                     month = lubridate::month(censusdate)) %>%
       dplyr::select(-newmoondate, -censusdate, -period) %>%
@@ -88,7 +96,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
     }
   } else if (season_level == 2) {
 
-      seasons <- rep(c("winter","summer"), each = 6)
+      seasons <- rep(c("winter", "summer"), each = 6)
       names(seasons) <- c(11:12,1:10)
 
       full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
@@ -107,7 +115,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
                     -dplyr::contains("date"), -dplyr::contains("period"))
 
   } else {
-    print("season_level must equal 2, 4, or year")
+    stop("`season_level` must equal 2, 4, or year")
   }
   return(full_data)
 }

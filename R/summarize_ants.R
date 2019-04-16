@@ -25,8 +25,9 @@
 colony_presence_absence <- function(path = get_default_data_path(),
                                     level = "Site",
                                     rare_sp = F, unknowns = F,
-                                    download_if_missing = TRUE) {
-
+                                    download_if_missing = TRUE)
+{
+  level <- tolower(level)
   data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
 
   colony <- data_tables$colony_data
@@ -51,39 +52,37 @@ colony_presence_absence <- function(path = get_default_data_path(),
   # filter out duplicated data (flag=10)
   colonydat = dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
   # reduce colony data to list of year, plot, species
-  if (level == "Site") {
+  if (level == "site") {
     colonypresence = colonydat %>% dplyr::select(year, species) %>% unique()
-    colonypresence$presence = rep(1)
+    colonypresence$presence <- 1
 
     # data frame of all year/species
     full_df = expand.grid(year = unique(colonypresence$year), species = specieslist)
 
-  }
-  if (level == "Plot") {
+  } else if (level == "plot") {
     colonypresence = colonydat %>% dplyr::select(year, plot, species) %>% unique()
-    colonypresence$presence = rep(1)
+    colonypresence$presence <- 1
 
     # data frame of which plots were censused in which years
     df = colonypresence %>% dplyr::select(year, plot) %>% unique()
     full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
     full_df = merge(df, full_df)
-  }
-  if (level == "Stake") {
+  } else if (level == "stake") {
     # filter out data taken only at plot level (flag=9) or rows where stake is missing (flag=1)
     colonypresence = dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake)) %>%
       dplyr::select(year, plot, stake, species)
-    colonypresence$presence = rep(1)
+    colonypresence$presence <- 1
 
     #data frame of which plots were censused in which years
-    df = colonypresence %>% dplyr::select(year, plot) %>% unique()
-    full_df = expand.grid(year = unique(df$year), plot = unique(df$plot),
-                          stake = c(11, 12, 13, 14, 15, 16, 17,
-                                    21, 22, 23, 24, 25, 26, 27,
-                                    31, 32, 33, 34, 35, 36, 37,
-                                    41, 42, 43, 44, 45, 46, 47,
-                                    51, 52, 53, 54, 55, 56, 57,
-                                    61, 62, 63, 64, 65, 66, 67,
-                                    71, 72, 73, 74, 75, 76, 77), species = specieslist)
+    df <- colonypresence %>% dplyr::select(year, plot)
+    full_df <- expand.grid(year = unique(df$year), plot = unique(df$plot),
+                           stake = c(11, 12, 13, 14, 15, 16, 17,
+                                     21, 22, 23, 24, 25, 26, 27,
+                                     31, 32, 33, 34, 35, 36, 37,
+                                     41, 42, 43, 44, 45, 46, 47,
+                                     51, 52, 53, 54, 55, 56, 57,
+                                     61, 62, 63, 64, 65, 66, 67,
+                                     71, 72, 73, 74, 75, 76, 77), species = specieslist)
     full_df = merge(df, full_df)
     full_df = full_df[order(full_df$year, full_df$plot, full_df$stake, full_df$species), ]
   }
@@ -118,11 +117,11 @@ colony_presence_absence <- function(path = get_default_data_path(),
 #'
 #' @export
 #'
-bait_presence_absence= function(path = get_default_data_path(),
+bait_presence_absence <- function(path = get_default_data_path(),
                                 level = "Site",
                                 download_if_missing = TRUE)
 {
-
+  level <- tolower(level)
   data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
 
   bait <- data_tables$bait_data
@@ -131,22 +130,20 @@ bait_presence_absence= function(path = get_default_data_path(),
   specieslist = unique(bait$species)
 
   # reduce data to list of year, plot, species
-  if (level == "Site") {
+  if (level == "site") {
     baitpresence = bait %>% dplyr::select(year, species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of all year/species
     full_df = expand.grid(year = unique(baitpresence$year), species = specieslist)
 
-  }
-  if (level == "Plot") {
+  } else if (level == "plot") {
     baitpresence = bait %>% dplyr::select(year, plot, species) %>% unique()
     baitpresence$presence = rep(1)
 
     # data frame of year/plot/species
     full_df = expand.grid(year = unique(bait$year), plot = seq(24), species = specieslist)
-  }
-  if (level == "Stake") {
+  } else if (level == "stake") {
     baitpresence = bait %>% dplyr::select(year, plot, stake, species)
     baitpresence$presence = rep(1)
 
@@ -167,6 +164,3 @@ bait_presence_absence= function(path = get_default_data_path(),
 
   return(baitpresabs)
 }
-
-
-
