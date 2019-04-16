@@ -28,10 +28,19 @@ colony_presence_absence <- function(path = get_default_data_path(),
                                     download_if_missing = TRUE)
 {
   level <- tolower(level)
-  data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
 
-  colony <- data_tables$colony_data
-  antsp <- data_tables$species_table
+  colony <- load_datafile(file.path("Ants", "Portal_ant_colony.csv"),
+                          na.strings = "", path = path,
+                          download_if_missing = download_if_missing)
+  antsp <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
+                         na.strings = "NA", path = path,
+                         download_if_missing = download_if_missing)
+  if (!"sp" %in% names(antsp))
+  {
+    antsp <- dplyr::rename(antsp,
+                           sp = species,
+                           species = speciescode)
+  }
 
   # list of species to include
   # if unknowns == F, unkn and those identified only to genus will be removed
@@ -51,45 +60,42 @@ colony_presence_absence <- function(path = get_default_data_path(),
   # filter out duplicated data (flag=10)
   colonydat <- dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
 
-  # summarize colony data by site, plot, or stake level, and converting
-  #   observations into presence = 1
-  if (level == "site")
-  {
-    colonypresence <- colonydat %>% dplyr::select(year, species) %>% dplyr::distinct()
-    colonypresence$presence <- 1
-
-    # data frame of all year/species
-    colonypresabs <- colonypresence %>%
-      tidyr::complete(year, species = specieslist,
-                      fill = list(presence = 0))
-
-  } else if (level == "plot") {
-    colonypresence <- colonydat %>% dplyr::select(year, plot, species) %>% dplyr::distinct()
-    colonypresence$presence <- 1
-
-    # data frame of all sampled year-plot combinations and all species
-    colonypresabs <- colonypresence %>%
-      tidyr::complete(tidyr::nesting(year, plot), species = specieslist,
-                      fill = list(presence = 0))
-
-  } else if (level == "stake") {
-    # filter out data taken only at plot level (flag=9) or rows where stake is missing (flag=1)
-    colonypresence <- dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake)) %>%
-      dplyr::select(year, plot, stake, species)
-    colonypresence$presence <- 1
-
-    # data frame of all sampled year-plot combinations, all stakes, and all species
-    colonypresabs <- colonypresence %>%
-      tidyr::complete(tidyr::nesting(year, plot), stake, species = specieslist,
-                      fill = list(presence = 0))
+  # additional filtering for stake-level data:
+  #   filter out data taken only at plot level (flag=9) or
+  #              rows where stake is missing (flag=1)
+  if (level == "stake")
+    {
+    colonydat <- dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake))
   }
 
-  # except "sole xylo" was not censused in 1978-1979, so those go back to NA
-  colonypresabs$presence[(colonypresabs$species %in% c("sole xylo", "sole sp") & colonypresabs$year %in% c(1978, 1979))] = NA
-  # in 1977, 1978, 1979, 1980, 1981 they sometimes included myrm depi in myrm mimi counts, so these too shouldn"t be considered true absences
-  colonypresabs$presence[(colonypresabs$species == "myrm depi") & colonypresabs$year %in% seq(1977, 1981) & colonypresabs$presence == 0] = NA
-  # species camp fest was probably not censused regularly (only one record of it)
-  colonypresabs$presence[(colonypresabs$species == "camp fest") & colonypresabs$presence == 0] = NA
+  grouping <- switch(level,
+                     "site" = rlang::quos(year, species),
+                     "plot" = rlang::quos(year, plot, species),
+                     "stake" = rlang::quos(year, plot, stake, species))
+
+  colonypresabs <- colonydat %>%
+    dplyr::select(!!!grouping) %>%
+    dplyr::distinct() %>%
+    fill_presence(grouping)
+
+  # additional checks
+  colonypresabs <- colonypresabs %>%
+    dplyr::mutate(
+      presence =
+        dplyr::case_when(
+          # except "sole xylo" was not censused in 1978-1979, so those go back to NA
+          species %in% c("sole xylo", "sole sp") &
+            year %in% c(1978, 1979) ~
+            NA_real_,
+          # in 1977, 1978, 1979, 1980, 1981 they sometimes included myrm depi in myrm mimi
+          # counts, so these too shouldn"t be considered true absences
+          species == "myrm depi" & year %in% seq(1977, 1981) &
+            presence == 0 ~
+            NA_real_,
+          # species camp fest was probably not censused regularly (only one record of it)
+          species == "camp fest" & presence == 0 ~
+            NA_real_,
+          TRUE ~ presence))
 
   return(colonypresabs)
 }
