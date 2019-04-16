@@ -24,7 +24,7 @@
 #'
 colony_presence_absence <- function(path = get_default_data_path(),
                                     level = "Site",
-                                    rare_sp = F, unknowns = F,
+                                    rare_sp = FALSE, unknowns = FALSE,
                                     download_if_missing = TRUE)
 {
   level <- tolower(level)
@@ -48,48 +48,42 @@ colony_presence_absence <- function(path = get_default_data_path(),
                                             "phei xero", "pogo dese", "sole xylo"))
   }
 
-
   # filter out duplicated data (flag=10)
-  colonydat = dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
-  # reduce colony data to list of year, plot, species
-  if (level == "site") {
-    colonypresence = colonydat %>% dplyr::select(year, species) %>% unique()
+  colonydat <- dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
+
+  # summarize colony data by site, plot, or stake level, and converting
+  #   observations into presence = 1
+  if (level == "site")
+  {
+    colonypresence <- colonydat %>% dplyr::select(year, species) %>% dplyr::distinct()
     colonypresence$presence <- 1
 
     # data frame of all year/species
-    full_df = expand.grid(year = unique(colonypresence$year), species = specieslist)
+    colonypresabs <- colonypresence %>%
+      tidyr::complete(year, species = specieslist,
+                      fill = list(presence = 0))
 
   } else if (level == "plot") {
-    colonypresence = colonydat %>% dplyr::select(year, plot, species) %>% unique()
+    colonypresence <- colonydat %>% dplyr::select(year, plot, species) %>% dplyr::distinct()
     colonypresence$presence <- 1
 
-    # data frame of which plots were censused in which years
-    df = colonypresence %>% dplyr::select(year, plot) %>% unique()
-    full_df = expand.grid(year = unique(df$year), plot = unique(df$plot), species = specieslist)
-    full_df = merge(df, full_df)
+    # data frame of all sampled year-plot combinations and all species
+    colonypresabs <- colonypresence %>%
+      tidyr::complete(tidyr::nesting(year, plot), species = specieslist,
+                      fill = list(presence = 0))
+
   } else if (level == "stake") {
     # filter out data taken only at plot level (flag=9) or rows where stake is missing (flag=1)
-    colonypresence = dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake)) %>%
+    colonypresence <- dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake)) %>%
       dplyr::select(year, plot, stake, species)
     colonypresence$presence <- 1
 
-    #data frame of which plots were censused in which years
-    df <- colonypresence %>% dplyr::select(year, plot)
-    full_df <- expand.grid(year = unique(df$year), plot = unique(df$plot),
-                           stake = c(11, 12, 13, 14, 15, 16, 17,
-                                     21, 22, 23, 24, 25, 26, 27,
-                                     31, 32, 33, 34, 35, 36, 37,
-                                     41, 42, 43, 44, 45, 46, 47,
-                                     51, 52, 53, 54, 55, 56, 57,
-                                     61, 62, 63, 64, 65, 66, 67,
-                                     71, 72, 73, 74, 75, 76, 77), species = specieslist)
-    full_df = merge(df, full_df)
-    full_df = full_df[order(full_df$year, full_df$plot, full_df$stake, full_df$species), ]
+    # data frame of all sampled year-plot combinations, all stakes, and all species
+    colonypresabs <- colonypresence %>%
+      tidyr::complete(tidyr::nesting(year, plot), stake, species = specieslist,
+                      fill = list(presence = 0))
   }
 
-  colonypresabs = merge(full_df, colonypresence, all = T)
-  # fill NAs with absence '0'
-  colonypresabs[is.na(colonypresabs)] = 0
   # except "sole xylo" was not censused in 1978-1979, so those go back to NA
   colonypresabs$presence[(colonypresabs$species %in% c("sole xylo", "sole sp") & colonypresabs$year %in% c(1978, 1979))] = NA
   # in 1977, 1978, 1979, 1980, 1981 they sometimes included myrm depi in myrm mimi counts, so these too shouldn"t be considered true absences
@@ -118,49 +112,43 @@ colony_presence_absence <- function(path = get_default_data_path(),
 #' @export
 #'
 bait_presence_absence <- function(path = get_default_data_path(),
-                                level = "Site",
-                                download_if_missing = TRUE)
+                                  level = "Site",
+                                  download_if_missing = TRUE)
 {
   level <- tolower(level)
-  data_tables <- load_ant_data(path, download_if_missing = download_if_missing)
+  bait <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
+                        na.strings = "", path = path,
+                        download_if_missing = download_if_missing)
 
-  bait <- data_tables$bait_data
+  grouping <- switch(level,
+                     "site" = rlang::quos(year, species),
+                     "plot" = rlang::quos(year, plot, species),
+                     "stake" = rlang::quos(year, plot, stake, species))
 
-  # list of species
-  specieslist = unique(bait$species)
-
-  # reduce data to list of year, plot, species
-  if (level == "site") {
-    baitpresence = bait %>% dplyr::select(year, species) %>% unique()
-    baitpresence$presence = rep(1)
-
-    # data frame of all year/species
-    full_df = expand.grid(year = unique(baitpresence$year), species = specieslist)
-
-  } else if (level == "plot") {
-    baitpresence = bait %>% dplyr::select(year, plot, species) %>% unique()
-    baitpresence$presence = rep(1)
-
-    # data frame of year/plot/species
-    full_df = expand.grid(year = unique(bait$year), plot = seq(24), species = specieslist)
-  } else if (level == "stake") {
-    baitpresence = bait %>% dplyr::select(year, plot, stake, species)
-    baitpresence$presence = rep(1)
-
-    #data frame of which plots were censused in which years
-    full_df = expand.grid(year = unique(bait$year), plot = seq(24),
-                          stake = c(11, 13, 15, 17,
-                                    22, 24, 26,
-                                    31, 33, 35, 37,
-                                    42, 44, 46,
-                                    51, 53, 55, 57,
-                                    62, 64, 66,
-                                    71, 73, 75, 77), species = specieslist)
-  }
-
-  baitpresabs = merge(full_df, baitpresence, all = T)
-  # fill NAs with absence '0'
-  baitpresabs[is.na(baitpresabs)] = 0
+  baitpresabs <- bait %>%
+    dplyr::select(!!!grouping) %>%
+    dplyr::distinct() %>%
+    fill_presence(grouping)
 
   return(baitpresabs)
+}
+
+#' @title Fill in missing presence values based on grouping levels
+#'
+#' @description A helper function to be used by both
+#'   \code\link{bait_presence_absence}} and \code{\link{colony_presence_absence}}
+#'
+#' @param df data.frame to modify
+#' @param ... levels to pass to tidyr::complete()
+#'
+#' @return data.frame with 1s and 0s in a new presence column
+#'
+#' @noRd
+#'
+fill_presence <- function(df, grouping)
+{
+  df %>%
+    dplyr::mutate(presence = 1) %>%
+    tidyr::complete(!!!grouping,
+                    fill = list(presence = 0))
 }

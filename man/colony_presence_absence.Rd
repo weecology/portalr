@@ -5,7 +5,7 @@
 \title{Ant Colony Presence Absence}
 \usage{
 colony_presence_absence(path = get_default_data_path(), level = "Site",
-  rare_sp = F, unknowns = F, download_if_missing = TRUE)
+  rare_sp = FALSE, unknowns = FALSE, download_if_missing = TRUE)
 }
 \arguments{
 \item{path}{path to location of downloaded Portal data; or "repo" to

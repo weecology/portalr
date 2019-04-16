@@ -1,9 +1,9 @@
 context("Check ant data summaries")
 
-portal_data_path <- tempdir()
+#portal_data_path <- tempdir()
+portal_data_path <- get_default_data_path()
 
 test_that("colony_presence_absence returns expected results", {
-  skip_on_cran()
   colonypresabs.stake <- colony_presence_absence(path = portal_data_path, level = "Stake",
                                                 rare_sp = T, unknowns = T)
 
@@ -18,7 +18,6 @@ test_that("colony_presence_absence returns expected results", {
 })
 
 test_that("bait_presence_absence returns expected results", {
-  skip_on_cran()
   baitpresabs.stake <- bait_presence_absence(path = portal_data_path, level = "Stake")
 
   test.bait <- dplyr::filter(baitpresabs.stake, year %in% 2000:2005)
@@ -27,11 +26,11 @@ test_that("bait_presence_absence returns expected results", {
   expect_equal(nrow(test.bait), 68400)
 
   baitpresabs.site <- bait_presence_absence(path = portal_data_path, level = "Site")
-  expect_equal(unique(baitpresabs.site$species), unique(baitpresabs.stake$species))
+  expect_equal(sort(unique(as.character(baitpresabs.site$species))),
+               sort(unique(as.character(baitpresabs.stake$species))))
 })
 
 test_that("colony_presence_absence returns expected results", {
-  skip_on_cran()
   colonypresabs.plot <- colony_presence_absence(path = portal_data_path, level = "plot",
                                                  rare_sp = T, unknowns = T)
 
@@ -42,12 +41,11 @@ test_that("colony_presence_absence returns expected results", {
 
   colonypresabs.site <- colony_presence_absence(path = portal_data_path, level = "site",
                                                 rare_sp = T, unknowns = T)
-  expect_equal(unique(colonypresabs.site$species), unique(colonypresabs.plot$species))
-
+  expect_equal(sort(unique(as.character(colonypresabs.site$species))),
+               sort(unique(as.character(colonypresabs.plot$species))))
 })
 
 test_that("bait_presence_absence returns expected results", {
-  skip_on_cran()
   baitpresabs.plot <- bait_presence_absence(path = portal_data_path, level = "plot")
 
   test.bait <- dplyr::filter(baitpresabs.plot, year %in% 2000:2005)
@@ -56,5 +54,6 @@ test_that("bait_presence_absence returns expected results", {
   expect_equal(nrow(test.bait), 2736)
 
   baitpresabs.site <- bait_presence_absence(path = portal_data_path, level = "site")
-  expect_equal(unique(baitpresabs.site$species), unique(baitpresabs.plot$species))
+  expect_equal(sort(unique(as.character(baitpresabs.site$species))),
+               sort(unique(as.character(baitpresabs.plot$species))))
 })
