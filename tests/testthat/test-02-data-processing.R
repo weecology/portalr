@@ -49,7 +49,8 @@ test_that("clean_rodent_data has correct columns", {
 })
 
 test_that("does fill_weight work properly?", {
-  rodents_fillweight <- clean_rodent_data(data_tables, fillweight = TRUE)
+  rodents_fillweight <- clean_rodent_data(data_tables$rodent_data,
+                                          data_tables$species_table, fillweight = TRUE)
   expect_lt(sum(is.na(rodents_fillweight$wgt)),
              sum(is.na(rodents$wgt)))
   expect_lt(sum(is.na(rodents_fillweight$energy)),
@@ -57,13 +58,15 @@ test_that("does fill_weight work properly?", {
 })
 
 test_that("does process_granivores work properly?", {
-  rodents_granivores <- clean_rodent_data(data_tables, type = "Granivores")
+  rodents_granivores <- clean_rodent_data(data_tables$rodent_data,
+                                          data_tables$species_table, type = "Granivores")
   expect_true(all(rodents_granivores$granivore == 1))
   expect_false(all(rodents$granivore == 1))
 })
 
 test_that("does process_unknownsp work properly?", {
-  rodents_with_unknowns <- clean_rodent_data(data_tables, unknowns = TRUE)
+  rodents_with_unknowns <- clean_rodent_data(data_tables$rodent_data,
+                                             data_tables$species_table, unknowns = TRUE)
   expect_true("other" %in% rodents_with_unknowns$species)
   expect_false("other" %in% rodents$species)
 })
