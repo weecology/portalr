@@ -173,8 +173,6 @@ prep_rodent_output <- function(level_data, data_tables, time, effort, na_drop,
 #'   to specify the kind of data to summarize (at what level of aggregation)
 #'   and various choices for dealing with data quality, and output format.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species; either all "Rodents" or only
 #'   "Granivores"

@@ -4,7 +4,7 @@
 #'
 #' @param level specify 'monthly', 'daily', or 'newmoon'
 #' @param fill specify if missing data should be filled, passed to \code{fill_missing_weather}
-#' @param path specify where to locate Portal data
+#' @inheritParams summarize_rodent_data
 #'
 #' @export
 #'
@@ -85,7 +85,7 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
 #' missing weather data in the daily time series
 #'
 #' @param weather a dataframe of daily weather data
-#' @param path specify where to locate regional data
+#' @inheritParams weather
 #'
 #' @noRd
 #'

@@ -16,8 +16,8 @@ summarise_individual_rodents(path = get_default_data_path(),
   min_traps = 1, download_if_missing = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
@@ -25,7 +25,7 @@ retrieve data from github repo}
 "Granivores"}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)}
+plots (to be deprecated)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
@@ -40,8 +40,7 @@ records from that individual or species, where possible}
 \item{min_plots}{minimum number of plots within a period for an
 observation to be included}
 
-\item{min_traps}{minimum number of plots within a period for an
-observation to be included}
+\item{min_traps}{minimum number of traps for a plot to be included}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}

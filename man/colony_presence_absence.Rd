@@ -8,15 +8,17 @@ colony_presence_absence(path = get_default_data_path(), level = "Site",
   rare_sp = FALSE, unknowns = FALSE, download_if_missing = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
 
 \item{rare_sp}{include rare species (T) or not (F).
-Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence}
+Rare species may or may not have been censused in all years. Setting
+`rare_sp = FALSE` gives a more conservative estimate of presence/absence}
 
-\item{unknowns}{include unknown species (T) or not (F). Unknowns include those only identified to genus.}
+\item{unknowns}{include unknown species (TRUE) or not (FALSE). Unknowns
+include those only identified to genus.}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}

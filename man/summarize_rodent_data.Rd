@@ -33,8 +33,8 @@ summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
   download_if_missing = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 

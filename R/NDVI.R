@@ -5,17 +5,19 @@
 #' @param level specify "monthly" or "newmoon"
 #' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
-#' @param path specify where to locate Portal data
+#' @inheritParams load_datafile
 #'
 #' @export
 #'
-ndvi <- function(level = "monthly", fill = FALSE, path = get_default_data_path())
+ndvi <- function(level = "monthly", fill = FALSE,
+                 path = get_default_data_path(), download_if_missing = TRUE)
 {
-  NDVI <- read.csv(full_path("PortalData/NDVI/monthly_NDVI.csv", path),
-                   na.strings = c(""), stringsAsFactors = FALSE)
-  moon_dates <- read.csv(full_path("PortalData/Rodents/moon_dates.csv", path),
-                         na.strings = c(""), stringsAsFactors = FALSE)
-
+  NDVI <- load_datafile(file.path("NDVI", "monthly_NDVI.csv"),
+                        na.strings = "", path = path,
+                        download_if_missing = download_if_missing)
+  moon_dates <-  load_datafile(file.path("Rodents", "moon_dates.csv"),
+                               na.strings = "", path = path,
+                               download_if_missing = download_if_missing)
   if (!all(c("year", "month") %in% names(NDVI))) {
     NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
     NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))

@@ -141,9 +141,6 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'   aggregation, various choices for dealing with data quality, and output
 #'   format.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
-#' @param level summarize by "Plot", "Treatment", or "Site"
 #' @param type specify subset of species;
 #'              If type=Annuals, removes all non-annual species.
 #'              If type=Summer Annuals, returns all annual species that can be found in the summer
@@ -151,24 +148,12 @@ prep_plant_output <- function(level_data, effort, na_drop,
 #'              If type=Non-woody, removes shrub and subshrub species
 #'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 #'              If type=Shrubs, returns only shrubs and subshrubs
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (to be deprecated)
-#' @param plots specify subset of plots; can be a vector of plots, or specific
-#'   sets: "all" plots or "Longterm" plots (plots that have had the same
-#'   treatment for the entire time series)
-#' @param unknowns either removes all individuals not identified to species
-#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
 #' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
-#' @param shape return data as a "flat" list or "crosstab"
 #' @param output specify whether to return "abundance", or "cover" [cover data
 #'    starts in summer 2015]
-#' @param na_drop logical, drop NA values (representing insufficient sampling)
-#' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
-#'    detections)
 #' @param min_quads numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included
-#' @param effort logical as to whether or not the effort columns should be
-#'    included in the output
 #' @inheritParams load_plant_data
+#' @inheritParams summarize_rodent_data
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
 #'   value of `shape`
@@ -258,23 +243,7 @@ plant_abundance <- function(..., shape = "flat") {
 #' with all years of transect data available. It also returns mean height
 #' beginning in 2015.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
-#' @param type specify subset of species;
-#'              If type=Annuals, removes all non-annual species.
-#'              If type=Summer Annuals, returns all annual species that can be found in the summer
-#'              If type=Winter Annuals, returns all annual species that can be found in the winter
-#'              If type=Non-woody, removes shrub and subshrub species
-#'              If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
-#'              If type=Shrubs, returns only shrubs and subshrubs
-#' @param plots specify subset of plots; can be a vector of plots, or specific
-#'   sets: "all" plots or "Longterm" plots (plots that have had the same
-#'   treatment for the entire time series)
-#' @param unknowns either removes all individuals not identified to species
-#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param correct_sp correct species names suspected to be incorrect in early data (T/F)
-#'
-#' @inheritParams load_plant_data
+#' @inheritParams summarize_plant_data
 #'
 #' @return a data.frame of percent cover and mean height
 #'

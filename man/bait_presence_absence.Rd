@@ -8,8 +8,8 @@ bait_presence_absence(path = get_default_data_path(), level = "Site",
   download_if_missing = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{level}{level at which to summarize data: 'Site', 'Plot', or 'Stake'}
 

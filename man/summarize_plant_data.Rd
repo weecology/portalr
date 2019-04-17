@@ -25,8 +25,8 @@ summarise_plant_data(path = get_default_data_path(), level = "Site",
   download_if_missing = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
@@ -50,7 +50,7 @@ treatment for the entire time series)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 
-\item{shape}{return data as a "flat" list or "crosstab"}
+\item{shape}{return data as a "crosstab" or "flat" list}
 
 \item{output}{specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]}

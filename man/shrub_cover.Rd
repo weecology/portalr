@@ -8,8 +8,8 @@ shrub_cover(path = get_default_data_path(), type = "Shrubs",
   plots = "all", unknowns = FALSE, correct_sp = TRUE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{type}{specify subset of species;
 If type=Annuals, removes all non-annual species.

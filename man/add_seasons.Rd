@@ -15,7 +15,7 @@ yearly(...)
 \arguments{
 \item{data}{data frame containing columns: date, period, newmoonnumber, or year and month}
 
-\item{level}{"plot, "treatment" or "site"}
+\item{level}{summarize by "Plot", "Treatment", or "Site"}
 
 \item{season_level}{either year,
 2: winter = Oct-March
@@ -31,8 +31,8 @@ or "yearmon" (data must contain "year" and "month")}
 \item{summarize}{A function or list of functions specified by their name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).}
 
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}

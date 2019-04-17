@@ -341,7 +341,7 @@ get_default_data_path <- function(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 #'   the presence of a pre-existing setting for the environmental variable.
 #'   Then it checks if the folder exists and creates it, if needed. Then it
 #'   provides instructions for setting the environmental variable.
-#' @param path Folder into which data will be downloaded
+#' @inheritParams download_observations
 #' @param ENV_VAR the environmental variable to check (by default
 #'   `"PORTALR_DATA_PATH"``)
 #'

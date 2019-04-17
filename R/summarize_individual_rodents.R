@@ -5,24 +5,7 @@
 #' @description This function cleans and subsets the data based on a number
 #'   of arguments. It returns stake number and individual level data.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
-#' @param type specify subset of species; either all "Rodents" or only
-#'   "Granivores"
-#' @param length specify subset of plots; use "All" plots or only "Longterm"
-#'   plots (plots that have had same treatment for entire time series)
-#' @param unknowns either removes all individuals not identified to species
-#'   (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)
-#' @param time specify the format of the time index in the output, either
-#'   "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-#'   "date" (calendar date)
-#' @param fillweight specify whether to fill in unknown weights with other
-#'   records from that individual or species, where possible
-#' @param min_plots minimum number of plots within a period for an
-#'   observation to be included
-#' @param min_traps minimum number of plots within a period for an
-#'   observation to be included
-#' @inheritParams load_rodent_data
+#' @inheritParams summarize_rodent_data
 #'
 #' @return a data.frame
 #'

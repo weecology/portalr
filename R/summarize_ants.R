@@ -10,12 +10,12 @@
 #' 'rare_sp = F' may include some false absences, since it is unknown if some rare species were censused in all years.
 #' Unknowns may also be excluded from output if desired.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
 #' @param level level at which to summarize data: 'Site', 'Plot', or 'Stake'
 #' @param rare_sp include rare species (T) or not (F).
-#'                    Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence
-#' @param unknowns include unknown species (T) or not (F). Unknowns include those only identified to genus.
+#'   Rare species may or may not have been censused in all years. Setting
+#'   `rare_sp = FALSE` gives a more conservative estimate of presence/absence
+#' @param unknowns include unknown species (TRUE) or not (FALSE). Unknowns
+#'   include those only identified to genus.
 #' @inheritParams load_ant_data
 #'
 #' @return data frame with year, species, (plot if applicable), and presence [1, 0, NA]
@@ -100,10 +100,7 @@ colony_presence_absence <- function(path = get_default_data_path(),
 #' Bait census data is more consistent over time than the colony census data. This function assumes that all species
 #' present in at least one census were censused in all years.
 #'
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'   retrieve data from github repo
-#' @param level level at which to summarize data: 'Site', 'Plot', or 'Stake'
-#' @inheritParams load_ant_data
+#' @inheritParams colony_presence_absence
 #'
 #' @return data frame with year, species, (plot if applicable), and presence [1, 0]
 #'

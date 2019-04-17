@@ -4,7 +4,6 @@
 #' Also applies specified functions to the specified summary level.
 #'
 #' @param data data frame containing columns: date, period, newmoonnumber, or year and month
-#' @param level "plot, "treatment" or "site"
 #' @param season_level either year,
 #'                       2: winter = Oct-March
 #'                          summer = April-Sept
@@ -16,9 +15,7 @@
 #'                    or "yearmon" (data must contain "year" and "month")
 #' @param summarize A function or list of functions specified by their name (e.g. "mean").
 #'                  Default is NA (returned with seasons added but not summarized).
-#' @param path path to location of downloaded Portal data; or "repo" to
-#'             retrieve data from github repo
-#' @inheritParams load_rodent_data
+#' @inheritParams summarize_rodent_data
 #'
 #' @return a data.frame with additional "season" and "year" column, and other columns summarized as specified
 #'
