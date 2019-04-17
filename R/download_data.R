@@ -252,7 +252,7 @@ check_for_newer_data <- function(path = get_default_data_path())
            error = function(e) stop("Unable to use the specified path: ", path, call. = FALSE),
            warning = function(w) w)
 
-  # check for `version.txt``
+  # check for `version.txt`
   version_file <- file.path(base_path, "version.txt")
   if (!file.exists(version_file)) # old version of data is missing this metadata file
     return(TRUE)

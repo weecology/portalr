@@ -45,7 +45,6 @@ Imports:
   clisymbols
 Suggests:
   httptest,
-  digest,
   tidyverse,
   cowplot,
   knitr,
