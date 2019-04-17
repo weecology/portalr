@@ -1,7 +1,6 @@
 context("Check ant data summaries")
 
-#portal_data_path <- tempdir()
-portal_data_path <- get_default_data_path()
+portal_data_path <- tempdir()
 
 test_that("colony_presence_absence returns expected results", {
   colonypresabs.stake <- colony_presence_absence(path = portal_data_path, level = "Stake",

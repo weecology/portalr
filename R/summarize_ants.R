@@ -126,7 +126,7 @@ bait_presence_absence <- function(path = get_default_data_path(),
 #' @title Fill in missing presence values based on grouping levels
 #'
 #' @description A helper function to be used by both
-#'   \code\link{bait_presence_absence}} and \code{\link{colony_presence_absence}}
+#'   \code{\link{bait_presence_absence}} and \code{\link{colony_presence_absence}}
 #'
 #' @param df data.frame to modify
 #' @param level level at which to generate presence data

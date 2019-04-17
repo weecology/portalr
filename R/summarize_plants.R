@@ -104,7 +104,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 
   if (effort == FALSE) {
     out_data <- dplyr::select(out_data, -nplots, -quads)
-  } else if (level %in% c("plot","site")) {
+  } else if (level %in% c("plot", "site")) {
     out_data <- dplyr::select(out_data, -nplots)
   }
 
@@ -291,17 +291,23 @@ shrub_cover <- function(path = get_default_data_path(),
   #### Get Data ----
   data_tables <- load_plant_data(path)
 
+  clean_transect_data <- function(df)
+  {
+    df %>%
+      dplyr::left_join(data_tables$species_table, by = "species") %>%
+      dplyr::left_join(data_tables$plots_table, by = c("year", "month", "plot")) %>%
+      rename_species_plants(correct_sp) %>%
+      process_annuals(type) %>%
+      process_unknownsp_plants(unknowns) %>%
+      filter_plots(plots) %>%
+      dplyr::mutate(treatment = as.character(treatment), species = as.factor(species)) %>%
+      dplyr::group_by(year, treatment, plot, species)
+  }
+
   #### Do initial cleaning ----
   oldtransect_data = data_tables$oldtransect_data %>%
     dplyr::mutate("month" = 8) %>%
-    dplyr::left_join(data_tables$species_table, by = "species") %>%
-    dplyr::left_join(data_tables$plots_table, by = c("year","month","plot")) %>%
-    rename_species_plants(correct_sp) %>%
-    process_annuals(type) %>%
-    process_unknownsp_plants(unknowns) %>%
-    filter_plots(plots) %>%
-    dplyr::mutate(treatment = as.character(treatment), species = as.factor(species)) %>%
-    dplyr::group_by(year, treatment, plot, species) %>%
+    clean_transect_data() %>%
     dplyr::summarize(count=n()) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(cover = count/1000, height = NA, species = as.character(species)) %>%
@@ -309,22 +315,15 @@ shrub_cover <- function(path = get_default_data_path(),
 
   transect_data = data_tables$transect_data %>%
     dplyr::filter(!grepl(3,notes)) %>%
-    dplyr::left_join(data_tables$species_table, by = "species") %>%
-    dplyr::left_join(data_tables$plots_table, by = c("year","month","plot")) %>%
-    rename_species_plants(correct_sp) %>%
-    process_annuals(type) %>%
-    process_unknownsp_plants(unknowns) %>%
-    filter_plots(plots) %>%
-    dplyr::mutate(stop = replace(stop, stop > 7071.1, 7071.1)) %>%
-    dplyr::mutate(treatment = as.character(treatment), species = as.factor(species), length=stop-start) %>%
-    dplyr::group_by(year, treatment, plot, species) %>%
+    clean_transect_data() %>%
+    dplyr::mutate(stop = replace(stop, stop > 7071.1, 7071.1),
+                  length = stop - start) %>%
     dplyr::summarize(length=sum(length, na.rm=TRUE), height = mean(height, na.rm=TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(cover = length/(2*7071.1), species = as.character(species)) %>%
-    dplyr::select(year,treatment,plot,species,cover,height)
+    dplyr::select(year, treatment, plot, species, cover, height)
 
-  return(dplyr::bind_rows(oldtransect_data,transect_data))
-
+  dplyr::bind_rows(oldtransect_data, transect_data)
 }
 
 #' @rdname summarize_plant_data

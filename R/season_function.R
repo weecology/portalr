@@ -34,37 +34,24 @@ add_seasons <- function(data, level = "site", season_level = 2,
   date_column <- tolower(date_column)
   summarize <- tolower(summarize)
   if (!is.na(summarize)) {sumfun <- get(summarize)}
-  if (level == "plot") {
-    grouping <- quos(year, season, treatment, plot)
-  } else if (level == "treatment") {
-    grouping <- quos(year, season, treatment)
-  } else {
-    grouping <- quos(year, season)
-  }
-  if("species" %in% colnames(data)) {grouping <- c(grouping, quos(species))}
+  grouping <- switch(level,
+                     "plot" = rlang::quos(year, season, treatment, plot),
+                     "treatment" = rlang::quos(year, season, treatment),
+                     rlang::quos(year, season))
+  if("species" %in% colnames(data)) {grouping <- c(grouping, rlang::quos(species))}
 
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
                                   na.strings = "NA", path, download_if_missing)
   #### Get month and year column
-  if (date_column == "period") {
+  if (date_column == "period" || date_column == "newmoonnumber") {
 
-
+    date_vars <- setdiff(c("newmoonnumber", "newmoondate", "censusdate", "period"),
+                         date_column)
     full_data <- data %>%
-      dplyr::left_join(newmoons_table, by = "period")  %>%
+      dplyr::left_join(newmoons_table, by = date_column)  %>%
       dplyr::mutate(year = lubridate::year(censusdate),
                     month = lubridate::month(censusdate)) %>%
-      dplyr::select(-newmoonnumber, -newmoondate, -censusdate) %>%
-      dplyr::group_by(year, month)
-
-  } else if (date_column == "newmoonnumber") {
-    data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
-                                    clean = clean)
-
-    full_data <- data %>%
-      dplyr::left_join(newmoons_table, by = "newmoonnumber")  %>%
-      dplyr::mutate(year = lubridate::year(censusdate),
-                    month = lubridate::month(censusdate)) %>%
-      dplyr::select(-newmoondate, -censusdate, -period) %>%
+      dplyr::select(-dplyr::one_of(date_vars)) %>%
       dplyr::group_by(year, month)
 
   } else if (date_column == "date") {
@@ -80,43 +67,34 @@ add_seasons <- function(data, level = "site", season_level = 2,
     print("date_column must equal period, newmoonnumber, date, or yearmon")
   }
 
- #### Add seasons and summarize
-  if (season_level == 4) {
+  #### Add seasons and summarize
+  if (season_level == 2 || season_level == 4) {
 
-    seasons <- rep(c("winter","spring","summer","fall"), each = 3)
-    names(seasons) <- c(12,1:11)
+    if (season_level == 4)
+    {
+      seasons <- rep(c("winter", "spring", "summer", "fall"), each = 3)
+      names(seasons) <- c(12, 1:11)
+    } else if (season_level == 2) {
+      seasons <- rep(c("winter", "summer"), each = 6)
+      names(seasons) <- c(11:12, 1:10)
+    }
 
     full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
 
-    if(!(is.na(summarize))) {
-      full_data = full_data %>% dplyr::group_by(!!!grouping) %>%
-        dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
-        dplyr::select(-month, -dplyr::contains("day"), -dplyr::contains("newmoonnumber"),
-                      -dplyr::contains("date"), -dplyr::contains("period"))
-    }
-  } else if (season_level == 2) {
-
-      seasons <- rep(c("winter", "summer"), each = 6)
-      names(seasons) <- c(11:12,1:10)
-
-      full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
-
-      if(!(is.na(summarize))) {
-        full_data = full_data %>% dplyr::group_by(!!!grouping) %>%
-          dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
-          dplyr::select(-month,-dplyr::contains("day"), -dplyr::contains("newmoonnumber"),
-                        -dplyr::contains("date"), -dplyr::contains("period"))
-      }
-    } else if (season_level == "year" && !(is.na(summarize))) {
-
-    full_data = full_data %>% dplyr::group_by(!!!grouping[-2]) %>%
-      dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
-      dplyr::select(-month, -dplyr::contains("day"), -dplyr::contains("newmoonnumber"),
-                    -dplyr::contains("date"), -dplyr::contains("period"))
-
+  } else if (season_level == "year" && !(is.na(summarize))) {
+    grouping <- grouping[-2]
   } else {
     stop("`season_level` must equal 2, 4, or year")
   }
+
+  if (!is.na(summarize))
+  {
+    full_data <- full_data %>% dplyr::group_by(!!!grouping) %>%
+      dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
+      dplyr::select(-month, -dplyr::contains("day"), -dplyr::contains("newmoonnumber"),
+                    -dplyr::contains("date"), -dplyr::contains("period"))
+  }
+
   return(full_data)
 }
 
