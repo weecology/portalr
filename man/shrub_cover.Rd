@@ -5,7 +5,8 @@
 \title{Generate percent cover from Portal plant transect data}
 \usage{
 shrub_cover(path = get_default_data_path(), type = "Shrubs",
-  plots = "all", unknowns = FALSE, correct_sp = TRUE)
+  plots = "all", unknowns = FALSE, correct_sp = TRUE,
+  download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -27,6 +28,11 @@ treatment for the entire time series)}
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without version messages}
 }
 \value{
 a data.frame of percent cover and mean height

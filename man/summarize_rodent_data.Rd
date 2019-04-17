@@ -15,7 +15,7 @@ summarize_rodent_data(path = get_default_data_path(), clean = TRUE,
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 
 abundance(...)
 
@@ -30,7 +30,7 @@ summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -80,6 +80,8 @@ included in the output}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without producing messages}
 
 \item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }

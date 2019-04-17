@@ -15,12 +15,12 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
                                          clean = TRUE, type = "Rodents",
                                          length = "all", unknowns = FALSE, time = "period",
                                          fillweight = FALSE, min_plots = 1, min_traps = 1,
-                                         download_if_missing = TRUE)
+                                         download_if_missing = TRUE, quiet = FALSE)
 {
 
   #### Get Data ----
   data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
-                                  clean = clean)
+                                  clean = clean, quiet = quiet)
 
   #### Do initial cleaning ----
   rodents <- clean_rodent_data(data_tables$rodent_data,

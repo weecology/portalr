@@ -34,6 +34,7 @@
 #'   observation to be included
 #' @param effort logical as to whether or not the effort columns should be
 #'   included in the output
+#' @param quiet logical, whether to run without producing messages
 #' @inheritParams load_rodent_data
 #'
 #' @return a data.frame in either "long" or "wide" format, depending on the
@@ -56,10 +57,10 @@ summarize_rodent_data <- function(path = get_default_data_path(),
                                                      "treatment" = TRUE,
                                                      "site" = TRUE),
                                   min_traps = 1, min_plots = 24, effort = FALSE,
-                                  download_if_missing = TRUE)
+                                  download_if_missing = TRUE, quiet = FALSE)
 {
   data_tables <- load_rodent_data(path, download_if_missing = download_if_missing,
-                                  clean = clean)
+                                  clean = clean, quiet = quiet)
 
   level <- tolower(level)
   type <- tolower(type)

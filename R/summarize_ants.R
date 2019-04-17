@@ -25,13 +25,14 @@
 colony_presence_absence <- function(path = get_default_data_path(),
                                     level = "Site",
                                     rare_sp = FALSE, unknowns = FALSE,
-                                    download_if_missing = TRUE)
+                                    download_if_missing = TRUE, quiet = FALSE)
 {
   level <- tolower(level)
 
   colony <- load_datafile(file.path("Ants", "Portal_ant_colony.csv"),
                           na.strings = "", path = path,
-                          download_if_missing = download_if_missing)
+                          download_if_missing = download_if_missing,
+                          version_message = !quiet)
   antsp <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
                          na.strings = "NA", path = path,
                          download_if_missing = download_if_missing)
@@ -108,12 +109,13 @@ colony_presence_absence <- function(path = get_default_data_path(),
 #'
 bait_presence_absence <- function(path = get_default_data_path(),
                                   level = "Site",
-                                  download_if_missing = TRUE)
+                                  download_if_missing = TRUE, quiet = FALSE)
 {
   level <- tolower(level)
   bait <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
                         na.strings = "", path = path,
-                        download_if_missing = download_if_missing)
+                        download_if_missing = download_if_missing,
+                        version_message = !quiet)
 
   baitpresabs <- compute_presence(bait, level)
 

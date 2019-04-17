@@ -12,7 +12,7 @@ summarize_plant_data(path = get_default_data_path(), level = "Site",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 
 plant_abundance(..., shape = "flat")
 
@@ -22,7 +22,7 @@ summarise_plant_data(path = get_default_data_path(), level = "Site",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -67,6 +67,8 @@ included in the output}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without version messages}
 
 \item{...}{arguments passed to \code{\link{summarize_plant_data}}}
 }

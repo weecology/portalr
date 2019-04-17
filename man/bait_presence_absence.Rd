@@ -5,7 +5,7 @@
 \title{Ant Bait Presence Absence}
 \usage{
 bait_presence_absence(path = get_default_data_path(), level = "Site",
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -15,6 +15,8 @@ bait_presence_absence(path = get_default_data_path(), level = "Site",
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without version messages}
 }
 \value{
 data frame with year, species, (plot if applicable), and presence [1, 0]

@@ -8,12 +8,12 @@
 summarize_individual_rodents(path = get_default_data_path(),
   clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
   time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE)
+  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
 
 summarise_individual_rodents(path = get_default_data_path(),
   clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
   time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE)
+  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -44,6 +44,8 @@ observation to be included}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without producing messages}
 }
 \value{
 a data.frame

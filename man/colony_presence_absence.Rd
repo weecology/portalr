@@ -5,7 +5,8 @@
 \title{Ant Colony Presence Absence}
 \usage{
 colony_presence_absence(path = get_default_data_path(), level = "Site",
-  rare_sp = FALSE, unknowns = FALSE, download_if_missing = TRUE)
+  rare_sp = FALSE, unknowns = FALSE, download_if_missing = TRUE,
+  quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -22,6 +23,8 @@ include those only identified to genus.}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without version messages}
 }
 \value{
 data frame with year, species, (plot if applicable), and presence [1, 0, NA]
