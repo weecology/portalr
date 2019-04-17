@@ -23,7 +23,9 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
                                   clean = clean)
 
   #### Do initial cleaning ----
-  rodents <- clean_rodent_data(data_tables, fillweight, type,
+  rodents <- clean_rodent_data(data_tables$rodent_data,
+                               data_tables$species_table,
+                               fillweight, type,
                                unknowns)
 
   #### Filter by length and add treatment types ----

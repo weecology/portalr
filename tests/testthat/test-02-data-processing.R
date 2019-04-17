@@ -24,10 +24,12 @@ test_that("species data.frame has correct column names", {
 })
 
 test_that("clean_rodent_data works", {
-  expect_error(rodents <- clean_rodent_data(data_tables), NA)
+  expect_error(rodents <- clean_rodent_data(data_tables$rodent_data,
+                                            data_tables$species_table), NA)
 })
 
-rodents <- clean_rodent_data(data_tables)
+rodents <- clean_rodent_data(data_tables$rodent_data,
+                             data_tables$species_table)
 
 test_that("clean_rodent_data has correct columns", {
   rodent_cols <- names(rodents)
