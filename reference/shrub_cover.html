@@ -134,7 +134,8 @@ beginning in 2015.</p>
     </div>
 
     <pre class="usage"><span class='fu'>shrub_cover</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Shrubs"</span>,
-  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>correct_sp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>correct_sp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +169,15 @@ treatment for the entire time series)</p></td>
     <tr>
       <th>correct_sp</th>
       <td><p>correct species names suspected to be incorrect in early data (T/F)</p></td>
+    </tr>
+    <tr>
+      <th>download_if_missing</th>
+      <td><p>if the specified file path doesn't have the
+PortalData folder, then download it</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>logical, whether to run without version messages</p></td>
     </tr>
     </table>
     

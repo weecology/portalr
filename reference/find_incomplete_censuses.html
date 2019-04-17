@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Period code for incomplete censuses — find_incomplete_censuses" />
 
-<meta property="og:description" content="Determines incomplete censuses by finding dates when some plots were trapped, but others were not." />
+<meta property="og:description" content="Determines incomplete censuses by finding dates when some plots
+  were trapped, but others were not." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,13 +116,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Period code for incomplete censuses</h1>
-    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/data_processing.R'><code>R/data_processing.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/process_rodent_data.R'><code>R/process_rodent_data.R</code></a></small>
     <div class="hidden name"><code>find_incomplete_censuses.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Determines incomplete censuses by finding dates when some plots were trapped, but others were not.</p>
+    <p>Determines incomplete censuses by finding dates when some plots
+  were trapped, but others were not.</p>
     
     </div>
 
@@ -132,15 +134,16 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>trapping_table</th>
-      <td><p>Data table that contains sampled column (1 for sampled, 0 for unsampled)</p></td>
+      <td><p>Data_table of when plots were censused.</p></td>
     </tr>
     <tr>
       <th>min_plots</th>
-      <td><p>minimum number of plots in a census for a census to count as sampled</p></td>
+      <td><p>minimum number of plots within a period for an
+observation to be included</p></td>
     </tr>
     <tr>
       <th>min_traps</th>
-      <td><p>minimum number of traps on a plot for a census to count as sampled</p></td>
+      <td><p>minimum number of traps for a plot to be included</p></td>
     </tr>
     </table>
     

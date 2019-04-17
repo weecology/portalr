@@ -141,7 +141,7 @@ plant_abundance generates a table of plant abundance" />
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>), <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_quads</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>plant_abundance</span>(<span class='no'>...</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"flat"</span>)
 
@@ -151,7 +151,7 @@ plant_abundance generates a table of plant abundance" />
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>), <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span>
   <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_quads</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -226,6 +226,10 @@ included in the output</p></td>
       <th>download_if_missing</th>
       <td><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>logical, whether to run without version messages</p></td>
     </tr>
     <tr>
       <th>...</th>

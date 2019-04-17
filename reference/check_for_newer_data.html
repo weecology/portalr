@@ -127,7 +127,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>check_for_newer_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>())</pre>
+    <pre class="usage"><span class='fu'>check_for_newer_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>mustWork</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,6 +135,11 @@
     <tr>
       <th>path</th>
       <td><p>Folder in which data will be checked</p></td>
+    </tr>
+    <tr>
+      <th>mustWork</th>
+      <td><p>logical: if TRUE then an error is given if the result cannot
+be determined; if NA then a warning.</p></td>
     </tr>
     </table>
     

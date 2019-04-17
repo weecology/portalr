@@ -138,16 +138,16 @@ load_trapping_data loads just the rodent trapping files" />
     </div>
 
     <pre class="usage"><span class='fu'>load_rodent_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>load_plant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>load_ant_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>load_trapping_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,6 +165,10 @@ PortalData folder, then download it</p></td>
     <tr>
       <th>clean</th>
       <td><p>logical, load only QA/QC rodent data (TRUE) or all data (FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>logical, whether to run without version messages</p></td>
     </tr>
     </table>
     
@@ -239,7 +243,7 @@ PortalData folder, then download it</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>portal_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_rodent_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div><div class='input'><span class='no'>portal_plant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_plant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div><div class='input'><span class='no'>portal_ant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_ant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div><div class='input'><span class='no'>trapping_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_trapping_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>portal_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_rodent_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div><div class='input'><span class='no'>portal_plant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_plant_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div><div class='input'><span class='no'>portal_ant_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_ant_data</span>(<span class='st'>"repo"</span>)</div><div class='input'><span class='no'>trapping_data</span> <span class='kw'>&lt;-</span> <span class='fu'>load_trapping_data</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.102.0</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
