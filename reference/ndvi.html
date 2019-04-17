@@ -125,7 +125,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>ndvi</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"monthly"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>())</pre>
+    <pre class="usage"><span class='fu'>ndvi</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"monthly"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,7 +142,13 @@
     </tr>
     <tr>
       <th>path</th>
-      <td><p>specify where to locate Portal data</p></td>
+      <td><p>either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository</p></td>
+    </tr>
+    <tr>
+      <th>download_if_missing</th>
+      <td><p>if the specified file path doesn't have the
+PortalData folder, then download it</p></td>
     </tr>
     </table>
     

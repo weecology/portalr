@@ -142,8 +142,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo</p></td>
+      <td><p>either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository</p></td>
     </tr>
     <tr>
       <th>clean</th>
@@ -157,7 +157,7 @@ retrieve data from github repo</p></td>
     <tr>
       <th>length</th>
       <td><p>specify subset of plots; use "All" plots or only "Longterm"
-plots (plots that have had same treatment for entire time series)</p></td>
+plots (to be deprecated)</p></td>
     </tr>
     <tr>
       <th>unknowns</th>
@@ -182,8 +182,7 @@ observation to be included</p></td>
     </tr>
     <tr>
       <th>min_traps</th>
-      <td><p>minimum number of plots within a period for an
-observation to be included</p></td>
+      <td><p>minimum number of traps for a plot to be included</p></td>
     </tr>
     <tr>
       <th>download_if_missing</th>

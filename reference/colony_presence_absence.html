@@ -145,8 +145,8 @@ Unknowns may also be excluded from output if desired.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo</p></td>
+      <td><p>either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository</p></td>
     </tr>
     <tr>
       <th>level</th>
@@ -155,11 +155,13 @@ retrieve data from github repo</p></td>
     <tr>
       <th>rare_sp</th>
       <td><p>include rare species (T) or not (F).
-Rare species may or may not have been censused in all years. Setting rare_sp=F gives a more conservative estimate of presence/absence</p></td>
+Rare species may or may not have been censused in all years. Setting
+`rare_sp = FALSE` gives a more conservative estimate of presence/absence</p></td>
     </tr>
     <tr>
       <th>unknowns</th>
-      <td><p>include unknown species (T) or not (F). Unknowns include those only identified to genus.</p></td>
+      <td><p>include unknown species (TRUE) or not (FALSE). Unknowns
+include those only identified to genus.</p></td>
     </tr>
     <tr>
       <th>download_if_missing</th>
