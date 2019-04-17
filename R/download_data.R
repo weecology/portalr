@@ -241,16 +241,18 @@ get_github_releases <- function()
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
 #' @param path Folder in which data will be checked
+#' @param mustWork logical: if TRUE then an error is given if the result cannot
+#'   be determined; if NA then a warning.
 #'
 #' @return bool TRUE if there is a newer version of the data online
 #'
 #' @export
-check_for_newer_data <- function(path = get_default_data_path())
+check_for_newer_data <- function(path = get_default_data_path(), mustWork = TRUE)
 {
   # first see if the folder for the data files exist
-  tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+  tryCatch(base_path <- file.path(normalizePath(path, mustWork = mustWork), "PortalData"),
            error = function(e) stop("Unable to use the specified path: ", path, call. = FALSE),
-           warning = function(w) w)
+           warning = function(w) {warning(w); return(NA)})
 
   # check for `version.txt`
   version_file <- file.path(base_path, "version.txt")
