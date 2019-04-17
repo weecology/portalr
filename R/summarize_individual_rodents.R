@@ -30,7 +30,7 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
   trapping <- filter_plots(data_tables$trapping, length)
   rodents <- join_trapping_to_rodents(rodents, trapping, data_tables$trapping,
                                       min_plots, min_traps) %>%
-    join_plots_to_rodents(data_tables$plots_table) %>%
+    join_plots(data_tables$plots_table) %>%
     dplyr::select(period, month, day = day.x, year, treatment, plot, stake,
                   species, sex, hfl, wgt, tag, ltag)
 
