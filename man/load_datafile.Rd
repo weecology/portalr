@@ -6,7 +6,7 @@
 \usage{
 load_datafile(datafile, na.strings = "",
   path = get_default_data_path(), download_if_missing = TRUE,
-  version_message = FALSE)
+  quiet = TRUE)
 }
 \arguments{
 \item{datafile}{the path to the datafile within the folder for Portal data}
@@ -24,8 +24,7 @@ load_datafile(datafile, na.strings = "",
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
 
-\item{version_message}{whether to display a message about the data version
-being loaded}
+\item{quiet}{logical, whether to perform operations silently}
 }
 \description{
 does checking for whether a particular datafile exists and then

@@ -23,6 +23,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param path Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#' @param quiet logical, whether to download data silently
 #' @inheritParams get_data_versions
 #'
 #' @return None
@@ -35,7 +36,8 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'
 #' @export
 download_observations <- function(path = get_default_data_path(),
-                                  version = "latest", from_zenodo = FALSE)
+                                  version = "latest", from_zenodo = FALSE,
+                                  quiet = FALSE)
 {
   # only use zenodo if version == "latest"
   if (version != "latest")
@@ -67,7 +69,8 @@ download_observations <- function(path = get_default_data_path(),
   }
 
   # Attemt to download the zip file
-  message("Downloading version ", releases$version[match_idx], " of the data...")
+  if (!quiet)
+    message("Downloading version ", releases$version[match_idx], " of the data...")
   zip_download_path <- releases$zipball_url[match_idx]
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
@@ -110,7 +113,7 @@ download_observations <- function(path = get_default_data_path(),
 #' @export
 get_data_versions <- function(from_zenodo = FALSE, halt_on_error = FALSE)
 {
-  releases   <- tryCatch(
+  releases <- tryCatch(
     {
       if (from_zenodo)
       {

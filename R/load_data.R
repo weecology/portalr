@@ -39,7 +39,7 @@ load_rodent_data <- function(path = get_default_data_path(),
 {
   rodent_data <- load_datafile(file.path("Rodents", "Portal_rodent.csv"),
                                na.strings = "", path, download_if_missing,
-                               version_message = !quiet)
+                               quiet = quiet)
   species_table <- load_datafile(file.path("Rodents", "Portal_rodent_species.csv"),
                                  na.strings = "", path, download_if_missing)
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
@@ -101,7 +101,7 @@ load_plant_data <- function(path = get_default_data_path(),
 {
   quadrat_data <- load_datafile(file.path("Plants", "Portal_plant_quadrats.csv"),
                                 na.strings = "", path, download_if_missing,
-                                version_message = !quiet)
+                                quiet = quiet)
   species_table <- load_datafile(file.path("Plants", "Portal_plant_species.csv"),
                                  na.strings = "", path, download_if_missing)
   census_table <- load_datafile(file.path("Plants", "Portal_plant_censuses.csv"),
@@ -189,10 +189,11 @@ load_ant_data <- function(path = get_default_data_path(),
 #' }
 #' @export
 load_trapping_data <- function(path = get_default_data_path(),
-                               download_if_missing = TRUE, clean = TRUE)
+                               download_if_missing = TRUE, clean = TRUE,
+                               quiet = FALSE)
 {
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
-                                  na.strings = "NA", path, download_if_missing, version_message = TRUE)
+                                  na.strings = "NA", path, download_if_missing, quiet = quiet)
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
                                   na.strings = "NA", path, download_if_missing)
 
@@ -215,8 +216,7 @@ load_trapping_data <- function(path = get_default_data_path(),
 #'   can also download the dataset if it's missing locally.
 #'
 #' @param datafile the path to the datafile within the folder for Portal data
-#' @param version_message whether to display a message about the data version
-#'   being loaded
+#' @param quiet logical, whether to perform operations silently
 #' @inheritParams load_rodent_data
 #' @inheritParams utils::read.table
 #'
@@ -226,7 +226,7 @@ load_trapping_data <- function(path = get_default_data_path(),
 #' }
 #' @export
 load_datafile <- function(datafile, na.strings = "", path = get_default_data_path(),
-                          download_if_missing = TRUE, version_message = FALSE)
+                          download_if_missing = TRUE, quiet = TRUE)
 {
 
   ## define file paths
@@ -252,7 +252,7 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   }
 
   ## output message about data version
-  if (version_message)
+  if (!quiet)
   {
     version_file <- file.path(base_path, "version.txt")
     if (tolower(path) != "repo" && !file.exists(version_file))

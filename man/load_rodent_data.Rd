@@ -17,7 +17,7 @@ load_ant_data(path = get_default_data_path(),
   download_if_missing = TRUE, quiet = FALSE)
 
 load_trapping_data(path = get_default_data_path(),
-  download_if_missing = TRUE, clean = TRUE)
+  download_if_missing = TRUE, clean = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
