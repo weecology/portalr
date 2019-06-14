@@ -6,7 +6,7 @@ test_that("download_observations and check_for_newer_data work", {
   skip_on_cran() # these download checks take a while to run
   expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
   expect_true(check_for_newer_data(portal_data_path))
-  without_internet({
+  httptest::without_internet({
     expect_false(check_for_newer_data(portal_data_path))
   })
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
@@ -34,7 +34,7 @@ test_that("load_rodent_data downloads data if missing", {
 })
 
 test_that("looking up data versions handle lack of a network connection", {
-  without_internet({
+  httptest::without_internet({
     #expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
     #expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
     #             "^GET https://zenodo.org/record/1215988$")

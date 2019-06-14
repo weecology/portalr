@@ -1,7 +1,7 @@
 context("Check plant data summaries")
 
 portal_data_path <- tempdir()
-portal_data_path <- get_default_data_path()
+
 test_that("plant_abundance returns expected results", {
   plants_all <- plant_abundance(path = portal_data_path, level = "Plot", type = "All",
                                 plots = "all", unknowns = TRUE,
