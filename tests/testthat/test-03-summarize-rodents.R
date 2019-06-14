@@ -109,9 +109,15 @@ test_that("energy returns expected results", {
 test_that("abundance filters at the plot level correctly", {
   skip_on_cran()
   incomplete_plots <- abundance(path = portal_data_path, level = "plot",
-                                min_plots = 1, min_traps = 1, effort = TRUE) %>%
+                                min_plots = 1, min_traps = 1, effort = TRUE,
+                                na_drop = FALSE) %>%
     dplyr::filter(ntraps < 1, period <= 463)
   expect_equal(NROW(incomplete_plots), 238)
+
+  incomplete_plots <- abundance(path = portal_data_path, level = "plot",
+                                min_plots = 1, min_traps = 1, effort = TRUE) %>%
+    dplyr::filter(ntraps < 1, period <= 463)
+  expect_equal(NROW(incomplete_plots), 0)
 
   incomplete_plots <- abundance(path = portal_data_path, level = "plot",
                                 min_plots = 24, min_traps = 49, effort = TRUE) %>%
