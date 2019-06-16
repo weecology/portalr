@@ -93,17 +93,21 @@ test_that("default data path functions work if unset", {
   Sys.unsetenv("PORTALR_DATA_PATH")
   expect_warning(result <- check_default_data_path(MESSAGE_FUN = warning),
                  "You don't appear to have a defined location for storing Portal data.")
-  expect_message(check_default_data_path(), "You don't appear to have a defined location for storing Portal data.")
-  expect_message(check_default_data_path(), "Call .+ if you wish to set the default data path.")
-  expect_message(check_default_data_path(), "Portal data will be downloaded into .+ otherwise.")
   expect_false(result)
+
+  m <- capture_messages(check_default_data_path())
+  expect_match(m, "You don't appear to have a defined location for storing Portal data.", all = FALSE)
+  expect_match(m, "Call .+ if you wish to set the default data path.", all = FALSE)
+  expect_match(m, "Portal data will be downloaded into .+ otherwise.", all = FALSE)
 
   expect_error(use_default_data_path())
 
-  expect_output(use_default_data_path(tempdir()), "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
-  expect_output(use_default_data_path(tempdir()), "Store your data path with a line like:")
-  expect_output(use_default_data_path(tempdir()), paste0("PORTALR_DATA_PATH=\"", tempdir(), "\""))
-  expect_output(use_default_data_path(tempdir()), "Make sure '.Renviron' ends with a newline!")
+  data_path <- tempdir()
+  expect_error(m <- capture_output(use_default_data_path(data_path)), NA)
+  expect_match(m, "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
+  expect_match(m, "Store your data path with a line like:")
+  expect_match(m, paste0("PORTALR_DATA_PATH=\"", data_path, "\""))
+  expect_match(m, "Make sure '.Renviron' ends with a newline!")
 })
 
 test_that("default data path functions work if set", {
