@@ -106,7 +106,7 @@ test_that("default data path functions work if unset", {
   expect_error(m <- capture_output(use_default_data_path(data_path)), NA)
   expect_match(m, "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
   expect_match(m, "Store your data path with a line like:")
-  expect_match(m, paste0("PORTALR_DATA_PATH=\"", data_path, "\""))
+  expect_match(m, "PORTALR_DATA_PATH=")
   expect_match(m, "Make sure '.Renviron' ends with a newline!")
 })
 
