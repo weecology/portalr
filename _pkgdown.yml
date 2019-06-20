@@ -1,0 +1,38 @@
+url: https://weecology.github.io/portalr
+development:
+  mode: auto
+reference:
+  - title: "Data Retrieval"
+    desc: "Functions to download and update data"
+    contents:
+      - download_observations
+      - check_for_newer_data
+      - get_data_versions
+      - check_default_data_path
+  - title: "Data Summaries"
+    desc: "Functions to return data summaries"
+    contents:
+      - summarize_rodent_data
+      - summarize_plant_data
+      - summarize_individual_rodents
+      - make_timeseries
+      - ndvi
+      - weather
+      - bait_presence_absence
+      - colony_presence_absence
+      - shrub_cover
+      - fcast_ndvi
+      - get_future_moons
+  - title: "Unprocessed Data"
+    desc: "Functions to load in raw or otherwise unprocessed data"
+    contents:
+      - load_datafile
+      - load_rodent_data
+  - title: "Data Processing"
+    desc: "Functions to do various data processing steps"
+    contents:
+      - add_seasons
+      - clean_plant_data
+      - clean_rodent_data
+      - fill_missing_ndvi
+      - find_incomplete_censuses

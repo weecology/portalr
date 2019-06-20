@@ -17,6 +17,7 @@
 #' @description \code{\link{load_rodent_data}} loads the rodent data files
 #'
 #' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
+#' @param quiet logical, whether to run without version messages
 #'
 #' @return \code{\link{load_rodent_data}} returns a list of 5 dataframes:
 #'   \tabular{ll}{
@@ -34,16 +35,17 @@
 #' @export
 #'
 load_rodent_data <- function(path = get_default_data_path(),
-                             download_if_missing = TRUE, clean = TRUE)
+                             download_if_missing = TRUE, clean = TRUE, quiet = FALSE)
 {
   rodent_data <- load_datafile(file.path("Rodents", "Portal_rodent.csv"),
-                               na.strings = "", path, download_if_missing, version_message = TRUE)
+                               na.strings = "", path, download_if_missing,
+                               quiet = quiet)
   species_table <- load_datafile(file.path("Rodents", "Portal_rodent_species.csv"),
                                  na.strings = "", path, download_if_missing)
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
-                                 na.strings = "NA", path, download_if_missing)
+                                  na.strings = "NA", path, download_if_missing)
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
-                                 na.strings = "NA", path, download_if_missing)
+                                  na.strings = "NA", path, download_if_missing)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
                                na.strings = "NA", path, download_if_missing)
 
@@ -95,16 +97,17 @@ load_rodent_data <- function(path = get_default_data_path(),
 #' }
 
 load_plant_data <- function(path = get_default_data_path(),
-                            download_if_missing = TRUE)
+                            download_if_missing = TRUE, quiet = FALSE)
 {
   quadrat_data <- load_datafile(file.path("Plants", "Portal_plant_quadrats.csv"),
-                               na.strings = "", path, download_if_missing, version_message = TRUE)
+                                na.strings = "", path, download_if_missing,
+                                quiet = quiet)
   species_table <- load_datafile(file.path("Plants", "Portal_plant_species.csv"),
                                  na.strings = "", path, download_if_missing)
   census_table <- load_datafile(file.path("Plants", "Portal_plant_censuses.csv"),
-                                  na.strings = "NA", path, download_if_missing)
+                                na.strings = "NA", path, download_if_missing)
   date_table <- load_datafile(file.path("Plants", "Portal_plant_census_dates.csv"),
-                                  na.strings = c("", "none", "unknown"), path, download_if_missing)
+                              na.strings = c("", "none", "unknown"), path, download_if_missing)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
                                na.strings = "NA", path, download_if_missing)
   transect_data <- load_datafile(file.path("Plants", "Portal_plant_transects_2015_present.csv"),
@@ -144,14 +147,15 @@ load_plant_data <- function(path = get_default_data_path(),
 #' }
 
 load_ant_data <- function(path = get_default_data_path(),
-                          download_if_missing = TRUE)
+                          download_if_missing = TRUE, quiet = FALSE)
 {
   bait_data <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
-                                na.strings = "", path, download_if_missing, version_message = TRUE)
+                             na.strings = "", path, download_if_missing,
+                             quiet = TRUE)
   colony_data <- load_datafile(file.path("Ants", "Portal_ant_colony.csv"),
-                                 na.strings = "", path, download_if_missing)
+                               na.strings = "", path, download_if_missing)
   species_table <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
-                                na.strings = "NA", path, download_if_missing)
+                                 na.strings = "NA", path, download_if_missing)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
                                na.strings = "NA", path, download_if_missing)
 
@@ -166,7 +170,7 @@ load_ant_data <- function(path = get_default_data_path(),
   return(mget(c("bait_data", "colony_data",
                 "species_table", "plots_table")))
 
-  }
+}
 
 #' @rdname load_rodent_data
 #' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
@@ -185,10 +189,11 @@ load_ant_data <- function(path = get_default_data_path(),
 #' }
 #' @export
 load_trapping_data <- function(path = get_default_data_path(),
-                               download_if_missing = TRUE, clean = TRUE)
+                               download_if_missing = TRUE, clean = TRUE,
+                               quiet = FALSE)
 {
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
-                                  na.strings = "NA", path, download_if_missing, version_message = TRUE)
+                                  na.strings = "NA", path, download_if_missing, quiet = quiet)
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
                                   na.strings = "NA", path, download_if_missing)
 
@@ -211,8 +216,7 @@ load_trapping_data <- function(path = get_default_data_path(),
 #'   can also download the dataset if it's missing locally.
 #'
 #' @param datafile the path to the datafile within the folder for Portal data
-#' @param version_message whether to display a message about the data version
-#'   being loaded
+#' @param quiet logical, whether to perform operations silently
 #' @inheritParams load_rodent_data
 #' @inheritParams utils::read.table
 #'
@@ -222,7 +226,7 @@ load_trapping_data <- function(path = get_default_data_path(),
 #' }
 #' @export
 load_datafile <- function(datafile, na.strings = "", path = get_default_data_path(),
-                          download_if_missing = TRUE, version_message = FALSE)
+                          download_if_missing = TRUE, quiet = TRUE)
 {
 
   ## define file paths
@@ -248,7 +252,7 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   }
 
   ## output message about data version
-  if (version_message)
+  if (!quiet)
   {
     version_file <- file.path(base_path, "version.txt")
     if (tolower(path) != "repo" && !file.exists(version_file))

@@ -4,7 +4,8 @@
 \alias{ndvi}
 \title{NDVI by calendar month or lunar month}
 \usage{
-ndvi(level = "monthly", fill = FALSE, path = get_default_data_path())
+ndvi(level = "monthly", fill = FALSE, path = get_default_data_path(),
+  download_if_missing = TRUE)
 }
 \arguments{
 \item{level}{specify "monthly" or "newmoon"}
@@ -12,7 +13,11 @@ ndvi(level = "monthly", fill = FALSE, path = get_default_data_path())
 \item{fill}{specify if missing data should be filled, passed to
 \code{fill_missing_ndvi}}
 
-\item{path}{specify where to locate Portal data}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
+
+\item{download_if_missing}{if the specified file path doesn't have the
+PortalData folder, then download it}
 }
 \description{
 Summarize NDVI data to monthly or lunar monthly level

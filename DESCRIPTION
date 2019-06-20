@@ -1,6 +1,6 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
-Version: 0.2.4
+Version: 0.2.5
 Authors@R: c(person(c("Glenda", "M."), "Yenni", role = c("aut", "cre"), 
                     email = "glenda@weecology.org", 
                     comment = c(ORCID = "0000-0001-6969-1848")), 
@@ -30,29 +30,28 @@ BugReports: https://github.com/weecology/portalr/issues
 LazyData: true
 Depends: R (>= 3.2.3)
 Imports:
-    dplyr,
-    tidyr,
-    zoo,
-    lubridate,
-    magrittr,
-    httr,
-    rlang,
-    forecast,
-    lunar,
-    jsonlite,
-    tibble,
-    usethis (>= 1.4.0.9000)
+  dplyr,
+  tidyr,
+  lubridate,
+  magrittr,
+  httr,
+  rlang,
+  forecast,
+  lunar,
+  jsonlite,
+  tibble,
+  usethis (>= 1.5.0), 
+  crayon, 
+  clisymbols
 Suggests:
   httptest,
-  digest,
   tidyverse,
   cowplot,
   knitr,
   rmarkdown,
   pkgdown,
   covr, 
-  ggplot2
+  ggplot2, 
+  testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
-Remotes:  
-    r-lib/usethis

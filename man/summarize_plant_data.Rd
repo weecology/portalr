@@ -12,7 +12,7 @@ summarize_plant_data(path = get_default_data_path(), level = "Site",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 
 plant_abundance(..., shape = "flat")
 
@@ -22,11 +22,11 @@ summarise_plant_data(path = get_default_data_path(), level = "Site",
   na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
   TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
   TRUE, site = TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{level}{summarize by "Plot", "Treatment", or "Site"}
 
@@ -50,7 +50,7 @@ treatment for the entire time series)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 
-\item{shape}{return data as a "flat" list or "crosstab"}
+\item{shape}{return data as a "crosstab" or "flat" list}
 
 \item{output}{specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]}
@@ -67,6 +67,8 @@ included in the output}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without version messages}
 
 \item{...}{arguments passed to \code{\link{summarize_plant_data}}}
 }

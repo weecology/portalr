@@ -8,16 +8,16 @@
 \title{Read in the Portal data files}
 \usage{
 load_rodent_data(path = get_default_data_path(),
-  download_if_missing = TRUE, clean = TRUE)
+  download_if_missing = TRUE, clean = TRUE, quiet = FALSE)
 
 load_plant_data(path = get_default_data_path(),
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 
 load_ant_data(path = get_default_data_path(),
-  download_if_missing = TRUE)
+  download_if_missing = TRUE, quiet = FALSE)
 
 load_trapping_data(path = get_default_data_path(),
-  download_if_missing = TRUE, clean = TRUE)
+  download_if_missing = TRUE, clean = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -27,6 +27,8 @@ load_trapping_data(path = get_default_data_path(),
 PortalData folder, then download it}
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
+
+\item{quiet}{logical, whether to run without version messages}
 }
 \value{
 \code{\link{load_rodent_data}} returns a list of 5 dataframes:

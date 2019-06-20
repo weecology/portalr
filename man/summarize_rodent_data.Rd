@@ -12,10 +12,9 @@ summarize_rodent_data(path = get_default_data_path(), clean = TRUE,
   level = "Site", type = "Rodents", length = "all", plots = length,
   unknowns = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
-  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
-  TRUE, site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
-  download_if_missing = TRUE)
+  na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
+  treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
+  effort = FALSE, download_if_missing = TRUE, quiet = FALSE)
 
 abundance(...)
 
@@ -27,14 +26,13 @@ summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
   level = "Site", type = "Rodents", length = "all", plots = length,
   unknowns = FALSE, shape = "crosstab", time = "period",
   output = "abundance", fillweight = (output != "abundance"),
-  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
-  TRUE, site = TRUE), min_traps = 1, min_plots = 24, effort = FALSE,
-  download_if_missing = TRUE)
+  na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
+  treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
+  effort = FALSE, download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{path}{path to location of downloaded Portal data; or "repo" to
-retrieve data from github repo}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
@@ -80,6 +78,8 @@ included in the output}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
+
+\item{quiet}{logical, whether to run without producing messages}
 
 \item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }

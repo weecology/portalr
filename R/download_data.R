@@ -23,6 +23,7 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'   TODO: incorporate data retriever into this when it's pointed at the github repo
 #' @param path Folder into which data will be downloaded
 #' @param version Version of the data to download (default = "latest")
+#' @param quiet logical, whether to download data silently
 #' @inheritParams get_data_versions
 #'
 #' @return None
@@ -35,7 +36,8 @@ full_path <- function(reference_path, base_path = getwd()) {
 #'
 #' @export
 download_observations <- function(path = get_default_data_path(),
-                                  version = "latest", from_zenodo = FALSE)
+                                  version = "latest", from_zenodo = FALSE,
+                                  quiet = FALSE)
 {
   # only use zenodo if version == "latest"
   if (version != "latest")
@@ -67,7 +69,8 @@ download_observations <- function(path = get_default_data_path(),
   }
 
   # Attemt to download the zip file
-  message("Downloading version ", releases$version[match_idx], " of the data...")
+  if (!quiet)
+    message("Downloading version ", releases$version[match_idx], " of the data...")
   zip_download_path <- releases$zipball_url[match_idx]
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
@@ -110,7 +113,7 @@ download_observations <- function(path = get_default_data_path(),
 #' @export
 get_data_versions <- function(from_zenodo = FALSE, halt_on_error = FALSE)
 {
-  releases   <- tryCatch(
+  releases <- tryCatch(
     {
       if (from_zenodo)
       {
@@ -241,18 +244,20 @@ get_github_releases <- function()
 #' @description Check the latest version against the data that exists on
 #'   the GitHub repo
 #' @param path Folder in which data will be checked
+#' @param mustWork logical: if TRUE then an error is given if the result cannot
+#'   be determined; if NA then a warning.
 #'
 #' @return bool TRUE if there is a newer version of the data online
 #'
 #' @export
-check_for_newer_data <- function(path = get_default_data_path())
+check_for_newer_data <- function(path = get_default_data_path(), mustWork = TRUE)
 {
   # first see if the folder for the data files exist
-  tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
+  tryCatch(base_path <- file.path(normalizePath(path, mustWork = mustWork), "PortalData"),
            error = function(e) stop("Unable to use the specified path: ", path, call. = FALSE),
-           warning = function(w) w)
+           warning = function(w) {warning(w); return(NA)})
 
-  # check for `version.txt``
+  # check for `version.txt`
   version_file <- file.path(base_path, "version.txt")
   if (!file.exists(version_file)) # old version of data is missing this metadata file
     return(TRUE)
@@ -295,16 +300,23 @@ check_for_newer_data <- function(path = get_default_data_path())
 #'   set, and prompts the user to set it if it is missing.
 #'
 #' @inheritParams use_default_data_path
+#' @param MESSAGE_FUN the function to use to output messages
+#' @param DATA_NAME the name of the dataset to use in output messages
 #' @return FALSE if there is no path set, TRUE otherwise
 #'
 #' @export
 #'
-check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH")
+check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH",
+                                    MESSAGE_FUN = message, DATA_NAME = "Portal data")
 {
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
-    usethis::ui_warn("No default data path set!")
-    usethis::ui_todo("Call {usethis::ui_code('use_default_data_path(\"<path>\")')} to set a default data path.")
+    MESSAGE_FUN("You don't appear to have a defined location for storing ", DATA_NAME, ".")
+    code_call_str <- (crayon::make_style("darkgrey"))(encodeString('use_default_data_path(\"<path>\")', quote = "`"))
+    MESSAGE_FUN(crayon::red(clisymbols::symbol$bullet),
+                " Call ", code_call_str, " if you wish to set the default data path.")
+    default_path_str <- (crayon::make_style("darkgrey"))(encodeString(path.expand("~"), quote = "`"))
+    MESSAGE_FUN(DATA_NAME, " will be downloaded into ", default_path_str, " otherwise.")
     return(FALSE)
   }
   return(TRUE)
@@ -334,7 +346,7 @@ get_default_data_path <- function(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 #'   the presence of a pre-existing setting for the environmental variable.
 #'   Then it checks if the folder exists and creates it, if needed. Then it
 #'   provides instructions for setting the environmental variable.
-#' @param path Folder into which data will be downloaded
+#' @inheritParams download_observations
 #' @param ENV_VAR the environmental variable to check (by default
 #'   `"PORTALR_DATA_PATH"``)
 #'

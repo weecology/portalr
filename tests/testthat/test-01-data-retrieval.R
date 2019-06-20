@@ -6,7 +6,7 @@ test_that("download_observations and check_for_newer_data work", {
   skip_on_cran() # these download checks take a while to run
   expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
   expect_true(check_for_newer_data(portal_data_path))
-  without_internet({
+  httptest::without_internet({
     expect_false(check_for_newer_data(portal_data_path))
   })
   unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
@@ -34,7 +34,7 @@ test_that("load_rodent_data downloads data if missing", {
 })
 
 test_that("looking up data versions handle lack of a network connection", {
-  without_internet({
+  httptest::without_internet({
     #expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
     #expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
     #             "^GET https://zenodo.org/record/1215988$")
@@ -91,22 +91,27 @@ test_that("load_ant_data works", {
 
 test_that("default data path functions work if unset", {
   Sys.unsetenv("PORTALR_DATA_PATH")
-  expect_warning(result <- check_default_data_path())
+  expect_warning(result <- check_default_data_path(MESSAGE_FUN = warning),
+                 "You don't appear to have a defined location for storing Portal data.")
   expect_false(result)
+
+  m <- capture_messages(check_default_data_path())
+  expect_match(m, "You don't appear to have a defined location for storing Portal data.", all = FALSE)
+  expect_match(m, "Call .+ if you wish to set the default data path.", all = FALSE)
+  expect_match(m, "Portal data will be downloaded into .+ otherwise.", all = FALSE)
 
   expect_error(use_default_data_path())
 
-  expect_output(use_default_data_path(tempdir()), "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
-  expect_output(use_default_data_path(tempdir()), "Store your data path with a line like:")
-  expect_output(use_default_data_path(tempdir()), paste0("PORTALR_DATA_PATH=\"", tempdir(), "\""))
-  expect_output(use_default_data_path(tempdir()), "Make sure '.Renviron' ends with a newline!")
+  data_path <- tempdir()
+  expect_error(m <- capture_output(use_default_data_path(data_path)), NA)
+  expect_match(m, "Call `usethis::edit_r_environ\\(\\)` to open '.Renviron'")
+  expect_match(m, "Store your data path with a line like:")
+  expect_match(m, "PORTALR_DATA_PATH=")
+  expect_match(m, "Make sure '.Renviron' ends with a newline!")
 })
 
 test_that("default data path functions work if set", {
  Sys.setenv("PORTALR_DATA_PATH" = tempdir())
   expect_true(check_default_data_path())
-
   expect_equal(get_default_data_path(), tempdir())
-
-  expect_warning(use_default_data_path(tempdir()))
 })

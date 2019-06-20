@@ -6,7 +6,8 @@
 \alias{use_default_data_path}
 \title{Manage the default path for downloading Portal Data into}
 \usage{
-check_default_data_path(ENV_VAR = "PORTALR_DATA_PATH")
+check_default_data_path(ENV_VAR = "PORTALR_DATA_PATH",
+  MESSAGE_FUN = message, DATA_NAME = "Portal data")
 
 get_default_data_path(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 
@@ -15,6 +16,10 @@ use_default_data_path(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
 \arguments{
 \item{ENV_VAR}{the environmental variable to check (by default
 `"PORTALR_DATA_PATH"``)}
+
+\item{MESSAGE_FUN}{the function to use to output messages}
+
+\item{DATA_NAME}{the name of the dataset to use in output messages}
 
 \item{fallback}{the default value to use if the setting is missing}
 

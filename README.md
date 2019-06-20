@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# portalr 0.2.2
+# portalr 0.2.5
 
 [![Build
 Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
@@ -38,8 +38,8 @@ install.packages("portalr")
 OR from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("weecology/portalr")
+# install.packages("remotes")
+remotes::install_github("weecology/portalr")
 ```
 
 ## Examples
@@ -83,19 +83,19 @@ browseVignettes("portalr")
 
 ## More Information
 
-#### [Portal Data Repo](github.com/weecology/PortalData)
+#### [Portal Data Repo](https://github.com/weecology/PortalData)
 
 The data repo contains useful details for issues with data collection,
 and background on why we handle them the way we do. Of course, it also
 contains the raw data, if you would like to create more complex data
 summaries than what is provided here.
 
-#### [The Portal Project](portal.weecology.org/)
+#### [The Portal Project](https://portal.weecology.org/)
 
 Find a list of previous publications using the Portal data at our
 website.
 
-#### [The Portal Blog](portalproject.wordpress.com/)
+#### [The Portal Blog](https://portalproject.wordpress.com/)
 
 Follow our blog to get the latest news on what is happening with our
 project and at the site.

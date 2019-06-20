@@ -12,7 +12,8 @@ weather(level = "daily", fill = FALSE,
 
 \item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
 
-\item{path}{specify where to locate Portal data}
+\item{path}{either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository}
 }
 \description{
 Summarize hourly weather data to either daily, monthly, or lunar monthly level.

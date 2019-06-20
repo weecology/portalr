@@ -7,6 +7,7 @@ r_check_args: "--no-vignettes"
 
 r_packages:
   - covr
+  - callr
 
 before_install:
   - sudo apt-get update -qq
