@@ -9,7 +9,7 @@ Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://trav
 [![Coverage
 status](https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=master)
 [![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://cran.rstudio.com/web/packages/portalr/index.html)
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.R-project.org/package=portalr)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
