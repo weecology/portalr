@@ -151,7 +151,7 @@ shrub_cover <- function(path = get_default_data_path(),
   oldtransect_data = data_tables$oldtransect_data %>%
     dplyr::mutate("month" = 8) %>%
     clean_transect_data() %>%
-    dplyr::summarize(count=n()) %>%
+    dplyr::summarize(count = dplyr::n()) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(cover = count/1000, height = NA, species = as.character(species)) %>%
     dplyr::select(-count)

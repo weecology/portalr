@@ -85,6 +85,13 @@ summarize_rodent_data <- function(path = get_default_data_path(),
     add_time(newmoons_table, time) %>%
     prep_rodent_output(effort, na_drop, zero_drop, shape, level, output)
 
+  # out1 <- clean_rodent_data(rodent_data, species_table, fillweight, type, unknowns)
+  # out2 <- out1 %>% make_plot_data(trapping_data, output, min_traps)
+  # out3 <- out2 %>% make_level_data(trapping_table, level, output, min_plots, min_traps)
+  # out4 <- out3 %>% add_time(newmoons_table, time)
+  # out5 <- out4 %>% prep_rodent_output(effort, na_drop, zero_drop, shape, level, output)
+
+
   return(out)
 }
 

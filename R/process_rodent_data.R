@@ -102,10 +102,19 @@ make_level_data <- function(plot_data, trapping_table, level, output,
                      "treatment" = rlang::quos(period, treatment, species),
                      "site" = rlang::quos(period, species))
 
-  level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
-    dplyr::summarise(n = sum(n, na.rm = TRUE),
-                     ntraps = sum(effort, na.rm = TRUE),
-                     nplots = true_length(effort))
+  if (level == "plot")
+  {
+    level_data <- plot_data %>%
+      dplyr::mutate(n = replace(n, is.na(n), 0L),
+                    ntraps = replace(effort, is.na(effort), 0),
+                    nplots = ifelse(is.na(effort), 0, 1)) %>%
+      dplyr::select(period, treatment, plot, species, n, ntraps, nplots)
+  } else {
+    level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
+      dplyr::summarize(n = sum(n, na.rm = TRUE),
+                       ntraps = sum(effort, na.rm = TRUE),
+                       nplots = sum(!is.na(effort)))
+  }
 
   # set data for incomplete censuses to NA
   incomplete <- find_incomplete_censuses(trapping_table, min_plots, min_traps)

@@ -87,7 +87,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
   if (!is.na(summarize))
   {
     full_data <- full_data %>% dplyr::group_by(!!!grouping) %>%
-      dplyr::summarize_all(dplyr::funs(sumfun), na.rm = TRUE) %>%
+      dplyr::summarize_all(list(sum), na.rm = TRUE) %>%
       dplyr::select(-month, -dplyr::contains("day"), -dplyr::contains("newmoonnumber"),
                     -dplyr::contains("date"), -dplyr::contains("period"))
   }
