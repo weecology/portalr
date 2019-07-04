@@ -130,7 +130,7 @@ Also applies specified functions to the specified summary level.</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_seasons</span>(<span class='no'>data</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"site"</span>, <span class='kw'>season_level</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"yearmon"</span>, <span class='kw'>summarize</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"yearmon"</span>, <span class='kw'>summary_funs</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -163,7 +163,7 @@ Also applies specified functions to the specified summary level.</p>
 or "yearmon" (data must contain "year" and "month")</p></td>
     </tr>
     <tr>
-      <th>summarize</th>
+      <th>summary_funs</th>
       <td><p>A function or list of functions specified by their name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).</p></td>
     </tr>
