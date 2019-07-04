@@ -6,7 +6,7 @@
 \title{Add Seasons}
 \usage{
 add_seasons(data, level = "site", season_level = 2,
-  date_column = "yearmon", summarize = NA,
+  date_column = "yearmon", summary_funs = NA,
   path = get_default_data_path(), download_if_missing = TRUE,
   clean = TRUE)
 
@@ -28,7 +28,7 @@ yearly(...)
 \item{date_column}{either "date" (must be in format "y-m-d"), "period", "newmoonnumber",
 or "yearmon" (data must contain "year" and "month")}
 
-\item{summarize}{A function or list of functions specified by their name (e.g. "mean").
+\item{summary_funs}{A function or list of functions specified by their name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).}
 
 \item{path}{either the file path that contains the PortalData folder or

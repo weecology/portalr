@@ -7,7 +7,7 @@
 #' @keywords package
 #'
 #' @importFrom lubridate "%m+%"
-#' @importFrom rlang "!!" "!!!" ":="
+#' @importFrom rlang "!!" "!!!" ":=" .data
 #' @importFrom utils head download.file read.csv unzip read.table tail
 #' @importFrom stats median na.omit
 
@@ -28,5 +28,3 @@ if (getRversion() >= "2.15.1") utils::globalVariables(
     # "treatment", "unidentified", "value", "value.x", "value.y", "values", "wgt",
     # "year", "yearmon"
     ))
-
-#' @importFrom rlang .data

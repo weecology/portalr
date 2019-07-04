@@ -20,12 +20,19 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
 
   ###########Summarise by Day ----------------------
   days <- weather_new %>%
-    dplyr::group_by(year, month, day) %>%
-    dplyr::summarize(mintemp = min(airtemp), maxtemp = max(airtemp), meantemp = mean(airtemp), precipitation = sum(precipitation), battv = min(battv, na.rm = TRUE))
+    dplyr::group_by(.data$year, .data$month, .data$day) %>%
+    dplyr::summarize(mintemp = min(.data$airtemp),
+                     maxtemp = max(.data$airtemp),
+                     meantemp = mean(.data$airtemp),
+                     precipitation = sum(.data$precipitation),
+                     battv = min(.data$battv, na.rm = TRUE))
 
   weather <- dplyr::bind_rows(weather_old[1:3442, ], days)  %>%
-    dplyr::mutate(locally_measured = TRUE, battv = ifelse(is.infinite(battv), NA, battv), battery_low = ifelse(battv<11, TRUE, FALSE)) %>%
-    dplyr::select(year, month, day, mintemp, maxtemp, meantemp, precipitation, locally_measured, battery_low)
+    dplyr::mutate(locally_measured = TRUE,
+                  battv = ifelse(is.infinite(.data$battv), NA, .data$battv),
+                  battery_low = ifelse(.data$battv < 11, TRUE, FALSE)) %>%
+    dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp",
+                    "precipitation", "locally_measured", "battery_low"))
 
   if (fill)
   {
@@ -37,15 +44,18 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
     ##########Summarise by Month -----------------
 
     weather = weather %>%
-      dplyr::group_by(year, month) %>%
-      dplyr::summarize(mintemp = min(mintemp, na.rm = TRUE), maxtemp = max(maxtemp, na.rm = TRUE), meantemp = mean(meantemp, na.rm = TRUE),
-                       precipitation = sum(precipitation, na.rm = TRUE), locally_measured = all(locally_measured),
-                       battery_low = all(battery_low, na.rm = TRUE)) %>%
-      dplyr::arrange(year, month) %>%
-      dplyr::select(year, month, mintemp, maxtemp, meantemp, precipitation, locally_measured, battery_low) %>%
-      dplyr::mutate(battery_low = ifelse(year < 2003, NA, battery_low))
+      dplyr::group_by(.data$year, .data$month) %>%
+      dplyr::summarize(mintemp = min(.data$mintemp, na.rm = TRUE),
+                       maxtemp = max(.data$maxtemp, na.rm = TRUE),
+                       meantemp = mean(.data$meantemp, na.rm = TRUE),
+                       precipitation = sum(.data$precipitation, na.rm = TRUE),
+                       locally_measured = all(.data$locally_measured),
+                       battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
+      dplyr::arrange(.data$year, .data$month) %>%
+      dplyr::select(c("year", "month", "mintemp", "maxtemp", "meantemp",
+                      "precipitation", "locally_measured", "battery_low")) %>%
+      dplyr::mutate(battery_low = ifelse(.data$year < 2003, NA, .data$battery_low))
   } else if (level == "newmoon") {
-
     ##########Summarise by lunar month -----------------
 
     weather$date <- as.Date(paste(weather$year, weather$month, weather$day, sep = "-"))
@@ -65,15 +75,17 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
 
     weather <- weather %>%
       dplyr::group_by(newmoonnumber) %>%
-      dplyr::summarize(date = max(date, na.rm = TRUE), mintemp = min(mintemp, na.rm = TRUE),
-                       maxtemp = max(maxtemp, na.rm = TRUE), meantemp = mean(meantemp, na.rm = TRUE),
-                       precipitation = sum(precipitation,  na.rm = TRUE),
-                       locally_measured = all(locally_measured),
-                       battery_low = all(battery_low, na.rm = TRUE)) %>%
-      dplyr::arrange(newmoonnumber) %>%
-      dplyr::select(newmoonnumber, date, mintemp, maxtemp, meantemp, precipitation,
-                    locally_measured, battery_low) %>%
-      dplyr::mutate(battery_low = ifelse(date < "2003-01-01", NA, battery_low))
+      dplyr::summarize(date = max(.data$date, na.rm = TRUE),
+                       mintemp = min(.data$mintemp, na.rm = TRUE),
+                       maxtemp = max(.data$maxtemp, na.rm = TRUE),
+                       meantemp = mean(.data$meantemp, na.rm = TRUE),
+                       precipitation = sum(.data$precipitation,  na.rm = TRUE),
+                       locally_measured = all(.data$locally_measured),
+                       battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
+      dplyr::arrange(.data$newmoonnumber) %>%
+      dplyr::select(c("newmoonnumber", "date", "mintemp", "maxtemp", "meantemp",
+                      "precipitation", "locally_measured", "battery_low")) %>%
+      dplyr::mutate(battery_low = ifelse(.data$date < "2003-01-01", NA, .data$battery_low))
   }
 
   return(weather)
