@@ -24,11 +24,11 @@ test_that("add_seasons returns expected results", {
   expect_equal(sum(rodent_seasons$abundance, na.rm = T), 16452)
 
   rodent_seasons = add_seasons(test_rodents, level = "treatment", date_column = "period",
-                               season_level = 2, summarize = "mean", path = portal_data_path)
+                               season_level = 2, summary_funs = "mean", path = portal_data_path)
   expect_equal(round(sum(rodent_seasons$abundance, na.rm = T), 4), 478.3957)
 
   weather_seasons = add_seasons(test_weather, date_column = "yearmon",
-                                season_level = 4, summarize = "mean", path = portal_data_path)
+                                season_level = 4, summary_funs = "mean", path = portal_data_path)
   expect_equal(round(sum(weather_seasons$precipitation, na.rm = T), 3), 1788.509)
 })
 
