@@ -110,10 +110,13 @@ make_level_data <- function(plot_data, trapping_table, level, output,
                     nplots = ifelse(is.na(.data$effort), 0, 1)) %>%
       dplyr::select(c("period", "treatment", "plot", "species", "n", "ntraps", "nplots"))
   } else {
-    level_data <- dplyr::group_by_at(plot_data, grouping) %>%
+    level_data <- plot_data %>%
+      dplyr::mutate(plot_sampled = as.numeric(!is.na(.data$effort))) %>%
+      dplyr::group_by_at(grouping) %>%
       dplyr::summarize(n = sum(.data$n, na.rm = TRUE),
                        ntraps = sum(.data$effort, na.rm = TRUE),
-                       nplots = sum(!is.na(.data$effort)))
+                       nplots = sum(plot_sampled)) %>%
+      dplyr::ungroup()
   }
 
   # set data for incomplete censuses to NA
