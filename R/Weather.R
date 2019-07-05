@@ -116,9 +116,11 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::filter(date >= "1980-01-01")
 
   regionmeans <- region %>%
+    tidyr::gather(key = "source", value = "value", .data$value.x, .data$value.y) %>%
     dplyr::group_by(.data$date, .data$element) %>%
-    dplyr::summarize(value = mean(c(.data$value.x, .data$value.y), na.rm = TRUE) / 10) %>%
+    dplyr::summarize(value = mean(.data$value, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
+    dplyr::mutate(value = .data$value / 10) %>%
     tidyr::spread(.data$element, .data$value) %>%
     dplyr::mutate(tmin = .data$TMIN,
                   tmax = .data$TMAX,
