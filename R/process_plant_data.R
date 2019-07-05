@@ -24,7 +24,7 @@ make_plant_plot_data <- function(plant_data, census_info_table,
 
   plant_data %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::summarise(n = sum(!!wt, na.rm = TRUE))  %>%
+    dplyr::summarize(n = sum(!!wt, na.rm = TRUE))  %>%
     dplyr::ungroup() %>%
     dplyr::right_join(census_info_table[, c("year","season","plot")],
                       by = c("year", "season", "plot")) %>%

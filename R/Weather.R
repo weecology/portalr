@@ -25,7 +25,8 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
                      maxtemp = max(.data$airtemp),
                      meantemp = mean(.data$airtemp),
                      precipitation = sum(.data$precipitation),
-                     battv = min(.data$battv, na.rm = TRUE))
+                     battv = min(.data$battv, na.rm = TRUE)) %>%
+    dplyr::ungroup()
 
   weather <- dplyr::bind_rows(weather_old[1:3442, ], days)  %>%
     dplyr::mutate(locally_measured = TRUE,
@@ -51,6 +52,7 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
                        precipitation = sum(.data$precipitation, na.rm = TRUE),
                        locally_measured = all(.data$locally_measured),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
+      dplyr::ungroup() %>%
       dplyr::arrange(.data$year, .data$month) %>%
       dplyr::select(c("year", "month", "mintemp", "maxtemp", "meantemp",
                       "precipitation", "locally_measured", "battery_low")) %>%
