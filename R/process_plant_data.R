@@ -16,24 +16,25 @@ make_plant_plot_data <- function(plant_data, census_info_table,
                                  output, min_quads = 1)
 {
 
-  grouping <- rlang::quos(year, season, plot, species)
+  grouping <- rlang::quos(.data$year, .data$season, .data$plot, .data$species)
   wt <- switch(output,
-               "abundance" = rlang::quo(abundance),
-               "cover" = rlang::quo(cover))
+               "abundance" = rlang::quo(.data$abundance),
+               "cover" = rlang::quo(.data$cover))
   filler <- list(n = as.integer(0))
 
   plant_data %>%
     dplyr::group_by(!!!grouping) %>%
     dplyr::summarise(n = sum(!!wt, na.rm = TRUE))  %>%
     dplyr::ungroup() %>%
-    dplyr::right_join(census_info_table[,c("year","season","plot")], by = c("year", "season", "plot")) %>%
+    dplyr::right_join(census_info_table[, c("year","season","plot")],
+                      by = c("year", "season", "plot")) %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::full_join(census_info_table, by = c("year", "season", "plot")) %>%
-    dplyr::select(year, season, plot, species, n, nquads, treatment) %>%
-    dplyr::filter(!is.na(species)) %>%
-    dplyr::mutate(n = replace(n, nquads < min_quads, NA),
-                  nquads = replace(nquads, nquads < min_quads, NA)) %>%
-    dplyr::rename(!!output := n)
+    dplyr::select(c("year", "season", "plot", "species", "n", "nquads", "treatment")) %>%
+    dplyr::filter(!is.na(.data$species)) %>%
+    dplyr::mutate(n = replace(.data$n, .data$nquads < min_quads, NA),
+                  nquads = replace(.data$nquads, .data$nquads < min_quads, NA)) %>%
+    dplyr::rename(!!output := .data$n)
 }
 
 #' Plant data summarized at the relevant level (plot, treatment, site)
@@ -61,7 +62,7 @@ make_plant_level_data <- function(plot_data, level, output,
                      "site" = c("year", "season", "species"))
 
   level_data <- dplyr::group_by_at(plot_data, grouping) %>%
-    dplyr::summarise(n = sum(.data$n, na.rm = TRUE),
+    dplyr::summarize(n = sum(.data$n, na.rm = TRUE),
                      quads = sum(.data$nquads, na.rm = TRUE),
                      nplots = dplyr::n_distinct(.data$plot)) %>%
     dplyr::ungroup()
@@ -180,7 +181,7 @@ process_unknownsp_plants <- function(quadrat_data, unknowns) {
       dplyr::mutate(species = replace(.data$species, .data$commonname == "Unknown", "other"))
   } else {
     quadrat_species_merge <- quadrat_data %>%
-      dplyr::filter(commonname != "Unknown")
+      dplyr::filter(.data$commonname != "Unknown")
   }
   return(quadrat_species_merge)
 }

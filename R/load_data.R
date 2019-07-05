@@ -116,12 +116,7 @@ load_plant_data <- function(path = get_default_data_path(),
                                     na.strings = "", path, download_if_missing)
 
   # reformat species columns
-  if (!"sp" %in% names(species_table))
-  {
-    species_table <- dplyr::rename(species_table,
-                                   sp = species,
-                                   species = speciescode)
-  }
+  species_table <- reformat_species_table(species_table)
 
   return(mget(c("quadrat_data", "species_table", "census_table",
                 "date_table", "plots_table",
@@ -160,16 +155,10 @@ load_ant_data <- function(path = get_default_data_path(),
                                na.strings = "NA", path, download_if_missing)
 
   # reformat species columns
-  if (!"sp" %in% names(species_table))
-  {
-    species_table <- dplyr::rename(species_table,
-                                   sp = species,
-                                   species = speciescode)
-  }
+  species_table <- reformat_species_table(species_table)
 
   return(mget(c("bait_data", "colony_data",
                 "species_table", "plots_table")))
-
 }
 
 #' @rdname load_rodent_data
@@ -265,4 +254,17 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
 
   ## read in the data table and return
   read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE)
+}
+
+
+#' @noRd
+reformat_species_table <- function(species_table)
+{
+  if (!"sp" %in% names(species_table))
+  {
+    species_table <- dplyr::rename(species_table,
+                                   sp = .data$species,
+                                   species = .data$speciescode)
+  }
+  return(species_table)
 }

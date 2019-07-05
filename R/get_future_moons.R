@@ -14,10 +14,10 @@ get_future_moons <- function(moons, num_future_moons = 12) {
   dates <- lubridate::as_date(most_recent_date:(most_recent_date + num_future_moons * 31))
 
   futuremoondates <- data.frame(newmoondate = dates, phase = lunar::lunar.phase(dates, name = 8)) %>%
-    dplyr::filter(phase == "New") %>%
-    dplyr::mutate(group = cumsum(c(1, diff.Date(newmoondate)) > 5)) %>%
-    dplyr::group_by(group) %>%
-    dplyr::summarise(newmoondate = median(newmoondate))
+    dplyr::filter(.data$phase == "New") %>%
+    dplyr::mutate(group = cumsum(c(1, diff.Date(.data$newmoondate)) > 5)) %>%
+    dplyr::group_by(.data$group) %>%
+    dplyr::summarize(newmoondate = median(.data$newmoondate))
 
   newmoondates <- futuremoondates$newmoondate[seq(num_future_moons)]
   if (length(newmoondates) != num_future_moons) {

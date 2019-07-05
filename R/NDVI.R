@@ -30,12 +30,13 @@ ndvi <- function(level = "monthly", fill = FALSE,
   if (level == "monthly") {
 
     NDVI <- NDVI %>%
-      dplyr::group_by(year, month) %>%
-      dplyr::summarize(ndvi = mean(ndvi, na.rm = T), date = min(date)) %>%
-      dplyr::arrange(date) %>%
+      dplyr::group_by(.data$year, .data$month) %>%
+      dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T),
+                       date = min(.data$date)) %>%
+      dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
-      dplyr::select(ndvi, date)
-    if (fill == TRUE) {
+      dplyr::select(.data$ndvi, .data$date)
+    if (fill) {
       curr_yearmonth <- format(Sys.Date(), "%Y-%m")
       last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
       NDVI <- fill_missing_ndvi(NDVI, "monthly", last_time)
@@ -56,9 +57,9 @@ ndvi <- function(level = "monthly", fill = FALSE,
 
     NDVI$newmoonnumber <- nm_match_number[match(NDVI$date, nm_match_date)]
     NDVI <- NDVI %>%
-      dplyr::group_by(newmoonnumber) %>%
-      dplyr::summarize(ndvi = mean(ndvi, na.rm = T)) %>%
-      dplyr::arrange(newmoonnumber)
+      dplyr::group_by(.data$newmoonnumber) %>%
+      dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T)) %>%
+      dplyr::arrange(.data$newmoonnumber)
 
     if (fill == TRUE) {
       today <- Sys.Date()

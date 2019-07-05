@@ -16,11 +16,13 @@
 #'
 #' @noRd
 #'
-make_timeseries = function(data, date_format="%Y-%m-%d"){
+make_timeseries <- function(data, date_format="%Y-%m-%d"){
   # Master function for creating the time series
 
-  data$date = as.Date(data$date, format=date_format)
-  data$newdate = as.Date(paste(lubridate::year(data$date),lubridate::month(data$date),"15", sep="-"))
+  data$date = as.Date(data$date, format = date_format)
+  data$newdate = as.Date(paste(lubridate::year(data$date),
+                               lubridate::month(data$date),
+                               "15", sep = "-"))
 
   # How many months between subsequent trapping sessions?
   # Calc_diff determines number of months between periods.
@@ -50,7 +52,7 @@ make_timeseries = function(data, date_format="%Y-%m-%d"){
   # the monthly cycle (i.e. in the next month).
   # They require a specialized fix to adjust censuses back into their place.
   fix_1981 = c(45,46,47)
-  for (i in fix_1981){
+  for (i in fix_1981) {
     data = fix_period(data, i, -1)
   }
   data = calc_diff(data)
@@ -61,13 +63,13 @@ make_timeseries = function(data, date_format="%Y-%m-%d"){
 
   # Insert records where a single month is missing
   diff2s = filter_diffs(data, 2)
-  for (period in diff2s){
+  for (period in diff2s) {
     data = insert_missing_months(data, period)
   }
 
   # Insert records where two consecutive months are missing
   diff3s = filter_diffs(data, 3)
-  for (period in diff3s){
+  for (period in diff3s) {
     data = insert_missing_months(data, period)
   }
 
@@ -78,7 +80,9 @@ make_timeseries = function(data, date_format="%Y-%m-%d"){
 
 
   # Repeated samples in a month are averaged
-  data = data %>% dplyr::group_by(newdate) %>% dplyr::summarise(values = mean(values))
+  data = data %>%
+    dplyr::group_by(.data$newdate) %>%
+    dplyr::summarize(values = mean(.data$values))
   return(data)
 }
 
@@ -92,7 +96,9 @@ filter_diffs = function(data, diff_value){
   # Returns the period code for months that match
   #   the specified diff_value. Diffs are the number
   #   of months between subsequent censuses
-  subset = data %>% dplyr::filter(mo_diff == diff_value) %>% dplyr::select(period)
+  subset <- data %>%
+    dplyr::filter(.data$mo_diff == diff_value) %>%
+    dplyr::select(.data$period)
   return(subset$period)
 }
 
@@ -102,60 +108,59 @@ calc_diff = function(data){
   diff = diff(lubridate::month(data$newdate))
   mo_diff = append(diff, 99)
   data$mo_diff = mo_diff
-  data$mo_diff = ifelse(data$mo_diff ==-11, 1, data$mo_diff)
-  data$mo_diff = ifelse(data$mo_diff ==-10, 2, data$mo_diff)
-  data$mo_diff = ifelse(data$mo_diff ==-9, 3, data$mo_diff)
+  data$mo_diff = ifelse(data$mo_diff == -11, 1, data$mo_diff)
+  data$mo_diff = ifelse(data$mo_diff == -10, 2, data$mo_diff)
+  data$mo_diff = ifelse(data$mo_diff == -9, 3, data$mo_diff)
   return(data)
 }
 
-shift_current_month = function(data){
+shift_current_month <- function(data){
   # Adjusts month for a diff pattern of:
   #   prev_month = 2, focal_month=0, next_month=1
   #   which matches an example trapping pattern of
   #   Jan trapped, Feb not trapped, Mar trapped twice, Apr trapped
   #   where the early march trapping is just late for February.
   diffs = filter_diffs(data, 0)
-  for(i in diffs){
-    prev_period = data %>% dplyr::filter(period == i - 1)
-    next_period = data %>% dplyr::filter(period == i + 1)
-    if (nrow(prev_period) == 0){
-      prev_period = data %>% dplyr::filter(period == i - 2)
+  for (i in diffs) {
+    prev_period = data %>% dplyr::filter(.data$period == i - 1)
+    next_period = data %>% dplyr::filter(.data$period == i + 1)
+    if (nrow(prev_period) == 0) {
+      prev_period = data %>% dplyr::filter(.data$period == i - 2)
     }
-    if (nrow(next_period) == 0){
-      next_period = data %>% dplyr::filter(period == i + 2)
+    if (nrow(next_period) == 0) {
+      next_period = data %>% dplyr::filter(.data$period == i + 2)
     }
-    if(prev_period$mo_diff == 2 && next_period$mo_diff == 1){
+    if (prev_period$mo_diff == 2 && next_period$mo_diff == 1) {
       data = fix_period(data, i, -1)
       }
   }
   data = calc_diff(data)
 }
 
-shift_next_month = function(data){
+shift_next_month = function(data) {
   # Adjusts month for a diff pattern of:
   #   prev_month = 1, focal_month=0, next_month=2
   #   which matches an example trapping pattern of
   #   January trapped, February trapped twice, March missed
   #   where the late February census was early for March.
   diffs = filter_diffs(data, 0)
-  for(i in diffs){
-    prev_period = data %>% dplyr::filter(period == i - 1)
-    next_period = data %>% dplyr::filter(period == i + 1)
-      if (nrow(prev_period) == 0){
-        prev_period = data %>% dplyr::filter(period == i - 2)
-      }
-      if (nrow(next_period) == 0){
-        next_period = data %>% dplyr::filter(period == i + 2)
-      }
-      if(prev_period$mo_diff == 1 && next_period$mo_diff == 2){
-        data = fix_period(data, i+1, 1)
-      }
+  for (i in diffs) {
+    prev_period = data %>% dplyr::filter(.data$period == i - 1)
+    next_period = data %>% dplyr::filter(.data$period == i + 1)
+    if (nrow(prev_period) == 0) {
+      prev_period = data %>% dplyr::filter(.data$period == i - 2)
     }
-  data = calc_diff(data)
+    if (nrow(next_period) == 0) {
+      next_period = data %>% dplyr::filter(.data$period == i + 2)
+    }
+    if (prev_period$mo_diff == 1 && next_period$mo_diff == 2) {
+      data = fix_period(data, i + 1, 1)
+    }
   }
+  data = calc_diff(data)
+}
 
-
-shift_current_next = function(data){
+shift_current_next <- function(data) {
   # Adjusts month for a diff pattern of:
   #   prev_month = 2, focal_month=1, next_month=0
   #   which matches an example trapping pattern of
@@ -164,43 +169,42 @@ shift_current_next = function(data){
   #   March census was conducted in early April.
   diffs = filter_diffs(data, 1)
   print(diffs)
-  for(i in diffs){
-    prev_period = data %>% dplyr::filter(period == i - 1)
-    next_period = data %>% dplyr::filter(period == i + 1)
-    if (nrow(prev_period) == 0){
-      prev_period = data %>% dplyr::filter(period == i - 2)
+  for (i in diffs) {
+    prev_period = data %>% dplyr::filter(.data$period == i - 1)
+    next_period = data %>% dplyr::filter(.data$period == i + 1)
+    if (nrow(prev_period) == 0) {
+      prev_period = data %>% dplyr::filter(.data$period == i - 2)
     }
-    if (nrow(next_period) == 0){
-      next_period = data %>% dplyr::filter(period == i + 2)
+    if (nrow(next_period) == 0) {
+      next_period = data %>% dplyr::filter(.data$period == i + 2)
     }
-    if(prev_period$mo_diff == 2 && next_period$mo_diff == 0){
-      data = fix_period(data, i+1, -1)
+    if (prev_period$mo_diff == 2 && next_period$mo_diff == 0) {
+      data = fix_period(data, i + 1, -1)
       data = fix_period(data, i, -1)
     }
   }
   data = calc_diff(data)
 }
 
-fix_period = function(data, i_period, adj){
+fix_period <- function(data, i_period, adj)
+{
   # Returns modified monthly date for a period.
-  modify = data %>% dplyr::filter(period==i_period) %>%
-    dplyr::mutate(newdate = newdate %m+% months(adj))
-  data <- data %>% dplyr::mutate(newdate = replace(newdate, period == i_period,
-                                            modify$newdate))
+  modify = data %>% dplyr::filter(.data$period == i_period) %>%
+    dplyr::mutate(newdate = .data$newdate %m+% months(adj))
+  data <- data %>% dplyr::mutate(newdate = replace(.data$newdate, .data$period == i_period,
+                                                   modify$newdate))
 }
 
-insert_missing_months = function(data, i_period){
-  gap_begin = data %>% dplyr::filter(period == i_period)
-  counter = gap_begin$mo_diff-1
+insert_missing_months <- function(data, i_period){
+  gap_begin = data %>% dplyr::filter(.data$period == i_period)
+  counter = gap_begin$mo_diff - 1
   new_records = c()
-  for (i in 1:counter){
-    new_record = gap_begin %>% dplyr::mutate(newdate = newdate %m+% months(i))
+  for (i in 1:counter)
+  {
+    new_record = gap_begin %>% dplyr::mutate(newdate = .data$newdate %m+% months(i))
     new_record$values = NA
     new_record$mo_diff = 9
     new_records = rbind(new_records, new_record)
   }
   data = rbind(data, new_records)
 }
-
-
-

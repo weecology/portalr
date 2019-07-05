@@ -98,7 +98,7 @@ plant_abundance <- function(..., shape = "flat") {
   }
   else {
     summarize_plant_data(..., shape = "flat", output = "abundance") %>%
-      dplyr::filter(abundance > 0)
+      dplyr::filter(.data$abundance > 0)
   }
 
 }
@@ -143,8 +143,9 @@ shrub_cover <- function(path = get_default_data_path(),
       process_annuals(type) %>%
       process_unknownsp_plants(unknowns) %>%
       filter_plots(plots) %>%
-      dplyr::mutate(treatment = as.character(treatment), species = as.factor(species)) %>%
-      dplyr::group_by(year, treatment, plot, species)
+      dplyr::mutate(treatment = as.character(.data$treatment),
+                    species = as.factor(.data$species)) %>%
+      dplyr::group_by_at(c("year", "treatment", "plot", "species"))
   }
 
   #### Do initial cleaning ----
@@ -153,18 +154,21 @@ shrub_cover <- function(path = get_default_data_path(),
     clean_transect_data() %>%
     dplyr::summarize(count = dplyr::n()) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(cover = count/1000, height = NA, species = as.character(species)) %>%
-    dplyr::select(-count)
+    dplyr::mutate(cover = .data$count/1000, height = NA,
+                  species = as.character(.data$species)) %>%
+    dplyr::select(-.data$count)
 
   transect_data = data_tables$transect_data %>%
-    dplyr::filter(!grepl(3,notes)) %>%
+    dplyr::filter(!grepl(3, .data$notes)) %>%
     clean_transect_data() %>%
-    dplyr::mutate(stop = replace(stop, stop > 7071.1, 7071.1),
-                  length = stop - start) %>%
-    dplyr::summarize(length=sum(length, na.rm=TRUE), height = mean(height, na.rm=TRUE)) %>%
+    dplyr::mutate(stop = replace(.data$stop, .data$stop > 7071.1, 7071.1),
+                  length = .data$stop - .data$start) %>%
+    dplyr::summarize(length = sum(.data$length, na.rm=TRUE),
+                     height = mean(.data$height, na.rm=TRUE)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(cover = length/(2*7071.1), species = as.character(species)) %>%
-    dplyr::select(year, treatment, plot, species, cover, height)
+    dplyr::mutate(cover = .data$length/(2*7071.1),
+                  species = as.character(.data$species)) %>%
+    dplyr::select(c("year", "treatment", "plot", "species", "cover", "height"))
 
   dplyr::bind_rows(oldtransect_data, transect_data)
 }

@@ -50,7 +50,7 @@ filter_plots <- function(data, plots = NULL)
     return(data)
 
   # otherwise return filtered data
-  dplyr::filter(data, plot %in% plots)
+  dplyr::filter(data, .data$plot %in% plots)
 }
 
 #' @title Join plots table
@@ -64,8 +64,8 @@ filter_plots <- function(data, plots = NULL)
 #' @noRd
 join_plots <- function(df, plots_table) {
   plots_table <- plots_table %>%
-    dplyr::group_by(year, plot) %>%
-    dplyr::select(year, month, plot, treatment)
+    dplyr::group_by(.data$year, .data$plot) %>%
+    dplyr::select(c("year", "month", "plot", "treatment"))
 
   join_by <- c(year = "year", month = "month", plot = "plot")
   dplyr::left_join(df, plots_table, by = join_by)
@@ -95,15 +95,15 @@ join_plots <- function(df, plots_table) {
 add_time <- function(summary_table, newmoon_table, time = "period") {
   newmoon_table$censusdate <- as.Date(newmoon_table$censusdate)
   join_summary_newmoon <- dplyr::right_join(newmoon_table, summary_table,
-                                           by = c("period" = "period")) %>%
-    dplyr::filter(period <= max(period, na.rm = TRUE))
+                                            by = c("period" = "period")) %>%
+    dplyr::filter(.data$period <= max(.data$period, na.rm = TRUE))
 
   date_vars <- c("newmoondate", "newmoonnumber", "period", "censusdate")
   vars_to_keep <- switch(tolower(time),
-                               "newmoon" = "newmoonnumber",
-                               "date" = "censusdate",
-                               "period" = "period",
-                               c("newmoonnumber", "period", "censusdate"))
+                         "newmoon" = "newmoonnumber",
+                         "date" = "censusdate",
+                         "period" = "period",
+                         c("newmoonnumber", "period", "censusdate"))
   vars_to_drop <- setdiff(date_vars, vars_to_keep)
   dplyr::select(join_summary_newmoon, -dplyr::one_of(vars_to_drop))
 }
@@ -121,6 +121,6 @@ make_crosstab <- function(summary_data,
                           variable_name = rlang::quo(abundance),
                           ...){
   summary_data %>%
-    tidyr::spread(species, !!variable_name, ...) %>%
+    tidyr::spread(.data$species, !!variable_name, ...) %>%
     dplyr::ungroup()
 }

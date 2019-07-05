@@ -33,8 +33,9 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
   rodents <- join_trapping_to_rodents(rodents, trapping, data_tables$trapping,
                                       min_plots, min_traps) %>%
     join_plots(data_tables$plots_table) %>%
-    dplyr::select(period, month, day = day.x, year, treatment, plot, stake,
-                  species, sex, hfl, wgt, tag, ltag)
+    dplyr::select(c("period", "month", "day" = "day.x", "year",
+                    "treatment", "plot", "stake", "species",
+                    "sex", "hfl", "wgt", "tag", "ltag"))
 
   #### use new moon number as time index if time == "newmoon" ----
   return(add_time(rodents, data_tables$newmoons_table, time))

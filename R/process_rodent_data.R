@@ -35,9 +35,9 @@ clean_rodent_data <- function(rodent_data, species_table,
     remove_suspect_entries() %>%
     process_unknownsp(unknowns) %>%
     process_granivores(type) %>%
-    dplyr::mutate(species = as.factor(species),
-                  wgt = as.numeric(wgt),
-                  energy = 5.69 * (wgt  ^ 0.75))
+    dplyr::mutate(species = as.factor(.data$species),
+                  wgt = as.numeric(.data$wgt),
+                  energy = 5.69 * (.data$wgt  ^ 0.75))
 }
 
 
@@ -56,22 +56,22 @@ clean_rodent_data <- function(rodent_data, species_table,
 #'
 make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
 
-  grouping <- rlang::quos(period, plot, species)
+  grouping <- rlang::quos(.data$period, .data$plot, .data$species)
   wt <- switch(output,
                "abundance" = NULL,
-               "biomass" = rlang::quo(wgt),
-               "energy" = rlang::quo(energy))
+               "biomass" = rlang::quo(.data$wgt),
+               "energy" = rlang::quo(.data$energy))
   filler <- list(n = as.integer(0))
 
   rodent_data %>%
     dplyr::count(!!!grouping, wt = !!wt)  %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::right_join(trapping_data, by = c("period", "plot")) %>%
-    dplyr::select(period, plot, species, n, effort, treatment) %>%
-    dplyr::filter(!is.na(species)) %>%
-    dplyr::mutate(n = replace(n, effort < min_traps, NA),
-                  effort = replace(effort, effort < min_traps, NA)) %>%
-    dplyr::rename(!!output := n)
+    dplyr::select(c("period", "plot", "species", "n", "effort", "treatment")) %>%
+    dplyr::filter(!is.na(.data$species)) %>%
+    dplyr::mutate(n = replace(.data$n, .data$effort < min_traps, NA),
+                  effort = replace(.data$effort, .data$effort < min_traps, NA)) %>%
+    dplyr::rename(!!output := .data$n)
 }
 
 #' Rodent data summarized at the relevant level (plot, treatment, site)
@@ -98,22 +98,22 @@ make_level_data <- function(plot_data, trapping_table, level, output,
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
-                     "plot" = rlang::quos(period, treatment, plot, species),
-                     "treatment" = rlang::quos(period, treatment, species),
-                     "site" = rlang::quos(period, species))
+                     "plot" = c("period", "treatment", "plot", "species"),
+                     "treatment" = c("period", "treatment", "species"),
+                     "site" = c("period", "species"))
 
   if (level == "plot")
   {
     level_data <- plot_data %>%
-      dplyr::mutate(n = replace(n, is.na(n), 0L),
-                    ntraps = replace(effort, is.na(effort), 0),
-                    nplots = ifelse(is.na(effort), 0, 1)) %>%
-      dplyr::select(period, treatment, plot, species, n, ntraps, nplots)
+      dplyr::mutate(n = replace(.data$n, is.na(.data$n), 0L),
+                    ntraps = replace(.data$effort, is.na(.data$effort), 0),
+                    nplots = ifelse(is.na(.data$effort), 0, 1)) %>%
+      dplyr::select(c("period", "treatment", "plot", "species", "n", "ntraps", "nplots"))
   } else {
-    level_data <- dplyr::group_by(plot_data, !!!grouping) %>%
-      dplyr::summarize(n = sum(n, na.rm = TRUE),
-                       ntraps = sum(effort, na.rm = TRUE),
-                       nplots = sum(!is.na(effort)))
+    level_data <- dplyr::group_by_at(plot_data, grouping) %>%
+      dplyr::summarize(n = sum(.data$n, na.rm = TRUE),
+                       ntraps = sum(.data$effort, na.rm = TRUE),
+                       nplots = sum(!is.na(.data$effort)))
   }
 
   # set data for incomplete censuses to NA
@@ -122,19 +122,19 @@ make_level_data <- function(plot_data, trapping_table, level, output,
   if (NROW(incomplete) > 0)
   {
     level_data <- level_data %>%
-      dplyr::mutate(n = replace(n, period %in% incomplete$period, NA),
-                    ntraps = replace(ntraps, period %in% incomplete$period, NA),
-                    nplots = replace(nplots, period %in% incomplete$period, NA))
+      dplyr::mutate(n = replace(.data$n, .data$period %in% incomplete$period, NA),
+                    ntraps = replace(.data$ntraps, .data$period %in% incomplete$period, NA),
+                    nplots = replace(.data$nplots, .data$period %in% incomplete$period, NA))
   }
 
   if (level == "plot")
   {
     level_data <- level_data %>%
-      dplyr::mutate(n = replace(n, ntraps < min_traps, NA))
+      dplyr::mutate(n = replace(.data$n, .data$ntraps < min_traps, NA))
   }
 
   level_data %>%
-    dplyr::rename(!!output := n) %>%
+    dplyr::rename(!!output := .data$n) %>%
     tibble::as_tibble()
 }
 
@@ -159,9 +159,9 @@ prep_rodent_output <- function(level_data, effort, na_drop,
   species <- as.character(unique(level_data$species))
 
   if (effort == FALSE) {
-    level_data <- dplyr::select(level_data, -nplots, -ntraps)
+    level_data <- dplyr::select(level_data, -.data$nplots, -.data$ntraps)
   } else if (level == "plot") {
-    level_data <- dplyr::select(level_data, -nplots)
+    level_data <- dplyr::select(level_data, -.data$nplots)
   }
 
   if (na_drop) {
@@ -175,10 +175,10 @@ prep_rodent_output <- function(level_data, effort, na_drop,
   if (zero_drop) {
     if (shape == "crosstab") {
       level_data <- level_data %>%
-        dplyr::filter(rowSums(dplyr::select(., species)) != 0)
+        dplyr::filter(rowSums(dplyr::select_at(., species)) != 0)
     } else { # shape == "flat"
       level_data <- level_data %>%
-        dplyr::filter(output != 0)
+        dplyr::filter(.data$output != 0)
     }
   }
 
@@ -198,7 +198,7 @@ prep_rodent_output <- function(level_data, effort, na_drop,
 #' @noRd
 remove_suspect_entries <- function(rodent_data) {
   rodent_data %>%
-    dplyr::filter(period > 0, !is.na(plot))
+    dplyr::filter(.data$period > 0, !is.na(.data$plot))
 }
 
 #' @title Processes unknown species.
@@ -220,12 +220,13 @@ process_unknownsp <- function(rodent_data, unknowns) {
   {
     #Rename all unknowns and non-target rodents to "other"
     rodent_species_merge <- rodent_data %>%
-      dplyr::filter(rodent == 1) %>%
-      dplyr::mutate(species = replace(species, unidentified == 1, "other")) %>%
-      dplyr::mutate(species = replace(species, censustarget == 0, "other"))
+      dplyr::filter(.data$rodent == 1) %>%
+      dplyr::mutate(species = replace(.data$species, .data$unidentified == 1, "other")) %>%
+      dplyr::mutate(species = replace(.data$species, .data$censustarget == 0, "other"))
   } else {
     rodent_species_merge <- rodent_data %>%
-      dplyr::filter(rodent == 1, unidentified == 0, censustarget == 1)
+      dplyr::filter(.data$rodent == 1, .data$unidentified == 0,
+                    .data$censustarget == 1)
   }
   return(rodent_species_merge)
 }
@@ -243,7 +244,7 @@ process_unknownsp <- function(rodent_data, unknowns) {
 process_granivores <- function(rodent_species_merge, type) {
   if (type %in% c("Granivores", "granivores")) {
     granivore_data <- rodent_species_merge %>%
-      dplyr::filter(granivore == 1)
+      dplyr::filter(.data$granivore == 1)
     return(granivore_data)
   } else {
     return(rodent_species_merge)
@@ -264,7 +265,7 @@ join_trapping_to_rodents <- function(rodent_data, trapping_table,
                                      full_trapping, min_plots, min_traps) {
 
   incomplete_samples <- find_incomplete_censuses(full_trapping, min_plots, min_traps)
-  trapping_table <- dplyr::filter(trapping_table, !period %in% incomplete_samples$period)
+  trapping_table <- dplyr::filter(trapping_table, !.data$period %in% incomplete_samples$period)
 
   dplyr::right_join(rodent_data, trapping_table,
                     by = c("month", "year", "period", "plot"))
@@ -283,11 +284,11 @@ join_trapping_to_rodents <- function(rodent_data, trapping_table,
 find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
 
   trapping_table %>%
-    dplyr::group_by(period) %>%
-    dplyr::mutate(sampled = as.numeric(effort >= min_traps)) %>%
-    dplyr::summarise(nplots = sum(sampled)) %>%
-    dplyr::filter(nplots < min_plots) %>%
-    dplyr::select(period)
+    dplyr::group_by(.data$period) %>%
+    dplyr::mutate(sampled = as.numeric(.data$effort >= min_traps)) %>%
+    dplyr::summarize(nplots = sum(.data$sampled)) %>%
+    dplyr::filter(.data$nplots < min_plots) %>%
+    dplyr::select(.data$period)
 }
 
 #' @title Fill Weight
@@ -313,9 +314,9 @@ fill_weight <- function(rodent_data, tofill)
   for (this_row in which(missing_wgt_idx))
   {
     rodents_with_wgt <- dplyr::filter(rodent_data,
-                                      tag == rodent_data$tag[this_row],
-                                      species == rodent_data$species[this_row],
-                                      wgt > 0)
+                                      .data$tag == rodent_data$tag[this_row],
+                                      .data$species == rodent_data$species[this_row],
+                                      .data$wgt > 0)
 
     # if there are weights for the same individual
     if (nrow(rodents_with_wgt) > 0) {
@@ -340,7 +341,7 @@ fill_weight <- function(rodent_data, tofill)
   rodent_data$wgt[missing_wgt_idx & !juv_idx] <- rodent_data$meanwgt[missing_wgt_idx & !juv_idx]
 
   #      (v) remove added columns for juvenile and average weight
-  rodent_data <- dplyr::select(rodent_data, -juvwgt, -meanwgt)
+  rodent_data <- dplyr::select(rodent_data, -.data$juvwgt, -.data$meanwgt)
 
   #      (vi) if all else fails, convert to 0, so that sums will work correctly
   rodent_data$wgt[is.na(rodent_data$wgt)] <- 0

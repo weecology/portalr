@@ -36,12 +36,7 @@ colony_presence_absence <- function(path = get_default_data_path(),
   antsp <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
                          na.strings = "NA", path = path,
                          download_if_missing = download_if_missing)
-  if (!"sp" %in% names(antsp))
-  {
-    antsp <- dplyr::rename(antsp,
-                           sp = species,
-                           species = speciescode)
-  }
+  antsp <- reformat_species_table(antsp)
 
   # list of species to include
   # if unknowns == F, unkn and those identified only to genus will be removed
@@ -59,14 +54,16 @@ colony_presence_absence <- function(path = get_default_data_path(),
   }
 
   # filter out duplicated data (flag=10)
-  colonydat <- dplyr::filter(colony, species %in% specieslist, !flag %in% c(10))
+  colonydat <- dplyr::filter(colony,
+                             .data$species %in% specieslist,
+                             !.data$flag %in% c(10))
 
   # additional filtering for stake-level data:
   #   filter out data taken only at plot level (flag=9) or
   #              rows where stake is missing (flag=1)
   if (level == "stake")
     {
-    colonydat <- dplyr::filter(colonydat, !flag %in% c(9, 1), !is.na(stake))
+    colonydat <- dplyr::filter(colonydat, !.data$flag %in% c(9, 1), !is.na(.data$stake))
   }
 
   colonypresabs <- compute_presence(colonydat, level)
@@ -77,16 +74,15 @@ colony_presence_absence <- function(path = get_default_data_path(),
       presence =
         dplyr::case_when(
           # except "sole xylo" was not censused in 1978-1979, so those go back to NA
-          species %in% c("sole xylo", "sole sp") &
-            year %in% c(1978, 1979) ~
+          .data$species %in% c("sole xylo", "sole sp") & .data$year %in% c(1978, 1979) ~
             NA_real_,
           # in 1977, 1978, 1979, 1980, 1981 they sometimes included myrm depi in myrm mimi
           # counts, so these too shouldn"t be considered true absences
-          species == "myrm depi" & year %in% seq(1977, 1981) &
+          .data$species == "myrm depi" & .data$year %in% seq(1977, 1981) &
             presence == 0 ~
             NA_real_,
           # species camp fest was probably not censused regularly (only one record of it)
-          species == "camp fest" & presence == 0 ~
+          .data$species == "camp fest" & .data$presence == 0 ~
             NA_real_,
           TRUE ~ presence))
 
@@ -137,9 +133,9 @@ bait_presence_absence <- function(path = get_default_data_path(),
 compute_presence <- function(df, level)
 {
   grouping <- switch(level,
-                     "site" = rlang::quos(year, species),
-                     "plot" = rlang::quos(year, plot, species),
-                     "stake" = rlang::quos(year, plot, stake, species))
+                     "site" = rlang::quos(.data$year, .data$species),
+                     "plot" = rlang::quos(.data$year, .data$plot, .data$species),
+                     "stake" = rlang::quos(.data$year, .data$plot, .data$stake, .data$species))
 
   df %>%
     dplyr::select(!!!grouping) %>%
