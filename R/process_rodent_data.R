@@ -115,7 +115,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
       dplyr::group_by_at(grouping) %>%
       dplyr::summarize(n = sum(.data$n, na.rm = TRUE),
                        ntraps = sum(.data$effort, na.rm = TRUE),
-                       nplots = sum(plot_sampled)) %>%
+                       nplots = sum(.data$plot_sampled)) %>%
       dplyr::ungroup()
   }
 
