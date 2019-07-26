@@ -181,7 +181,7 @@ prep_rodent_output <- function(level_data, effort, na_drop,
         dplyr::filter(rowSums(dplyr::select_at(., species)) != 0)
     } else { # shape == "flat"
       level_data <- level_data %>%
-        dplyr::filter(.data$output != 0)
+        dplyr::filter(!!output != 0)
     }
   }
 

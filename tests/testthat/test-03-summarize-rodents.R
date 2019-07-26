@@ -1,6 +1,7 @@
 context("Check rodent data summaries")
 
 portal_data_path <- tempdir()
+portal_data_path <- get_default_data_path()
 
 test_that("summarize_rodent_data returns expected results, and filters by plots correctly", {
   skip_on_cran()
@@ -39,7 +40,7 @@ test_that("abundance returns expected results", {
   ab_notfilled <- abundance(path = portal_data_path, level = "Plot", type = "Rodents",
                             plots = "all", unknowns = FALSE,
                             shape = "flat", time = "period", fillweight = FALSE,
-                            na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
+                            na_drop = FALSE, zero_drop = TRUE, min_traps = 1,
                             min_plots = 24, effort = FALSE)
   test_ab <- dplyr::filter(ab_notfilled, period %in% 400:450)
   expect_equal(nrow(test_ab), 25704)
@@ -51,7 +52,7 @@ test_that("abundance returns expected results", {
   ab_filled <- abundance(path = portal_data_path, level = "Plot", type = "Rodents",
                          plots = "all", unknowns = FALSE,
                          shape = "flat", time = "period", fillweight = TRUE,
-                         na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
+                         na_drop = FALSE, zero_drop = TRUE, min_traps = 1,
                          min_plots = 24, effort = FALSE)
   expect_equal(ab_notfilled, ab_filled)
 })
