@@ -41,5 +41,4 @@ test_that("shrub_cover returns expected results", {
                                       correct_sp = TRUE)
   expect_equal(round(mean(shrubs_all$cover),3),
                round(mean(shrubs_fix_names$cover),3))
-
 })

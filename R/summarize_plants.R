@@ -9,6 +9,7 @@
 #'   aggregation, various choices for dealing with data quality, and output
 #'   format.
 #'
+#' @param level summarize by "Plot", "Treatment", "Site", or "Quadrat"
 #' @param type specify subset of species;
 #'              If type=Annuals, removes all non-annual species.
 #'              If type=Summer Annuals, returns all annual species that can be found in the summer
@@ -34,13 +35,17 @@ summarize_plant_data <- function(path = get_default_data_path(),
                                  correct_sp = TRUE,
                                  shape = "flat", output = "abundance",
                                  na_drop = switch(tolower(level),
+                                                  "quadrat" = FALSE,
                                                   "plot" = FALSE,
                                                   "treatment" = TRUE,
-                                                  "site" = TRUE),
+                                                  "site" = TRUE,
+                                                  TRUE),
                                  zero_drop = switch(tolower(level),
+                                                    "quadrat" = TRUE,
                                                     "plot" = FALSE,
                                                     "treatment" = TRUE,
-                                                    "site" = TRUE),
+                                                    "site" = TRUE,
+                                                    TRUE),
                                  min_quads = 1, effort = TRUE,
                                  download_if_missing = TRUE,
                                  quiet = FALSE)
@@ -71,7 +76,7 @@ summarize_plant_data <- function(path = get_default_data_path(),
   #### Clean data and prepare output ----
   out_df <- clean_plant_data(data_tables, type,
                              unknowns, correct_sp) %>%
-    make_plant_plot_data(census_info_table, output, min_quads) %>%
+    make_plant_plot_data(census_info_table, level, output, min_quads) %>%
     make_plant_level_data(level, output, min_quads) %>%
     prep_plant_output(effort, na_drop, zero_drop, shape, level, output)
 
