@@ -13,31 +13,39 @@
 #' @noRd
 #'
 make_plant_plot_data <- function(plant_data, census_info_table,
-                                 output, min_quads = 1)
+                                 level, output, min_quads = 1)
 {
-
+  # if level == "quadrat", don't group by quadrat
+  vars_to_keep <- c("year", "season", "plot", "species", "n", "nquads", "treatment")
   grouping <- rlang::quos(.data$year, .data$season, .data$plot, .data$species)
+  if (level == "quadrat")
+  {
+    vars_to_keep <- c(vars_to_keep, "quadrat")
+    grouping <- c(grouping, rlang::quo(.data$quadrat))
+  }
+
   wt <- switch(output,
                "abundance" = rlang::quo(.data$abundance),
                "cover" = rlang::quo(.data$cover))
+
   filler <- list(n = as.integer(0))
 
   plant_data %>%
     dplyr::group_by(!!!grouping) %>%
     dplyr::summarize(n = sum(!!wt, na.rm = TRUE))  %>%
     dplyr::ungroup() %>%
-    dplyr::right_join(census_info_table[, c("year","season","plot")],
+    dplyr::right_join(census_info_table[, c("year", "season", "plot")],
                       by = c("year", "season", "plot")) %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::full_join(census_info_table, by = c("year", "season", "plot")) %>%
-    dplyr::select(c("year", "season", "plot", "species", "n", "nquads", "treatment")) %>%
+    dplyr::select(vars_to_keep) %>%
     dplyr::filter(!is.na(.data$species)) %>%
     dplyr::mutate(n = replace(.data$n, .data$nquads < min_quads, NA),
                   nquads = replace(.data$nquads, .data$nquads < min_quads, NA)) %>%
     dplyr::rename(!!output := .data$n)
 }
 
-#' Plant data summarized at the relevant level (plot, treatment, site)
+#' Plant data summarized at the relevant level (plot, treatment, site, quadrat)
 #'
 #' @param plot_data plant data summarized at the plot level
 #' @param level specify level of interest ("plot", "treatment", "site")
@@ -57,6 +65,7 @@ make_plant_level_data <- function(plot_data, level, output,
 
   plot_data <- dplyr::rename(plot_data, n := !!output)
   grouping <- switch(level,
+                     "quadrat" = c("year", "season", "plot", "quadrat", "species"),
                      "plot" = c("year", "season", "plot", "species"),
                      "treatment" = c("year", "season", "treatment", "species"),
                      "site" = c("year", "season", "species"))
@@ -67,7 +76,7 @@ make_plant_level_data <- function(plot_data, level, output,
                      nplots = dplyr::n_distinct(.data$plot)) %>%
     dplyr::ungroup()
 
-  if (level == "plot")
+  if (level == "plot" || level == "quadrat")
   {
     level_data <- level_data %>%
       dplyr::mutate(n = replace(.data$n, .data$quads < min_quads, NA))
@@ -105,7 +114,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
 
   out_data <- level_data
 
-  if (effort == FALSE) {
+  if (effort == FALSE || level == "quadrat") {
     out_data <- dplyr::select(out_data, -.data$nplots, -.data$quads)
   } else if (level %in% c("plot", "site")) {
     out_data <- dplyr::select(out_data, -.data$nplots)
