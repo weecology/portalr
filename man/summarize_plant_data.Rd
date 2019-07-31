@@ -9,9 +9,10 @@
 summarize_plant_data(path = get_default_data_path(), level = "Site",
   type = "All", length = "all", plots = length, unknowns = FALSE,
   correct_sp = TRUE, shape = "flat", output = "abundance",
-  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
-  TRUE, site = TRUE), min_quads = 1, effort = TRUE,
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE,
+  treatment = TRUE, site = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE,
+  treatment = TRUE, site = TRUE, TRUE), min_quads = 1, effort = TRUE,
   download_if_missing = TRUE, quiet = FALSE)
 
 plant_abundance(..., shape = "flat")
@@ -19,16 +20,17 @@ plant_abundance(..., shape = "flat")
 summarise_plant_data(path = get_default_data_path(), level = "Site",
   type = "All", length = "all", plots = length, unknowns = FALSE,
   correct_sp = TRUE, shape = "flat", output = "abundance",
-  na_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site =
-  TRUE), zero_drop = switch(tolower(level), plot = FALSE, treatment =
-  TRUE, site = TRUE), min_quads = 1, effort = TRUE,
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE,
+  treatment = TRUE, site = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE,
+  treatment = TRUE, site = TRUE, TRUE), min_quads = 1, effort = TRUE,
   download_if_missing = TRUE, quiet = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository}
 
-\item{level}{summarize by "Plot", "Treatment", or "Site"}
+\item{level}{summarize by "Plot", "Treatment", "Site", or "Quadrat"}
 
 \item{type}{specify subset of species;
 If type=Annuals, removes all non-annual species.
