@@ -78,8 +78,12 @@ make_plant_level_data <- function(plot_data, level, output,
 
   if (level == "plot" || level == "quadrat")
   {
+    treatment_levels <- plot_data %>%
+      dplyr::select(c("year", "season", "plot", "treatment")) %>%
+      dplyr::distinct()
     level_data <- level_data %>%
-      dplyr::mutate(n = replace(.data$n, .data$quads < min_quads, NA))
+      dplyr::mutate(n = replace(.data$n, .data$quads < min_quads, NA)) %>%
+      dplyr::left_join(treatment_levels, by = c("year", "season", "plot"))
   }
 
   level_data %>%
