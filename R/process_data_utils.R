@@ -93,12 +93,20 @@ join_plots <- function(df, plots_table) {
 #' @return Data.table of summarized rodent data with user-specified time format
 #'
 #' @noRd
-add_time <- function(summary_table, newmoon_table, time = "period") {
-  newmoon_table$censusdate <- as.Date(newmoon_table$censusdate)
-  join_summary_newmoon <- dplyr::right_join(newmoon_table, summary_table,
-                                            by = c("period" = "period")) %>%
-    dplyr::filter(.data$period <= max(.data$period, na.rm = TRUE))
-
+add_time <- function(summary_table, newmoons_table, time = "period") {
+  newmoons_table$censusdate <- as.Date(newmoons_table$censusdate)
+  newmoons_table$newmoondate <- as.Date(newmoons_table$newmoondate)
+  if (time == "period")
+  {
+    join_summary_newmoon <- dplyr::right_join(newmoons_table, summary_table,
+                                              by = c("period" = "period")) %>%
+      dplyr::filter(.data$period <= max(.data$period, na.rm = TRUE))
+  } else {
+    newmoons_table$censusdate[is.na(newmoons_table$censusdate)] <-
+      newmoons_table$newmoondate[is.na(newmoons_table$censusdate)]
+    join_summary_newmoon <- dplyr::left_join(newmoons_table, summary_table,
+                                             by = "period")
+  }
   date_vars <- c("newmoondate", "newmoonnumber", "period", "censusdate")
   vars_to_keep <- switch(tolower(time),
                          "newmoon" = "newmoonnumber",
@@ -119,9 +127,14 @@ add_time <- function(summary_table, newmoon_table, time = "period") {
 #'
 #' @noRd
 make_crosstab <- function(summary_data,
-                          variable_name = rlang::quo(abundance),
-                          ...){
+                          variable_name = "abundance",
+                          ...)
+{
+  species <- as.character(na.omit(unique(summary_data$species)))
+  vars_to_keep <- c(setdiff(names(summary_data), c("species", variable_name)),
+                    species)
   summary_data %>%
     tidyr::spread(.data$species, !!variable_name, ...) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::select(vars_to_keep)
 }

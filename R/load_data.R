@@ -63,8 +63,6 @@ load_rodent_data <- function(path = get_default_data_path(),
   {
     rodent_data <- clean_data(rodent_data, trapping_table,
                               by = c("month", "day", "year", "period", "plot"))
-    newmoons_table <- clean_data(newmoons_table, trapping_table,
-                                 by = "period")
     plots_table <- clean_data(plots_table, trapping_table,
                               by = c("year", "month", "plot"))
     trapping_table <- dplyr::filter(trapping_table, .data$qcflag == 1)

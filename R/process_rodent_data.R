@@ -159,7 +159,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
 prep_rodent_output <- function(level_data, effort, na_drop,
                                zero_drop, shape, level, output)
 {
-  species <- as.character(unique(level_data$species))
+  species <- na.omit(as.character(unique(level_data$species)))
 
   if (effort == FALSE) {
     level_data <- dplyr::select(level_data, -.data$nplots, -.data$ntraps)

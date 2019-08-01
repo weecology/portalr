@@ -1,18 +1,17 @@
 context("Check rodent data summaries")
 
 portal_data_path <- tempdir()
-portal_data_path <- get_default_data_path()
 
 test_that("summarize_rodent_data returns expected results, and filters by plots correctly", {
   skip_on_cran()
   ab_all_plots <- summarize_rodent_data(path = portal_data_path, level = "plot",
-                                  na_drop = TRUE)
+                                        na_drop = TRUE)
 
   rodent_counts <- ab_all_plots %>%
     dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
 
   ab_plot_4 <- summarize_rodent_data(path = portal_data_path, plots = 4,
-                               na_drop = TRUE, zero_drop = FALSE)
+                                     na_drop = TRUE, zero_drop = FALSE)
 
   expect_equal(rodent_counts, ab_plot_4)
 
