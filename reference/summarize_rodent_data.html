@@ -8,21 +8,25 @@
 
 <title>Generate summaries of Portal rodent data — summarize_rodent_data • portalr</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Generate summaries of Portal rodent data — summarize_rodent_data" />
 
+<meta property="og:title" content="Generate summaries of Portal rodent data — summarize_rodent_data" />
 <meta property="og:description" content="This function is a generic interface into creating summaries
   of the Portal rodent species data. It contains a number of arguments
   to specify the kind of data to summarize (at what level of aggregation)
@@ -44,6 +48,7 @@ abundance generates a table of rodent abundance
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -52,6 +57,7 @@ abundance generates a table of rodent abundance
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -78,7 +84,7 @@ abundance generates a table of rodent abundance
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,11 +107,10 @@ abundance generates a table of rodent abundance
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/weecology/portalr">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,6 +121,7 @@ abundance generates a table of rodent abundance
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -127,7 +133,6 @@ abundance generates a table of rodent abundance
     </div>
 
     <div class="ref-description">
-    
     <p>This function is a generic interface into creating summaries
   of the Portal rodent species data. It contains a number of arguments
   to specify the kind of data to summarize (at what level of aggregation)
@@ -136,14 +141,13 @@ abundance generates a table of rodent abundance
 <p>* <code>biomass()</code> generates a table of rodent biomass</p>
 <p>* <code>energy()</code> generates a table of rodent energy
   (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>summarize_rodent_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
   <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
   <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
   <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
@@ -157,10 +161,10 @@ abundance generates a table of rodent abundance
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
   <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
   <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/switch'>switch</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/chartr'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
   <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -255,15 +259,15 @@ PortalData folder, then download it</p></td>
       <td><p>arguments passed to <code>summarize_rodent_data</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a data.frame in either "long" or "wide" format, depending on the
   value of `shape`</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>abundance</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.121.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>abundance</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.132.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
 #&gt; 1       27  0 16  0 11  1  6 12   0  2  2  0  0  0  0   3  0  0  0  0  0  0
 #&gt; 2       28  0 15  5 15  5  4 10   0  3  1  0  0  0  0   2  0  1  0  0  0  0
 #&gt; 3       29  0 25  3 11  4  9 10   0  5  5  0  0  0  1   1  0  5  0  0  0  0
@@ -679,7 +683,10 @@ PortalData folder, then download it</p></td>
 #&gt; 413    472  0 47  0  1  0  0 14   6  4  0  0  0  0  1  23  0  0  0  0  0  0
 #&gt; 414    473  0 48  2  1  1  1 11   3  1  0  0  0  0  0  51  0  0  0  0  0  0
 #&gt; 415    474  0 21  3  1  2  0 11   2  4  0  0  0  0  0  89  0  0  0  0  0  0
-#&gt; 416    475  0 33  1  1  1  0  8   6  2  0  0  0  0  0  77  0  0  0  0  1  0</div><div class='input'><span class='fu'>biomass</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.121.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
+#&gt; 416    475  0 33  1  1  1  0  8   6  2  0  0  0  0  0  77  0  0  0  0  1  0
+#&gt; 417    476  0 25  0  1  0  0  7   6  5  0  0  0  0  0  83  0  0  0  0  0  0</div><div class='input'><span class='co'># }</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>biomass</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.132.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
 #&gt; 1       27   0.00000  713.0000    0.0000 1405.0000  152.0000 214.00000  288.000
 #&gt; 2       28   0.00000  648.0000  224.0000 1973.0000  881.0000 120.00000  219.000
 #&gt; 3       29   0.00000 1032.0000  145.0000 1467.0000  665.0000 315.00000  226.000
@@ -1096,6 +1103,7 @@ PortalData folder, then download it</p></td>
 #&gt; 414    473   0.00000 2076.0000   94.0000  106.0000  211.0000  31.12672  258.056
 #&gt; 415    474   0.00000  942.0000  138.0000  100.0000  342.0000   0.00000  272.000
 #&gt; 416    475   0.00000 1373.5272   50.0000   98.0000   85.0000   0.00000  197.056
+#&gt; 417    476   0.00000 1083.5272    0.0000  102.0000    0.0000   0.00000  180.000
 #&gt;            PB        PE         PF       PH        PI        PL        PM
 #&gt; 1      0.0000  47.00000  14.000000  0.00000   0.00000   0.00000   0.00000
 #&gt; 2      0.0000  62.00000   7.000000  0.00000   0.00000   0.00000   0.00000
@@ -1513,6 +1521,7 @@ PortalData folder, then download it</p></td>
 #&gt; 414  108.0000  21.00000   0.000000  0.00000   0.00000   0.00000   0.00000
 #&gt; 415   70.0000  91.00000   0.000000  0.00000   0.00000   0.00000   0.00000
 #&gt; 416  126.0000  49.00000   0.000000  0.00000   0.00000   0.00000   0.00000
+#&gt; 417  174.0000  89.98282   0.000000  0.00000   0.00000   0.00000   0.00000
 #&gt;             PP       RF        RM  RO         SF         SH        SO
 #&gt; 1     44.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000
 #&gt; 2     32.00000   0.0000   7.00000   0    0.00000    0.00000   0.00000
@@ -1929,7 +1938,10 @@ PortalData folder, then download it</p></td>
 #&gt; 413  397.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000
 #&gt; 414  883.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000
 #&gt; 415 1593.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000
-#&gt; 416 1338.61851   0.0000   0.00000   0    0.00000   92.00000   0.00000</div><div class='input'><span class='fu'>energy</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.121.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
+#&gt; 416 1338.61851   0.0000   0.00000   0    0.00000   92.00000   0.00000
+#&gt; 417 1374.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000</div><div class='input'><span class='co'># }</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>energy</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 1.132.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
 #&gt; 1       27    0.00000 1567.9740    0.00000 2375.8176  246.31732  497.09858
 #&gt; 2       28    0.00000 1434.4242  490.20531 3311.7904 1359.14576  291.19307
 #&gt; 3       29    0.00000 2304.1940  312.78712 2454.2308 1047.76424  736.52836
@@ -2346,6 +2358,7 @@ PortalData folder, then download it</p></td>
 #&gt; 414    473    0.00000 4598.8426  204.19711  187.9714  315.00983   74.98291
 #&gt; 415    474    0.00000 2069.7920  301.32023  179.9336  538.13265    0.00000
 #&gt; 416    475    0.00000 3059.5963  106.98916  177.2278  159.28558    0.00000
+#&gt; 417    476    0.00000 2396.1929    0.00000  182.6259    0.00000    0.00000
 #&gt;             OT          PB         PE         PF        PH        PI        PL
 #&gt; 1    738.87707     0.00000  121.45761   48.97402   0.00000   0.00000   0.00000
 #&gt; 2    575.15528     0.00000  165.26162   24.48701   0.00000   0.00000   0.00000
@@ -2763,6 +2776,7 @@ PortalData folder, then download it</p></td>
 #&gt; 414  666.51078   250.79321   55.81832    0.00000   0.00000   0.00000   0.00000
 #&gt; 415  693.70101   163.43970  236.46094    0.00000   0.00000   0.00000   0.00000
 #&gt; 416  500.43060   329.63663  124.71973    0.00000   0.00000   0.00000   0.00000
+#&gt; 417  453.20101   422.85027  248.10566    0.00000   0.00000   0.00000   0.00000
 #&gt;             PM          PP        RF         RM        RO         SF         SH
 #&gt; 1      0.00000   127.88416   0.00000    0.00000   0.00000    0.00000    0.00000
 #&gt; 2      0.00000    91.04000   0.00000   24.48701   0.00000    0.00000    0.00000
@@ -3180,6 +3194,7 @@ PortalData folder, then download it</p></td>
 #&gt; 414    0.00000  2456.02176   0.00000    0.00000   0.00000    0.00000    0.00000
 #&gt; 415    0.00000  4400.14533   0.00000    0.00000   0.00000    0.00000    0.00000
 #&gt; 416    0.00000  3719.10939   0.00000    0.00000   0.00000    0.00000  169.02585
+#&gt; 417    0.00000  3858.13633   0.00000    0.00000   0.00000    0.00000    0.00000
 #&gt;            SO
 #&gt; 1     0.00000
 #&gt; 2     0.00000
@@ -3596,20 +3611,21 @@ PortalData folder, then download it</p></td>
 #&gt; 413   0.00000
 #&gt; 414   0.00000
 #&gt; 415   0.00000
-#&gt; 416   0.00000</div></pre>
+#&gt; 416   0.00000
+#&gt; 417   0.00000</div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -3617,13 +3633,16 @@ PortalData folder, then download it</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
