@@ -40,7 +40,7 @@ test_that("looking up data versions handle lack of a network connection", {
     #             "^GET https://zenodo.org/record/1215988$")
     expect_null(get_data_versions(from_zenodo = FALSE, halt_on_error = FALSE))
     expect_error(get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE),
-                 "^GET https://api.github.com/repos/weecology/PortalData/releases\\?page=1$")
+                 "^GET https://api.github.com/repos/weecology/PortalData/releases")
   })
 })
 
