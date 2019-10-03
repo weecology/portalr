@@ -11,12 +11,9 @@
 weather <- function(level = "daily", fill = FALSE, path = get_default_data_path())
 {
   level <- tolower(level)
-  weather_new <- read.csv(full_path("PortalData/Weather/Portal_weather.csv", path),
-                          na.strings = c(""), stringsAsFactors = FALSE)
-  weather_old <- read.csv(full_path("PortalData/Weather/Portal_weather_19801989.csv", path),
-                          na.strings = c("-99"), stringsAsFactors = FALSE)
-  moon_dates <- read.csv(full_path("PortalData/Rodents/moon_dates.csv", path),
-                         na.strings = c(""), stringsAsFactors = FALSE)
+  weather_new <- load_datafile("Weather/Portal_weather.csv", na.strings = c(""), path = path)
+  weather_old <- load_datafile("Weather/Portal_weather_19801989.csv", na.strings = c("-99"), path = path)
+  moon_dates <- load_datafile("Rodents/moon_dates.csv", na.strings = c(""), path = path)
 
   ###########Summarise by Day ----------------------
   days <- weather_new %>%
