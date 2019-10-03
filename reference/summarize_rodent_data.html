@@ -149,7 +149,8 @@ abundance generates a table of rodent abundance
   <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>abundance</span>(<span class='no'>...</span>)
 
@@ -163,7 +164,8 @@ abundance generates a table of rodent abundance
   <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
   <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,7 +212,7 @@ treatment for the entire time series)</p></td>
       <th>time</th>
       <td><p>specify the format of the time index in the output, either
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date)</p></td>
+"date" (calendar date), or "all" (for all time indices)</p></td>
     </tr>
     <tr>
       <th>output</th>
@@ -253,6 +255,11 @@ PortalData folder, then download it</p></td>
     <tr>
       <th>quiet</th>
       <td><p>logical, whether to run without producing messages</p></td>
+    </tr>
+    <tr>
+      <th>include_unsampled</th>
+      <td><p>logical, overrides settings for `na_drop` and
+`zero_drop`, setting both to FALSE</p></td>
     </tr>
     <tr>
       <th>...</th>
