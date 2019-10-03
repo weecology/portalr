@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download the PortalData repo — download_observations • portalr</title>
+<title>Phenocam data products by day, calendar month, or lunar month — phenocam • portalr</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,8 @@
 
 
 
-<meta property="og:title" content="Download the PortalData repo — download_observations" />
-<meta property="og:description" content="This downloads the latest portal data regardless if they are
-  actually updated or not.
-  TODO: incorporate data retriever into this when it's pointed at the github repo" />
+<meta property="og:title" content="Phenocam data products by day, calendar month, or lunar month — phenocam" />
+<meta property="og:description" content="Summarize phenocam data products to either daily, monthly, or lunar monthly level." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,57 +120,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download the PortalData repo</h1>
-    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/download_data.R'><code>R/download_data.R</code></a></small>
-    <div class="hidden name"><code>download_observations.Rd</code></div>
+    <h1>Phenocam data products by day, calendar month, or lunar month</h1>
+    <small class="dont-index">Source: <a href='https://github.com/weecology/portalr/blob/master/R/phenocam.R'><code>R/phenocam.R</code></a></small>
+    <div class="hidden name"><code>phenocam.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This downloads the latest portal data regardless if they are
-  actually updated or not.
-  TODO: incorporate data retriever into this when it's pointed at the github repo</p>
+    <p>Summarize phenocam data products to either daily, monthly, or lunar monthly level.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>download_observations</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>from_zenodo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>phenocam</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"daily"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>level</th>
+      <td><p>specify 'monthly', 'daily', or 'newmoon'</p></td>
+    </tr>
+    <tr>
       <th>path</th>
-      <td><p>Folder into which data will be downloaded</p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>Version of the data to download (default = "latest")</p></td>
-    </tr>
-    <tr>
-      <th>from_zenodo</th>
-      <td><p>logical; if `TRUE`, get info from Zenodo, otherwise GitHub</p></td>
-    </tr>
-    <tr>
-      <th>quiet</th>
-      <td><p>logical, whether to download data silently</p></td>
+      <td><p>either the file path that contains the PortalData folder or
+"repo", which then pulls data from the PortalData GitHub repository</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>None</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-  <span class='fu'>download_observations</span>()</div><div class='output co'>#&gt; <span class='message'>Downloading version 1.135.1 of the data...</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>  <span class='fu'>download_observations</span>(<span class='st'>"~/old-data"</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"1.50.0"</span>)</div><div class='output co'>#&gt; <span class='message'>Downloading version 1.50.0 of the data...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: path[1]="/home/travis/old-data": No such file or directory</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># }
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
