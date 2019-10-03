@@ -32,7 +32,7 @@ plots (to be deprecated)}
 
 \item{time}{specify the format of the time index in the output, either
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date)}
+"date" (calendar date), or "all" (for all time indices)}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}

@@ -14,7 +14,8 @@ summarize_rodent_data(path = get_default_data_path(), clean = TRUE,
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
   treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
-  effort = FALSE, download_if_missing = TRUE, quiet = FALSE)
+  effort = FALSE, download_if_missing = TRUE, quiet = FALSE,
+  include_unsampled = FALSE)
 
 abundance(...)
 
@@ -28,7 +29,8 @@ summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
   output = "abundance", fillweight = (output != "abundance"),
   na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
   treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
-  effort = FALSE, download_if_missing = TRUE, quiet = FALSE)
+  effort = FALSE, download_if_missing = TRUE, quiet = FALSE,
+  include_unsampled = FALSE)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -55,7 +57,7 @@ treatment for the entire time series)}
 
 \item{time}{specify the format of the time index in the output, either
 "period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date)}
+"date" (calendar date), or "all" (for all time indices)}
 
 \item{output}{specify whether to return "abundance", or "biomass", or
 "energy"}
@@ -80,6 +82,9 @@ included in the output}
 PortalData folder, then download it}
 
 \item{quiet}{logical, whether to run without producing messages}
+
+\item{include_unsampled}{logical, overrides settings for `na_drop` and
+`zero_drop`, setting both to FALSE}
 
 \item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }
