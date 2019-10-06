@@ -76,7 +76,11 @@ download_observations <- function(path = get_default_data_path(),
   zip_download_dest <- full_path("PortalData.zip", tempdir())
   if (grepl("github", zip_download_path))
   {
-    gh::gh(paste("GET", zip_download_path), .destfile = zip_download_dest)
+    ### This is the ideal way to download using the `gh` package, but the `.destfile`
+    ### option is only in the github version of the package for now. (2019-10-06)
+    #    gh::gh(paste("GET", zip_download_path), .destfile = zip_download_dest)
+    httr::GET(zip_download_path, c(httr::authenticate(gh:::gh_token(), "x-oauth-basic", "basic"),
+                                   httr::write_disk(zip_download_dest, overwrite = TRUE)))
   } else {
     download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
   }
@@ -213,7 +217,8 @@ get_github_releases <- function()
   )
 
   releases <- data.frame(version = vapply(resp, `[[`, "", "tag_name"),
-                         zipball_url = vapply(resp, `[[`, "", "zipball_url"))
+                         zipball_url = vapply(resp, `[[`, "", "zipball_url"),
+                         stringsAsFactors = FALSE)
   return(releases)
 }
 

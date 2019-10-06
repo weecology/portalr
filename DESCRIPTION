@@ -1,6 +1,6 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
-Version: 0.2.7
+Version: 0.2.8
 Authors@R: c(person(c("Glenda", "M."), "Yenni", role = c("aut", "cre"), 
                     email = "glenda@weecology.org", 
                     comment = c(ORCID = "0000-0001-6969-1848")), 
@@ -43,7 +43,7 @@ Imports:
     usethis (>= 1.5.0),
     crayon,
     clisymbols,
-    gh (>= 1.0.1)
+    gh
 Suggests:
   httptest,
   tidyverse,
@@ -56,5 +56,3 @@ Suggests:
   testthat
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
-Remotes:  
-    r-lib/gh
