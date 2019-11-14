@@ -104,10 +104,10 @@ test_that("default data path functions work if unset", {
 
   data_path <- tempdir()
   expect_error(m <- capture_messages(use_default_data_path(data_path)), NA)
-  expect_match(m, "Call \033\\[90m`usethis::edit_r_environ\\(\\)`\033\\[39m to open \033\\[34m'.Renviron'\033\\[39m", all = FALSE)
+  expect_match(m, "Call `usethis::edit_r_environ()` to open '.Renviron'", fixed = TRUE, all = FALSE)
   expect_match(m, "Store your data path with a line like:", all = FALSE)
   expect_match(m, "PORTALR_DATA_PATH=", all = FALSE)
-  expect_match(m, "Make sure \033\\[34m'.Renviron'\033\\[39m ends with a newline!", all = FALSE)
+  expect_match(m, "Make sure '.Renviron' ends with a newline!", all = FALSE)
 })
 
 test_that("default data path functions work if set", {
