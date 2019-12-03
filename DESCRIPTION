@@ -46,7 +46,6 @@ Imports:
     gh
 Suggests:
   httptest,
-  tidyverse,
   cowplot,
   knitr,
   rmarkdown,

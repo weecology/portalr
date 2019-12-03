@@ -39,7 +39,9 @@ First we load several packages:
 
 
 ```{r, warning = FALSE, message = FALSE}
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(cowplot)
 library(portalr)
 ```
