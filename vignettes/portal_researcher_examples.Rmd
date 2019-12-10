@@ -30,7 +30,9 @@ First, we need to install the `portalr` package if we haven't done so already. W
 ```{r, warning = FALSE, message = FALSE}
 #devtools::install_github("weecology/portalr")
 library(portalr)
-library(tidyverse)  
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 ```     
 <br/>
     
