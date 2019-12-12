@@ -103,33 +103,26 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
 fill_missing_weather <- function(weather, path = get_default_data_path())
 {
   portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
-                        na.strings = c(""), header = TRUE,
-                        colClasses = c("character", rep("integer", 3), "character",
-                                       "integer", rep("character", 3), "Date"))
+                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
+    dplyr::select(year, month, day, date, name, prcp, snow, tmax, tmin, tobs)
+
   sansimon <- read.csv(full_path('PortalData/Weather/Sansimon_regional_weather.csv', path),
-                       na.strings = c(""), header = TRUE,
-                       colClasses = c("character", rep("integer", 3), "character",
-                                      "integer", rep("character", 3), "Date"))
+                       na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
+    dplyr::select(year, month, day, date, name, prcp, snow)
+
   region <- dplyr::full_join(portal4sw, sansimon, by =
-                               c("date", "year", "month", "day", "element")) %>%
+                               c("date", "year", "month", "day")) %>%
+    dplyr::arrange(year, month, day) %>%
     dplyr::filter(date >= "1980-01-01")
 
   regionmeans <- region %>%
-    tidyr::gather(key = "source", value = "value", .data$value.x, .data$value.y) %>%
-    dplyr::group_by(.data$date, .data$element) %>%
-    dplyr::summarize(value = mean(.data$value, na.rm = TRUE)) %>%
+    dplyr::group_by(date) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(precip = mean(c(prcp.x, prcp.y), na.rm = TRUE, trim = 0)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(value = .data$value / 10) %>%
-    tidyr::spread(.data$element, .data$value) %>%
-    dplyr::mutate(tmin = .data$TMIN,
-                  tmax = .data$TMAX,
-                  tobs = .data$TOBS,
-                  precip = .data$PRCP,
-                  year = as.integer(lubridate::year(.data$date)),
-                  month = as.integer(lubridate::month(.data$date)),
-                  day = lubridate::day(.data$date)) %>%
-    dplyr::filter(!(is.na(.data$tmin) & is.na(.data$tmax) &
-                      is.na(.data$tobs) & is.na(.data$precip))) %>%
+    dplyr::mutate(precip = ifelse(is.nan(precip), NA, precip)) %>%
+    dplyr::filter(!(is.na(tmin) & is.na(tmax) &
+                      is.na(tobs) & is.na(precip))) %>%
     dplyr::select(c("year", "month", "day", "precip", "tmin", "tmax", "tobs"))
 
   filled_data <- dplyr::full_join(regionmeans, weather, by = c("year", "month", "day")) %>%
