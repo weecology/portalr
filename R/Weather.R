@@ -104,25 +104,25 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
 {
   portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
                         na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
-    dplyr::select(year, month, day, date, name, prcp, snow, tmax, tmin, tobs)
+    dplyr::select(c("year", "month", "day", "date", "name", "prcp", "snow", "tmax", "tmin", "tobs"))
 
   sansimon <- read.csv(full_path('PortalData/Weather/Sansimon_regional_weather.csv', path),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
-    dplyr::select(year, month, day, date, name, prcp, snow)
+    dplyr::select(c("year", "month", "day", "date", "name", "prcp", "snow"))
 
   region <- dplyr::full_join(portal4sw, sansimon, by =
                                c("date", "year", "month", "day")) %>%
-    dplyr::arrange(year, month, day) %>%
-    dplyr::filter(date >= "1980-01-01")
+    dplyr::arrange(.data$year,.data$ month, .data$day) %>%
+    dplyr::filter(.data$date >= "1980-01-01")
 
   regionmeans <- region %>%
-    dplyr::group_by(date) %>%
+    dplyr::group_by(.data$date) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(precip = mean(c(prcp.x, prcp.y), na.rm = TRUE, trim = 0)) %>%
+    dplyr::mutate(precip = mean(c(.data$prcp.x, .data$prcp.y), na.rm = TRUE, trim = 0)) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(precip = ifelse(is.nan(precip), NA, precip)) %>%
-    dplyr::filter(!(is.na(tmin) & is.na(tmax) &
-                      is.na(tobs) & is.na(precip))) %>%
+    dplyr::mutate(precip = ifelse(is.nan(.data$precip), NA, .data$precip)) %>%
+    dplyr::filter(!(is.na(.data$tmin) & is.na(.data$tmax) &
+                      is.na(.data$tobs) & is.na(.data$precip))) %>%
     dplyr::select(c("year", "month", "day", "precip", "tmin", "tmax", "tobs"))
 
   filled_data <- dplyr::full_join(regionmeans, weather, by = c("year", "month", "day")) %>%
