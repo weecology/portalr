@@ -16,6 +16,19 @@ full_path <- function(reference_path, base_path = getwd()) {
   return(path)
 }
 
+#' Return the local user's GitHub Personal Access Token (PAT) (from gh package)
+#' https://github.com/r-lib/gh/blob/master/R/gh_request.R
+#'
+#' @return A string, with the token, or a zero length string scalar,
+#' if no token is available.
+#'
+#' @export
+
+gh_token <- function() {
+  token <- Sys.getenv('GITHUB_PAT', "")
+  if (token == "") Sys.getenv("GITHUB_TOKEN", "") else token
+}
+
 #' @title Download the PortalData repo
 #'
 #' @description This downloads the latest portal data regardless if they are
@@ -79,7 +92,7 @@ download_observations <- function(path = get_default_data_path(),
     ### This is the ideal way to download using the `gh` package, but the `.destfile`
     ### option is only in the github version of the package for now. (2019-10-06)
     #    gh::gh(paste("GET", zip_download_path), .destfile = zip_download_dest)
-    httr::GET(zip_download_path, c(httr::authenticate(gh:::gh_token(), "x-oauth-basic", "basic"),
+    httr::GET(zip_download_path, c(httr::authenticate(gh_token(), "x-oauth-basic", "basic"),
                                    httr::write_disk(zip_download_dest, overwrite = TRUE)))
   } else {
     download.file(zip_download_path, zip_download_dest, quiet = TRUE, mode = "wb")
