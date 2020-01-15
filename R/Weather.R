@@ -132,8 +132,11 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
                   mintemp = ifelse(is.na(.data$mintemp), .data$tmin, .data$mintemp),
                   maxtemp = ifelse(is.na(.data$maxtemp), .data$tmax, .data$maxtemp),
                   meantemp = ifelse(is.na(.data$meantemp), .data$tobs, .data$meantemp),
-                  precipitation = ifelse(is.na(.data$precipitation), .data$precip, .data$precipitation)) %>%
-    dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp", "precipitation", "locally_measured", "battery_low"))
+                  precipitation = ifelse(is.na(.data$precipitation),
+                                         .data$precip, .data$precipitation)) %>%
+    dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp", "precipitation",
+                    "locally_measured", "battery_low")) %>%
+    dplyr::distinct()
 
   return(as.data.frame(filled_data))
 }
