@@ -4,9 +4,14 @@
 \alias{colony_presence_absence}
 \title{Ant Colony Presence Absence}
 \usage{
-colony_presence_absence(path = get_default_data_path(), level = "Site",
-  rare_sp = FALSE, unknowns = FALSE, download_if_missing = TRUE,
-  quiet = FALSE)
+colony_presence_absence(
+  path = get_default_data_path(),
+  level = "Site",
+  rare_sp = FALSE,
+  unknowns = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

@@ -6,25 +6,47 @@
 \alias{summarise_plant_data}
 \title{Generate summaries of Portal plant data}
 \usage{
-summarize_plant_data(path = get_default_data_path(), level = "Site",
-  type = "All", length = "all", plots = length, unknowns = FALSE,
-  correct_sp = TRUE, shape = "flat", output = "abundance",
-  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE,
-  treatment = TRUE, site = TRUE, TRUE),
-  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE,
-  treatment = TRUE, site = TRUE, TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE, quiet = FALSE)
+summarize_plant_data(
+  path = get_default_data_path(),
+  level = "Site",
+  type = "All",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  correct_sp = TRUE,
+  shape = "flat",
+  output = "abundance",
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE,
+    site = TRUE, TRUE),
+  min_quads = 1,
+  effort = TRUE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 
 plant_abundance(..., shape = "flat")
 
-summarise_plant_data(path = get_default_data_path(), level = "Site",
-  type = "All", length = "all", plots = length, unknowns = FALSE,
-  correct_sp = TRUE, shape = "flat", output = "abundance",
-  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE,
-  treatment = TRUE, site = TRUE, TRUE),
-  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE,
-  treatment = TRUE, site = TRUE, TRUE), min_quads = 1, effort = TRUE,
-  download_if_missing = TRUE, quiet = FALSE)
+summarise_plant_data(
+  path = get_default_data_path(),
+  level = "Site",
+  type = "All",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  correct_sp = TRUE,
+  shape = "flat",
+  output = "abundance",
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE,
+    site = TRUE, TRUE),
+  min_quads = 1,
+  effort = TRUE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

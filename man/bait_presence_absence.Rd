@@ -4,8 +4,12 @@
 \alias{bait_presence_absence}
 \title{Ant Bait Presence Absence}
 \usage{
-bait_presence_absence(path = get_default_data_path(), level = "Site",
-  download_if_missing = TRUE, quiet = FALSE)
+bait_presence_absence(
+  path = get_default_data_path(),
+  level = "Site",
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

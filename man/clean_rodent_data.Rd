@@ -4,8 +4,13 @@
 \alias{clean_rodent_data}
 \title{Do basic cleaning of Portal rodent data}
 \usage{
-clean_rodent_data(rodent_data, species_table, fillweight = FALSE,
-  type = "Rodents", unknowns = FALSE)
+clean_rodent_data(
+  rodent_data,
+  species_table,
+  fillweight = FALSE,
+  type = "Rodents",
+  unknowns = FALSE
+)
 }
 \arguments{
 \item{rodent_data}{the raw rodent data table}
