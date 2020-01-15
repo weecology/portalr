@@ -4,8 +4,7 @@
 \alias{weather}
 \title{Weather by day, calendar month, or lunar month}
 \usage{
-weather(level = "daily", fill = FALSE,
-  path = get_default_data_path())
+weather(level = "daily", fill = FALSE, path = get_default_data_path())
 }
 \arguments{
 \item{level}{specify 'monthly', 'daily', or 'newmoon'}

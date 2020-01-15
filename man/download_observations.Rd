@@ -4,8 +4,12 @@
 \alias{download_observations}
 \title{Download the PortalData repo}
 \usage{
-download_observations(path = get_default_data_path(),
-  version = "latest", from_zenodo = FALSE, quiet = FALSE)
+download_observations(
+  path = get_default_data_path(),
+  version = "latest",
+  from_zenodo = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{Folder into which data will be downloaded}

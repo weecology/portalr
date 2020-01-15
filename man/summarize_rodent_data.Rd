@@ -8,14 +8,27 @@
 \alias{summarise_rodent_data}
 \title{Generate summaries of Portal rodent data}
 \usage{
-summarize_rodent_data(path = get_default_data_path(), clean = TRUE,
-  level = "Site", type = "Rodents", length = "all", plots = length,
-  unknowns = FALSE, shape = "crosstab", time = "period",
-  output = "abundance", fillweight = (output != "abundance"),
-  na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
-  treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
-  effort = FALSE, download_if_missing = TRUE, quiet = FALSE,
-  include_unsampled = FALSE)
+summarize_rodent_data(
+  path = get_default_data_path(),
+  clean = TRUE,
+  level = "Site",
+  type = "Rodents",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  shape = "crosstab",
+  time = "period",
+  output = "abundance",
+  fillweight = (output != "abundance"),
+  na_drop = TRUE,
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site = TRUE),
+  min_traps = 1,
+  min_plots = 24,
+  effort = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE,
+  include_unsampled = FALSE
+)
 
 abundance(...)
 
@@ -23,14 +36,27 @@ biomass(...)
 
 energy(...)
 
-summarise_rodent_data(path = get_default_data_path(), clean = TRUE,
-  level = "Site", type = "Rodents", length = "all", plots = length,
-  unknowns = FALSE, shape = "crosstab", time = "period",
-  output = "abundance", fillweight = (output != "abundance"),
-  na_drop = TRUE, zero_drop = switch(tolower(level), plot = FALSE,
-  treatment = TRUE, site = TRUE), min_traps = 1, min_plots = 24,
-  effort = FALSE, download_if_missing = TRUE, quiet = FALSE,
-  include_unsampled = FALSE)
+summarise_rodent_data(
+  path = get_default_data_path(),
+  clean = TRUE,
+  level = "Site",
+  type = "Rodents",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  shape = "crosstab",
+  time = "period",
+  output = "abundance",
+  fillweight = (output != "abundance"),
+  na_drop = TRUE,
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site = TRUE),
+  min_traps = 1,
+  min_plots = 24,
+  effort = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE,
+  include_unsampled = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

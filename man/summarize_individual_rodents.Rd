@@ -5,15 +5,33 @@
 \alias{summarise_individual_rodents}
 \title{Return cleaned Portal rodent individual data}
 \usage{
-summarize_individual_rodents(path = get_default_data_path(),
-  clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
+summarize_individual_rodents(
+  path = get_default_data_path(),
+  clean = TRUE,
+  type = "Rodents",
+  length = "all",
+  unknowns = FALSE,
+  time = "period",
+  fillweight = FALSE,
+  min_plots = 1,
+  min_traps = 1,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 
-summarise_individual_rodents(path = get_default_data_path(),
-  clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
+summarise_individual_rodents(
+  path = get_default_data_path(),
+  clean = TRUE,
+  type = "Rodents",
+  length = "all",
+  unknowns = FALSE,
+  time = "period",
+  fillweight = FALSE,
+  min_plots = 1,
+  min_traps = 1,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or

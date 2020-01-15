@@ -4,8 +4,12 @@
 \alias{ndvi}
 \title{NDVI by calendar month or lunar month}
 \usage{
-ndvi(level = "monthly", fill = FALSE, path = get_default_data_path(),
-  download_if_missing = TRUE)
+ndvi(
+  level = "monthly",
+  fill = FALSE,
+  path = get_default_data_path(),
+  download_if_missing = TRUE
+)
 }
 \arguments{
 \item{level}{specify "monthly" or "newmoon"}

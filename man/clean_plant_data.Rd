@@ -4,8 +4,12 @@
 \alias{clean_plant_data}
 \title{Do basic cleaning of Portal plant data}
 \usage{
-clean_plant_data(data_tables, type = "All", unknowns = FALSE,
-  correct_sp = TRUE)
+clean_plant_data(
+  data_tables,
+  type = "All",
+  unknowns = FALSE,
+  correct_sp = TRUE
+)
 }
 \arguments{
 \item{data_tables}{the list of data_tables, returned from calling
