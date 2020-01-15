@@ -76,7 +76,7 @@ abundance generates a table of rodent abundance
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -143,14 +143,27 @@ abundance generates a table of rodent abundance
   (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_rodent_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
-  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>summarize_rodent_data</span>(
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
+  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>,
+  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>,
+  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
+  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
+  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
+  <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
+  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
+  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='fu'>abundance</span>(<span class='no'>...</span>)
 
@@ -158,14 +171,27 @@ abundance generates a table of rodent abundance
 
 <span class='fu'>energy</span>(<span class='no'>...</span>)
 
-<span class='fu'>summarise_rodent_data</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(), <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
-  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>, <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>summarise_rodent_data</span>(
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
+  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>,
+  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>,
+  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
+  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
+  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
+  <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
+  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
+  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -76,7 +76,7 @@ use_default_data_path has 3 steps. First, it checks for
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -143,8 +143,11 @@ use_default_data_path has 3 steps. First, it checks for
   provides instructions for setting the environmental variable.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_default_data_path</span>(<span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>,
-  <span class='kw'>MESSAGE_FUN</span> <span class='kw'>=</span> <span class='no'>message</span>, <span class='kw'>DATA_NAME</span> <span class='kw'>=</span> <span class='st'>"Portal data"</span>)
+    <pre class="usage"><span class='fu'>check_default_data_path</span>(
+  <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>,
+  <span class='kw'>MESSAGE_FUN</span> <span class='kw'>=</span> <span class='no'>message</span>,
+  <span class='kw'>DATA_NAME</span> <span class='kw'>=</span> <span class='st'>"Portal data"</span>
+)
 
 <span class='fu'>get_default_data_path</span>(<span class='kw'>fallback</span> <span class='kw'>=</span> <span class='st'>"~"</span>, <span class='kw'>ENV_VAR</span> <span class='kw'>=</span> <span class='st'>"PORTALR_DATA_PATH"</span>)
 
