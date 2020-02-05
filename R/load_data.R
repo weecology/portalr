@@ -162,8 +162,6 @@ load_ant_data <- function(path = get_default_data_path(),
 #' @rdname load_rodent_data
 #' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
 #'
-#' @inheritParams load_rodent_data
-#'
 #' @return \code{\link{load_trapping_data}} returns a list of 2 dataframes:
 #'   \tabular{ll}{
 #'     \code{trapping_table} \tab when each plot was trapped\cr
