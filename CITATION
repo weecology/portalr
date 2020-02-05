@@ -1,0 +1,12 @@
+Christensen et al., (2019). portalr: an R package for summarizing and using the Portal Project Data. Journal of Open Source Software, 4(33), 1098, https://doi.org/10.21105/joss.01098
+
+@article{christensen2019portalr,
+  title={portalr: an R package for summarizing and using the Portal Project Data},
+  author={Christensen, Erica and Yenni, Glenda and Ye, Hao and Simonis, Juniper and Bledsoe, Ellen and Diaz, Renata and Taylor, Shawn and White, Ethan and Ernest, S},
+  journal={Journal of Open Source Software},
+  volume={4},
+  number={33},
+  pages={1098},
+  year={2019},
+  doi={10.21105/joss.01098}
+}
