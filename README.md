@@ -99,3 +99,48 @@ website.
 
 Follow our blog to get the latest news on what is happening with our
 project and at the site.
+
+## Citation
+
+To cite `portalr`, please refer to either:
+
+  - [JOSS publication](https://doi.org/10.21105/joss.01098):
+    
+    Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,
+    Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,
+    and S. K. Morgan Ernest. (2019). portalr: an R package for
+    summarizing and using the Portal Project Data. Journal of Open
+    Source Software, 4(33), 1098, <https://doi.org/10.21105/joss.01098>
+
+  - or use the most recent release on
+    [Zenodo](https://doi.org/10.5281/zenodo.1429290).
+
+### Dataset Citation
+
+To cite the Portal dataset, use:
+
+``` r
+get_dataset_citation()
+#> 
+#> To cite the Portal Data in publications, use:
+#> 
+#>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
+#>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso,
+#>   Jacob R. Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan
+#>   M. Meiners, Jim Munger, Carla Restrepo, Douglas A. Samson,
+#>   Michele R. Schutzenhofer, Marian Skupski, Sarah R. Supp, Kate
+#>   Thibault, Shawn Taylor, Ethan White, Diane W. Davidson, James H.
+#>   Brown, and Thomas J. Valone. (2018). The Portal Project: a
+#>   long-term study of a Chihuahuan desert ecosystem. bioRxiv,
+#>   https://doi.org/10.1101/332783
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{ernest2018portal,
+#>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
+#>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
+#>     year = {2018},
+#>     journal = {bioRxiv},
+#>     doi = {10.1101/332783},
+#>   }
+```

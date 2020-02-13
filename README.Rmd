@@ -10,6 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/"
 )
+
+library(portalr)
 ```
 
 # portalr
@@ -84,3 +86,22 @@ Find a list of previous publications using the Portal data at our website.
 
 #### [The Portal Blog](https://portalproject.wordpress.com/)
 Follow our blog to get the latest news on what is happening with our project and at the site.
+
+## Citation
+
+To cite `portalr`, please refer to either:
+
+* [JOSS publication](https://doi.org/10.21105/joss.01098):
+
+  Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White, and S. K. Morgan Ernest. (2019). portalr: an R package for summarizing and using the Portal Project Data. Journal of Open Source Software, 4(33), 1098, https://doi.org/10.21105/joss.01098
+
+* or use the most recent release on [Zenodo](https://doi.org/10.5281/zenodo.1429290).
+
+### Dataset Citation
+
+To cite the Portal dataset, use:
+
+```{r}
+get_dataset_citation()
+```
+

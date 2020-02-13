@@ -17,3 +17,14 @@ NULL
 if (getRversion() >= "2.15.1") utils::globalVariables(
   c(".", "n")
   )
+
+#' @title Return Citation for Portal Data
+#'
+#' @return An object of class "citation". For more details, see `citation()`
+#' @export
+get_dataset_citation <- function()
+{
+  path <- system.file("CITATION-PORTAL-DATA",
+                      package = "portalr", mustWork = TRUE)
+  readCitationFile(path)
+}
