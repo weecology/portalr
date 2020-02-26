@@ -174,7 +174,7 @@ or "yearmon" (data must contain "year" and "month")</p></td>
     </tr>
     <tr>
       <th>summary_funs</th>
-      <td><p>A function or list of functions specified by their name (e.g. "mean").
+      <td><p>A function specified by its name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).</p></td>
     </tr>
     <tr>
@@ -199,12 +199,15 @@ PortalData folder, then download it</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with additional "season" and "year" column, and other columns summarized as specified</p>
+    <p>a data.frame with additional "season" and "year" column, and other columns summarized
+        as specified. If no summary function is specified, "season" and "year" columns are
+        added to original dataframe, as well as a "seasonyear" column which correctly assigns
+        months to seasons for grouping (eg December 2000 in winter 2001, rather than winter 2000).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'>yearly</span>(<span class='fu'><a href='summarize_rodent_data.html'>abundance</a></span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"repo"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"newmoon"</span>),
-       <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"newmoonnumber"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.12.0</span></div><div class='output co'>#&gt; # A tibble: 40 x 22
+       <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"newmoonnumber"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.13.0</span></div><div class='output co'>#&gt; # A tibble: 40 x 22
 #&gt;     year    BA    DM    DO    DS  `NA`    OL    OT    PB    PE      PF     PH
 #&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
 #&gt;  1  1979     0  18.7  2.67 12.3   3.33  6.33 10.7      0  3.33  2.67   0     
