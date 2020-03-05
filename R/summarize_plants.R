@@ -78,7 +78,8 @@ summarize_plant_data <- function(path = get_default_data_path(),
                              unknowns, correct_sp) %>%
     make_plant_plot_data(census_info_table, level, output, min_quads) %>%
     make_plant_level_data(level, output, min_quads) %>%
-    prep_plant_output(effort, na_drop, zero_drop, shape, level, output)
+    prep_plant_output(effort, na_drop, zero_drop, shape, level, output) %>%
+    as.data.frame()
 
   return(out_df)
 }
@@ -154,7 +155,7 @@ shrub_cover <- function(path = get_default_data_path(),
   }
 
   #### Do initial cleaning ----
-  oldtransect_data = data_tables$oldtransect_data %>%
+  oldtransect_data <- data_tables$oldtransect_data %>%
     dplyr::mutate("month" = 8) %>%
     clean_transect_data() %>%
     dplyr::summarize(count = dplyr::n()) %>%
@@ -163,7 +164,7 @@ shrub_cover <- function(path = get_default_data_path(),
                   species = as.character(.data$species)) %>%
     dplyr::select(-.data$count)
 
-  transect_data = data_tables$transect_data %>%
+  transect_data <- data_tables$transect_data %>%
     dplyr::filter(!grepl(3, .data$notes)) %>%
     clean_transect_data() %>%
     dplyr::mutate(stop = replace(.data$stop, .data$stop > 7071.1, 7071.1),
@@ -175,7 +176,8 @@ shrub_cover <- function(path = get_default_data_path(),
                   species = as.character(.data$species)) %>%
     dplyr::select(c("year", "treatment", "plot", "species", "cover", "height"))
 
-  dplyr::bind_rows(oldtransect_data, transect_data)
+  dplyr::bind_rows(oldtransect_data, transect_data) %>%
+    as.data.frame()
 }
 
 #' @rdname summarize_plant_data

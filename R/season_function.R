@@ -73,7 +73,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
     {
       seasons <- rep(c("winter", "spring", "summer", "fall"), each = 3)
       names(seasons) <- c(12, 1:11)
-      full_data$wateryear[full_data$month==12] <- full_data$year[full_data$month==12] + 1
+      full_data$wateryear[full_data$month == 12] <- full_data$year[full_data$month == 12] + 1
 
     } else if (season_level == 2) {
       seasons <- rep(c("winter", "summer"), each = 6)
@@ -90,9 +90,10 @@ add_seasons <- function(data, level = "site", season_level = 2,
 
     if (!is.na(summary_funs))
     {
-      date_vars <- c("month", "day", "date", "newmoonnumber", "period")
+      date_vars <- c("month", "day", "date", "newmoonnumber", "period",
+                     "year", "season")
       full_data <- full_data %>% dplyr::ungroup() %>%
-        dplyr::select(-.data$year, -.data$season, -any_of(date_vars)) %>%
+        dplyr::select(-dplyr::one_of(date_vars)) %>%
         dplyr::group_by_at(grouping) %>%
         dplyr::summarize_all(list(sumfun), na.rm = TRUE) %>%
         dplyr::mutate(season = sub( " .*$", "", .data$seasonyear ),
@@ -108,7 +109,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
 
       date_vars <- c("month", "day", "date", "newmoonnumber", "period")
       full_data <- full_data %>% dplyr::ungroup() %>%
-        dplyr::select(-any_of(date_vars)) %>%
+        dplyr::select(-dplyr::one_of(date_vars)) %>%
         dplyr::group_by_at(c("year", grouping)) %>%
         dplyr::summarize_all(list(sumfun), na.rm = TRUE) %>%
         dplyr::arrange(.data$year)
