@@ -26,5 +26,5 @@ get_dataset_citation <- function()
 {
   path <- system.file("CITATION-PORTAL-DATA",
                       package = "portalr", mustWork = TRUE)
-  readCitationFile(path)
+  utils::readCitationFile(path)
 }

@@ -42,8 +42,7 @@ Imports:
     usethis (>= 1.5.0),
     crayon,
     clisymbols,
-    gh (>= 1.1.0), 
-    cli (>= 2.0.1)
+    gh (>= 1.1.0)
 Suggests:
   httptest,
   cowplot,
