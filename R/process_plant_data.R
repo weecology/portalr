@@ -87,8 +87,7 @@ make_plant_level_data <- function(plot_data, level, output,
   }
 
   level_data %>%
-    dplyr::rename(!!output := .data$n) %>%
-    tibble::as_tibble()
+    dplyr::rename(!!output := .data$n)
 }
 
 #' Plant data prepared for output

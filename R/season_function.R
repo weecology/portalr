@@ -108,7 +108,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
 
       date_vars <- c("month", "day", "date", "newmoonnumber", "period")
       full_data <- full_data %>% dplyr::ungroup() %>%
-        dplyr::select(-any_of(date_vars)) %>%
+        dplyr::select(-dplyr::any_of(date_vars)) %>%
         dplyr::group_by_at(c("year", grouping)) %>%
         dplyr::summarize_all(list(sumfun), na.rm = TRUE) %>%
         dplyr::arrange(.data$year)

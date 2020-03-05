@@ -137,8 +137,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
   }
 
   level_data %>%
-    dplyr::rename(!!output := .data$n) %>%
-    tibble::as_tibble()
+    dplyr::rename(!!output := .data$n)
 }
 
 #' Rodent data prepared for output

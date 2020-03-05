@@ -38,7 +38,6 @@ Imports:
     rlang,
     forecast,
     lunar,
-    tibble (>= 2.1.3),
     usethis (>= 1.5.0),
     crayon,
     clisymbols,
