@@ -87,7 +87,7 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
       dplyr::mutate(battery_low = ifelse(.data$date < "2003-01-01", NA, .data$battery_low))
   }
 
-  return(weather)
+  return(as.data.frame(weather))
 }
 
 #' @title Fill missing weather with regional data

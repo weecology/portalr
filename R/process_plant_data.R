@@ -81,7 +81,7 @@ make_plant_level_data <- function(plot_data, level, output,
   level_data <- dplyr::group_by_at(plot_data, grouping) %>%
     dplyr::summarize(n = sum(.data$n, na.rm = TRUE),
                      quads = sum(.data$nquads, na.rm = TRUE),
-                     nplots = dplyr::n_distinct(.data$plot)) %>%
+                     nplots = length(unique(.data$plot))) %>%
     dplyr::ungroup()
 
   if (level == "plot" || level == "quadrat")
@@ -132,7 +132,8 @@ prep_plant_output <- function(level_data, effort, na_drop,
   }
 
   if (na_drop) {
-    out_data <- na.omit(out_data)
+#    out_data <- na.omit(out_data)
+    out_data <- tidyr::drop_na(out_data)
   }
 
   if (shape == "crosstab") {
