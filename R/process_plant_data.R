@@ -18,27 +18,35 @@ make_plant_plot_data <- function(plant_data, census_info_table,
   # if level == "quadrat", don't group by quadrat
   vars_to_keep <- c("year", "season", "plot", "species", "n", "nquads", "treatment")
   grouping <- rlang::quos(.data$year, .data$season, .data$plot, .data$species)
-  if (level == "quadrat")
-  {
-    vars_to_keep <- c(vars_to_keep, "quadrat")
-    grouping <- c(grouping, rlang::quo(.data$quadrat))
-  }
 
   wt <- switch(output,
                "abundance" = rlang::quo(.data$abundance),
                "cover" = rlang::quo(.data$cover))
-
   filler <- list(n = as.integer(0))
 
+  if (level == "quadrat")
+  {
+    vars_to_keep <- c(vars_to_keep, "quadrat")
+    grouping <- c(grouping, rlang::quo(.data$quadrat))
+    plant_data <- plant_data %>%
+      dplyr::rename(n = !!wt) %>%
+#      tidyr::replace_na(list(n = 0)) %>%
+      dplyr::right_join(census_info_table[, c("year", "season", "plot")],
+                        by = c("year", "season", "plot"))
+  } else {
+    plant_data <-
+      plant_data %>%
+      dplyr::group_by(!!!grouping) %>%
+      dplyr::summarize(n = sum(!!wt, na.rm = TRUE))  %>%
+      dplyr::ungroup() %>%
+      dplyr::right_join(census_info_table[, c("year", "season", "plot")],
+                        by = c("year", "season", "plot")) %>%
+      tidyr::complete(!!!grouping, fill = filler)
+  }
+
   plant_data %>%
-    dplyr::group_by(!!!grouping) %>%
-    dplyr::summarize(n = sum(!!wt, na.rm = TRUE))  %>%
-    dplyr::ungroup() %>%
-    dplyr::right_join(census_info_table[, c("year", "season", "plot")],
-                      by = c("year", "season", "plot")) %>%
-    tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::full_join(census_info_table, by = c("year", "season", "plot")) %>%
-    dplyr::select(vars_to_keep) %>%
+    dplyr::select_at(vars_to_keep) %>%
     dplyr::filter(!is.na(.data$species)) %>%
     dplyr::mutate(n = replace(.data$n, .data$nquads < min_quads, NA),
                   nquads = replace(.data$nquads, .data$nquads < min_quads, NA)) %>%
@@ -113,8 +121,8 @@ make_plant_level_data <- function(plot_data, level, output,
 #' @noRd
 #'
 prep_plant_output <- function(level_data, effort, na_drop,
-                              zero_drop, shape, level, output) {
-
+                              zero_drop, shape, level, output)
+{
   out_data <- level_data
 
   if (effort == FALSE || level == "quadrat") {
@@ -128,14 +136,14 @@ prep_plant_output <- function(level_data, effort, na_drop,
   }
 
   if (shape == "crosstab") {
-    out_data <- make_crosstab(out_data, output, NA)
+    out_data <- portalr:::make_crosstab(out_data, output, fill = 0)
   }
 
   if (zero_drop) {
     if (shape == "crosstab") {
       species_names <- as.character(unique(level_data$species))
       out_data <- out_data %>%
-        dplyr::filter(rowSums(dplyr::select(., species_names)) != 0)
+        dplyr::filter(rowSums(dplyr::select_at(., species_names)) != 0)
     } else { # shape == "flat"
       out_data <- out_data %>%
         dplyr::filter(output != 0)

@@ -132,7 +132,7 @@ make_crosstab <- function(summary_data,
 {
   species <- as.character(na.omit(unique(summary_data$species)))
   vars_to_keep <- c(setdiff(names(summary_data), c("species", variable_name)),
-                    species)
+                    sort(species))
   summary_data %>%
     tidyr::spread(.data$species, !!variable_name, ...) %>%
     dplyr::ungroup() %>%
