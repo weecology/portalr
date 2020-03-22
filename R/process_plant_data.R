@@ -136,7 +136,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
   }
 
   if (shape == "crosstab") {
-    out_data <- portalr:::make_crosstab(out_data, output, fill = 0)
+    out_data <- portalr:::make_crosstab(out_data, output, fill = 0L)
   }
 
   if (zero_drop) {
