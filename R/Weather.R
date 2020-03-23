@@ -22,12 +22,12 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
                      maxtemp = max(.data$airtemp),
                      meantemp = mean(.data$airtemp),
                      precipitation = sum(.data$precipitation),
-                     battv = min(.data$battv, na.rm = TRUE)) %>%
+                     battv = ifelse(all(is.na(.data$battv)), NA, min(.data$battv, na.rm = TRUE))) %>%
     dplyr::ungroup()
 
   weather <- dplyr::bind_rows(weather_old[1:3442, ], days)  %>%
     dplyr::mutate(locally_measured = TRUE,
-                  battv = ifelse(is.infinite(.data$battv), NA, .data$battv),
+#                  battv = ifelse(is.infinite(.data$battv), NA, .data$battv),
                   battery_low = ifelse(.data$battv < 11, TRUE, FALSE)) %>%
     dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp",
                     "precipitation", "locally_measured", "battery_low"))
@@ -87,7 +87,7 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
       dplyr::mutate(battery_low = ifelse(.data$date < "2003-01-01", NA, .data$battery_low))
   }
 
-  return(weather)
+  return(as.data.frame(weather))
 }
 
 #' @title Fill missing weather with regional data
