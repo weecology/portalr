@@ -50,7 +50,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
       dplyr::left_join(newmoons_table, by = date_column)  %>%
       dplyr::mutate(year = lubridate::year(.data$censusdate),
                     month = lubridate::month(.data$censusdate)) %>%
-      dplyr::select(-dplyr::one_of(date_vars))
+      dplyr::select(-tidyselect::any_of(date_vars))
 
   } else if (date_column == "date") {
     full_data <- data %>%
@@ -93,7 +93,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
       date_vars <- c("month", "day", "date", "newmoonnumber", "period",
                      "year", "season")
       full_data <- full_data %>% dplyr::ungroup() %>%
-        dplyr::select(-dplyr::one_of(date_vars)) %>%
+        dplyr::select(-tidyselect::any_of(date_vars)) %>%
         dplyr::group_by_at(grouping) %>%
         dplyr::summarize_all(list(sumfun), na.rm = TRUE) %>%
         dplyr::mutate(season = sub( " .*$", "", .data$seasonyear ),
@@ -109,7 +109,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
 
       date_vars <- c("month", "day", "date", "newmoonnumber", "period")
       full_data <- full_data %>% dplyr::ungroup() %>%
-        dplyr::select(-dplyr::one_of(date_vars)) %>%
+        dplyr::select(-tidyselect::any_of(date_vars)) %>%
         dplyr::group_by_at(c("year", grouping)) %>%
         dplyr::summarize_all(list(sumfun), na.rm = TRUE) %>%
         dplyr::arrange(.data$year)

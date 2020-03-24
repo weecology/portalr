@@ -114,7 +114,7 @@ add_time <- function(summary_table, newmoons_table, time = "period") {
                          "period" = "period",
                          c("newmoonnumber", "period", "censusdate"))
   vars_to_drop <- setdiff(date_vars, vars_to_keep)
-  dplyr::select(join_summary_newmoon, -dplyr::one_of(vars_to_drop))
+  dplyr::select(join_summary_newmoon, -tidyselect::any_of(vars_to_drop))
 }
 
 #' @title Make Crosstab

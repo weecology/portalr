@@ -62,7 +62,8 @@ Imports:
     magrittr,
     rlang,
     tidyr,
-    usethis (>= 1.5.0)
+    usethis (>= 1.5.0),
+    tidyselect (>= 1.0.0)
 Suggests:
     covr,
     cowplot,
