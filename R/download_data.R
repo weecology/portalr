@@ -294,11 +294,11 @@ check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH",
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
     MESSAGE_FUN("You don't appear to have a defined location for storing ", DATA_NAME, ".")
-    code_call_str <- (crayon::make_style("darkgrey"))(encodeString('use_default_data_path(\"<path>\")', quote = "`"))
-    MESSAGE_FUN(crayon::red(clisymbols::symbol$bullet),
-                " Call ", code_call_str, " if you wish to set the default data path.")
-    default_path_str <- (crayon::make_style("darkgrey"))(encodeString(path.expand("~"), quote = "`"))
-    MESSAGE_FUN(DATA_NAME, " will be downloaded into ", default_path_str, " otherwise.")
+    MESSAGE_FUN(format_todo(" Call ",
+                            format_code('use_default_data_path(\"<path>\")'),
+                            " if you wish to set the default data path."))
+    MESSAGE_FUN(DATA_NAME, " will be downloaded into ",
+                format_code(path.expand("~")), " otherwise.")
     return(FALSE)
   }
   return(TRUE)
@@ -347,7 +347,7 @@ use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
   # check if a path is provided
   if (is.null(path))
   {
-    usethis::ui_stop("Please provide a path to store downloaded data.")
+    stop("Please provide a path to store downloaded data.")
   }
 
   # check if path is valid
@@ -356,12 +356,38 @@ use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
     dir.create(path)
   }
 
-  # copy new path setting to clipboard
+  # display message and copy new path setting to clipboard
   path_setting_string <- paste0(ENV_VAR, "=", '"', path, '"')
-
-  usethis::ui_todo("Call {usethis::ui_code('usethis::edit_r_environ()')} to open {usethis::ui_path('.Renviron')}")
-  usethis::ui_todo("Store your data path with a line like:")
-  usethis::ui_code_block(path_setting_string)
-  usethis::ui_todo("Make sure {usethis::ui_value('.Renviron')} ends with a newline!")
+  message(format_todo("Call ", format_code('usethis::edit_r_environ()'), " to open ",
+               format_value('.Renviron')))
+  message(format_todo("Store your data path with a line like:"))
+  message("  ", format_code(path_setting_string))
+  if (rlang::is_interactive() && clipr::clipr_available()) {
+    clipr::write_clip(path_setting_string)
+    message("  [Copied to clipboard]")
+  }
+  message(format_todo("Make sure ", format_value('.Renviron'), " ends with a newline!"))
   return()
+}
+
+#' @noRd
+format_value <- function(...)
+{
+  x <- paste0(..., collapse = "")
+  x <- encodeString(x, quote = "'")
+  crayon::blue(x)
+}
+
+#' @noRd
+format_todo <- function(...)
+{
+  paste0(crayon::red(clisymbols::symbol$bullet), " ", ..., collapse = "")
+}
+
+#' @noRd
+format_code <- function(...)
+{
+  x <- paste0(..., collapse = "")
+  x <- encodeString(x, quote = "`")
+  crayon::silver(x)
 }

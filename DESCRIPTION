@@ -51,6 +51,7 @@ BugReports: https://github.com/weecology/portalr/issues
 Depends: 
     R (>= 3.2.3)
 Imports:
+    clipr, 
     clisymbols,
     crayon,
     dplyr,
@@ -62,7 +63,6 @@ Imports:
     magrittr,
     rlang,
     tidyr,
-    usethis (>= 1.5.0),
     tidyselect (>= 1.0.0)
 Suggests:
     covr,
@@ -72,7 +72,8 @@ Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    testthat
+    testthat, 
+    usethis
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
