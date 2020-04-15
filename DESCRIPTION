@@ -63,7 +63,8 @@ Imports:
     magrittr,
     rlang,
     tidyr,
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.0.0),
+    zoo
 Suggests:
     covr,
     cowplot,

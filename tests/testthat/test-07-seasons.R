@@ -29,7 +29,7 @@ test_that("add_seasons returns expected results", {
 
   weather_seasons = add_seasons(test_weather, date_column = "yearmon",
                                 season_level = 4, summary_funs = "mean", path = portal_data_path)
-  expect_equal(round(sum(weather_seasons$precipitation, na.rm = T), 3), 1799.454)
+  expect_equal(round(sum(weather_seasons$precipitation, na.rm = T), 3), 1774.485)
 })
 
 test_that("yearly returns expected results", {
@@ -38,5 +38,5 @@ test_that("yearly returns expected results", {
   expect_equal(round(sum(rodent_yearly$abundance, na.rm = T), 3), 1533.19)
 
   weather_yearly = yearly(test_weather, date_column = "yearmon", path = portal_data_path)
-  expect_equal(round(sum(weather_yearly$precipitation, na.rm = T), 4), 453.3213)
+  expect_equal(round(sum(weather_yearly$precipitation, na.rm = T), 4), 440.885)
 })
