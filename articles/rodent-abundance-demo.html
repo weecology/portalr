@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Portal Rodent Abundance Demo</h1>
                         <h4 class="author">Hao Ye</h4>
             
-            <h4 class="date">2020-04-09</h4>
+            <h4 class="date">2020-04-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/rodent-abundance-demo.Rmd"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
@@ -122,13 +122,13 @@
 <p>check whether we already have the data. If we don’t have the data, or if the version we have isn’t the most recent, we use the <code>download_observations</code> function to download the latest copy of the data.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r">portal_data_path &lt;- tempdir() # use a temporary folder to store downloaded data
 data_tables &lt;- load_rodent_data(portal_data_path, download_if_missing = TRUE)
-#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpuTNisI
+#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmplhVmpk
 #&gt; 
 ℹ Running gh query
 ℹ Running gh query, got 100 records of about 200
                                                 
-Downloading version 2.19.0 of the data...
-#&gt; Loading in data version 2.19.0</pre></body></html></div>
+Downloading version 2.20.0 of the data...
+#&gt; Loading in data version 2.20.0</pre></body></html></div>
 <p>The <code>load_rodent_data</code> function reads in several tables related to the rodent abundances. We won’t necessarily use all of these tables, but loading this now gives us access later.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">data_tables</span>))
 <span class="co">#&gt;                Length Class      Mode</span>
@@ -144,7 +144,7 @@ Downloading version 2.19.0 of the data...
 <p>The first table that we loaded (<code>data_tables$rodent_data</code>) is a record of whatever was found in the traps, mostly rodents, but also a few other taxa. If we just wanted to get the rodent abundance data, we could use the <code>abundance</code> function, which has default arguments to filter out the non-rodents.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># get rodent abundance by plot</span>
 <span class="no">rodent_abundance_by_plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/summarize_rodent_data.html">abundance</a></span>(<span class="kw">path</span> <span class="kw">=</span> <span class="no">portal_data_path</span>, <span class="kw">time</span> <span class="kw">=</span> <span class="st">"date"</span>, <span class="kw">level</span> <span class="kw">=</span> <span class="st">"plot"</span>)
-<span class="co">#&gt; Loading in data version 2.19.0</span>
+<span class="co">#&gt; Loading in data version 2.20.0</span>
 
 <span class="no">rodent_abundance</span> <span class="kw">&lt;-</span> <span class="no">rodent_abundance_by_plot</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(<span class="no">species</span>, <span class="no">abundance</span>, -<span class="no">censusdate</span>, -<span class="no">treatment</span>, -<span class="no">plot</span>) <span class="kw">%&gt;%</span>

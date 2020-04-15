@@ -132,7 +132,13 @@
     <p>Summarize hourly weather data to either daily, monthly, or lunar monthly level.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>weather</span>(<span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"daily"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>())</pre>
+    <pre class="usage"><span class='fu'>weather</span>(
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"daily"</span>,
+  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>horizon</span> <span class='kw'>=</span> <span class='fl'>360</span>,
+  <span class='kw'>temperature_limit</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>()
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,6 +150,16 @@
     <tr>
       <th>fill</th>
       <td><p>specify if missing data should be filled, passed to <code>fill_missing_weather</code></p></td>
+    </tr>
+    <tr>
+      <th>horizon</th>
+      <td><p>Horizon (number of days) to use when calculating cumulative values
+(eg warm weather precip)</p></td>
+    </tr>
+    <tr>
+      <th>temperature_limit</th>
+      <td><p>Temperature limit (in C) to use when calculating cumulative values
+(eg warm weather precip)</p></td>
     </tr>
     <tr>
       <th>path</th>
