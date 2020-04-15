@@ -4,12 +4,24 @@
 \alias{weather}
 \title{Weather by day, calendar month, or lunar month}
 \usage{
-weather(level = "daily", fill = FALSE, path = get_default_data_path())
+weather(
+  level = "daily",
+  fill = FALSE,
+  horizon = 360,
+  temperature_limit = 4,
+  path = get_default_data_path()
+)
 }
 \arguments{
 \item{level}{specify 'monthly', 'daily', or 'newmoon'}
 
 \item{fill}{specify if missing data should be filled, passed to \code{fill_missing_weather}}
+
+\item{horizon}{Horizon (number of days) to use when calculating cumulative values
+(eg warm weather precip)}
+
+\item{temperature_limit}{Temperature limit (in C) to use when calculating cumulative values
+(eg warm weather precip)}
 
 \item{path}{either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository}

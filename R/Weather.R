@@ -4,11 +4,16 @@
 #'
 #' @param level specify 'monthly', 'daily', or 'newmoon'
 #' @param fill specify if missing data should be filled, passed to \code{fill_missing_weather}
+#' @param horizon Horizon (number of days) to use when calculating cumulative values
+#' (eg warm weather precip)
+#' @param temperature_limit Temperature limit (in C) to use when calculating cumulative values
+#' (eg warm weather precip)
 #' @inheritParams summarize_rodent_data
 #'
 #' @export
 #'
-weather <- function(level = "daily", fill = FALSE, path = get_default_data_path())
+weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_limit = 4,
+                      path = get_default_data_path())
 {
   level <- tolower(level)
   weather_new <- load_datafile("Weather/Portal_weather.csv", na.strings = c(""), path = path)
@@ -37,6 +42,19 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
     weather <- fill_missing_weather(weather, path)
   }
 
+  weather <- weather %>%
+    dplyr::mutate(date = as.Date(paste(.data$year, .data$month, .data$day, sep = "-"))) %>%
+    tidyr::complete(date = tidyr::full_seq(.data$date, period = 1), fill = list(value = NA)) %>%
+    dplyr::mutate(year = lubridate::year(.data$date), month = lubridate::month(.data$date)) %>%
+    dplyr::mutate(warm_days = zoo::rollapplyr(.data$mintemp, width = horizon,
+                             FUN = function(x) length(which(x >= temperature_limit)), partial = TRUE)) %>%
+    dplyr::mutate(cool_precip = zoo::rollapplyr(ifelse(.data$mintemp < temperature_limit,
+                                                       .data$precipitation, 0),
+                                            width = horizon, FUN = sum, partial = TRUE, na.rm = TRUE)) %>%
+    dplyr::mutate(warm_precip = zoo::rollapplyr(ifelse(.data$mintemp >= temperature_limit,
+                                                       .data$precipitation, 0),
+                                                width = horizon, FUN = sum, partial = TRUE, na.rm = TRUE))
+
   if (level == "monthly") {
 
     ##########Summarise by Month -----------------
@@ -47,17 +65,25 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
                        maxtemp = max(.data$maxtemp, na.rm = TRUE),
                        meantemp = mean(.data$meantemp, na.rm = TRUE),
                        precipitation = sum(.data$precipitation, na.rm = TRUE),
-                       locally_measured = all(.data$locally_measured),
+                       warm_days = mean(.data$warm_days, na.rm = TRUE),
+                       cool_precip = mean(.data$cool_precip, na.rm = TRUE),
+                       warm_precip = mean(.data$warm_precip, na.rm = TRUE),
+                       locally_measured = all(.data$locally_measured, na.rm = TRUE),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
       dplyr::arrange(.data$year, .data$month) %>%
       dplyr::select(c("year", "month", "mintemp", "maxtemp", "meantemp",
-                      "precipitation", "locally_measured", "battery_low")) %>%
-      dplyr::mutate(battery_low = ifelse(.data$year < 2003, NA, .data$battery_low))
-  } else if (level == "newmoon") {
+                      "precipitation", "locally_measured", "battery_low",
+                      "warm_days", "cool_precip", "warm_precip")) %>%
+      dplyr::mutate(battery_low = ifelse(.data$year < 2003, NA, .data$battery_low),
+      mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
+      maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
+      meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA))
+
+    } else if (level == "newmoon") {
+
     ##########Summarise by lunar month -----------------
 
-    weather$date <- as.Date(paste(weather$year, weather$month, weather$day, sep = "-"))
     newmoon_number <- moon_dates$newmoonnumber[-1]
     newmoon_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
     newmoon_end <- as.Date(moon_dates$newmoondate[-1])
@@ -70,6 +96,12 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
       newmoon_match_number <- c(newmoon_match_number, temp_numbers)
     }
     newmoon_match_date <- as.Date(newmoon_match_date)
+
+    newmoon_sums <- moon_dates %>%
+      dplyr::mutate(date = as.Date(.data$newmoondate)) %>%
+      dplyr::left_join(weather, by = "date") %>%
+      dplyr::select(c("date", "newmoonnumber", "warm_days", "cool_precip", "warm_precip"))
+
     weather$newmoonnumber <- newmoon_match_number[match(weather$date, newmoon_match_date)]
 
     weather <- weather %>%
@@ -79,12 +111,16 @@ weather <- function(level = "daily", fill = FALSE, path = get_default_data_path(
                        maxtemp = max(.data$maxtemp, na.rm = TRUE),
                        meantemp = mean(.data$meantemp, na.rm = TRUE),
                        precipitation = sum(.data$precipitation,  na.rm = TRUE),
-                       locally_measured = all(.data$locally_measured),
+                       locally_measured = all(.data$locally_measured, na.rm = TRUE),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
       dplyr::arrange(.data$newmoonnumber) %>%
       dplyr::select(c("newmoonnumber", "date", "mintemp", "maxtemp", "meantemp",
                       "precipitation", "locally_measured", "battery_low")) %>%
-      dplyr::mutate(battery_low = ifelse(.data$date < "2003-01-01", NA, .data$battery_low))
+      dplyr::mutate(battery_low = ifelse(.data$date < "2003-01-01", NA, .data$battery_low)) %>%
+      dplyr::left_join(newmoon_sums, by = c("newmoonnumber", "date")) %>%
+      dplyr::mutate(mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
+                    maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
+                    meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA))
   }
 
   return(as.data.frame(weather))
