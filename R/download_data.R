@@ -369,25 +369,3 @@ use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
   message(format_todo("Make sure ", format_value('.Renviron'), " ends with a newline!"))
   return()
 }
-
-#' @noRd
-format_value <- function(...)
-{
-  x <- paste0(..., collapse = "")
-  x <- encodeString(x, quote = "'")
-  crayon::blue(x)
-}
-
-#' @noRd
-format_todo <- function(...)
-{
-  paste0(crayon::red(clisymbols::symbol$bullet), " ", ..., collapse = "")
-}
-
-#' @noRd
-format_code <- function(...)
-{
-  x <- paste0(..., collapse = "")
-  x <- encodeString(x, quote = "`")
-  crayon::silver(x)
-}
