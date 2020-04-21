@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   portal_researcher_examples: portal_researcher_examples.html
   rodent-abundance-demo: rodent-abundance-demo.html
-last_built: 2020-04-15T23:16Z
+last_built: 2020-04-21T17:06Z
 urls:
   reference: https://weecology.github.io/portalr/reference
   article: https://weecology.github.io/portalr/articles
