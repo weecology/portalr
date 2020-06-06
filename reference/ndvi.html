@@ -134,6 +134,7 @@
 
     <pre class="usage"><span class='fu'>ndvi</span>(
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"monthly"</span>,
+  <span class='kw'>sensor</span> <span class='kw'>=</span> <span class='st'>"landsat"</span>,
   <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
   <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
@@ -145,6 +146,10 @@
     <tr>
       <th>level</th>
       <td><p>specify "monthly" or "newmoon"</p></td>
+    </tr>
+    <tr>
+      <th>sensor</th>
+      <td><p>specify "landsat", "modis", "gimms", or "all"</p></td>
     </tr>
     <tr>
       <th>fill</th>
