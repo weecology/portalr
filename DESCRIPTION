@@ -38,7 +38,9 @@ Authors@R:
       person(given = c("S.K.", "Morgan"),
              family = "Ernest",
              role = "aut",
-             comment = c(ORCID = "0000-0002-6026-8530")))
+             comment = c(ORCID = "0000-0002-6026-8530")),
+      person("Weecology",
+             role = "cph"))
 Description: Download and generate summaries for the rodent,
     plant, ant, and weather data from the Portal Project. Portal is a
     long-term (and ongoing) experimental monitoring site in the Chihuahua
