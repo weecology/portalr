@@ -11,7 +11,8 @@ test_that("colony_presence_absence returns expected results", {
   expect_false(anyNA(dplyr::filter(test.colony, species != "camp fest")))
   expect_equal(nrow(test.colony), 190512)
 
-  colonypresabs.site <- colony_presence_absence(path = portal_data_path, level = "Site", rare_sp = T, unknowns = T)
+  colonypresabs.site <- colony_presence_absence(path = portal_data_path, level = "Site",
+                                                rare_sp = T, unknowns = T)
   expect_equal(unique(colonypresabs.site$species), unique(colonypresabs.stake$species))
 
 })

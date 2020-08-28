@@ -1,5 +1,9 @@
 context("Check data processing")
 
+eps <- if (capabilities("long.double"))
+  sqrt(.Machine$double.eps) else
+    0.1
+
 portal_data_path <- tempdir()
 data_tables <- load_rodent_data(portal_data_path)
 
@@ -43,9 +47,9 @@ test_that("clean_rodent_data has correct columns", {
   expect_is(rodents$species, "factor")
   expect_is(rodents$wgt, "numeric")
   expect_is(rodents$energy, "numeric")
-  expect_equal(is.na(rodents$wgt), is.na(rodents$energy))
+  expect_equal(is.na(rodents$wgt), is.na(rodents$energy), tolerance = eps)
   expect_equal(5.69 * rodents$wgt[!is.na(rodents$wgt)] ^ 0.75,
-               rodents$energy[!is.na(rodents$energy)])
+               rodents$energy[!is.na(rodents$energy)], tolerance = eps)
 })
 
 test_that("does fill_weight work properly?", {
@@ -60,8 +64,8 @@ test_that("does fill_weight work properly?", {
 test_that("does process_granivores work properly?", {
   rodents_granivores <- clean_rodent_data(data_tables$rodent_data,
                                           data_tables$species_table, type = "Granivores")
-  expect_true(all(rodents_granivores$granivore == 1))
-  expect_false(all(rodents$granivore == 1))
+  expect_equal(rodents_granivores$granivore, rep(1,length(rodents_granivores$granivore)))
+  expect_false(isTRUE(all.equal(rodents$granivore, rep(1,length(rodents$granivore)))))
 })
 
 test_that("does process_unknownsp work properly?", {
@@ -85,7 +89,7 @@ test_that("does find_incomplete_censuses work properly?", {
   expect_gt(NROW(any_incomplete), NROW(missing_traps))
   periods_47_traps <- setdiff(any_incomplete$period, missing_traps$period)
   idx <- periods_47_traps > 320 & periods_47_traps < 450
-  expect_equal(sum(idx), 114)
+  expect_equal(sum(idx), 114, tolerance = eps)
 })
 
 plant_tables <- load_plant_data(portal_data_path)
