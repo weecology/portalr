@@ -79,7 +79,7 @@ abundance generates a table of rodent abundance
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
       </span>
     </div>
 
@@ -146,55 +146,55 @@ abundance generates a table of rodent abundance
   (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_rodent_data</span>(
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>,
-  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
-  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>,
-  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
-  <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+    <pre class="usage"><span class='fu'>summarize_rodent_data</span><span class='op'>(</span>
+  path <span class='op'>=</span> <span class='fu'><a href='check_default_data_path.html'>get_default_data_path</a></span><span class='op'>(</span><span class='op'>)</span>,
+  clean <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  level <span class='op'>=</span> <span class='st'>"Site"</span>,
+  type <span class='op'>=</span> <span class='st'>"Rodents"</span>,
+  length <span class='op'>=</span> <span class='st'>"all"</span>,
+  plots <span class='op'>=</span> <span class='va'>length</span>,
+  unknowns <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  shape <span class='op'>=</span> <span class='st'>"crosstab"</span>,
+  time <span class='op'>=</span> <span class='st'>"period"</span>,
+  output <span class='op'>=</span> <span class='st'>"abundance"</span>,
+  fillweight <span class='op'>=</span> <span class='op'>(</span><span class='va'>output</span> <span class='op'>!=</span> <span class='st'>"abundance"</span><span class='op'>)</span>,
+  na_drop <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  zero_drop <span class='op'>=</span> <span class='kw'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span><span class='op'>(</span><span class='va'>level</span><span class='op'>)</span>, plot <span class='op'>=</span> <span class='cn'>FALSE</span>, treatment <span class='op'>=</span> <span class='cn'>TRUE</span>, site <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  min_traps <span class='op'>=</span> <span class='fl'>1</span>,
+  min_plots <span class='op'>=</span> <span class='fl'>24</span>,
+  effort <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  download_if_missing <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  include_unsampled <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>abundance</span>(<span class='no'>...</span>)
+<span class='fu'>abundance</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>biomass</span>(<span class='no'>...</span>)
+<span class='fu'>biomass</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>energy</span>(<span class='no'>...</span>)
+<span class='fu'>energy</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>summarise_rodent_data</span>(
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Site"</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Rodents"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='st'>"all"</span>,
-  <span class='kw'>plots</span> <span class='kw'>=</span> <span class='no'>length</span>,
-  <span class='kw'>unknowns</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"crosstab"</span>,
-  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"period"</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"abundance"</span>,
-  <span class='kw'>fillweight</span> <span class='kw'>=</span> (<span class='no'>output</span> <span class='kw'>!=</span> <span class='st'>"abundance"</span>),
-  <span class='kw'>na_drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>zero_drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>level</span>), <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>treatment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>site</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
-  <span class='kw'>min_traps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>min_plots</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>effort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include_unsampled</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+<span class='fu'>summarise_rodent_data</span><span class='op'>(</span>
+  path <span class='op'>=</span> <span class='fu'><a href='check_default_data_path.html'>get_default_data_path</a></span><span class='op'>(</span><span class='op'>)</span>,
+  clean <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  level <span class='op'>=</span> <span class='st'>"Site"</span>,
+  type <span class='op'>=</span> <span class='st'>"Rodents"</span>,
+  length <span class='op'>=</span> <span class='st'>"all"</span>,
+  plots <span class='op'>=</span> <span class='va'>length</span>,
+  unknowns <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  shape <span class='op'>=</span> <span class='st'>"crosstab"</span>,
+  time <span class='op'>=</span> <span class='st'>"period"</span>,
+  output <span class='op'>=</span> <span class='st'>"abundance"</span>,
+  fillweight <span class='op'>=</span> <span class='op'>(</span><span class='va'>output</span> <span class='op'>!=</span> <span class='st'>"abundance"</span><span class='op'>)</span>,
+  na_drop <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  zero_drop <span class='op'>=</span> <span class='kw'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span><span class='op'>(</span><span class='va'>level</span><span class='op'>)</span>, plot <span class='op'>=</span> <span class='cn'>FALSE</span>, treatment <span class='op'>=</span> <span class='cn'>TRUE</span>, site <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  min_traps <span class='op'>=</span> <span class='fl'>1</span>,
+  min_plots <span class='op'>=</span> <span class='fl'>24</span>,
+  effort <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  download_if_missing <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  include_unsampled <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -303,7 +303,8 @@ PortalData folder, then download it</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>abundance</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.38.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
+<span class='fu'>abundance</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.48.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
 #&gt; 1       27  0 16  0 11  1  6 12   0  2  2  0  0  0  0   3  0  0  0  0  0  0
 #&gt; 2       28  0 15  5 15  5  4 10   0  3  1  0  0  0  0   2  0  1  0  0  0  0
 #&gt; 3       29  0 25  3 11  4  9 10   0  5  5  0  0  0  1   1  0  5  0  0  0  0
@@ -729,7 +730,8 @@ PortalData folder, then download it</p></td>
 #&gt; 423    484  0 32  0  0  0  0  3   4  6  0  0  0  0  0  26  0  4  0  0  0  0
 #&gt; 424    485  0 22  1  0  1  0  2   3  3  0  0  0  0  0  26  0  0  0  0  0  0</div><div class='input'><span class='co'># }</span>
 <span class='co'># \donttest{</span>
-<span class='fu'>biomass</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.38.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
+<span class='fu'>biomass</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.48.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
 #&gt; 1       27   0.00000  713.0000    0.0000 1405.0000  152.0000 214.00000  288.000
 #&gt; 2       28   0.00000  648.0000  224.0000 1973.0000  881.0000 120.00000  219.000
 #&gt; 3       29   0.00000 1032.0000  145.0000 1467.0000  665.0000 315.00000  226.000
@@ -2005,7 +2007,8 @@ PortalData folder, then download it</p></td>
 #&gt; 423  489.00000   0.0000  54.00000   0    0.00000    0.00000   0.00000
 #&gt; 424  528.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000</div><div class='input'><span class='co'># }</span>
 <span class='co'># \donttest{</span>
-<span class='fu'>energy</span>(<span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.38.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
+<span class='fu'>energy</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.48.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
 #&gt; 1       27    0.00000 1567.9740    0.00000 2375.8176  246.31732  497.09858
 #&gt; 2       28    0.00000 1434.4242  490.20531 3311.7904 1359.14576  291.19307
 #&gt; 3       29    0.00000 2304.1940  312.78712 2454.2308 1047.76424  736.52836
@@ -3704,7 +3707,7 @@ PortalData folder, then download it</p></td>
 #&gt; 421   0.00000
 #&gt; 422   0.00000
 #&gt; 423   0.00000
-#&gt; 424   0.00000</div><div class='input'># }
+#&gt; 424   0.00000</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -3721,7 +3724,7 @@ PortalData folder, then download it</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

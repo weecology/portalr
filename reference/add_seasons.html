@@ -74,7 +74,7 @@ yearly generates a table of yearly means" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
       </span>
     </div>
 
@@ -136,18 +136,18 @@ Also applies specified functions to the specified summary level.</p>
 <p><code>yearly</code> generates a table of yearly means</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_seasons</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"site"</span>,
-  <span class='kw'>season_level</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"yearmon"</span>,
-  <span class='kw'>summary_funs</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='use_default_data_path.html'>get_default_data_path</a></span>(),
-  <span class='kw'>download_if_missing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
+    <pre class="usage"><span class='fu'>add_seasons</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  level <span class='op'>=</span> <span class='st'>"site"</span>,
+  season_level <span class='op'>=</span> <span class='fl'>2</span>,
+  date_column <span class='op'>=</span> <span class='st'>"yearmon"</span>,
+  summary_funs <span class='op'>=</span> <span class='cn'>NA</span>,
+  path <span class='op'>=</span> <span class='fu'><a href='check_default_data_path.html'>get_default_data_path</a></span><span class='op'>(</span><span class='op'>)</span>,
+  download_if_missing <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  clean <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
-<span class='fu'>yearly</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>yearly</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,23 +209,24 @@ PortalData folder, then download it</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>yearly</span>(<span class='fu'><a href='summarize_rodent_data.html'>abundance</a></span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"repo"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"newmoon"</span>),
-       <span class='kw'>date_column</span> <span class='kw'>=</span> <span class='st'>"newmoonnumber"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"repo"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.38.0</span></div><div class='output co'>#&gt; # A tibble: 41 x 22
+<span class='fu'>yearly</span><span class='op'>(</span><span class='fu'><a href='summarize_rodent_data.html'>abundance</a></span><span class='op'>(</span>path <span class='op'>=</span> <span class='st'>"repo"</span>, time <span class='op'>=</span> <span class='st'>"newmoon"</span><span class='op'>)</span>,
+       date_column <span class='op'>=</span> <span class='st'>"newmoonnumber"</span>, path <span class='op'>=</span> <span class='st'>"repo"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.48.0</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 41 x 22</span><span>
 #&gt;     year    BA    DM    DO    DS  `NA`    OL    OT    PB    PE      PF     PH
-#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-#&gt;  1  1979     0  18.7  2.67 12.3   3.33  6.33 10.7      0  3.33  2.67   0     
-#&gt;  2  1980     0  22    4    21     3.92  5.92  5.67     0  1.33  6.83   0     
-#&gt;  3  1981     0  30.7  6.36 20.6   5.27  3.09  4.27     0  3.64  4.36   0     
-#&gt;  4  1982     0  47.3  9.2  28.5  10.1   5.3   6.6      0  9.6  12.7    0     
-#&gt;  5  1983     0  44   13.9  23.3   8.17  5.42  7.17     0  3.17  9.5    0     
-#&gt;  6  1984     0  32.3  8.2   6.4   5.9   6.4   4.5      0  1.5   0.6    0.7   
-#&gt;  7  1985     0  48.9 16.6   7.55  3.91  7.18  5.09     0  4.27  0.0909 0.273 
-#&gt;  8  1986     0  40.6 11.5   8.8   6     4.3   2.5      0  2.6   0.2    0.1   
-#&gt;  9  1987     0  42.5 19.4   9.45 11.6   7.18  3.91     0 12.9   0.364  0     
-#&gt; 10  1988     0  30.4 12     4.5   8.5   4.25  7.25     0 15.8   0.167  0.0833
-#&gt; # … with 31 more rows, and 10 more variables: PI &lt;dbl&gt;, PL &lt;dbl&gt;, PM &lt;dbl&gt;,
-#&gt; #   PP &lt;dbl&gt;, RF &lt;dbl&gt;, RM &lt;dbl&gt;, RO &lt;dbl&gt;, SF &lt;dbl&gt;, SH &lt;dbl&gt;, SO &lt;dbl&gt;</div><div class='input'># }
-</div></pre>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>  </span><span style='text-decoration: underline;'>1</span><span>979     0  18.7  2.67 12.3   3.33  6.33 10.7      0  3.33  2.67   0     
+#&gt; </span><span style='color: #555555;'> 2</span><span>  </span><span style='text-decoration: underline;'>1</span><span>980     0  22    4    21     3.92  5.92  5.67     0  1.33  6.83   0     
+#&gt; </span><span style='color: #555555;'> 3</span><span>  </span><span style='text-decoration: underline;'>1</span><span>981     0  30.7  6.36 20.6   5.27  3.09  4.27     0  3.64  4.36   0     
+#&gt; </span><span style='color: #555555;'> 4</span><span>  </span><span style='text-decoration: underline;'>1</span><span>982     0  47.3  9.2  28.5  10.1   5.3   6.6      0  9.6  12.7    0     
+#&gt; </span><span style='color: #555555;'> 5</span><span>  </span><span style='text-decoration: underline;'>1</span><span>983     0  44   13.9  23.3   8.17  5.42  7.17     0  3.17  9.5    0     
+#&gt; </span><span style='color: #555555;'> 6</span><span>  </span><span style='text-decoration: underline;'>1</span><span>984     0  32.3  8.2   6.4   5.9   6.4   4.5      0  1.5   0.6    0.7   
+#&gt; </span><span style='color: #555555;'> 7</span><span>  </span><span style='text-decoration: underline;'>1</span><span>985     0  48.9 16.6   7.55  3.91  7.18  5.09     0  4.27  0.090</span><span style='text-decoration: underline;'>9</span><span> 0.273 
+#&gt; </span><span style='color: #555555;'> 8</span><span>  </span><span style='text-decoration: underline;'>1</span><span>986     0  40.6 11.5   8.8   6     4.3   2.5      0  2.6   0.2    0.1   
+#&gt; </span><span style='color: #555555;'> 9</span><span>  </span><span style='text-decoration: underline;'>1</span><span>987     0  42.5 19.4   9.45 11.6   7.18  3.91     0 12.9   0.364  0     
+#&gt; </span><span style='color: #555555;'>10</span><span>  </span><span style='text-decoration: underline;'>1</span><span>988     0  30.4 12     4.5   8.5   4.25  7.25     0 15.8   0.167  0.083</span><span style='text-decoration: underline;'>3</span><span>
+#&gt; </span><span style='color: #555555;'># … with 31 more rows, and 10 more variables: PI </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, PL </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, PM </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   PP </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, RF </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, RM </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, RO </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, SF </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, SH </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, SO </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'><span class='co'># }</span>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -241,7 +242,7 @@ PortalData folder, then download it</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
