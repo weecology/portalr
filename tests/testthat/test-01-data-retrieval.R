@@ -29,6 +29,7 @@ test_that("download_observations and check_for_newer_data work", {
 })
 
 test_that("load_rodent_data downloads data if missing", {
+    skip_on_cran()
     expect_error(data_tables <- load_rodent_data(portal_data_path, download_if_missing = FALSE))
     expect_warning(data_tables <- load_rodent_data(portal_data_path))
 })
