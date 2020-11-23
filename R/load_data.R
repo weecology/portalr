@@ -230,7 +230,9 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   {
     if (download_if_missing) {
       warning("Proceeding to download data into specified path", path, "\n")
-      download_observations(path)
+      tryCatch(download_observations(path),
+               error = function(e) e,
+               warning = function(w) w)
     } else {
       stop("Data files were not found in specified path", path, "\n")
     }
@@ -249,7 +251,9 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   }
 
   ## read in the data table and return
-  read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE)
+  tryCatch(read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE),
+  error = function(e) e,
+  warning = function(w) w)
 }
 
 
