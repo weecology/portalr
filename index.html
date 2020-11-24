@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -100,12 +100,12 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install portalr from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"portalr"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"portalr"</span><span class="op">)</span></code></pre></div>
 <p>OR from github with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"weecology/portalr"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"weecology/portalr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -113,26 +113,26 @@
 <ol>
 <li>Load all data tables from the <a href="https://github.com/weecology/portalData">PortalData GitHub repo</a>:</li>
 </ol>
-<!-- end list --><div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">data_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_rodent_data.html">load_rodent_data</a></span><span class="op">(</span><span class="st">"repo"</span><span class="op">)</span></pre></div>
+<!-- end list --><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_rodent_data.html">load_rodent_data</a></span><span class="op">(</span><span class="st">"repo"</span><span class="op">)</span></code></pre></div>
 <ol>
 <li>Download and generate summaries of rodent abundance and biomass:</li>
 </ol>
-<!-- end list --><div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="reference/download_observations.html">download_observations</a></span><span class="op">(</span><span class="st">"."</span><span class="op">)</span>
+<!-- end list --><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/download_observations.html">download_observations</a></span><span class="op">(</span><span class="st">"."</span><span class="op">)</span>
 
 <span class="va">rodent_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summarize_rodent_data.html">abundance</a></span><span class="op">(</span><span class="st">"."</span><span class="op">)</span> <span class="co"># default grouping is by sampling period</span>
 
 <span class="va">rodent_biomass_by_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summarize_rodent_data.html">biomass</a></span><span class="op">(</span><span class="st">"."</span>, level <span class="op">=</span> <span class="st">"plot"</span>, type <span class="op">=</span> <span class="st">"granivores"</span>, 
-shape <span class="op">=</span> <span class="st">"flat"</span>, time <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span></pre></div>
+shape <span class="op">=</span> <span class="st">"flat"</span>, time <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span></code></pre></div>
 <ol>
 <li>Retrieve weather data:</li>
 </ol>
-<!-- end list --><div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">weatherdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/weather.html">weather</a></span><span class="op">(</span><span class="st">"Monthly"</span>, <span class="st">"."</span><span class="op">)</span></pre></div>
+<!-- end list --><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">weatherdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/weather.html">weather</a></span><span class="op">(</span><span class="st">"Monthly"</span>, <span class="st">"."</span><span class="op">)</span></code></pre></div>
 <p>For more detailed info, checkout the vignettes associated with the package:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"portalr"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"portalr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="more-information" class="section level2">
 <h2 class="hasAnchor">
@@ -171,8 +171,8 @@ shape <span class="op">=</span> <span class="st">"flat"</span>, time <span class
 <h3 class="hasAnchor">
 <a href="#dataset-citation" class="anchor"></a>Dataset Citation</h3>
 <p>To cite the Portal dataset, use:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="reference/get_dataset_citation.html">get_dataset_citation</a></span><span class="op">(</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/get_dataset_citation.html">get_dataset_citation</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; To cite the Portal Data in publications, use:</span>
 <span class="co">#&gt; </span>
@@ -194,7 +194,7 @@ shape <span class="op">=</span> <span class="st">"flat"</span>, time <span class
 <span class="co">#&gt;     year = {2018},</span>
 <span class="co">#&gt;     journal = {bioRxiv},</span>
 <span class="co">#&gt;     doi = {10.1101/332783},</span>
-<span class="co">#&gt;   }</span></pre></div>
+<span class="co">#&gt;   }</span></code></pre></div>
 </div>
 </div>
 </div>

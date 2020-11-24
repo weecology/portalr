@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
       <h1 data-toc-skip>Portal Rodent Abundance Demo</h1>
                         <h4 class="author">Hao Ye</h4>
             
-            <h4 class="date">2020-10-23</h4>
+            <h4 class="date">2020-11-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/rodent-abundance-demo.Rmd"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
@@ -108,12 +108,12 @@
 <li><p><code>cowplot</code> contains a nicer default theme for ggplot.</p></li>
 <li><p><code>portalr</code> is this package, which contains functions to read in the Portal data and do some basic processing.</p></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://weecology.github.io/portalr/">portalr</a></span><span class="op">)</span></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://weecology.github.io/portalr/">portalr</a></span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="retrieving-the-data" class="section level1">
@@ -122,33 +122,32 @@
 <p>Note that this package does not contain the actual Portal data, which resides online in a <a href="https://github.com/weecology/PortalData">GitHub repository</a>.</p>
 <p>First, we try to load the data. If there isn’t a Portal folder, than <code>load_rodent_data</code> will fall back to downloading the data, as well.</p>
 <p>check whether we already have the data. If we don’t have the data, or if the version we have isn’t the most recent, we use the <code>download_observations</code> function to download the latest copy of the data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">portal_data_path &lt;-<span class="st"> </span><span class="kw">tempdir</span>() <span class="co"># use a temporary folder to store downloaded data</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">data_tables &lt;-<span class="st"> </span><span class="kw">load_rodent_data</span>(portal_data_path, <span class="dt">download_if_missing =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/Rtmp4CHjWo</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">ℹ Running gh query</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">ℹ Running gh query, got <span class="dv">100</span> records of about <span class="dv">200</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">                                                </a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">Downloading version <span class="dv">2</span>.<span class="fl">48.0</span> of the data...</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; Loading in data version 2.48.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">portal_data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># use a temporary folder to store downloaded data</span>
+<span class="va">data_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_rodent_data.html">load_rodent_data</a></span><span class="op">(</span><span class="va">portal_data_path</span>, download_if_missing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpIwLYmu</span>
+<span class="co">#&gt; ℹ Running gh query</span>
+<span class="co">#&gt; ℹ Running gh query, got 100 records of about 200</span>
+<span class="co">#&gt; Downloading version 2.56.0 of the data...</span>
+<span class="co">#&gt; Loading in data version 2.56.0</span></code></pre></div>
 <p>The <code>load_rodent_data</code> function reads in several tables related to the rodent abundances. We won’t necessarily use all of these tables, but loading this now gives us access later.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;                Length Class      Mode</span>
 <span class="co">#&gt; rodent_data    29     data.frame list</span>
 <span class="co">#&gt; species_table  15     data.frame list</span>
 <span class="co">#&gt; trapping_table  8     data.frame list</span>
 <span class="co">#&gt; newmoons_table  4     data.frame list</span>
-<span class="co">#&gt; plots_table     6     data.frame list</span></pre></div>
+<span class="co">#&gt; plots_table     6     data.frame list</span></code></pre></div>
 </div>
 <div id="rodent-abundances" class="section level1">
 <h1 class="hasAnchor">
 <a href="#rodent-abundances" class="anchor"></a>Rodent Abundances</h1>
 <p>The first table that we loaded (<code>data_tables$rodent_data</code>) is a record of whatever was found in the traps, mostly rodents, but also a few other taxa. If we just wanted to get the rodent abundance data, we could use the <code>abundance</code> function, which has default arguments to filter out the non-rodents.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co"># get rodent abundance by plot</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get rodent abundance by plot</span>
 <span class="va">rodent_abundance_by_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarize_rodent_data.html">abundance</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">portal_data_path</span>, time <span class="op">=</span> <span class="st">"date"</span>, level <span class="op">=</span> <span class="st">"plot"</span><span class="op">)</span> 
-<span class="co">#&gt; Loading in data version 2.48.0</span>
+<span class="co">#&gt; Loading in data version 2.56.0</span>
 
 <span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="va">rodent_abundance_by_plot</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">abundance</span>, <span class="op">-</span><span class="va">censusdate</span>, <span class="op">-</span><span class="va">treatment</span>, <span class="op">-</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -161,10 +160,10 @@
 <span class="co">#&gt;  Mode  :character   Median :1998-02-14   Median :  0.000  </span>
 <span class="co">#&gt;                     Mean   :1998-12-05   Mean   :  6.695  </span>
 <span class="co">#&gt;                     3rd Qu.:2008-10-04   3rd Qu.:  5.000  </span>
-<span class="co">#&gt;                     Max.   :2019-05-04   Max.   :285.000</span></pre></div>
+<span class="co">#&gt;                     Max.   :2019-05-04   Max.   :285.000</span></code></pre></div>
 <p>Let’s convert the data to long format for easier facetting. Also, we want the scientific names instead of the two-letter species codes, so let’s do that matching, too:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">join_scientific_name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rodent_abundance</span>, 
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">join_scientific_name</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rodent_abundance</span>, 
                                  <span class="va">species_table</span> <span class="op">=</span> <span class="va">data_tables</span><span class="op">$</span><span class="va">species_table</span><span class="op">)</span>
 <span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">rodent_abundance</span> <span class="op">%&gt;%</span>
@@ -174,12 +173,12 @@
   <span class="op">)</span>
 <span class="op">}</span>
 
-<span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="fu">join_scientific_name</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span></pre></div>
+<span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="fu">join_scientific_name</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span></code></pre></div>
 <div id="figure-abundance-over-time" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figure-abundance-over-time" class="anchor"></a>Figure: abundance over time</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">make_abundance_plot_over_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">make_abundance_plot_over_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span>
 <span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">rodent_abundance</span>, 
                 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">censusdate</span>, y <span class="op">=</span> <span class="va">abundance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -200,7 +199,7 @@
 <span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu">make_abundance_plot_over_time</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">my_plot</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 12 row(s) containing missing values (geom_path).</span></pre></div>
+<span class="co">#&gt; Warning: Removed 12 row(s) containing missing values (geom_path).</span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-6-1.png" alt="Monthly abundance of rodents (all plots)" width="720"><p class="caption">
 Monthly abundance of rodents (all plots)
@@ -218,8 +217,8 @@ Monthly abundance of rodents (all plots)
 <a href="#plot-treatments" class="anchor"></a>Plot Treatments</h1>
 <p>A description of the experimental design and treatments can be found in this <a href="https://github.com/weecology/PortalData/tree/master/SiteandMethods">Readme file</a> in the PortalDate repo.</p>
 <p>For now, we are just going to use the <a href="https://github.com/weecology/PortalData/blob/master/SiteandMethods/Portal_plots.csv"><code>Portal_plots</code></a> table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the <code>plots_table</code> from the <code>loadData</code> function we ran previously.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">$</span><span class="va">plots_table</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">$</span><span class="va">plots_table</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       year          month             plot        treatment        </span>
 <span class="co">#&gt;  Min.   :1977   Min.   : 1.000   Min.   : 1.00   Length:10856      </span>
 <span class="co">#&gt;  1st Qu.:1988   1st Qu.: 4.000   1st Qu.: 6.00   Class :character  </span>
@@ -233,18 +232,18 @@ Monthly abundance of rodents (all plots)
 <span class="co">#&gt;  Mode  :character   Mode  :character  </span>
 <span class="co">#&gt;                                       </span>
 <span class="co">#&gt;                                       </span>
-<span class="co">#&gt; </span></pre></div>
+<span class="co">#&gt; </span></code></pre></div>
 <p>We want a proper date variable as well as converting <code>plot</code> into a factor:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">plot_treatments</span> <span class="op">&lt;-</span> <span class="va">data_tables</span><span class="op">$</span><span class="va">plots_table</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plot_treatments</span> <span class="op">&lt;-</span> <span class="va">data_tables</span><span class="op">$</span><span class="va">plots_table</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>iso_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">year</span>, <span class="st">"-"</span>, <span class="va">month</span>, <span class="st">"-"</span>, <span class="st">"01"</span><span class="op">)</span><span class="op">)</span>, 
          plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">iso_date</span>, <span class="va">plot</span>, <span class="va">treatment</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">iso_date</span>, <span class="va">plot</span>, <span class="va">treatment</span><span class="op">)</span></code></pre></div>
 <div id="figure-plot-treatments-over-time" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figure-plot-treatments-over-time" class="anchor"></a>Figure: plot treatments over time</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">plot_treatments</span>, 
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">plot_treatments</span>, 
                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">iso_date</span>, y <span class="op">=</span> <span class="va">treatment</span>, color <span class="op">=</span> <span class="va">treatment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"1977-10-01"</span><span class="op">)</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> 
@@ -260,7 +259,7 @@ Monthly abundance of rodents (all plots)
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">my_plot</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">my_plot</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-9-1.png" alt="Treatments of Plots by Date" width="672"><p class="caption">
 Treatments of Plots by Date
@@ -274,8 +273,8 @@ Treatments of Plots by Date
 <div id="which-plots-have-always-been-control-plots" class="section level3">
 <h3 class="hasAnchor">
 <a href="#which-plots-have-always-been-control-plots" class="anchor"></a>Which plots have always been control plots?</h3>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">always_control_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">always_control_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>always_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">treatment</span> <span class="op">==</span> <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">always_control</span><span class="op">)</span>
@@ -288,10 +287,10 @@ Treatments of Plots by Date
 <span class="co">#&gt; 1 4     TRUE          </span>
 <span class="co">#&gt; 2 11    TRUE          </span>
 <span class="co">#&gt; 3 14    TRUE          </span>
-<span class="co">#&gt; 4 17    TRUE</span></pre></div>
+<span class="co">#&gt; 4 17    TRUE</span></code></pre></div>
 <p>Note, however, that this excludes several plots for which the treatment was changed ~2015. We can include these plots by first filtering by date before testing for the “control” treatment:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">mostly_control_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mostly_control_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">iso_date</span> <span class="op">&lt;</span> <span class="st">"2015-01-01"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mostly_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">treatment</span> <span class="op">==</span> <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -309,10 +308,10 @@ Treatments of Plots by Date
 <span class="co">#&gt; 5 12    TRUE          </span>
 <span class="co">#&gt; 6 14    TRUE          </span>
 <span class="co">#&gt; 7 17    TRUE          </span>
-<span class="co">#&gt; 8 22    TRUE</span></pre></div>
+<span class="co">#&gt; 8 22    TRUE</span></code></pre></div>
 <p>And to identify the datespan over which these plots have been controls:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">date_span</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">date_span</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">plot</span> <span class="op">%in%</span> <span class="va">mostly_control_plots</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">iso_date</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>all_control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">treatment</span> <span class="op">==</span> <span class="st">"control"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -333,15 +332,15 @@ Treatments of Plots by Date
 <span class="co">#&gt;  8 1978-02-01 TRUE       </span>
 <span class="co">#&gt;  9 1978-03-01 TRUE       </span>
 <span class="co">#&gt; 10 1978-04-01 TRUE       </span>
-<span class="co">#&gt; # … with 401 more rows</span></pre></div>
+<span class="co">#&gt; # … with 401 more rows</span></code></pre></div>
 </div>
 </div>
 <div id="abundances-over-control-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#abundances-over-control-plots" class="anchor"></a>Abundances over control plots</h2>
 <p>We are now ready to plot abundances just over the control plots and the time span in 1977-07-01 to 2015-03-01. We do this by retrieving the abundance data by plot, and then filtering accordingly:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">rodent_abundance_by_plot</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rodent_abundance_by_plot</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">censusdate</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">date_span</span><span class="op">$</span><span class="va">iso_date</span><span class="op">)</span>, 
          <span class="va">censusdate</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">date_span</span><span class="op">$</span><span class="va">iso_date</span><span class="op">)</span>, 
          <span class="va">plot</span> <span class="op">%in%</span> <span class="va">mostly_control_plots</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -354,7 +353,7 @@ Treatments of Plots by Date
 
 <span class="va">rodent_abundance_control</span> <span class="op">%&gt;%</span>
   <span class="fu">make_abundance_plot_over_time</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-13-1.png" alt="Monthly abundance of rodents (control plots)" width="720"><p class="caption">
 Monthly abundance of rodents (control plots)
@@ -365,8 +364,8 @@ Monthly abundance of rodents (control plots)
 <h2 class="hasAnchor">
 <a href="#abundances-over-rodent-exclosures" class="anchor"></a>Abundances over rodent exclosures</h2>
 <p>We can do the same with the “exclosure” condition. First, which plots:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="va">mostly_exclosure_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mostly_exclosure_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">iso_date</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"1989-01-01"</span><span class="op">)</span>, 
          <span class="va">iso_date</span> <span class="op">&lt;</span> <span class="st">"2015-01-01"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -385,10 +384,10 @@ Monthly abundance of rodents (control plots)
 <span class="co">#&gt; 5 18    TRUE            </span>
 <span class="co">#&gt; 6 19    TRUE            </span>
 <span class="co">#&gt; 7 20    TRUE            </span>
-<span class="co">#&gt; 8 21    TRUE</span></pre></div>
+<span class="co">#&gt; 8 21    TRUE</span></code></pre></div>
 <p>Then, the datespan:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">date_span</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">date_span</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">plot</span> <span class="op">%in%</span> <span class="va">mostly_exclosure_plots</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">iso_date</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>all_exclosure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">treatment</span> <span class="op">==</span> <span class="st">"exclosure"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -409,10 +408,10 @@ Monthly abundance of rodents (control plots)
 <span class="co">#&gt;  8 1988-08-01 TRUE         </span>
 <span class="co">#&gt;  9 1988-09-01 TRUE         </span>
 <span class="co">#&gt; 10 1988-10-01 TRUE         </span>
-<span class="co">#&gt; # … with 287 more rows</span></pre></div>
+<span class="co">#&gt; # … with 287 more rows</span></code></pre></div>
 <p>Finally, the figure:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="va">rodent_abundance_by_plot</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rodent_abundance_by_plot</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">censusdate</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">date_span</span><span class="op">$</span><span class="va">iso_date</span><span class="op">)</span>, 
          <span class="va">censusdate</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">date_span</span><span class="op">$</span><span class="va">iso_date</span><span class="op">)</span>, 
          <span class="va">plot</span> <span class="op">%in%</span> <span class="va">mostly_exclosure_plots</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -425,7 +424,7 @@ Monthly abundance of rodents (control plots)
 
 <span class="va">rodent_abundance_exclosure</span> <span class="op">%&gt;%</span>
   <span class="fu">make_abundance_plot_over_time</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-16-1.png" alt="Monthly abundance of rodents (exclosure plots)" width="720"><p class="caption">
 Monthly abundance of rodents (exclosure plots)
@@ -437,8 +436,8 @@ Monthly abundance of rodents (exclosure plots)
 <h2 class="hasAnchor">
 <a href="#comparison-figure" class="anchor"></a>Comparison Figure</h2>
 <p>Let’s merge the two datasets and produce a combined plot:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">rodent_abundance_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rodent_abundance_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">rodent_abundance_control</span>, treatment <span class="op">=</span> <span class="st">"control"</span><span class="op">)</span>, 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">rodent_abundance_exclosure</span>, treatment <span class="op">=</span> <span class="st">"exclosure"</span><span class="op">)</span><span class="op">)</span>
 
@@ -457,7 +456,7 @@ Monthly abundance of rodents (exclosure plots)
         legend.position <span class="op">=</span> <span class="st">"bottom"</span>, legend.justification <span class="op">=</span> <span class="st">"center"</span>, 
         strip.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">merged_plot</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">merged_plot</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-17-1.png" alt="Monthly abundance of rodents (control vs. exclosure plots)" width="720"><p class="caption">
 Monthly abundance of rodents (control vs. exclosure plots)
