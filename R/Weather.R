@@ -15,6 +15,7 @@
 weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_limit = 4,
                       path = get_default_data_path())
 {
+  options(dplyr.summarise.inform = FALSE)
   level <- tolower(level)
   weather_new <- load_datafile("Weather/Portal_weather.csv", na.strings = c(""), path = path)
   weather_old <- load_datafile("Weather/Portal_weather_19801989.csv", na.strings = c("-99"), path = path)
@@ -56,13 +57,15 @@ weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_li
                                                 width = horizon, FUN = sum, partial = TRUE, na.rm = TRUE))
 
   if (level == "monthly") {
-
-    ##########Summarise by Month -----------------
-
-    weather = weather %>%
+    ##########Summarize by Month -----------------
+    normals <- load_datafile("Weather/PRISM_normals.csv", na.strings = c(""), path = path) %>%
+      dplyr::filter(month != "Annual") %>%
+      dplyr::mutate(month = match(.data$month, month.name)) %>%
+      dplyr::select(-c("tdmean", "vpdmin", "vpdmax"))
+    weather <- weather %>%
       dplyr::group_by(.data$year, .data$month) %>%
-      dplyr::summarize(mintemp = min(.data$mintemp, na.rm = TRUE),
-                       maxtemp = max(.data$maxtemp, na.rm = TRUE),
+      dplyr::summarize(mintemp = mean(.data$mintemp, na.rm = TRUE),
+                       maxtemp = mean(.data$maxtemp, na.rm = TRUE),
                        meantemp = mean(.data$meantemp, na.rm = TRUE),
                        precipitation = sum(.data$precipitation, na.rm = TRUE),
                        warm_days = mean(.data$warm_days, na.rm = TRUE),
@@ -71,17 +74,23 @@ weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_li
                        locally_measured = all(.data$locally_measured, na.rm = TRUE),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
-      dplyr::arrange(.data$year, .data$month) %>%
       dplyr::select(c("year", "month", "mintemp", "maxtemp", "meantemp",
                       "precipitation", "locally_measured", "battery_low",
                       "warm_days", "cool_precip", "warm_precip")) %>%
       dplyr::mutate(battery_low = ifelse(.data$year < 2003, NA, .data$battery_low),
       mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
       maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
-      meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA))
+      meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA)) %>%
+      dplyr::full_join(normals, by="month") %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(anomaly_ppt = .data$precipitation/.data$ppt,
+                    anomaly_mint = .data$mintemp - .data$tmin,
+                    anomaly_maxt = .data$maxtemp - .data$tmax,
+                    anomaly_meant = .data$meantemp - .data$tmean) %>%
+      dplyr::select(-c("ppt", "tmin", "tmax", "tmean")) %>%
+      dplyr::arrange(.data$year, .data$month)
 
     } else if (level == "newmoon") {
-
     ##########Summarize by lunar month -----------------
 
     newmoon_number <- moon_dates$newmoonnumber[-1]
@@ -107,8 +116,8 @@ weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_li
     weather <- weather %>%
       dplyr::group_by(.data$newmoonnumber) %>%
       dplyr::summarize(date = max(.data$date, na.rm = TRUE),
-                       mintemp = min(.data$mintemp, na.rm = TRUE),
-                       maxtemp = max(.data$maxtemp, na.rm = TRUE),
+                       mintemp = mean(.data$mintemp, na.rm = TRUE),
+                       maxtemp = mean(.data$maxtemp, na.rm = TRUE),
                        meantemp = mean(.data$meantemp, na.rm = TRUE),
                        precipitation = sum(.data$precipitation, na.rm = TRUE),
                        locally_measured = all(.data$locally_measured, na.rm = TRUE),
@@ -120,7 +129,8 @@ weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_li
       dplyr::left_join(newmoon_sums, by = c("newmoonnumber", "date")) %>%
       dplyr::mutate(mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
                     maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
-                    meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA))
+                    meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA)) %>%
+      tidyr::drop_na(.data$newmoonnumber)
   }
 
   return(as.data.frame(weather))
