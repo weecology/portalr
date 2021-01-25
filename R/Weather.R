@@ -12,7 +12,7 @@
 #'
 #' @export
 #'
-weather <- function(level = "daily", fill = FALSE, horizon = 360, temperature_limit = 4,
+weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_limit = 4,
                       path = get_default_data_path())
 {
   options(dplyr.summarise.inform = FALSE)
