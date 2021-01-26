@@ -20,11 +20,12 @@ test_that("Daily temperatures ok", {
 })
 
 test_that("Monthly option returns 11 columns", {
-  expect_equal(dim(monthly_weather)[2], 11)
+  expect_equal(dim(monthly_weather)[2], 15)
   expect_equal(sum(colnames(monthly_weather) ==
                     c("year", "month", "mintemp", "maxtemp", "meantemp",
                       "precipitation", "locally_measured", "battery_low", "warm_days",
-                      "cool_precip", "warm_precip")), 11)
+                      "cool_precip", "warm_precip", "anomaly_ppt", "anomaly_mint",
+                      "anomaly_maxt", "anomaly_meant")), 15)
 })
 
 test_that("Monthly temperatures ok", {

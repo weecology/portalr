@@ -91,7 +91,12 @@ treatment for the entire time series)}
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
 
-\item{na_drop}{logical, drop NA values (representing insufficient sampling)}
+\item{na_drop}{logical, drop NA values (representing insufficient sampling)
+filling missing combinations of year-month-treatment/plot-species with NA could
+represent one of a few slightly different meanings:
+ 1) that combo doesn't exist
+ 2) that combo was skipped that month, or
+ 3) that combo was trapped, but is unusable (a negative period code))}
 
 \item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
 detections)}
