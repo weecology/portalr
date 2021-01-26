@@ -87,7 +87,7 @@ abundance generates a table of rodent abundance
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -113,7 +113,7 @@ abundance generates a table of rodent abundance
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/weecology/portalr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -255,7 +255,12 @@ records from that individual or species, where possible</p></td>
     </tr>
     <tr>
       <th>na_drop</th>
-      <td><p>logical, drop NA values (representing insufficient sampling)</p></td>
+      <td><p>logical, drop NA values (representing insufficient sampling)
+filling missing combinations of year-month-treatment/plot-species with NA could
+represent one of a few slightly different meanings:
+ 1) that combo doesn't exist
+ 2) that combo was skipped that month, or
+ 3) that combo was trapped, but is unusable (a negative period code))</p></td>
     </tr>
     <tr>
       <th>zero_drop</th>
@@ -304,7 +309,7 @@ PortalData folder, then download it</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'>abundance</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.56.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.73.0</span></div><div class='output co'>#&gt;     period BA DM DO DS NA OL OT  PB PE PF PH PI PL PM  PP RF RM RO SF SH SO
 #&gt; 1       27  0 16  0 11  1  6 12   0  2  2  0  0  0  0   3  0  0  0  0  0  0
 #&gt; 2       28  0 15  5 15  5  4 10   0  3  1  0  0  0  0   2  0  1  0  0  0  0
 #&gt; 3       29  0 25  3 11  4  9 10   0  5  5  0  0  0  1   1  0  5  0  0  0  0
@@ -731,7 +736,7 @@ PortalData folder, then download it</p></td>
 #&gt; 424    485  0 22  1  0  1  0  2   3  3  0  0  0  0  0  26  0  0  0  0  0  0</div><div class='input'><span class='co'># }</span>
 <span class='co'># \donttest{</span>
 <span class='fu'>biomass</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.56.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.73.0</span></div><div class='output co'>#&gt;     period        BA        DM        DO        DS        NA        OL       OT
 #&gt; 1       27   0.00000  713.0000    0.0000 1405.0000  152.0000 214.00000  288.000
 #&gt; 2       28   0.00000  648.0000  224.0000 1973.0000  881.0000 120.00000  219.000
 #&gt; 3       29   0.00000 1032.0000  145.0000 1467.0000  665.0000 315.00000  226.000
@@ -2008,7 +2013,7 @@ PortalData folder, then download it</p></td>
 #&gt; 424  528.00000   0.0000   0.00000   0    0.00000    0.00000   0.00000</div><div class='input'><span class='co'># }</span>
 <span class='co'># \donttest{</span>
 <span class='fu'>energy</span><span class='op'>(</span><span class='st'>"repo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.56.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
+</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.73.0</span></div><div class='output co'>#&gt;     period         BA        DM         DO        DS         NA         OL
 #&gt; 1       27    0.00000 1567.9740    0.00000 2375.8176  246.31732  497.09858
 #&gt; 2       28    0.00000 1434.4242  490.20531 3311.7904 1359.14576  291.19307
 #&gt; 3       29    0.00000 2304.1940  312.78712 2454.2308 1047.76424  736.52836
