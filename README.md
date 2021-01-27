@@ -4,7 +4,7 @@
 # portalr
 
 [![Build
-Status](https://travis-ci.org/weecology/portalr.svg?branch=master)](https://travis-ci.org/weecology/portalr)
+Status](https://travis-ci.com/weecology/portalr.svg?branch=master)](https://travis-ci.com/github/weecology/portalr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
 [![Coverage
 status](https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=master)
@@ -32,55 +32,43 @@ collected each summer and fall.
 
 You can install portalr from CRAN with:
 
-``` r
-install.packages("portalr")
-```
+    install.packages("portalr")
 
 OR from github with:
 
-``` r
-# install.packages("remotes")
-remotes::install_github("weecology/portalr")
-```
+    # install.packages("remotes")
+    remotes::install_github("weecology/portalr")
 
 ## Examples
 
 1.  Load all data tables from the [PortalData GitHub
     repo](https://github.com/weecology/portalData):
 
-<!-- end list -->
+<!-- -->
 
-``` r
-data_tables <- load_rodent_data("repo")
-```
+    data_tables <- load_rodent_data("repo")
 
-2.  Download and generate summaries of rodent abundance and biomass:
+1.  Download and generate summaries of rodent abundance and biomass:
 
-<!-- end list -->
+<!-- -->
 
-``` r
-download_observations(".")
+    download_observations(".")
 
-rodent_data <- abundance(".") # default grouping is by sampling period
+    rodent_data <- abundance(".") # default grouping is by sampling period
 
-rodent_biomass_by_plot <- biomass(".", level = "plot", type = "granivores", 
-shape = "flat", time = "date")
-```
+    rodent_biomass_by_plot <- biomass(".", level = "plot", type = "granivores", 
+    shape = "flat", time = "date")
 
-3.  Retrieve weather data:
+1.  Retrieve weather data:
 
-<!-- end list -->
+<!-- -->
 
-``` r
-weatherdata <- weather("Monthly", ".")
-```
+    weatherdata <- weather("Monthly", ".")
 
 For more detailed info, checkout the vignettes associated with the
 package:
 
-``` r
-browseVignettes("portalr")
-```
+    browseVignettes("portalr")
 
 ## More Information
 
@@ -105,43 +93,41 @@ project and at the site.
 
 To cite `portalr`, please refer to either:
 
-  - [JOSS publication](https://doi.org/10.21105/joss.01098):
-    
+-   [JOSS publication](https://doi.org/10.21105/joss.01098):
+
     Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,
     Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,
     and S. K. Morgan Ernest. (2019). portalr: an R package for
     summarizing and using the Portal Project Data. Journal of Open
-    Source Software, 4(33), 1098, <https://doi.org/10.21105/joss.01098>
+    Source Software, 4(33), 1098,
+    <a href="https://doi.org/10.21105/joss.01098" class="uri">https://doi.org/10.21105/joss.01098</a>
 
-  - or use the most recent release on
+-   or use the most recent release on
     [Zenodo](https://doi.org/10.5281/zenodo.1429290).
 
 ### Dataset Citation
 
 To cite the Portal dataset, use:
 
-``` r
-get_dataset_citation()
-#> 
-#> To cite the Portal Data in publications, use:
-#> 
-#>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
-#>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso,
-#>   Jacob R. Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan
-#>   M. Meiners, Jim Munger, Carla Restrepo, Douglas A. Samson,
-#>   Michele R. Schutzenhofer, Marian Skupski, Sarah R. Supp, Kate
-#>   Thibault, Shawn Taylor, Ethan White, Diane W. Davidson, James H.
-#>   Brown, and Thomas J. Valone. (2018). The Portal Project: a
-#>   long-term study of a Chihuahuan desert ecosystem. bioRxiv,
-#>   https://doi.org/10.1101/332783
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Article{ernest2018portal,
-#>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
-#>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
-#>     year = {2018},
-#>     journal = {bioRxiv},
-#>     doi = {10.1101/332783},
-#>   }
-```
+    get_dataset_citation()
+    #> 
+    #> To cite the Portal Data in publications, use:
+    #> 
+    #>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
+    #>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.
+    #>   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim
+    #>   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,
+    #>   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan
+    #>   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.
+    #>   (2018). The Portal Project: a long-term study of a Chihuahuan desert
+    #>   ecosystem. bioRxiv, https://doi.org/10.1101/332783
+    #> 
+    #> A BibTeX entry for LaTeX users is
+    #> 
+    #>   @Article{ernest2018portal,
+    #>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
+    #>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
+    #>     year = {2018},
+    #>     journal = {bioRxiv},
+    #>     doi = {10.1101/332783},
+    #>   }
