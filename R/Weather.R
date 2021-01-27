@@ -32,7 +32,9 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
     dplyr::ungroup()
 
   weather <- dplyr::bind_rows(weather_old[1:3442, ], days)  %>%
-    dplyr::mutate(locally_measured = TRUE,
+    dplyr::rowwise() %>%
+    dplyr::mutate(locally_measured = ifelse(all(is.na(c(.data$mintemp, .data$maxtemp, .data$meantemp,
+                                                        .data$precipitation))), NA, TRUE),
 #                  battv = ifelse(is.infinite(.data$battv), NA, .data$battv),
                   battery_low = ifelse(.data$battv < 11, TRUE, FALSE)) %>%
     dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp",
@@ -59,7 +61,7 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
   if (level == "monthly") {
     ##########Summarize by Month -----------------
     normals <- load_datafile("Weather/PRISM_normals.csv", na.strings = c(""), path = path) %>%
-      dplyr::filter(month != "Annual") %>%
+      dplyr::filter(.data$month != "Annual") %>%
       dplyr::mutate(month = match(.data$month, month.name)) %>%
       dplyr::select(-c("tdmean", "vpdmin", "vpdmax"))
     weather <- weather %>%
@@ -71,7 +73,7 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
                        warm_days = mean(.data$warm_days, na.rm = TRUE),
                        cool_precip = mean(.data$cool_precip, na.rm = TRUE),
                        warm_precip = mean(.data$warm_precip, na.rm = TRUE),
-                       locally_measured = all(.data$locally_measured, na.rm = TRUE),
+                       locally_measured = all(.data$locally_measured),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
       dplyr::select(c("year", "month", "mintemp", "maxtemp", "meantemp",
@@ -80,7 +82,8 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
       dplyr::mutate(battery_low = ifelse(.data$year < 2003, NA, .data$battery_low),
       mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
       maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
-      meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA)) %>%
+      meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA),
+      locally_measured = ifelse(is.na(.data$locally_measured), FALSE, .data$locally_measured)) %>%
       dplyr::full_join(normals, by="month") %>%
       dplyr::rowwise() %>%
       dplyr::mutate(anomaly_ppt = .data$precipitation/.data$ppt,
@@ -120,7 +123,7 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
                        maxtemp = mean(.data$maxtemp, na.rm = TRUE),
                        meantemp = mean(.data$meantemp, na.rm = TRUE),
                        precipitation = sum(.data$precipitation, na.rm = TRUE),
-                       locally_measured = all(.data$locally_measured, na.rm = TRUE),
+                       locally_measured = all(.data$locally_measured),
                        battery_low = all(.data$battery_low, na.rm = TRUE)) %>%
       dplyr::arrange(.data$newmoonnumber) %>%
       dplyr::select(c("newmoonnumber", "date", "mintemp", "maxtemp", "meantemp",
@@ -129,7 +132,9 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
       dplyr::left_join(newmoon_sums, by = c("newmoonnumber", "date")) %>%
       dplyr::mutate(mintemp = ifelse(is.finite(.data$mintemp), .data$mintemp, NA),
                     maxtemp = ifelse(is.finite(.data$maxtemp), .data$maxtemp, NA),
-                    meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA)) %>%
+                    meantemp = ifelse(is.finite(.data$meantemp), .data$meantemp, NA),
+                    locally_measured = ifelse(is.na(.data$locally_measured), FALSE,
+                                              .data$locally_measured)) %>%
       tidyr::drop_na(.data$newmoonnumber)
   }
 
@@ -153,14 +158,15 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::select(c("year", "month", "day", "date", "prcp", "tmax", "tmin", "tobs")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day) %>%
     dplyr::filter(.data$date >= "1980-01-01") %>%
-    dplyr::rename(precipitation = prcp, maxtemp = tmax, mintemp = tmin, meantemp = tobs)
+    dplyr::rename(precipitation = .data$prcp, maxtemp = .data$tmax, mintemp = .data$tmin,
+                  meantemp = .data$tobs)
 
   sansimon <- read.csv(full_path('PortalData/Weather/Sansimon_regional_weather.csv', path),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::select(c("year", "month", "day", "date", "prcp")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day) %>%
     dplyr::filter(.data$date >= "1980-01-01") %>%
-    dplyr::rename(precipitation = prcp)
+    dplyr::rename(precipitation = .data$prcp)
 
   rustys <- read.csv(full_path('PortalData/Weather/Rustys_regional_weather.csv', path),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
@@ -170,7 +176,7 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
                      meantemp = mean(.data$tempavg),
                      precipitation = sum(.data$preciptotal)) %>%
     dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp","precipitation")) %>%
-    dplyr::arrange(.data$year,.data$ month, .data$day)
+    dplyr::arrange(.data$year,.data$month, .data$day)
 
   rodeo <- read.csv(full_path('PortalData/Weather/Rodeo_regional_weather.csv', path),
                      na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
@@ -180,7 +186,7 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
                      meantemp = mean(.data$tempavg),
                      precipitation = sum(.data$preciptotal)) %>%
     dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp","precipitation")) %>%
-    dplyr::arrange(.data$year,.data$ month, .data$day)
+    dplyr::arrange(.data$year,.data$month, .data$day)
 
   region1 <- dplyr::full_join(rodeo, rustys, by = c("year", "month", "day")) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
