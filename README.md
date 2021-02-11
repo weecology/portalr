@@ -4,10 +4,10 @@
 # portalr
 
 [![Build
-Status](https://travis-ci.com/weecology/portalr.svg?branch=master)](https://travis-ci.com/github/weecology/portalr)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/master/LICENSE)
+Status](https://travis-ci.com/weecology/portalr.svg?branch=main)](https://travis-ci.com/github/weecology/portalr)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/main/LICENSE)
 [![Coverage
-status](https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=master)
+status](https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=main)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.R-project.org/package=portalr)
 

@@ -62,7 +62,7 @@ knitr::kable(tail(biomass_data[, 1:10]))
 
 Let's select only the rows we want:
 
-* Based on information about the plot treatment switches that can be found in this [Readme file](https://github.com/weecology/PortalData/tree/master/SiteandMethods) in the PortalData repo, we want to select censuses in the years 1988-2014; to make the data a bit easier to work with, we can also split the date column into three separate columns and then filter on the year column. 
+* Based on information about the plot treatment switches that can be found in this [Readme file](https://github.com/weecology/PortalData/tree/main/SiteandMethods) in the PortalData repo, we want to select censuses in the years 1988-2014; to make the data a bit easier to work with, we can also split the date column into three separate columns and then filter on the year column. 
 
 * Since we are comparing control plots and exclosure plots, we can also filter for only those treatment types. 
 

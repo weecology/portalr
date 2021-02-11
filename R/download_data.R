@@ -101,7 +101,7 @@ download_observations <- function(path = get_default_data_path(),
     unlink(final_data_folder, recursive = TRUE)
   }
 
-  #Github serves this up with the -master extension. Unzip and rename to remove that.
+  #Github serves this up with the -main extension. Unzip and rename to remove that.
   primary_data_folder <- unzip(zip_download_dest, list = TRUE)$Name[1]
   unzip(zip_download_dest, exdir = path)
   Sys.sleep(10)

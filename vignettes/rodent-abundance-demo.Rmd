@@ -127,9 +127,9 @@ Our next steps would likely be to dig deeper into the rodent abundances for diff
 
 # Plot Treatments
 
-A description of the experimental design and treatments can be found in this [Readme file](https://github.com/weecology/PortalData/tree/master/SiteandMethods) in the PortalDate repo.
+A description of the experimental design and treatments can be found in this [Readme file](https://github.com/weecology/PortalData/tree/main/SiteandMethods) in the PortalDate repo.
 
-For now, we are just going to use the [`Portal_plots`](https://github.com/weecology/PortalData/blob/master/SiteandMethods/Portal_plots.csv) table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the `plots_table` from the `loadData` function we ran previously.
+For now, we are just going to use the [`Portal_plots`](https://github.com/weecology/PortalData/blob/main/SiteandMethods/Portal_plots.csv) table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the `plots_table` from the `loadData` function we ran previously.
 
 ```{r}
 print(summary(data_tables$plots_table))

@@ -28,5 +28,5 @@ matrix:
       keep-history: true
       local-dir: docs
       on:
-        branch: master
+        branch: main
 

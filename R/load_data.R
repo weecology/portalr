@@ -217,7 +217,7 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   ## define file paths
   if (tolower(path) == "repo")
   {
-    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/main"
   } else {
     tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
              error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
