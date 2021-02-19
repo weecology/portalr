@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.8</span>
       </span>
     </div>
 
@@ -88,8 +88,9 @@
 <div id="portalr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#portalr" class="anchor"></a>portalr</h1></div>
+<!-- badges: start -->
 
-<p><a href="https://doi.org/10.5281/zenodo.1429290"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.01098"><img src="http://joss.theoj.org/papers/10.21105/joss.01098/status.svg" alt="DOI"></a> <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1929730"><img src="https://img.shields.io/badge/NSF-1929730-blue.svg" alt="NSF-1929730"></a></p>
+<p><a href="https://doi.org/10.5281/zenodo.1429290"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.01098"><img src="http://joss.theoj.org/papers/10.21105/joss.01098/status.svg" alt="DOI"></a> <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1929730"><img src="https://img.shields.io/badge/NSF-1929730-blue.svg" alt="NSF-1929730"></a> <!-- badges: end --></p>
 <p><img src="reference/figures/portalr.png" width="200px"></p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
@@ -100,10 +101,10 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install portalr from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"portalr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">"portalr"</span>)</span></code></pre></div>
 <p>OR from github with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("remotes")</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"weecology/portalr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("remotes")</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"weecology/portalr"</span>)</span></code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -111,22 +112,22 @@
 <ol>
 <li>Load all data tables from the <a href="https://github.com/weecology/portalData">PortalData GitHub repo</a>:</li>
 </ol>
-<!-- --><div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">data_tables &lt;-<span class="st"> </span><span class="kw">load_rodent_data</span>(<span class="st">"repo"</span>)</a></code></pre></div>
+<!-- --><div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>data_tables &lt;-<span class="st"> </span><span class="kw">load_rodent_data</span>(<span class="st">"repo"</span>)</span></code></pre></div>
 <ol>
 <li>Download and generate summaries of rodent abundance and biomass:</li>
 </ol>
-<!-- --><div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">download_observations</span>(<span class="st">"."</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">rodent_data &lt;-<span class="st"> </span><span class="kw">abundance</span>(<span class="st">"."</span>) <span class="co"># default grouping is by sampling period</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">rodent_biomass_by_plot &lt;-<span class="st"> </span><span class="kw">biomass</span>(<span class="st">"."</span>, <span class="dt">level =</span> <span class="st">"plot"</span>, <span class="dt">type =</span> <span class="st">"granivores"</span>, </a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="dt">shape =</span> <span class="st">"flat"</span>, <span class="dt">time =</span> <span class="st">"date"</span>)</a></code></pre></div>
+<!-- --><div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">download_observations</span>(<span class="st">"."</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>rodent_data &lt;-<span class="st"> </span><span class="kw">abundance</span>(<span class="st">"."</span>) <span class="co"># default grouping is by sampling period</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>rodent_biomass_by_plot &lt;-<span class="st"> </span><span class="kw">biomass</span>(<span class="st">"."</span>, <span class="dt">level =</span> <span class="st">"plot"</span>, <span class="dt">type =</span> <span class="st">"granivores"</span>, </span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="dt">shape =</span> <span class="st">"flat"</span>, <span class="dt">time =</span> <span class="st">"date"</span>)</span></code></pre></div>
 <ol>
 <li>Retrieve weather data:</li>
 </ol>
-<!-- --><div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">weatherdata &lt;-<span class="st"> </span><span class="kw">weather</span>(<span class="st">"Monthly"</span>, <span class="st">"."</span>)</a></code></pre></div>
+<!-- --><div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>weatherdata &lt;-<span class="st"> </span><span class="kw">weather</span>(<span class="st">"Monthly"</span>, <span class="st">"."</span>)</span></code></pre></div>
 <p>For more detailed info, checkout the vignettes associated with the package:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">browseVignettes</span>(<span class="st">"portalr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">browseVignettes</span>(<span class="st">"portalr"</span>)</span></code></pre></div>
 </div>
 <div id="more-information" class="section level2">
 <h2 class="hasAnchor">
@@ -165,28 +166,28 @@
 <h3 class="hasAnchor">
 <a href="#dataset-citation" class="anchor"></a>Dataset Citation</h3>
 <p>To cite the Portal dataset, use:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">get_dataset_citation</span>()</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; To cite the Portal Data in publications, use:</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;   (2018). The Portal Project: a long-term study of a Chihuahuan desert</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;   ecosystem. bioRxiv, https://doi.org/10.1101/332783</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;   @Article{ernest2018portal,</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;     year = {2018},</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;     journal = {bioRxiv},</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;     doi = {10.1101/332783},</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;   }</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">get_dataset_citation</span>()</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; </span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; To cite the Portal Data in publications, use:</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt;   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt;   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt;   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt;   (2018). The Portal Project: a long-term study of a Chihuahuan desert</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt;   ecosystem. bioRxiv, https://doi.org/10.1101/332783</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; </span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; </span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt;   @Article{ernest2018portal,</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt;     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt;     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="co">#&gt;     year = {2018},</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co">#&gt;     journal = {bioRxiv},</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#&gt;     doi = {10.1101/332783},</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="co">#&gt;   }</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -243,9 +244,9 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/github/weecology/portalr"><img src="https://travis-ci.com/weecology/portalr.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://raw.githubusercontent.com/weecology/portalr/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a></li>
-<li><a href="https://codecov.io/github/weecology/portalr?branch=master"><img src="https://codecov.io/gh/weecology/portalr/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="https://github.com/weecology/portalr/actions"><img src="https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://raw.githubusercontent.com/weecology/portalr/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a></li>
+<li><a href="https://codecov.io/github/weecology/portalr?branch=main"><img src="https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg" alt="Coverage status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=portalr"><img src="https://cranlogs.r-pkg.org/badges/grand-total/portalr" alt="CRAN downloads"></a></li>
 </ul>
 </div>
