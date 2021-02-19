@@ -3,8 +3,9 @@
 
 # portalr
 
-[![Build
-Status](https://travis-ci.com/weecology/portalr.svg?branch=main)](https://travis-ci.com/github/weecology/portalr)
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg)](https://github.com/weecology/portalr/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/main/LICENSE)
 [![Coverage
 status](https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=main)
@@ -14,6 +15,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
 [![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929730)
+<!-- badges: end -->
 
 <img src="man/figures/portalr.png" width="200px">
 
