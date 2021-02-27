@@ -59,7 +59,7 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-          conda install -c r r-stringi
+          sudo apt-get install libicu-dev
 
       - name: Install dependencies
         run: |
