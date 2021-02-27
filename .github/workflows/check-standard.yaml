@@ -59,7 +59,10 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-          sudo apt-get install libicu55
+          sudo apt-get update -qq
+          sudo apt-get install texlive-latex-base libharfbuzz-dev libfribidi-dev
+          sudo apt-get install gsl-bin libgsl0-dev
+          sudo apt-get install libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
