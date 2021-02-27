@@ -20,8 +20,8 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -59,10 +59,6 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-          sudo apt-get update -qq
-          sudo apt-get install texlive-latex-base libharfbuzz-dev libfribidi-dev
-          sudo apt-get install gsl-bin libgsl0-dev
-          sudo apt-get install libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
