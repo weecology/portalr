@@ -61,6 +61,12 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
           sudo apt-get install libicu-dev
+          sudo apt-get install texlive-latex-base libharfbuzz-dev libfribidi-dev
+          sudo apt-get install gsl-bin libgsl0-dev
+          sudo apt-get install libcurl4-openssl-dev
+          sudo apt-get install jags
+          sudo apt-get -y install libcurl4-openssl-dev
+
 
       - name: Install dependencies
         run: |
@@ -70,7 +76,7 @@ jobs:
 
       - name: Check
         env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+          _R_CHECK_CRAN_INCOMING_: false
         run: |
           options(crayon.enabled = TRUE)
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
