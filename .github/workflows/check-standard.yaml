@@ -65,7 +65,13 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          install.packages(c("covr","cowplot","ggplot2","httptest","knitr","pkgdown","rmarkdown"))
+          remove.packages("tidyverse")
+          remove.packages("knitr")
+          remove.packages("roxygen2")
+          remove.packages("selectr")
+          remove.packages("stringi")
+          remove.packages("stringr")
+          install.packages(c("knitr", "roxygen2", "selectr", "selectr", "tidyverse", "stringi", "stringr"))
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
         
