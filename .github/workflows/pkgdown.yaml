@@ -9,6 +9,8 @@ jobs:
   pkgdown:
     runs-on: ubuntu-latest
     env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_FORCE_SUGGESTS_: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RSPM: https://packagemanager.rstudio.com/all/__linux__/focal/latest
     steps:
@@ -42,6 +44,10 @@ jobs:
       - name: Install package dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
+          remove.packages("knitr")
+          remove.packages("stringi")
+          remove.packages("stringr")
+          install.packages(c("knitr", "roxygen2", "selectr", "selectr", "tidyverse", "stringi", "stringr"))
           install.packages("pkgdown")
         shell: Rscript {0}
 
