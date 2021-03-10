@@ -44,10 +44,6 @@ jobs:
       - name: Install package dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remove.packages("knitr")
-          remove.packages("stringi")
-          remove.packages("stringr")
-          install.packages(c("knitr", "roxygen2", "selectr", "selectr", "tidyverse", "stringi", "stringr"))
           install.packages("pkgdown")
         shell: Rscript {0}
 
