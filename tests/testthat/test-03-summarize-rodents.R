@@ -106,6 +106,25 @@ test_that("energy returns expected results", {
                                    species == "BA")$energy), 82)
 })
 
+test_that("rates returns expected results", {
+  skip_on_cran()
+  rates_default <- rates(path = portal_data_path) %>%
+    dplyr::filter(period %in% 400:450)
+
+  rates_flat <- rates(path = portal_data_path, level = "Plot", type = "Rodents",
+                             plots = "all", unknowns = FALSE,
+                             shape = "flat", time = "period", fillweight = FALSE,
+                             na_drop = FALSE, zero_drop = FALSE, min_traps = 1,
+                             min_plots = 24, effort = FALSE) %>%
+    dplyr::filter(period %in% 400:450)
+
+  expect_equal(nrow(rates_default), 42)
+  expect_equal(nrow(rates_flat), 25704)
+  expect_equal(floor(dplyr::filter(rates_default, period == 440)$DM), -1)
+  expect_equal(floor(dplyr::filter(rates_flat, period == 446, plot == 11,
+                                   species == "DM")$rates), 0)
+})
+
 test_that("abundance filters at the plot level correctly", {
   skip_on_cran()
   incomplete_plots <- abundance(path = portal_data_path, level = "plot",

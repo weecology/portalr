@@ -60,7 +60,8 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
   wt <- switch(output,
                "abundance" = NULL,
                "biomass" = rlang::quo(.data$wgt),
-               "energy" = rlang::quo(.data$energy))
+               "energy" = rlang::quo(.data$energy),
+               "rates" = NULL)
   filler <- list(n = as.integer(0))
 
   rodent_data %>%
@@ -166,16 +167,29 @@ prep_rodent_output <- function(level_data, effort, na_drop,
     level_data <- dplyr::select(level_data, -.data$nplots)
   }
 
+  if (output == "rates") {
+    grouping <- switch(level,
+                       "plot" = c("species", "plot"),
+                       "treatment" = c("species", "treatment"),
+                       "site" = c("species"))
+
+    level_data <- level_data %>%
+      dplyr::group_by_at(grouping) %>%
+      dplyr::arrange_at(grouping) %>%
+      dplyr::mutate(rates = log(dplyr::lead(.data$rates,1)/.data$rates)) %>%
+      dplyr::mutate(rates = ifelse(abs(rates) == Inf,NA,.data$rates))
+  }
+
   if (na_drop) {
     level_data <- na.omit(level_data)
   }
 
   if (shape == "crosstab") {
-    level_data <- make_crosstab(level_data, output, NA)
+    level_data <- make_crosstab(level_data, variable_name = output, NA)
   }
 
   if (zero_drop) {
-    if (shape == "crosstab") {
+    if (shape == "crosstab" && output != "rates") {
       level_data <- level_data %>%
         dplyr::filter(rowSums(dplyr::select_at(., species)) != 0)
     } else { # shape == "flat"

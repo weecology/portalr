@@ -5,6 +5,7 @@
 \alias{abundance}
 \alias{biomass}
 \alias{energy}
+\alias{rates}
 \alias{summarise_rodent_data}
 \title{Generate summaries of Portal rodent data}
 \usage{
@@ -35,6 +36,8 @@ abundance(...)
 biomass(...)
 
 energy(...)
+
+rates(...)
 
 summarise_rodent_data(
   path = get_default_data_path(),
@@ -86,7 +89,7 @@ treatment for the entire time series)}
 "date" (calendar date), or "all" (for all time indices)}
 
 \item{output}{specify whether to return "abundance", or "biomass", or
-"energy"}
+"energy", or "rates"}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
@@ -135,6 +138,9 @@ This function is a generic interface into creating summaries
 
 * \code{energy()} generates a table of rodent energy
   (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)
+
+* \code{rates()} generates a table of rodent growth rates
+  (computed as r=log(N[t+1]/N[t])
 }
 \examples{
 \donttest{
@@ -145,5 +151,8 @@ biomass("repo")
 }
 \donttest{
 energy("repo")
+}
+\donttest{
+rates("repo")
 }
 }
