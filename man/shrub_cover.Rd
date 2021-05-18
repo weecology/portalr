@@ -27,11 +27,12 @@ If type=Perennials, returns all perennial species (includes shrubs and subshrubs
 If type=Shrubs, returns only shrubs and subshrubs}
 
 \item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had the same
-treatment for the entire time series)}
+sets: "all" plots or "Longterm" plots (plots that have had 
+the same treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column 
+(unknowns = TRUE)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 

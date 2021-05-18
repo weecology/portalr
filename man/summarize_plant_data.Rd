@@ -66,11 +66,12 @@ If type=Shrubs, returns only shrubs and subshrubs}
 plots (to be deprecated)}
 
 \item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had the same
-treatment for the entire time series)}
+sets: "all" plots or "Longterm" plots (plots that have had 
+the same treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column 
+(unknowns = TRUE)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 
@@ -80,14 +81,18 @@ treatment for the entire time series)}
 starts in summer 2015]}
 
 \item{na_drop}{logical, drop NA values (representing insufficient sampling)
-filling missing combinations of year-month-treatment/plot-species with NA could
+filling missing combinations of 
+year-month-treatment/plot-species with NA could
 represent one of a few slightly different meanings:
- 1) that combo doesn't exist
- 2) that combo was skipped that month, or
- 3) that combo was trapped, but is unusable (a negative period code))}
+\itemize{
+  \item that combo doesn't exist
+  \item that combo was skipped that month, or
+  \item that combo was trapped, but is unusable 
+        (a negative period code))
+}}
 
-\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
-detections)}
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but 
+no detections)}
 
 \item{min_quads}{numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included}
 

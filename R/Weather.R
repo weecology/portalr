@@ -153,7 +153,7 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
 #'
 fill_missing_weather <- function(weather, path = get_default_data_path())
 {
-  portal4sw <- read.csv(full_path('PortalData/Weather/Portal4sw_regional_weather.csv', path),
+  portal4sw <- read.csv(normalized_file_path(path, 'PortalData/Weather/Portal4sw_regional_weather.csv'),
                         na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::select(c("year", "month", "day", "date", "prcp", "tmax", "tmin", "tobs")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day) %>%
@@ -161,14 +161,14 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::rename(precipitation = .data$prcp, maxtemp = .data$tmax, mintemp = .data$tmin,
                   meantemp = .data$tobs)
 
-  sansimon <- read.csv(full_path('PortalData/Weather/Sansimon_regional_weather.csv', path),
+  sansimon <- read.csv(normalized_file_path(path, 'PortalData/Weather/Sansimon_regional_weather.csv'),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::select(c("year", "month", "day", "date", "prcp")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day) %>%
     dplyr::filter(.data$date >= "1980-01-01") %>%
     dplyr::rename(precipitation = .data$prcp)
 
-  rustys <- read.csv(full_path('PortalData/Weather/Rustys_regional_weather.csv', path),
+  rustys <- read.csv(normalized_file_path(path, 'PortalData/Weather/Rustys_regional_weather.csv'),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
     dplyr::summarize(mintemp = min(.data$templow),
@@ -178,7 +178,7 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::select(c("year", "month", "day", "mintemp", "maxtemp", "meantemp","precipitation")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day)
 
-  rodeo <- read.csv(full_path('PortalData/Weather/Rodeo_regional_weather.csv', path),
+  rodeo <- read.csv(normalized_file_path(path, 'PortalData/Weather/Rodeo_regional_weather.csv'),
                      na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
     dplyr::summarize(mintemp = min(.data$templow),

@@ -58,7 +58,6 @@ Imports:
     crayon,
     dplyr,
     forecast,
-    gh (>= 1.1.0),
     httr,
     lubridate,
     lunar,

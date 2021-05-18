@@ -46,11 +46,13 @@ summarise_individual_rodents(
 plots (to be deprecated)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column 
+(unknowns = TRUE)}
 
 \item{time}{specify the format of the time index in the output, either
-"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date), or "all" (for all time indices)}
+"period" (sequential Portal surveys), "newmoon" (lunar cycle 
+numbering), "date" (calendar date), or "all" (for all time 
+indices)}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}

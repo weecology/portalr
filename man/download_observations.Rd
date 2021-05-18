@@ -8,7 +8,8 @@ download_observations(
   path = get_default_data_path(),
   version = "latest",
   from_zenodo = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  timeout = getOption("timeout")
 )
 }
 \arguments{
@@ -16,17 +17,13 @@ download_observations(
 
 \item{version}{Version of the data to download (default = "latest")}
 
-\item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
-
 \item{quiet}{logical, whether to download data silently}
 }
 \value{
 None
 }
 \description{
-This downloads the latest portal data regardless if they are
-  actually updated or not.
-  TODO: incorporate data retriever into this when it's pointed at the github repo
+Downloads specified version of the Portal data.
 }
 \examples{
 \donttest{
