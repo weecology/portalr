@@ -7,7 +7,6 @@
 \alias{energy}
 \alias{rates}
 \alias{summarise_rodent_data}
-\alias{rates}
 \title{Generate summaries of Portal rodent data}
 \usage{
 summarize_rodent_data(
@@ -70,7 +69,6 @@ the same treatment for the entire time series)}
 "period" (sequential Portal surveys), "newmoon" (lunar cycle 
 numbering), "date" (calendar date), or "all" (for all time 
 indices)}
-
 
 \item{output}{specify whether to return "abundance", or "biomass",
 "energy", or "rates"}

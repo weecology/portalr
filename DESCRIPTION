@@ -1,6 +1,6 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
-Version: 0.3.8
+Version: 0.4.1
 Authors@R: 
     c(person(given = c("Glenda", "M."),
              family = "Yenni",
