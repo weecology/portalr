@@ -19,6 +19,9 @@
 #'              \cr \cr
 #'              \code{energy} generates a table of rodent energy
 #'              (computed as 5.69 * (biomass ^ 0.75) after White et al. 2004).
+#'              \cr \cr
+#'              \code{rates} generates a table of rodent growth rates
+#'              (computed as r = log(N[t+1]/N[t]).
 #'
 #' @param level summarize by "Plot", "Treatment", or "Site"
 #'
@@ -93,6 +96,7 @@
 #'    abundance("repo")
 #'    biomass("repo")
 #'    energy("repo")
+#'    rates("repo")
 #'  }
 #'
 #' @export
@@ -195,5 +199,12 @@ energy <- function(...) {
   summarize_rodent_data(..., output = "energy")
 }
 
+#' @rdname summarize_rodent_data
+#'
+#' @export
+#'
+rates <- function(...) {
+  summarize_rodent_data(..., output = "rates")
+}
 
 

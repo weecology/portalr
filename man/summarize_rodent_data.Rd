@@ -6,6 +6,7 @@
 \alias{biomass}
 \alias{energy}
 \alias{summarise_rodent_data}
+\alias{rates}
 \title{Generate summaries of Portal rodent data}
 \usage{
 summarize_rodent_data(
@@ -37,6 +38,8 @@ abundance(...)
 biomass(...)
 
 energy(...)
+
+rates(...)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -126,12 +129,16 @@ Generic interface into creating summaries of the Portal
              \cr \cr
              \code{energy} generates a table of rodent energy
              (computed as 5.69 * (biomass ^ 0.75) after White et al. 2004).
+             \cr \cr
+             \code{rates} generates a table of rodent growth rates
+             (computed as r = log(N[t+1]/N[t]).
 }
 \examples{
  \donttest{
    abundance("repo")
    biomass("repo")
    energy("repo")
+   rates("repo")
  }
 
 }
