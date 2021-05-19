@@ -1,5 +1,5 @@
 #' @name summarize_rodent_data
-#' @aliases abundance biomass energy
+#' @aliases abundance biomass energy rates
 #'
 #' @title Generate summaries of Portal rodent data
 #'
@@ -201,10 +201,10 @@ energy <- function(...) {
 
 #' @rdname summarize_rodent_data
 #'
+
 #' @export
 #'
 rates <- function(...) {
   summarize_rodent_data(..., output = "rates")
 }
-
 
