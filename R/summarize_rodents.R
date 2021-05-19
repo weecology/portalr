@@ -46,8 +46,8 @@
 #'             numbering), "date" (calendar date), or "all" (for all time 
 #'             indices)
 #'
-#' @param output specify whether to return "abundance", or "biomass", or
-#'               "energy"
+#' @param output specify whether to return "abundance", or "biomass",
+#'               "energy", or "rates"
 #'
 #' @param fillweight specify whether to fill in unknown weights with other
 #'                   records from that individual or species, where possible

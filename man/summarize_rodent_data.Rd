@@ -70,8 +70,8 @@ the same treatment for the entire time series)}
 numbering), "date" (calendar date), or "all" (for all time 
 indices)}
 
-\item{output}{specify whether to return "abundance", or "biomass", or
-"energy"}
+\item{output}{specify whether to return "abundance", or "biomass",
+"energy", or "rates"}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
