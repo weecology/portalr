@@ -6,8 +6,11 @@
 \alias{use_default_data_path}
 \title{Manage the default path for downloading Portal Data into}
 \usage{
-check_default_data_path(ENV_VAR = "PORTALR_DATA_PATH",
-  MESSAGE_FUN = message, DATA_NAME = "Portal data")
+check_default_data_path(
+  ENV_VAR = "PORTALR_DATA_PATH",
+  MESSAGE_FUN = message,
+  DATA_NAME = "Portal data"
+)
 
 get_default_data_path(fallback = "~", ENV_VAR = "PORTALR_DATA_PATH")
 

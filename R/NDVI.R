@@ -3,16 +3,24 @@
 #' @description Summarize NDVI data to monthly or lunar monthly level
 #'
 #' @param level specify "monthly" or "newmoon"
+#' @param sensor specify "landsat", "modis", "gimms", or "all"
 #' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
 #' @inheritParams load_datafile
 #'
 #' @export
 #'
-ndvi <- function(level = "monthly", fill = FALSE,
+ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
                  path = get_default_data_path(), download_if_missing = TRUE)
 {
-  NDVI <- load_datafile(file.path("NDVI", "monthly_NDVI.csv"),
+  sensor <- tolower(sensor)
+  filtering <- switch(sensor,
+                     "landsat" = c("Landsat5", "Landsat7", "Landsat8"),
+                     "modis" = c("MODIS"),
+                     "gimms" = c("GIMMSv0"),
+                     "all" = c("GIMMSv0", "Landsat5", "Landsat7", "MODIS", "Landsat8"))
+
+  NDVI <- load_datafile(file.path("NDVI", "ndvi.csv"),
                         na.strings = "", path = path,
                         download_if_missing = download_if_missing)
   moon_dates <-  load_datafile(file.path("Rodents", "moon_dates.csv"),
@@ -21,21 +29,19 @@ ndvi <- function(level = "monthly", fill = FALSE,
   if (!all(c("year", "month") %in% names(NDVI))) {
     NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
     NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))
-    NDVI$ndvi <- NDVI$NDVI
-  }
-  if (!"date" %in% names(NDVI)) {
-    NDVI$date <- as.Date(paste(NDVI$year, NDVI$month, "01", sep = "-"))
   }
 
   if (level == "monthly") {
 
     NDVI <- NDVI %>%
+      dplyr::filter(.data$sensor %in% filtering) %>%
+      dplyr::mutate(date = as.Date(paste(.data$year, .data$month, "01", sep = "-"))) %>%
       dplyr::group_by(.data$year, .data$month) %>%
       dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T),
                        date = min(.data$date)) %>%
       dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
-      dplyr::select(.data$ndvi, .data$date)
+      dplyr::select( .data$date, .data$ndvi)
     if (fill) {
       curr_yearmonth <- format(Sys.Date(), "%Y-%m")
       last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
@@ -55,10 +61,12 @@ ndvi <- function(level = "monthly", fill = FALSE,
     }
     nm_match_date <- as.Date(nm_match_date)
 
-    NDVI$newmoonnumber <- nm_match_number[match(NDVI$date, nm_match_date)]
+    NDVI$newmoonnumber <- nm_match_number[match(as.Date(NDVI$date), nm_match_date)]
     NDVI <- NDVI %>%
+      dplyr::filter(.data$sensor %in% filtering) %>%
       dplyr::group_by(.data$newmoonnumber) %>%
       dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T)) %>%
+      tidyr::drop_na(.data$newmoonnumber) %>%
       dplyr::arrange(.data$newmoonnumber)
 
     if (fill == TRUE) {
@@ -115,7 +123,7 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL)
     max_hist_time <- max(hist_time_obs)
     hist_time <- min_hist_time:max_hist_time
     hist_ndvi <- data.frame(newmoonnumber = hist_time, ndvi = NA)
-    time_match <- match(hist_ndvi$newmoonnumber, ndvi$newmoonnumber)
+    time_match <- match(hist_ndvi$newmoonnumber, ndvi$newmoonnumber, nomatch = NA)
     hist_ndvi$ndvi <- ndvi$ndvi[time_match]
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
     hist_ndvi$ndvi <- as.numeric(ndvi_interp)

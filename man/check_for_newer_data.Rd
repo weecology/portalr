@@ -4,13 +4,10 @@
 \alias{check_for_newer_data}
 \title{Check for latest version of data files}
 \usage{
-check_for_newer_data(path = get_default_data_path(), mustWork = TRUE)
+check_for_newer_data(path = get_default_data_path())
 }
 \arguments{
 \item{path}{Folder in which data will be checked}
-
-\item{mustWork}{logical: if TRUE then an error is given if the result cannot
-be determined; if NA then a warning.}
 }
 \value{
 bool TRUE if there is a newer version of the data online

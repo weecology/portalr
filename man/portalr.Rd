@@ -3,9 +3,11 @@
 \docType{package}
 \name{portalr}
 \alias{portalr}
-\alias{portalr-package}
 \title{Creates summaries of the Portal data}
 \description{
-This package is designed to be an interface to the Portal data, which resides online at \url{https://github.com/weecology/portalData}. Its contains a set of functions to download, clean, and summarize the data.
+This package is an interface to the Portal data, which reside
+             online at \url{https://github.com/weecology/portalData}. It
+             contains a set of functions to download, clean, and summarize 
+             the data.
 }
 \keyword{package}

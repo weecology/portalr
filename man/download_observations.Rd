@@ -4,25 +4,30 @@
 \alias{download_observations}
 \title{Download the PortalData repo}
 \usage{
-download_observations(path = get_default_data_path(),
-  version = "latest", from_zenodo = FALSE, quiet = FALSE)
+download_observations(
+  path = get_default_data_path(),
+  version = "latest",
+  from_zenodo = FALSE,
+  quiet = FALSE,
+  verbose = FALSE,
+  timeout = getOption("timeout")
+)
 }
 \arguments{
 \item{path}{Folder into which data will be downloaded}
 
-\item{version}{Version of the data to download (default = "latest")}
+\item{version}{Version of the data to download (default = "latest").
+If \code{NULL}, returns.}
 
-\item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
+\item{quiet}{logical, whether to download data silently.}
 
-\item{quiet}{logical, whether to download data silently}
+\item{verbose}{logical, whether to provide details of downloading.}
 }
 \value{
-None
+NULL invisibly.
 }
 \description{
-This downloads the latest portal data regardless if they are
-  actually updated or not.
-  TODO: incorporate data retriever into this when it's pointed at the github repo
+Downloads specified version of the Portal data.
 }
 \examples{
 \donttest{

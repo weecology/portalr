@@ -12,3 +12,4 @@
 ^paper$
 ^.Renviron$
 ^_pkgdown\.yml$
+^\.github$

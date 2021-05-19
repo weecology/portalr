@@ -5,10 +5,16 @@
 \alias{yearly}
 \title{Add Seasons}
 \usage{
-add_seasons(data, level = "site", season_level = 2,
-  date_column = "yearmon", summary_funs = NA,
-  path = get_default_data_path(), download_if_missing = TRUE,
-  clean = TRUE)
+add_seasons(
+  data,
+  level = "site",
+  season_level = 2,
+  date_column = "yearmon",
+  summary_funs = NA,
+  path = get_default_data_path(),
+  download_if_missing = TRUE,
+  clean = TRUE
+)
 
 yearly(...)
 }
@@ -28,7 +34,7 @@ yearly(...)
 \item{date_column}{either "date" (must be in format "y-m-d"), "period", "newmoonnumber",
 or "yearmon" (data must contain "year" and "month")}
 
-\item{summary_funs}{A function or list of functions specified by their name (e.g. "mean").
+\item{summary_funs}{A function specified by its name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).}
 
 \item{path}{either the file path that contains the PortalData folder or
@@ -42,7 +48,10 @@ PortalData folder, then download it}
 \item{...}{arguments passed to \code{\link{add_seasons}}}
 }
 \value{
-a data.frame with additional "season" and "year" column, and other columns summarized as specified
+a data.frame with additional "season" and "year" column, and other columns summarized
+        as specified. If no summary function is specified, "season" and "year" columns are
+        added to original dataframe, as well as a "seasonyear" column which correctly assigns
+        months to seasons for grouping (eg December 2000 in winter 2001, rather than winter 2000).
 }
 \description{
 Higher-order data summaries, by 6-month seasons, 3-month seasons, or year.

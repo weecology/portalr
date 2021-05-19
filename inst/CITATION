@@ -1,0 +1,29 @@
+citHeader("To cite portalR in publications, use:")
+
+citEntry(key = "christensen2019portalr",
+         entry = "Article",
+         title = "portalr: an R package for summarizing and using the Portal Project Data",
+         author = personList(as.person("Erica M. Christensen"),
+                             as.person("Glenda M. Yenni"),
+                             as.person("Hao Ye"),
+                             as.person("Juniper L. Simonis"),
+                             as.person("Ellen K. Bledsoe"),
+                             as.person("Renata M. Diaz"),
+                             as.person("Shawn D. Taylor"),
+                             as.person("Ethan P. White"),
+                             as.person("S. K. Morgan Ernest")),
+         year = "2019",
+         journal = "Journal of Open Source Software",
+         volume = "4",
+         number = "33",
+         pages = "1098",
+         doi = "10.21105/joss.01098",
+         textVersion =
+           paste("Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,",
+                 "Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,",
+                 "and S. K. Morgan Ernest. (2019).",
+                 "portalr: an R package for summarizing and using the Portal",
+                 "Project Data.",
+                 "Journal of Open Source Software, 4(33), 1098,",
+                 "https://doi.org/10.21105/joss.01098")
+)

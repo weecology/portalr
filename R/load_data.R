@@ -162,8 +162,6 @@ load_ant_data <- function(path = get_default_data_path(),
 #' @rdname load_rodent_data
 #' @description \code{\link{load_trapping_data}} loads just the rodent trapping files
 #'
-#' @inheritParams load_rodent_data
-#'
 #' @return \code{\link{load_trapping_data}} returns a list of 2 dataframes:
 #'   \tabular{ll}{
 #'     \code{trapping_table} \tab when each plot was trapped\cr
@@ -219,7 +217,7 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   ## define file paths
   if (tolower(path) == "repo")
   {
-    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/master"
+    base_path <- "https://raw.githubusercontent.com/weecology/PortalData/main"
   } else {
     tryCatch(base_path <- file.path(normalizePath(path, mustWork = TRUE), "PortalData"),
              error = function(e) stop("Specified path ", path, "does not exist. Please create it first."),
@@ -232,7 +230,9 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   {
     if (download_if_missing) {
       warning("Proceeding to download data into specified path", path, "\n")
-      download_observations(path)
+      tryCatch(download_observations(path),
+               error = function(e) e,
+               warning = function(w) w)
     } else {
       stop("Data files were not found in specified path", path, "\n")
     }
@@ -251,7 +251,9 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   }
 
   ## read in the data table and return
-  read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE)
+  tryCatch(read.csv(datafile, na.strings = na.strings, stringsAsFactors = FALSE),
+  error = function(e) e,
+  warning = function(w) w)
 }
 
 

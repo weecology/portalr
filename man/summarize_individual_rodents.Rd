@@ -5,15 +5,33 @@
 \alias{summarise_individual_rodents}
 \title{Return cleaned Portal rodent individual data}
 \usage{
-summarize_individual_rodents(path = get_default_data_path(),
-  clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
+summarize_individual_rodents(
+  path = get_default_data_path(),
+  clean = TRUE,
+  type = "Rodents",
+  length = "all",
+  unknowns = FALSE,
+  time = "period",
+  fillweight = FALSE,
+  min_plots = 1,
+  min_traps = 1,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 
-summarise_individual_rodents(path = get_default_data_path(),
-  clean = TRUE, type = "Rodents", length = "all", unknowns = FALSE,
-  time = "period", fillweight = FALSE, min_plots = 1,
-  min_traps = 1, download_if_missing = TRUE, quiet = FALSE)
+summarise_individual_rodents(
+  path = get_default_data_path(),
+  clean = TRUE,
+  type = "Rodents",
+  length = "all",
+  unknowns = FALSE,
+  time = "period",
+  fillweight = FALSE,
+  min_plots = 1,
+  min_traps = 1,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -28,11 +46,13 @@ summarise_individual_rodents(path = get_default_data_path(),
 plots (to be deprecated)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column 
+(unknowns = TRUE)}
 
 \item{time}{specify the format of the time index in the output, either
-"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
-"date" (calendar date), or "all" (for all time indices)}
+"period" (sequential Portal surveys), "newmoon" (lunar cycle 
+numbering), "date" (calendar date), or "all" (for all time 
+indices)}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}

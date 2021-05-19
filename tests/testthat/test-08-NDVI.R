@@ -6,7 +6,7 @@ newmoon_ndvi <- ndvi("newmoon", path = portal_data_path)
 
 test_that("Monthly option returns 2 columns", {
   expect_equal(NCOL(monthly_ndvi), 2)
-  expect_equal(colnames(monthly_ndvi), c("ndvi", "date"))
+  expect_equal(colnames(monthly_ndvi), c("date", "ndvi"))
 })
 
 test_that("Newmoon option returns 2 columns", {

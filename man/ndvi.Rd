@@ -4,11 +4,18 @@
 \alias{ndvi}
 \title{NDVI by calendar month or lunar month}
 \usage{
-ndvi(level = "monthly", fill = FALSE, path = get_default_data_path(),
-  download_if_missing = TRUE)
+ndvi(
+  level = "monthly",
+  sensor = "landsat",
+  fill = FALSE,
+  path = get_default_data_path(),
+  download_if_missing = TRUE
+)
 }
 \arguments{
 \item{level}{specify "monthly" or "newmoon"}
+
+\item{sensor}{specify "landsat", "modis", "gimms", or "all"}
 
 \item{fill}{specify if missing data should be filled, passed to
 \code{fill_missing_ndvi}}

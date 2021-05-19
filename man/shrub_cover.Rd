@@ -4,9 +4,15 @@
 \alias{shrub_cover}
 \title{Generate percent cover from Portal plant transect data}
 \usage{
-shrub_cover(path = get_default_data_path(), type = "Shrubs",
-  plots = "all", unknowns = FALSE, correct_sp = TRUE,
-  download_if_missing = TRUE, quiet = FALSE)
+shrub_cover(
+  path = get_default_data_path(),
+  type = "Shrubs",
+  plots = "all",
+  unknowns = FALSE,
+  correct_sp = TRUE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -21,11 +27,12 @@ If type=Perennials, returns all perennial species (includes shrubs and subshrubs
 If type=Shrubs, returns only shrubs and subshrubs}
 
 \item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had the same
-treatment for the entire time series)}
+sets: "all" plots or "Longterm" plots (plots that have had 
+the same treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column 
+(unknowns = TRUE)}
 
 \item{correct_sp}{correct species names suspected to be incorrect in early data (T/F)}
 

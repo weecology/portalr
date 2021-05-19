@@ -84,7 +84,8 @@ colony_presence_absence <- function(path = get_default_data_path(),
           # species camp fest was probably not censused regularly (only one record of it)
           .data$species == "camp fest" & .data$presence == 0 ~
             NA_real_,
-          TRUE ~ presence))
+          TRUE ~ presence)) %>%
+    as.data.frame()
 
   return(colonypresabs)
 }
@@ -113,7 +114,8 @@ bait_presence_absence <- function(path = get_default_data_path(),
                         download_if_missing = download_if_missing,
                         quiet = quiet)
 
-  baitpresabs <- compute_presence(bait, level)
+  baitpresabs <- compute_presence(bait, level) %>%
+    as.data.frame()
 
   return(baitpresabs)
 }
