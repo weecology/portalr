@@ -9,18 +9,22 @@ download_observations(
   version = "latest",
   from_zenodo = FALSE,
   quiet = FALSE,
+  verbose = FALSE,
   timeout = getOption("timeout")
 )
 }
 \arguments{
 \item{path}{Folder into which data will be downloaded}
 
-\item{version}{Version of the data to download (default = "latest")}
+\item{version}{Version of the data to download (default = "latest").
+If \code{NULL}, returns.}
 
-\item{quiet}{logical, whether to download data silently}
+\item{quiet}{logical, whether to download data silently.}
+
+\item{verbose}{logical, whether to provide details of downloading.}
 }
 \value{
-None
+NULL invisibly.
 }
 \description{
 Downloads specified version of the Portal data.

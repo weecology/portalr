@@ -7,11 +7,14 @@
 #'
 #' @param path Folder into which data will be downloaded
 #'
-#' @param version Version of the data to download (default = "latest")
+#' @param version Version of the data to download (default = "latest").
+#'                 If \code{NULL}, returns.
 #'
-#' @param quiet logical, whether to download data silently
+#' @param quiet logical, whether to download data silently.
 #'
-#' @return None
+#' @param verbose logical, whether to provide details of downloading.
+#'
+#' @return NULL invisibly.
 #'
 #' @examples
 #' \donttest{
@@ -25,7 +28,14 @@ download_observations <- function(path        = get_default_data_path(),
                                   version     = "latest", 
                                   from_zenodo = FALSE,
                                   quiet       = FALSE,
+                                  verbose       = FALSE,
                                   timeout     = getOption("timeout")) {
+
+  if (is.null(version)) {
+
+    return(invisible())
+
+  }
 
   timeout_backup <- getOption("timeout")
   on.exit(options(timeout = timeout_backup))
@@ -91,7 +101,7 @@ download_observations <- function(path        = get_default_data_path(),
   temp <- normalized_file_path(tempdir(), "PortalData.zip", mustWork = FALSE)
   final <- normalized_file_path(path, "PortalData", mustWork = FALSE)
 
-  download.file(zipball_url, temp, quiet = TRUE, mode = "wb")
+  download.file(zipball_url, temp, quiet = !verbose, mode = "wb")
   if (file.exists(final)) {
 
     old_files <- list.files(final,
@@ -115,6 +125,7 @@ download_observations <- function(path        = get_default_data_path(),
   file.remove(temp)
   file.rename(normalized_file_path(path, temp_unzip), final)
 
+  invisible()
 }
 
 #' @title Check for latest version of data files
