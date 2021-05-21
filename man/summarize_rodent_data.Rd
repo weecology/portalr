@@ -142,17 +142,3 @@ This function is a generic interface into creating summaries
 * \code{rates()} generates a table of rodent growth rates
   (computed as r=log(N[t+1]/N[t])
 }
-\examples{
-\donttest{
-abundance("repo")
-}
-\donttest{
-biomass("repo")
-}
-\donttest{
-energy("repo")
-}
-\donttest{
-rates("repo")
-}
-}

@@ -59,9 +59,3 @@ Also applies specified functions to the specified summary level.
 
 \code{yearly} generates a table of yearly means
 }
-\examples{
-\donttest{
-yearly(abundance(path = "repo", time = "newmoon"),
-       date_column = "newmoonnumber", path = "repo")
-}
-}
