@@ -109,10 +109,6 @@ summarize_rodent_data <- function(path = get_default_data_path(),
 #'
 #' @param ... arguments passed to \code{\link{summarize_rodent_data}}
 #'
-#' @examples
-#' \donttest{
-#' abundance("repo")
-#' }
 #' @export
 #'
 abundance <- function(...) {
@@ -125,10 +121,6 @@ abundance <- function(...) {
 #'
 #' @inheritParams abundance
 #'
-#' @examples
-#' \donttest{
-#' biomass("repo")
-#' }
 #' @export
 #'
 biomass <- function(...) {
@@ -143,10 +135,6 @@ biomass <- function(...) {
 #'
 #' @inheritParams abundance
 #'
-#' @examples
-#' \donttest{
-#' energy("repo")
-#' }
 #' @export
 #'
 energy <- function(...) {
@@ -160,10 +148,6 @@ energy <- function(...) {
 #'
 #'@inheritParams abundance
 #'
-#' @examples
-#' \donttest{
-#' rates("repo")
-#' }
 #' @export
 #'
 rates <- function(...) {

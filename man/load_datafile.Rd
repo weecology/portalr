@@ -35,8 +35,3 @@ does checking for whether a particular datafile exists and then
   reads it in, using na_strings to determine what gets converted to NA. It
   can also download the dataset if it's missing locally.
 }
-\examples{
-\donttest{
-rodent_species <- load_datafile("Rodents/Portal_rodent_species.csv")
-}
-}

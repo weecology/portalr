@@ -90,10 +90,6 @@ summarize_plant_data <- function(path = get_default_data_path(),
 #'
 #' @param ... arguments passed to \code{\link{summarize_plant_data}}
 #'
-#' @examples
-#' \donttest{
-#' plant_abundance("repo")
-#' }
 #' @export
 #'
 plant_abundance <- function(..., shape = "flat") {

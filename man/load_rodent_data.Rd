@@ -93,17 +93,3 @@ Loads Portal data files from either a user-defined
 
 \code{\link{load_trapping_data}} loads just the rodent trapping files
 }
-\examples{
-\donttest{
-portal_data <- load_rodent_data("repo")
-}
-\donttest{
-portal_plant_data <- load_plant_data("repo")
-}
-\donttest{
-portal_ant_data <- load_ant_data("repo")
-}
-\donttest{
-trapping_data <- load_trapping_data("repo")
-}
-}
