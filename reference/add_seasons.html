@@ -207,26 +207,6 @@ PortalData folder, then download it</p></td>
         added to original dataframe, as well as a "seasonyear" column which correctly assigns
         months to seasons for grouping (eg December 2000 in winter 2001, rather than winter 2000).</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'>yearly</span><span class='op'>(</span><span class='fu'><a href='summarize_rodent_data.html'>abundance</a></span><span class='op'>(</span>path <span class='op'>=</span> <span class='st'>"repo"</span>, time <span class='op'>=</span> <span class='st'>"newmoon"</span><span class='op'>)</span>,
-       date_column <span class='op'>=</span> <span class='st'>"newmoonnumber"</span>, path <span class='op'>=</span> <span class='st'>"repo"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading in data version 2.83.0</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 41 x 22</span><span>
-#&gt;     year    BA    DM    DO    DS  `NA`    OL    OT    PB    PE      PF     PH
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>  </span><span style='text-decoration: underline;'>1</span><span>979     0  18.7  2.67 12.3   3.33  6.33 10.7      0  3.33  2.67   0     
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>  </span><span style='text-decoration: underline;'>1</span><span>980     0  22    4    21     3.92  5.92  5.67     0  1.33  6.83   0     
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>  </span><span style='text-decoration: underline;'>1</span><span>981     0  30.7  6.36 20.6   5.27  3.09  4.27     0  3.64  4.36   0     
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>  </span><span style='text-decoration: underline;'>1</span><span>982     0  47.3  9.2  28.5  10.1   5.3   6.6      0  9.6  12.7    0     
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>  </span><span style='text-decoration: underline;'>1</span><span>983     0  44   13.9  23.3   8.17  5.42  7.17     0  3.17  9.5    0     
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>  </span><span style='text-decoration: underline;'>1</span><span>984     0  32.3  8.2   6.4   5.9   6.4   4.5      0  1.5   0.6    0.7   
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>  </span><span style='text-decoration: underline;'>1</span><span>985     0  48.9 16.6   7.55  3.91  7.18  5.09     0  4.27  0.090</span><span style='text-decoration: underline;'>9</span><span> 0.273 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>  </span><span style='text-decoration: underline;'>1</span><span>986     0  40.6 11.5   8.8   6     4.3   2.5      0  2.6   0.2    0.1   
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>  </span><span style='text-decoration: underline;'>1</span><span>987     0  42.5 19.4   9.45 11.6   7.18  3.91     0 12.9   0.364  0     
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>  </span><span style='text-decoration: underline;'>1</span><span>988     0  30.4 12     4.5   8.5   4.25  7.25     0 15.8   0.167  0.083</span><span style='text-decoration: underline;'>3</span><span>
-#&gt; </span><span style='color: #949494;'># … with 31 more rows, and 10 more variables: PI &lt;dbl&gt;, PL &lt;dbl&gt;, PM &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   PP &lt;dbl&gt;, RF &lt;dbl&gt;, RM &lt;dbl&gt;, RO &lt;dbl&gt;, SF &lt;dbl&gt;, SH &lt;dbl&gt;, SO &lt;dbl&gt;</span><span></div><div class='input'><span class='co'># }</span>
-</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
