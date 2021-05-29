@@ -119,8 +119,3 @@ This function is a generic interface into creating
 
 \code{plant_abundance} generates a table of plant abundance
 }
-\examples{
-\donttest{
-plant_abundance("repo")
-}
-}

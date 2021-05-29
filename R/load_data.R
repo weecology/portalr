@@ -28,10 +28,6 @@
 #'     \code{plots_table} \tab rodent treatment assignments for each plot\cr
 #'   }
 #'
-#' @examples
-#' \donttest{
-#' portal_data <- load_rodent_data("repo")
-#' }
 #' @export
 #'
 load_rodent_data <- function(path = get_default_data_path(),
@@ -89,10 +85,6 @@ load_rodent_data <- function(path = get_default_data_path(),
 #'
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' portal_plant_data <- load_plant_data("repo")
-#' }
 
 load_plant_data <- function(path = get_default_data_path(),
                             download_if_missing = TRUE, quiet = FALSE)
@@ -134,10 +126,6 @@ load_plant_data <- function(path = get_default_data_path(),
 #'
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' portal_ant_data <- load_ant_data("repo")
-#' }
 
 load_ant_data <- function(path = get_default_data_path(),
                           download_if_missing = TRUE, quiet = FALSE)
@@ -168,10 +156,6 @@ load_ant_data <- function(path = get_default_data_path(),
 #'     \code{newmoons_table} \tab pairs census periods with newmoons\cr
 #'   }
 #'
-#' @examples
-#' \donttest{
-#' trapping_data <- load_trapping_data("repo")
-#' }
 #' @export
 load_trapping_data <- function(path = get_default_data_path(),
                                download_if_missing = TRUE, clean = TRUE,
@@ -205,10 +189,6 @@ load_trapping_data <- function(path = get_default_data_path(),
 #' @inheritParams load_rodent_data
 #' @inheritParams utils::read.table
 #'
-#' @examples
-#' \donttest{
-#' rodent_species <- load_datafile("Rodents/Portal_rodent_species.csv")
-#' }
 #' @export
 load_datafile <- function(datafile, na.strings = "", path = get_default_data_path(),
                           download_if_missing = TRUE, quiet = TRUE)

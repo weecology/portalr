@@ -16,11 +16,6 @@
 #'
 #' @return NULL invisibly.
 #'
-#' @examples
-#' \donttest{
-#'   download_observations()
-#'   download_observations("~/old-data", version = "1.50.0")
-#' }
 #'
 #' @export
 #'

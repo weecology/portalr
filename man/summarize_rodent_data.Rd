@@ -133,6 +133,7 @@ Generic interface into creating summaries of the Portal
              \code{rates} generates a table of rodent growth rates
              (computed as r = log(N[t+1]/N[t]).
 }
+
 \examples{
  \donttest{
    abundance("repo")

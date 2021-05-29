@@ -192,8 +192,7 @@ biomass <- function(...) {
 }
 
 #' @rdname summarize_rodent_data
-#'
-#' @export
+#'#' @export
 #'
 energy <- function(...) {
   summarize_rodent_data(..., output = "energy")
@@ -201,7 +200,6 @@ energy <- function(...) {
 
 #' @rdname summarize_rodent_data
 #'
-
 #' @export
 #'
 rates <- function(...) {
