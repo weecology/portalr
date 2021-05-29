@@ -3,35 +3,26 @@
 \name{summarize_individual_rodents}
 \alias{summarize_individual_rodents}
 \alias{summarise_individual_rodents}
-\title{Return cleaned Portal rodent individual data}
+\title{Portal rodent individual-level data}
 \usage{
 summarize_individual_rodents(
   path = get_default_data_path(),
   clean = TRUE,
+  level = "Site",
   type = "Rodents",
   length = "all",
+  plots = length,
   unknowns = FALSE,
   time = "period",
   fillweight = FALSE,
   min_plots = 1,
   min_traps = 1,
+  start_id = 1000001,
   download_if_missing = TRUE,
   quiet = FALSE
 )
 
-summarise_individual_rodents(
-  path = get_default_data_path(),
-  clean = TRUE,
-  type = "Rodents",
-  length = "all",
-  unknowns = FALSE,
-  time = "period",
-  fillweight = FALSE,
-  min_plots = 1,
-  min_traps = 1,
-  download_if_missing = TRUE,
-  quiet = FALSE
-)
+summarise_individual_rodents(...)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -39,11 +30,17 @@ summarise_individual_rodents(
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
+\item{level}{summarize by "Plot", "Treatment", or "Site"}
+
 \item{type}{specify subset of species; either all "Rodents" or only
 "Granivores"}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (to be deprecated)}
+
+\item{plots}{specify subset of plots; can be a vector of plots, or specific
+sets: "all" plots or "Longterm" plots (plots that have had 
+the same treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column 
@@ -62,15 +59,27 @@ observation to be included}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
 
+\item{start_id}{\code{integer}-conformible value used to start the ids for
+individuals who are not id'ed. Set high enough that it
+should not reasonably need to be changed under current
+id scheme. See \code{\link{clean_tags}}.}
+
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
 
 \item{quiet}{logical, whether to run without producing messages}
+
+\item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }
 \value{
 a data.frame
 }
 \description{
-This function cleans and subsets the data based on a number
-  of arguments. It returns stake number and individual level data.
+Generic interface into creating summaries of the Portal 
+             rodent data at the individual level. It contains a number of 
+             arguments to specify the kind of data to summarize (at what 
+             level of aggregation) and various choices for dealing with 
+             data quality and output format. 
+             \cr \cr
+             \code{summarise_rodent_output} provides alternative spelling.
 }

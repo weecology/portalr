@@ -45,6 +45,8 @@ PIT_tag <- function(tag, species){
   out
 }
 
+# it looks like clean_tags takes a while to run. can it be optimized?
+# also doesnt run fully eeeep
 
 # uses general heuristics to clean the raw rodent observations
 # returns a rodents data frame with a new id column 
@@ -94,7 +96,6 @@ clean_tags <- function(rodents, start_id = 1000001){
   nunks <- length(unks)
   end_id <- start_id + nunks - 1
   rodents$id[unks] <- start_id:end_id
-
   # disentangle non-unique ids
   # making the assumption that PIT tag values are not repeated among 
   # individuals
@@ -104,6 +105,7 @@ clean_tags <- function(rodents, start_id = 1000001){
   # trying to account for individuals that might have been mis-identified 
   #  using the ltag also, there's only one individual that looks mis-id'ed
   # assuming that tag 1782 OT, OT -> OL -> OT should have been all OT
+
   rodents$species[which(rodents$recordID == 19533)] <- "OT"
 
   rodents$id <- paste0(rodents$id, "_", rodents$species) 
@@ -114,7 +116,46 @@ clean_tags <- function(rodents, start_id = 1000001){
 
   uids <- unique(rodents$id)
   nuids <- length(uids)
+
+  
+  rodents$status <- ""
+  rodents$status[rodents$note2 == "*"] <- "*"
+  rodents$status[rodents$note5 == "D"] <- "D"
+
+  rodents$date <- as.Date(apply(rodents[, c("year", "month", "day")], 1, 
+                                paste, collapse = "-"))
+
+  rodents <- rodents[order(rodents$species, rodents$id, rodents$date), ]
+
+
+#
+#  working here
+
+table(table(paste(rodents$id,
+                  rodents$status, sep = "_")[rodents$status == "*"]))
+table(table(paste(rodents$id,
+                  rodents$status, sep = "_")[rodents$status == "D"]))
+
+# may indicate that there might not be that many to have to deal with
+
+
+# plan of attack:
+#
+#    running and timing over night.
+#    then check the number of unique ids at that point
+#    then reset rodents, target the code to the individuals that need it
+#         timing that out. 
+#    then check the number of unique ids at that point
+
+#
+#  SLOW
+#
+
+
+st <- numeric(nuids)
+
   for(i in 1:nuids){
+st[i] <- system.time({
     rodents_i <- rodents[which(rodents$id == uids[i]),]
     ast <- which(rodents_i$note2 == "*")
     D <- which(rodents_i$note5 == "D")
@@ -140,8 +181,19 @@ clean_tags <- function(rodents, start_id = 1000001){
     
     rodents_i$id <- paste0(rodents_i$id, "_", ind)
     rodents[which(rodents$id == uids[i]),] <- rodents_i    
+})[3]
   }
  
+
+#
+#
+
+
+
+#
+# not slow
+#
+
   # or an extended time window break for non-PIT tags
   #  assuming that if there's a gap of more than 1 year between records
   #  for a non-PIT tag, then that means it's a new individual
@@ -159,6 +211,11 @@ clean_tags <- function(rodents, start_id = 1000001){
     PIT_tagYN[i] <- rodents_i$PIT_tag[1]
     longev[i] <- as.numeric(difftime(max(rid), min(rid), unit = "days"))/365
   }
+
+
+#
+# not slow
+#
 
   whichlong <- which(longev > 1 & !PIT_tagYN)
   nlong <- length(whichlong)
@@ -182,12 +239,19 @@ clean_tags <- function(rodents, start_id = 1000001){
     rodents[which(rodents$id == uids[whichlong[i]]),] <- rodents_i    
   }
 
+#
+#
+#
+
+
+
+
+
   # remove duplicates from the same period
   #  choosing the duplicate that is from a more common plot for the individual
   #  if it's a tie, the first observation is the one that's kept
   # if they are in the same plot (weird!) the first one is kept
 
-  rodents<-rodentsx
   uids <- unique(rodents$id)
   nuids <- length(uids)
   for(i in 1:nuids){
