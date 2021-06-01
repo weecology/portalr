@@ -1,39 +1,8 @@
-# WORK IN PROGRESS
 
-# thoughts on output options
-# 1. list of two elements: 
-#  1. table of rodent-level information, where one column is a caputre history
-#     across a series of possible capture events
-#  2. table describing the capture events
-#
-rodent_level_data <- function(path = get_default_data_path(),
-                              download_if_missing = TRUE, plots = "all",
-                              type = "Rodents", unknowns = FALSE, 
-                              clean = TRUE, quiet = FALSE,
-                              start_id = 1000001){
-
-  data <- load_rodent_data(path = path, 
-                           download_if_missing = download_if_missing,
-                           clean = clean, quiet = quiet)
-  
-  rodents <- clean_rodent_data(rodent_data = data$rodent_data, 
-                               species_table = data$species_table,
-                               fillweight = FALSE, type = type,
-                               unknowns = unknowns) %>%
-             clean_tags(start_id = start_id)
-
-# the rodent data are now in and cleaned at the tag level
-# need to construct the capture histories based on trapping data and tag
-# data
-
-  trapping <- filter_plots(data = data$trapping_table, plots = plots) %>%
-              join_plots(plots_table = data$plots_table)
-
-}
 
 
 #
-# attempts to determine if a tag is a PIT tag by its structure
+# determines if a tag is a PIT tag by its structure
 #  requires species input for comparison, returns a logical vector
 #
 PIT_tag <- function(tag, species){
@@ -44,9 +13,6 @@ PIT_tag <- function(tag, species){
   out[which(tagchar == 6 &! sp_in_tag &! non_pit_letters)] <- TRUE
   out
 }
-
-# it looks like clean_tags takes a while to run. can it be optimized?
-# also doesnt run fully eeeep
 
 # uses general heuristics to clean the raw rodent observations
 # returns a rodents data frame with a new id column 
@@ -68,7 +34,24 @@ PIT_tag <- function(tag, species){
 #     kept. if it's a tie, the first observation is the one that's kept
 #     if they are in the same plot (weird!) the first one is kept
 #
-clean_tags <- function(rodents, start_id = 1000001){
+# individuals without tag ids are given temporary ids, starting with
+#   a number 1000 larger than the largest number tag in the database
+#   letters and ?s are translated to 0s
+#   the tag is only temporary, not a fixed part of the dataset
+#
+clean_tags <- function (rodents, clean = TRUE, quiet = FALSE) {
+
+  if (!clean) {
+
+    return(rodents)
+
+  }
+
+  if (!quiet) {
+
+    message("Cleaning tag data...")
+
+  }
 
   # append the tag type
   rodents$PIT_tag <- PIT_tag(rodents$tag, rodents$species)
@@ -94,6 +77,12 @@ clean_tags <- function(rodents, start_id = 1000001){
   # give an id to individuals with no id
   unks <- which(is.na(rodents$tag) == TRUE)
   nunks <- length(unks)
+
+  temp <- gsub("([[:alpha:]])", "0", rodents$tag)
+  temp <- gsub("\\?", "0", temp)
+  max_id <- max(as.numeric(na.omit(temp)), na.rm = TRUE)
+  start_id <- max_id + 1000
+
   end_id <- start_id + nunks - 1
   rodents$id[unks] <- start_id:end_id
   # disentangle non-unique ids
@@ -116,95 +105,71 @@ clean_tags <- function(rodents, start_id = 1000001){
 
   uids <- unique(rodents$id)
   nuids <- length(uids)
-
   
   rodents$status <- ""
-  rodents$status[rodents$note2 == "*"] <- "*"
+  rodents$status[rodents$note2 == "*" | rodents$note3 == "*"] <- "*"
   rodents$status[rodents$note5 == "D"] <- "D"
+  rodents$id_status <- paste(rodents$id, rodents$status, sep = "_")
+
+
+  ast <- rodents$note2 == "*"
+  D <- rodents$note5 == "D"
 
   rodents$date <- as.Date(apply(rodents[, c("year", "month", "day")], 1, 
                                 paste, collapse = "-"))
 
   rodents <- rodents[order(rodents$species, rodents$id, rodents$date), ]
 
-
-#
-#  working here
-
-table(table(paste(rodents$id,
-                  rodents$status, sep = "_")[rodents$status == "*"]))
-table(table(paste(rodents$id,
-                  rodents$status, sep = "_")[rodents$status == "D"]))
-
-# may indicate that there might not be that many to have to deal with
+  rodents$idind <- 1
 
 
-# plan of attack:
-#
-#    running and timing over night.
-#    then check the number of unique ids at that point
-#    then reset rodents, target the code to the individuals that need it
-#         timing that out. 
-#    then check the number of unique ids at that point
+  fun1 <- function(x){
+    x[length(x)] <- "D"
+    x[1] <- "*"
+    x[(which(x == "*") - 1)] <- "D"
+    x[1] <- "*"
+    x
+  }
 
-#
-#  SLOW
-#
+  fun2 <- function(x){
+    nx <- sum(x == "*")
+    x[x == "*"] <- 1:nx
+    x[!(x %in% 1:nx)] <- 0
+    rep(1:sum(x %in% 1:nx), 
+        diff(c(which(x %in% 1:nx), length(x) + 1)))
+  }
 
 
-st <- numeric(nuids)
 
   for(i in 1:nuids){
-st[i] <- system.time({
-    rodents_i <- rodents[which(rodents$id == uids[i]),]
-    ast <- which(rodents_i$note2 == "*")
-    D <- which(rodents_i$note5 == "D")
-    status <- rep(NA, NROW(rodents_i))
-    status[ast] <- "*"
-    status[D] <- "D"
-    status[NROW(rodents_i)] <- "D"
-    status[1] <- "*"
-    makeD <- which(status == "*") - 1
-    makeD <- makeD[which(makeD > 0)]
-    status[makeD] <- "D"
 
-    ind <- rep(NA, NROW(rodents_i))
-    newind <- which(status == "*")
-    nnewind <- length(newind)
-    for(j in 1:nnewind){
-      spot1 <- which(status == "*")[j]
-      spot1[is.na(spot1)] <- 1
-      spot2 <- which(status == "D")[j]
-      spot2[is.na(spot2)] <- NROW(rodents_i)
-      ind[spot1:spot2] <- j
+    if(sum(rodents$id == uids[i]) == 1){
+      next()
     }
-    
-    rodents_i$id <- paste0(rodents_i$id, "_", ind)
-    rodents[which(rodents$id == uids[i]),] <- rodents_i    
-})[3]
+
+    rodents$status[rodents$id == uids[i]] <- 
+                            fun1(rodents$status[rodents$id == uids[i]])
+    rodents$idind[rodents$id == uids[i]] <- 
+                            fun2(rodents$status[rodents$id == uids[i]])
+
   }
- 
-
-#
-#
 
 
+  rodents$id_ind <- paste(rodents$id, rodents$idind, sep = "_")
 
-#
-# not slow
-#
+
 
   # or an extended time window break for non-PIT tags
   #  assuming that if there's a gap of more than 1 year between records
   #  for a non-PIT tag, then that means it's a new individual
 
-  uids <- unique(rodents$id)
+  uids <- unique(rodents$id_ind)
   nuids <- length(uids)
   sp <- rep(NA, nuids)
   PIT_tagYN <- rep(NA, nuids)
   longev <- rep(NA, nuids)
   for(i in 1:nuids){
-    rodents_i <- rodents[which(rodents$id == uids[i]),]
+    rodents_i <- rodents[which(rodents$id_ind == uids[i]),]
     rid <- paste0(rodents_i$year, "-", rodents_i$month, "-", rodents_i$day)
     rid <- as.Date(rid)
     sp[i] <- rodents_i$species[1]
@@ -213,15 +178,12 @@ st[i] <- system.time({
   }
 
 
-#
-# not slow
-#
 
   whichlong <- which(longev > 1 & !PIT_tagYN)
   nlong <- length(whichlong)
   for(i in 1:nlong){
     longuid <- uids[whichlong[i]]
-    rodents_i <- rodents[which(rodents$id == longuid),]
+    rodents_i <- rodents[which(rodents$id_ind == longuid),]
     rid <- paste0(rodents_i$year, "-", rodents_i$month, "-", rodents_i$day)
     rid <- as.Date(rid)
     ddiff <- c(0, as.numeric(diff(rid))/365)
@@ -235,15 +197,9 @@ st[i] <- system.time({
       spot2 <- lastofind[j]
       ind[spot1:spot2] <- j
     }
-    rodents_i$id <- paste0(rodents_i$id, "_", letters[ind])
-    rodents[which(rodents$id == uids[whichlong[i]]),] <- rodents_i    
+    rodents_i$id_ind <- paste0(rodents_i$id_ind , "_", letters[ind])
+    rodents[which(rodents$id_ind == uids[whichlong[i]]),] <- rodents_i    
   }
-
-#
-#
-#
-
-
 
 
 
@@ -252,10 +208,10 @@ st[i] <- system.time({
   #  if it's a tie, the first observation is the one that's kept
   # if they are in the same plot (weird!) the first one is kept
 
-  uids <- unique(rodents$id)
+  uids <- unique(rodents$id_ind)
   nuids <- length(uids)
   for(i in 1:nuids){
-    rodents_i <- rodents[which(rodents$id == uids[i]),]
+    rodents_i <- rodents[which(rodents$id_ind == uids[i]),]
     pds <- table(rodents_i$period)
     if(any(pds > 1)){
       mpds <- which(pds > 1)
@@ -282,6 +238,13 @@ st[i] <- system.time({
     }
 
   }
+
+  if (!quiet) {
+
+    message("...tag data cleaned")
+
+  }
+  rodents$id <- rodents$id_ind
 
   rodents
 }

@@ -10,11 +10,6 @@
 #'              \cr \cr
 #'              \code{summarise_rodent_output} provides alternative spelling. 
 #'
-#' @param start_id \code{integer}-conformible value used to start the ids for
-#'                 individuals who are not id'ed. Set high enough that it
-#'                 should not reasonably need to be changed under current
-#'                 id scheme. See \code{\link{clean_tags}}.
-#'
 #' @inheritParams summarize_rodent_data
 #'
 #' @return a data.frame
@@ -49,20 +44,30 @@ summarize_individual_rodents <- function (path = get_default_data_path(),
                                species_table = data$species_table,
                                fillweight = FALSE, type = type,
                                unknowns = unknowns) %>%
-             clean_tags(start_id = start_id)
+             clean_tags(clean = clean, quiet = quiet)
 
-  #### Filter by length and add treatment types ----
-  trapping <- filter_plots(data_tables$trapping, plots = plots)
-  rodents <- join_trapping_to_rodents(rodents, trapping, data_tables$trapping,
-                                      min_plots, min_traps) %>%
-    join_plots(data_tables$plots_table) %>%
-    dplyr::select(c("period", "month", "day" = "day.x", "year",
+
+  trapping <- filter_plots(data$trapping, plots = plots) %>%
+              join_plots(plots_table = data$plots_table)
+
+
+#
+#  working here
+#
+
+  join_trapping_to_rodents(rodents, trapping, data$trapping, min_plots, 
+                           min_traps) %>%
+  join_plots(data$plots_table) %>%
+  dplyr::select(c("id", "period", "month", "day" = "day.x", "year",
                     "treatment", "plot", "stake", "species",
                     "sex", "reprod", "age", "testes", "vagina","pregnant",
                     "nipples","lactation",
-                    "hfl", "wgt", "tag", "note2", "ltag", "note3"))
+                    "hfl", "wgt", "tag", "note2", "ltag", "note3")) %>%
+  add_time(rodents, data$newmoons_table, time)
+#
+# through here
+#
 
-  add_time(rodents, data_tables$newmoons_table, time)
 }
 
 #' 
