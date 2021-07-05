@@ -165,6 +165,7 @@ shrub_cover <- function(path = get_default_data_path(),
     clean_transect_data() %>%
     dplyr::mutate(stop = replace(.data$stop, .data$stop > 7071.1, 7071.1),
                   length = .data$stop - .data$start) %>%
+    dplyr::filter(start < 7071.1) %>%
     dplyr::summarize(length = sum(.data$length, na.rm=TRUE),
                      height = mean(.data$height, na.rm=TRUE)) %>%
     dplyr::ungroup() %>%
