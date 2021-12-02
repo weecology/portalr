@@ -11,7 +11,7 @@ test_that("download_observations and check_for_newer_data work", {
     })
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
-    expect_error(download_observations(portal_data_path, version = "1.6"), NA)
+    expect_error(download_observations(portal_data_path, version = "1.6.0"), NA)
     expect_true(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
     expect_true(check_for_newer_data(portal_data_path))
@@ -34,16 +34,6 @@ test_that("load_rodent_data downloads data if missing", {
     expect_warning(data_tables <- load_rodent_data(portal_data_path))
 })
 
-test_that("looking up data versions handle lack of a network connection", {
-    httptest::without_internet({
-        #expect_null(get_data_versions(from_zenodo = TRUE, halt_on_error = FALSE))
-        #expect_error(get_data_versions(from_zenodo = TRUE, halt_on_error = TRUE),
-        #             "^GET https://zenodo.org/record/1215988$")
-        expect_null(get_data_versions(from_zenodo = FALSE, halt_on_error = FALSE))
-        expect_error(get_data_versions(from_zenodo = FALSE, halt_on_error = TRUE),
-                     "^GET https://api.github.com/repos/weecology/PortalData/releases")
-    })
-})
 
 test_that("load_rodent_data has the right format", {
     skip_on_cran()

@@ -1,6 +1,6 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
-Version: 0.3.8
+Version: 0.4.0
 Authors@R: 
     c(person(given = c("Glenda", "M."),
              family = "Yenni",
@@ -58,7 +58,6 @@ Imports:
     crayon,
     dplyr,
     forecast,
-    gh (>= 1.1.0),
     httr,
     lubridate,
     lunar,
