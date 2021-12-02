@@ -93,8 +93,8 @@ download_observations <- function(path        = get_default_data_path(),
     message("Downloading version `", version, "` of the data...")
   }
 
-  temp <- normalized_file_path(tempdir(), "PortalData.zip", mustWork = FALSE)
-  final <- normalized_file_path(path, "PortalData", mustWork = FALSE)
+  temp <- file.path(tempdir(), "PortalData.zip")
+  final <- file.path(path, "PortalData")
 
   download.file(zipball_url, temp, quiet = !verbose, mode = "wb")
   if (file.exists(final)) {
@@ -118,7 +118,7 @@ download_observations <- function(path        = get_default_data_path(),
   Sys.sleep(10)
 
   file.remove(temp)
-  file.rename(normalized_file_path(path, temp_unzip), final)
+  file.rename(file.path(path, temp_unzip), final)
 
   invisible()
 }
@@ -134,11 +134,10 @@ download_observations <- function(path        = get_default_data_path(),
 check_for_newer_data <- function (path = get_default_data_path()) {
 
   tryCatch(
-    path <- normalized_file_path(path, mustWork = TRUE),
+    path <- file.path(path),
     error = function(e) stop("Unable to locate ", path, call. = FALSE))
 
-  version_file <- normalized_file_path(path, "PortalData", "version.txt",
-                                       mustWork = FALSE)
+  version_file <- file.path(path, "PortalData", "version.txt")
 
   if (!file.exists(version_file)) {
     return(TRUE)

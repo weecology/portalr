@@ -17,7 +17,6 @@ summarize_individual_rodents(
   fillweight = FALSE,
   min_plots = 1,
   min_traps = 1,
-  start_id = 1000001,
   download_if_missing = TRUE,
   quiet = FALSE
 )
@@ -58,11 +57,6 @@ records from that individual or species, where possible}
 observation to be included}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
-
-\item{start_id}{\code{integer}-conformible value used to start the ids for
-individuals who are not id'ed. Set high enough that it
-should not reasonably need to be changed under current
-id scheme. See \code{\link{clean_tags}}.}
 
 \item{download_if_missing}{if the specified file path doesn't have the
 PortalData folder, then download it}
