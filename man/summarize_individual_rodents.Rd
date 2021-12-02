@@ -3,15 +3,13 @@
 \name{summarize_individual_rodents}
 \alias{summarize_individual_rodents}
 \alias{summarise_individual_rodents}
-\title{Portal rodent individual-level data}
+\title{Return cleaned Portal rodent individual data}
 \usage{
 summarize_individual_rodents(
   path = get_default_data_path(),
   clean = TRUE,
-  level = "Site",
   type = "Rodents",
   length = "all",
-  plots = length,
   unknowns = FALSE,
   time = "period",
   fillweight = FALSE,
@@ -21,7 +19,19 @@ summarize_individual_rodents(
   quiet = FALSE
 )
 
-summarise_individual_rodents(...)
+summarise_individual_rodents(
+  path = get_default_data_path(),
+  clean = TRUE,
+  type = "Rodents",
+  length = "all",
+  unknowns = FALSE,
+  time = "period",
+  fillweight = FALSE,
+  min_plots = 1,
+  min_traps = 1,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -29,26 +39,18 @@ summarise_individual_rodents(...)
 
 \item{clean}{logical, load only QA/QC rodent data (TRUE) or all data (FALSE)}
 
-\item{level}{summarize by "Plot", "Treatment", or "Site"}
-
 \item{type}{specify subset of species; either all "Rodents" or only
 "Granivores"}
 
 \item{length}{specify subset of plots; use "All" plots or only "Longterm"
 plots (to be deprecated)}
 
-\item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had 
-the same treatment for the entire time series)}
-
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column 
-(unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
 \item{time}{specify the format of the time index in the output, either
-"period" (sequential Portal surveys), "newmoon" (lunar cycle 
-numbering), "date" (calendar date), or "all" (for all time 
-indices)}
+"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
+"date" (calendar date), or "all" (for all time indices)}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
@@ -62,18 +64,11 @@ observation to be included}
 PortalData folder, then download it}
 
 \item{quiet}{logical, whether to run without producing messages}
-
-\item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }
 \value{
 a data.frame
 }
 \description{
-Generic interface into creating summaries of the Portal 
-             rodent data at the individual level. It contains a number of 
-             arguments to specify the kind of data to summarize (at what 
-             level of aggregation) and various choices for dealing with 
-             data quality and output format. 
-             \cr \cr
-             \code{summarise_rodent_output} provides alternative spelling.
+This function cleans and subsets the data based on a number
+  of arguments. It returns stake number and individual level data.
 }

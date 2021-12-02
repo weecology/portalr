@@ -31,13 +31,35 @@ summarize_rodent_data(
   include_unsampled = FALSE
 )
 
-summarise_rodent_data(...)
-
 abundance(...)
 
 biomass(...)
 
+energy(...)
+
 rates(...)
+
+summarise_rodent_data(
+  path = get_default_data_path(),
+  clean = TRUE,
+  level = "Site",
+  type = "Rodents",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  shape = "crosstab",
+  time = "period",
+  output = "abundance",
+  fillweight = (output != "abundance"),
+  na_drop = TRUE,
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site = TRUE),
+  min_traps = 1,
+  min_plots = 24,
+  effort = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE,
+  include_unsampled = FALSE
+)
 }
 \arguments{
 \item{path}{either the file path that contains the PortalData folder or
@@ -54,39 +76,33 @@ rates(...)
 plots (to be deprecated)}
 
 \item{plots}{specify subset of plots; can be a vector of plots, or specific
-sets: "all" plots or "Longterm" plots (plots that have had 
-the same treatment for the entire time series)}
+sets: "all" plots or "Longterm" plots (plots that have had the same
+treatment for the entire time series)}
 
 \item{unknowns}{either removes all individuals not identified to species
-(unknowns = FALSE) or sums them in an additional column 
-(unknowns = TRUE)}
+(unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)}
 
 \item{shape}{return data as a "crosstab" or "flat" list}
 
 \item{time}{specify the format of the time index in the output, either
-"period" (sequential Portal surveys), "newmoon" (lunar cycle 
-numbering), "date" (calendar date), or "all" (for all time 
-indices)}
+"period" (sequential Portal surveys), "newmoon" (lunar cycle numbering),
+"date" (calendar date), or "all" (for all time indices)}
 
-\item{output}{specify whether to return "abundance", or "biomass",
+\item{output}{specify whether to return "abundance", or "biomass", or
 "energy", or "rates"}
 
 \item{fillweight}{specify whether to fill in unknown weights with other
 records from that individual or species, where possible}
 
 \item{na_drop}{logical, drop NA values (representing insufficient sampling)
-filling missing combinations of 
-year-month-treatment/plot-species with NA could
+filling missing combinations of year-month-treatment/plot-species with NA could
 represent one of a few slightly different meanings:
-\itemize{
-  \item that combo doesn't exist
-  \item that combo was skipped that month, or
-  \item that combo was trapped, but is unusable 
-        (a negative period code))
-}}
+ 1) that combo doesn't exist
+ 2) that combo was skipped that month, or
+ 3) that combo was trapped, but is unusable (a negative period code))}
 
-\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but 
-no detections)}
+\item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
+detections)}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
 
@@ -101,47 +117,28 @@ PortalData folder, then download it}
 
 \item{quiet}{logical, whether to run without producing messages}
 
-\item{include_unsampled}{logical, overrides settings for \code{na_drop} and
-\code{zero_drop}, setting both to FALSE}
+\item{include_unsampled}{logical, overrides settings for `na_drop` and
+`zero_drop`, setting both to FALSE}
 
 \item{...}{arguments passed to \code{\link{summarize_rodent_data}}}
 }
 \value{
 a data.frame in either "long" or "wide" format, depending on the
-        value of \code{shape}.
+  value of `shape`
 }
 \description{
-Generic interface into creating summaries of the Portal 
-             rodent species data. It contains a number of arguments
-             to specify the kind of data to summarize (at what level of 
-             aggregation) and various choices for dealing with data 
-             quality and output format. 
-             \cr \cr
-             \code{summarise_rodent_output} provides alternative spelling. 
-             \cr \cr
-             Functions for specific \code{output}: 
-             \cr \cr
-             \code{abundance} generates a table of rodent abundance.
-             \cr \cr
-             \code{biomass} generates a table of rodent biomass.
-             \cr \cr
-             \code{energy} generates a table of rodent energy
-             (computed as 5.69 * (biomass ^ 0.75) after White et al. 2004).
-             \cr \cr
-             \code{rates} generates a table of rodent growth rates
-             (computed as r = log(N[t+1]/N[t]).
-}
-\examples{
- \donttest{
-   abundance("repo")
-   biomass("repo")
-   energy("repo")
-   rates("repo")
- }
+This function is a generic interface into creating summaries
+  of the Portal rodent species data. It contains a number of arguments
+  to specify the kind of data to summarize (at what level of aggregation)
+  and various choices for dealing with data quality, and output format.
 
-}
-\references{
-White, E. P., S. K. M. Ernest, and K. M. Thibault. 2004. Trade-offs in 
-   community properties through time in a desert rodent community. 
-   The American Naturalist 164:670-676. https://doi.org/10.1086/424766.
+\code{abundance} generates a table of rodent abundance
+
+* \code{biomass()} generates a table of rodent biomass
+
+* \code{energy()} generates a table of rodent energy
+  (computed as 5.69 * (biomass ^ 0.75) after White et al 2004)
+
+* \code{rates()} generates a table of rodent growth rates
+  (computed as r=log(N[t+1]/N[t])
 }
