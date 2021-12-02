@@ -91,6 +91,8 @@ clean_tags <- function (rodents, clean = TRUE, quiet = FALSE) {
 
   # split based on species code within tag
   
+
+# https://github.com/weecology/PortalData/issues/410#event-4827318374 should have fixed this
   # trying to account for individuals that might have been mis-identified 
   #  using the ltag also, there's only one individual that looks mis-id'ed
   # assuming that tag 1782 OT, OT -> OL -> OT should have been all OT
