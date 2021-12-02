@@ -14,6 +14,10 @@
 #'
 #' @param verbose logical, whether to provide details of downloading.
 #'
+#' @param timeout Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.
+#'
+#' @param from_zenodo logical; if `TRUE`, get info from Zenodo, otherwise GitHub
+#'
 #' @return NULL invisibly.
 #'
 #'

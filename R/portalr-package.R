@@ -10,6 +10,7 @@
 #' @importFrom rlang "!!" "!!!" ":=" .data
 #' @importFrom utils head download.file read.csv unzip read.table tail
 #' @importFrom stats median na.omit
+#' @importFrom httr content GET stop_for_status
 
 NULL
 

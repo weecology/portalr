@@ -19,9 +19,13 @@ download_observations(
 \item{version}{Version of the data to download (default = "latest").
 If \code{NULL}, returns.}
 
+\item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
+
 \item{quiet}{logical, whether to download data silently.}
 
 \item{verbose}{logical, whether to provide details of downloading.}
+
+\item{timeout}{Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.}
 }
 \value{
 NULL invisibly.
