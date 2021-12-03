@@ -7,7 +7,6 @@ reference:
     contents:
       - download_observations
       - check_for_newer_data
-      - get_data_versions
       - check_default_data_path
   - title: "Data Summaries"
     desc: "Functions to return data summaries"
@@ -15,7 +14,6 @@ reference:
       - summarize_rodent_data
       - summarize_plant_data
       - summarize_individual_rodents
-      - make_timeseries
       - ndvi
       - weather
       - bait_presence_absence
