@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,18 +37,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.9</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -68,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/weecology/portalr/">
+  <a href="https://github.com/weecology/portalr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -85,35 +81,35 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="portalr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#portalr" class="anchor"></a>portalr</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="portalr">portalr<a class="anchor" aria-label="anchor" href="#portalr"></a>
+</h1></div>
 <!-- badges: start -->
 
-<p><a href="https://doi.org/10.5281/zenodo.1429290"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.01098"><img src="http://joss.theoj.org/papers/10.21105/joss.01098/status.svg" alt="DOI"></a> <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1929730"><img src="https://img.shields.io/badge/NSF-1929730-blue.svg" alt="NSF-1929730"></a> <!-- badges: end --></p>
+<p><a href="https://doi.org/10.5281/zenodo.1429290" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.01098" class="external-link"><img src="http://joss.theoj.org/papers/10.21105/joss.01098/status.svg" alt="DOI"></a> <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1929730" class="external-link"><img src="https://img.shields.io/badge/NSF-1929730-blue.svg" alt="NSF-1929730"></a> <!-- badges: end --></p>
 <p><img src="reference/figures/portalr.png" width="200px"></p>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>The <strong>portalr</strong> package provides collection of basic functions to summarize the Portal project data on rodents, plants, ants, and weather at our long-term field site in the Chihuahuan Desert. The data begin in 1977 and are continuously updated today. There are functions to summarize rodent abundance, biomass, or energy and by site, plot, or treatment type. There are functions to summarize the weather data collected from our automated weather stations and plant data that is collected each summer and fall.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install portalr from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">"portalr"</span>)</span></code></pre></div>
 <p>OR from github with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("remotes")</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"weecology/portalr"</span>)</span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<ol>
-<li>Load all data tables from the <a href="https://github.com/weecology/portalData">PortalData GitHub repo</a>:</li>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Load all data tables from the <a href="https://github.com/weecology/portalData" class="external-link">PortalData GitHub repo</a>:</li>
 </ol>
 <!-- --><div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>data_tables &lt;-<span class="st"> </span><span class="kw">load_rodent_data</span>(<span class="st">"repo"</span>)</span></code></pre></div>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Download and generate summaries of rodent abundance and biomass:</li>
 </ol>
 <!-- --><div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">download_observations</span>(<span class="st">"."</span>)</span>
@@ -122,49 +118,49 @@
 <span id="cb4-4"><a href="#cb4-4"></a></span>
 <span id="cb4-5"><a href="#cb4-5"></a>rodent_biomass_by_plot &lt;-<span class="st"> </span><span class="kw">biomass</span>(<span class="st">"."</span>, <span class="dt">level =</span> <span class="st">"plot"</span>, <span class="dt">type =</span> <span class="st">"granivores"</span>, </span>
 <span id="cb4-6"><a href="#cb4-6"></a><span class="dt">shape =</span> <span class="st">"flat"</span>, <span class="dt">time =</span> <span class="st">"date"</span>)</span></code></pre></div>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Retrieve weather data:</li>
 </ol>
 <!-- --><div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>weatherdata &lt;-<span class="st"> </span><span class="kw">weather</span>(<span class="st">"Monthly"</span>, <span class="st">"."</span>)</span></code></pre></div>
 <p>For more detailed info, checkout the vignettes associated with the package:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">browseVignettes</span>(<span class="st">"portalr"</span>)</span></code></pre></div>
 </div>
-<div id="more-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#more-information" class="anchor"></a>More Information</h2>
-<div id="portal-data-repo" class="section level4">
-<h4 class="hasAnchor">
-<a href="#portal-data-repo" class="anchor"></a><a href="https://github.com/weecology/PortalData">Portal Data Repo</a>
+<div class="section level2">
+<h2 id="more-information">More Information<a class="anchor" aria-label="anchor" href="#more-information"></a>
+</h2>
+<div class="section level4">
+<h4 id="portal-data-repo">
+<a href="https://github.com/weecology/PortalData" class="external-link">Portal Data Repo</a><a class="anchor" aria-label="anchor" href="#portal-data-repo"></a>
 </h4>
 <p>The data repo contains useful details for issues with data collection, and background on why we handle them the way we do. Of course, it also contains the raw data, if you would like to create more complex data summaries than what is provided here.</p>
 </div>
-<div id="the-portal-project" class="section level4">
-<h4 class="hasAnchor">
-<a href="#the-portal-project" class="anchor"></a><a href="https://portal.weecology.org/">The Portal Project</a>
+<div class="section level4">
+<h4 id="the-portal-project">
+<a href="https://portal.weecology.org/" class="external-link">The Portal Project</a><a class="anchor" aria-label="anchor" href="#the-portal-project"></a>
 </h4>
 <p>Find a list of previous publications using the Portal data at our website.</p>
 </div>
-<div id="the-portal-blog" class="section level4">
-<h4 class="hasAnchor">
-<a href="#the-portal-blog" class="anchor"></a><a href="https://portalproject.wordpress.com/">The Portal Blog</a>
+<div class="section level4">
+<h4 id="the-portal-blog">
+<a href="https://portalproject.wordpress.com/" class="external-link">The Portal Blog</a><a class="anchor" aria-label="anchor" href="#the-portal-blog"></a>
 </h4>
 <p>Follow our blog to get the latest news on what is happening with our project and at the site.</p>
 </div>
 </div>
-<div id="citation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
 <p>To cite <code>portalr</code>, please refer to either:</p>
 <ul>
 <li>
-<p><a href="https://doi.org/10.21105/joss.01098">JOSS publication</a>:</p>
-<p>Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White, and S. K. Morgan Ernest. (2019). portalr: an R package for summarizing and using the Portal Project Data. Journal of Open Source Software, 4(33), 1098, <a href="https://doi.org/10.21105/joss.01098" class="uri">https://doi.org/10.21105/joss.01098</a></p>
+<p><a href="https://doi.org/10.21105/joss.01098" class="external-link">JOSS publication</a>:</p>
+<p>Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White, and S. K. Morgan Ernest. (2019). portalr: an R package for summarizing and using the Portal Project Data. Journal of Open Source Software, 4(33), 1098, <a href="https://doi.org/10.21105/joss.01098" class="external-link uri">https://doi.org/10.21105/joss.01098</a></p>
 </li>
-<li><p>or use the most recent release on <a href="https://doi.org/10.5281/zenodo.1429290">Zenodo</a>.</p></li>
+<li><p>or use the most recent release on <a href="https://doi.org/10.5281/zenodo.1429290" class="external-link">Zenodo</a>.</p></li>
 </ul>
-<div id="dataset-citation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dataset-citation" class="anchor"></a>Dataset Citation</h3>
+<div class="section level3">
+<h3 id="dataset-citation">Dataset Citation<a class="anchor" aria-label="anchor" href="#dataset-citation"></a>
+</h3>
 <p>To cite the Portal dataset, use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">get_dataset_citation</span>()</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; </span></span>
@@ -195,71 +191,75 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=portalr">https://​cloud.r-project.org/​package=portalr</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/weecology/portalr/">https://​github.com/​weecology/​portalr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/weecology/portalr/issues">https://​github.com/​weecology/​portalr/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=portalr" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/weecology/portalr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/weecology/portalr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing portalr</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Glenda M. Yenni <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6969-1848" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Hao Ye <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8630-1458" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Erica M. Christensen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5635-2502" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Juniper L. Simonis <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9798-0460" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Ellen K. Bledsoe <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3629-7235" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Renata M. Diaz <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0803-4734" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Shawn D. Taylor <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6178-6903" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Ethan P, White <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6728-7745" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>S.K. Morgan Ernest <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6026-8530" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing portalr</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/weecology/portalr/actions"><img src="https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://raw.githubusercontent.com/weecology/portalr/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a></li>
-<li><a href="https://codecov.io/github/weecology/portalr?branch=main"><img src="https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg" alt="Coverage status"></a></li>
-<li><a href="https://CRAN.R-project.org/package=portalr"><img src="https://cranlogs.r-pkg.org/badges/grand-total/portalr" alt="CRAN downloads"></a></li>
+<li>Glenda M. Yenni <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6969-1848" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Hao Ye <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8630-1458" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Erica M. Christensen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5635-2502" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Juniper L. Simonis <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9798-0460" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Ellen K. Bledsoe <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3629-7235" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Renata M. Diaz <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0803-4734" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Shawn D. Taylor <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6178-6903" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Ethan P, White <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6728-7745" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>S.K. Morgan Ernest <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6026-8530" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/weecology/portalr/actions" class="external-link"><img src="https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://raw.githubusercontent.com/weecology/portalr/main/LICENSE" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a></li>
+<li><a href="https://codecov.io/github/weecology/portalr?branch=main" class="external-link"><img src="https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=portalr" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/portalr" alt="CRAN downloads"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Glenda M. Yenni, Hao Ye, Erica M. Christensen, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P, White, S.K. Morgan Ernest.</p>
+  <p></p>
+<p>Developed by Glenda M. Yenni, Hao Ye, Erica M. Christensen, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P, White, S.K. Morgan Ernest.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
       </footer>
@@ -267,6 +267,8 @@
 
   
 
+
+  
 
   </body>
 </html>

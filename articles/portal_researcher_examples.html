@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.9</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/weecology/portalr/">
+  <a href="https://github.com/weecology/portalr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,41 +79,41 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Examples of How Portal Researchers Are Using the Package</h1>
-                        <h4 class="author">Ellen K. Bledsoe</h4>
+                        <h4 data-toc-skip class="author">Ellen K. Bledsoe</h4>
             
-            <h4 class="date">2021-08-05</h4>
+            <h4 data-toc-skip class="date">2021-12-03</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/master/vignettes/portal_researcher_examples.Rmd"><code>vignettes/portal_researcher_examples.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/HEAD/vignettes/portal_researcher_examples.Rmd" class="external-link"><code>vignettes/portal_researcher_examples.Rmd</code></a></small>
       <div class="hidden name"><code>portal_researcher_examples.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>The <code>portalr</code> package started out as a series of scripts used by Portal researchers to quickly and consistently summarize the <a href="https://github.com/weecology/PortalData">Portal data</a>. It has developed from there into a formalized package, dealing with all the quirky data manipulation under the hood. Now, the researchers who are currently collecting data at Portal have started actively using the package in their own work. Some examples of how we are using the package are included below.</p>
-<div id="installing-the-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing-the-package" class="anchor"></a>Installing the Package</h2>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
+<p>The <code>portalr</code> package started out as a series of scripts used by Portal researchers to quickly and consistently summarize the <a href="https://github.com/weecology/PortalData" class="external-link">Portal data</a>. It has developed from there into a formalized package, dealing with all the quirky data manipulation under the hood. Now, the researchers who are currently collecting data at Portal have started actively using the package in their own work. Some examples of how we are using the package are included below.</p>
+<div class="section level2">
+<h2 id="installing-the-package">Installing the Package<a class="anchor" aria-label="anchor" href="#installing-the-package"></a>
+</h2>
 <p>First, we need to install the <code>portalr</code> package if we haven’t done so already. We’ll also load <code>tidyverse</code>, which has many packages for data manipulation and plotting.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#devtools::install_github("weecology/portalr")</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://weecology.github.io/portalr/">portalr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://weecology.github.io/portalr/">portalr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
 <p><br></p>
 </div>
 </div>
-<div id="rodent-biomass-ratios-between-plot-treatment-types" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rodent-biomass-ratios-between-plot-treatment-types" class="anchor"></a>Rodent Biomass Ratios between Plot Treatment Types</h1>
+<div class="section level1">
+<h1 id="rodent-biomass-ratios-between-plot-treatment-types">Rodent Biomass Ratios between Plot Treatment Types<a class="anchor" aria-label="anchor" href="#rodent-biomass-ratios-between-plot-treatment-types"></a>
+</h1>
 <p>One thing we can do with the Portal rodent data is look at the ratio of biomass between the control plots and the kangaroo rat exclosure plots and how it has changed through time.</p>
-<div id="getting-the-data-we-want" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-the-data-we-want" class="anchor"></a>Getting the Data We Want</h2>
+<div class="section level2">
+<h2 id="getting-the-data-we-want">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want"></a>
+</h2>
 <p>Because we are going to compare biomass between plot types, we need to know the biomass on each plot. To achieve this, we can set <code>level = "plot"</code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">biomass_data</span> <span class="op">&lt;-</span> <span class="fu">portalr</span><span class="fu">::</span><span class="fu"><a href="../reference/summarize_rodent_data.html">summarize_rodent_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"repo"</span>, 
@@ -142,8 +138,8 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">10171</td>
-<td align="left">2019-05-04</td>
+<td align="left">10387</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">1</td>
 <td align="right">0</td>
@@ -155,8 +151,8 @@
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">10172</td>
-<td align="left">2019-05-04</td>
+<td align="left">10388</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">9</td>
 <td align="right">0</td>
@@ -168,8 +164,8 @@
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">10173</td>
-<td align="left">2019-05-04</td>
+<td align="left">10389</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">10</td>
 <td align="right">0</td>
@@ -181,12 +177,12 @@
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">10174</td>
-<td align="left">2019-05-04</td>
+<td align="left">10390</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">12</td>
 <td align="right">0</td>
-<td align="right">57</td>
+<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -194,8 +190,8 @@
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">10175</td>
-<td align="left">2019-05-04</td>
+<td align="left">10391</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">16</td>
 <td align="right">0</td>
@@ -207,8 +203,8 @@
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">10176</td>
-<td align="left">2019-05-04</td>
+<td align="left">10392</td>
+<td align="left">2020-01-25</td>
 <td align="left">removal</td>
 <td align="right">23</td>
 <td align="right">0</td>
@@ -222,49 +218,49 @@
 </tbody>
 </table>
 </div>
-<div id="working-with-the-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#working-with-the-data" class="anchor"></a>Working with the Data</h2>
+<div class="section level2">
+<h2 id="working-with-the-data">Working with the Data<a class="anchor" aria-label="anchor" href="#working-with-the-data"></a>
+</h2>
 <p>Let’s select only the rows we want:</p>
 <ul>
-<li><p>Based on information about the plot treatment switches that can be found in this <a href="https://github.com/weecology/PortalData/tree/main/SiteandMethods">Readme file</a> in the PortalData repo, we want to select censuses in the years 1988-2014; to make the data a bit easier to work with, we can also split the date column into three separate columns and then filter on the year column.</p></li>
+<li><p>Based on information about the plot treatment switches that can be found in this <a href="https://github.com/weecology/PortalData/tree/main/SiteandMethods" class="external-link">Readme file</a> in the PortalData repo, we want to select censuses in the years 1988-2014; to make the data a bit easier to work with, we can also split the date column into three separate columns and then filter on the year column.</p></li>
 <li><p>Since we are comparing control plots and exclosure plots, we can also filter for only those treatment types.</p></li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">biomass_data</span> <span class="op">&lt;-</span> <span class="va">biomass_data</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">biomass_data</span> <span class="op">&lt;-</span> <span class="va">biomass_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="co"># split the date column into year, month, and day</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">censusdate</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">1988</span> <span class="op">&amp;</span> <span class="va">year</span> <span class="op">&lt;</span> <span class="fl">2015</span>,                         <span class="co"># filter by year</span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">censusdate</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">1988</span> <span class="op">&amp;</span> <span class="va">year</span> <span class="op">&lt;</span> <span class="fl">2015</span>,                         <span class="co"># filter by year</span>
          <span class="va">treatment</span> <span class="op">==</span> <span class="st">"control"</span> <span class="op">|</span> <span class="va">treatment</span> <span class="op">==</span> <span class="st">"exclosure"</span><span class="op">)</span>  <span class="co"># filter by treatment type</span></code></pre></div>
 <p>We can get the total biomass for each plot per census by summing the mass of all the species per row. From there, we will sum by year for each treatment type. Then, we can create the exclosure:control ratio.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compute total biomass per year and treatment</span>
-<span class="va">biomass_total</span> <span class="op">&lt;-</span> <span class="va">biomass_data</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">biomass</span>, <span class="va">BA</span><span class="op">:</span><span class="va">SO</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">treatment</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>totals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">biomass</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">biomass_total</span> <span class="op">&lt;-</span> <span class="va">biomass_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">biomass</span>, <span class="va">BA</span><span class="op">:</span><span class="va">SO</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">treatment</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>totals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">biomass</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># make a column with the exclosure:control ratio</span>
-<span class="va">biomass_ratio</span> <span class="op">&lt;-</span> <span class="va">biomass_total</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span><span class="va">treatment</span>, <span class="va">totals</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>EX_to_CO_ratio <span class="op">=</span> <span class="va">exclosure</span> <span class="op">/</span> <span class="va">control</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">biomass_ratio</span> <span class="op">&lt;-</span> <span class="va">biomass_total</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">treatment</span>, <span class="va">totals</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>EX_to_CO_ratio <span class="op">=</span> <span class="va">exclosure</span> <span class="op">/</span> <span class="va">control</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="plotting-the-ratios" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting-the-ratios" class="anchor"></a>Plotting the Ratios</h2>
+<div class="section level2">
+<h2 id="plotting-the-ratios">Plotting the Ratios<a class="anchor" aria-label="anchor" href="#plotting-the-ratios"></a>
+</h2>
 <p>We can finally plot the data!</p>
 <p><img src="portal_researcher_examples_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Before the mid-1990s, biomass on the kangaroo rat exclosures never went above 50% of the biomass found in the control plots; the small granivores just couldn’t keep up with the larger kangaroo rats. When a larger pocket mouse, <em>Chaetodipus baileyi</em>, showed up in the system (first gray bar), they were found primarily in the kangaroo rat exclosures. This increased the biomass ratio to above 80% of that found in the control plots. As <em>C. baileyi</em> left the system (second gray bar), the ratio returned to similar levels as before their arrival.<br><br><br></p>
 </div>
 </div>
-<div id="working-with-plant-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#working-with-plant-data" class="anchor"></a>Working with Plant Data</h1>
+<div class="section level1">
+<h1 id="working-with-plant-data">Working with Plant Data<a class="anchor" aria-label="anchor" href="#working-with-plant-data"></a>
+</h1>
 <p>While the rodent community data is the most frequently utilized data from the Portal Project, we can also use <code>portalr</code> to get plant or ant data from the site. We’ve been running some multivariate statistics on plant composition in the plots and looking for differences between rodent treatment types. This is how we get the data we need to do that.</p>
-<div id="getting-the-data-we-want-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-the-data-we-want-1" class="anchor"></a>Getting the Data We Want</h2>
+<div class="section level2">
+<h2 id="getting-the-data-we-want-1">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want-1"></a>
+</h2>
 <p>Our site has two rainy periods and, therefore, two communities of annual plants. Let’s say we want to take a look at the abundance of the <em>winter</em> annuals in the system, and we want to see if they differ by treatment type. We can use the <code>summarize_plant_data</code> function to get the appropriate data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plant_data</span> <span class="op">&lt;-</span> <span class="fu">portalr</span><span class="fu">::</span><span class="fu"><a href="../reference/summarize_plant_data.html">summarize_plant_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">'repo'</span>, level <span class="op">=</span> <span class="st">'plot'</span>,
@@ -343,7 +339,7 @@
 <p>As it turns out, while we have two annual communities of plants, some of the annuals in our system can be found in both summer AND winter. Hypothetically, someone might want to know about any and all annual plants that could be found in the winter: how many of them show up in the summer, for example?</p>
 <p>To get the data we want–just winter annuals found only in the winter season–we just need one more quick line of code.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plant_data_winter</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">plant_data</span>, <span class="va">season</span> <span class="op">==</span> <span class="st">'winter'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">plant_data_winter</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">plant_data</span>, <span class="va">season</span> <span class="op">==</span> <span class="st">'winter'</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">year</th>
@@ -413,9 +409,9 @@
 </table>
 <p>That’s more like it! Now we have the data we want to run some multivariate statistics or whatever else you might want to do with the data.</p>
 </div>
-<div id="happy-coding" class="section level2">
-<h2 class="hasAnchor">
-<a href="#happy-coding" class="anchor"></a>Happy coding!</h2>
+<div class="section level2">
+<h2 id="happy-coding">Happy coding!<a class="anchor" aria-label="anchor" href="#happy-coding"></a>
+</h2>
 </div>
 </div>
   </div>
@@ -431,11 +427,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Glenda M. Yenni, Hao Ye, Erica M. Christensen, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P, White, S.K. Morgan Ernest.</p>
+  <p></p>
+<p>Developed by Glenda M. Yenni, Hao Ye, Erica M. Christensen, Juniper L. Simonis, Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P, White, S.K. Morgan Ernest.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
       </footer>
@@ -443,6 +441,8 @@
 
   
 
+
+  
 
   </body>
 </html>
