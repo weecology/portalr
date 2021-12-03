@@ -36,3 +36,11 @@ reference:
       - clean_rodent_data
       - fill_missing_ndvi
       - find_incomplete_censuses
+   - title: "Utilities"
+    desc: "Formatting"
+    contents:
+      - format_todo
+      - format_value
+      - format_code
+      - portalr
+      
