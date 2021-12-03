@@ -36,7 +36,7 @@ reference:
       - clean_rodent_data
       - fill_missing_ndvi
       - find_incomplete_censuses
-   - title: "Utilities"
+  - title: "Utilities"
     desc: "Formatting"
     contents:
       - format_todo
