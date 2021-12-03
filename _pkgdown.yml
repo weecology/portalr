@@ -8,6 +8,7 @@ reference:
       - download_observations
       - check_for_newer_data
       - check_default_data_path
+      - get_dataset_citation
   - title: "Data Summaries"
     desc: "Functions to return data summaries"
     contents:
@@ -21,6 +22,7 @@ reference:
       - shrub_cover
       - fcast_ndvi
       - get_future_moons
+      - phenocam
   - title: "Unprocessed Data"
     desc: "Functions to load in raw or otherwise unprocessed data"
     contents:
