@@ -10,6 +10,7 @@ download_observations(
   from_zenodo = FALSE,
   quiet = FALSE,
   verbose = FALSE,
+  pause = 30,
   timeout = getOption("timeout")
 )
 }
@@ -24,6 +25,8 @@ If \code{NULL}, returns.}
 \item{quiet}{logical, whether to download data silently.}
 
 \item{verbose}{logical, whether to provide details of downloading.}
+
+\item{pause}{Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment.}
 
 \item{timeout}{Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.}
 }

@@ -14,6 +14,8 @@
 #'
 #' @param verbose logical, whether to provide details of downloading.
 #'
+#' @param pause Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment. 
+#'
 #' @param timeout Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.
 #'
 #' @param from_zenodo logical; if `TRUE`, get info from Zenodo, otherwise GitHub
@@ -27,7 +29,8 @@ download_observations <- function(path        = get_default_data_path(),
                                   version     = "latest", 
                                   from_zenodo = FALSE,
                                   quiet       = FALSE,
-                                  verbose       = FALSE,
+                                  verbose     = FALSE,
+                                  pause       = 30,
                                   timeout     = getOption("timeout")) {
 
   if (is.null(version)) {
@@ -119,7 +122,7 @@ download_observations <- function(path        = get_default_data_path(),
 
   unzip(temp, exdir = path)
 
-  Sys.sleep(10)
+  Sys.sleep(pause)
 
   file.remove(temp)
   file.rename(file.path(path, temp_unzip), final)
