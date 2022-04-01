@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.10</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -81,7 +81,7 @@
       <h1 data-toc-skip>Examples of How Portal Researchers Are Using the Package</h1>
                         <h4 data-toc-skip class="author">Ellen K. Bledsoe</h4>
             
-            <h4 data-toc-skip class="date">2021-12-03</h4>
+            <h4 data-toc-skip class="date">2022-04-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/HEAD/vignettes/portal_researcher_examples.Rmd" class="external-link"><code>vignettes/portal_researcher_examples.Rmd</code></a></small>
       <div class="hidden name"><code>portal_researcher_examples.Rmd</code></div>
@@ -90,13 +90,13 @@
 
     
     
-<div class="section level1">
-<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h1>
-<p>The <code>portalr</code> package started out as a series of scripts used by Portal researchers to quickly and consistently summarize the <a href="https://github.com/weecology/PortalData" class="external-link">Portal data</a>. It has developed from there into a formalized package, dealing with all the quirky data manipulation under the hood. Now, the researchers who are currently collecting data at Portal have started actively using the package in their own work. Some examples of how we are using the package are included below.</p>
 <div class="section level2">
-<h2 id="installing-the-package">Installing the Package<a class="anchor" aria-label="anchor" href="#installing-the-package"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>The <code>portalr</code> package started out as a series of scripts used by Portal researchers to quickly and consistently summarize the <a href="https://github.com/weecology/PortalData" class="external-link">Portal data</a>. It has developed from there into a formalized package, dealing with all the quirky data manipulation under the hood. Now, the researchers who are currently collecting data at Portal have started actively using the package in their own work. Some examples of how we are using the package are included below.</p>
+<div class="section level3">
+<h3 id="installing-the-package">Installing the Package<a class="anchor" aria-label="anchor" href="#installing-the-package"></a>
+</h3>
 <p>First, we need to install the <code>portalr</code> package if we haven’t done so already. We’ll also load <code>tidyverse</code>, which has many packages for data manipulation and plotting.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#devtools::install_github("weecology/portalr")</span>
@@ -107,13 +107,13 @@
 <p><br></p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="rodent-biomass-ratios-between-plot-treatment-types">Rodent Biomass Ratios between Plot Treatment Types<a class="anchor" aria-label="anchor" href="#rodent-biomass-ratios-between-plot-treatment-types"></a>
-</h1>
-<p>One thing we can do with the Portal rodent data is look at the ratio of biomass between the control plots and the kangaroo rat exclosure plots and how it has changed through time.</p>
 <div class="section level2">
-<h2 id="getting-the-data-we-want">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want"></a>
+<h2 id="rodent-biomass-ratios-between-plot-treatment-types">Rodent Biomass Ratios between Plot Treatment Types<a class="anchor" aria-label="anchor" href="#rodent-biomass-ratios-between-plot-treatment-types"></a>
 </h2>
+<p>One thing we can do with the Portal rodent data is look at the ratio of biomass between the control plots and the kangaroo rat exclosure plots and how it has changed through time.</p>
+<div class="section level3">
+<h3 id="getting-the-data-we-want">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want"></a>
+</h3>
 <p>Because we are going to compare biomass between plot types, we need to know the biomass on each plot. To achieve this, we can set <code>level = "plot"</code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">biomass_data</span> <span class="op">&lt;-</span> <span class="fu">portalr</span><span class="fu">::</span><span class="fu"><a href="../reference/summarize_rodent_data.html">summarize_rodent_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"repo"</span>, 
@@ -218,9 +218,9 @@
 </tbody>
 </table>
 </div>
-<div class="section level2">
-<h2 id="working-with-the-data">Working with the Data<a class="anchor" aria-label="anchor" href="#working-with-the-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="working-with-the-data">Working with the Data<a class="anchor" aria-label="anchor" href="#working-with-the-data"></a>
+</h3>
 <p>Let’s select only the rows we want:</p>
 <ul>
 <li><p>Based on information about the plot treatment switches that can be found in this <a href="https://github.com/weecology/PortalData/tree/main/SiteandMethods" class="external-link">Readme file</a> in the PortalData repo, we want to select censuses in the years 1988-2014; to make the data a bit easier to work with, we can also split the date column into three separate columns and then filter on the year column.</p></li>
@@ -246,21 +246,21 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>EX_to_CO_ratio <span class="op">=</span> <span class="va">exclosure</span> <span class="op">/</span> <span class="va">control</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="plotting-the-ratios">Plotting the Ratios<a class="anchor" aria-label="anchor" href="#plotting-the-ratios"></a>
-</h2>
+<div class="section level3">
+<h3 id="plotting-the-ratios">Plotting the Ratios<a class="anchor" aria-label="anchor" href="#plotting-the-ratios"></a>
+</h3>
 <p>We can finally plot the data!</p>
 <p><img src="portal_researcher_examples_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Before the mid-1990s, biomass on the kangaroo rat exclosures never went above 50% of the biomass found in the control plots; the small granivores just couldn’t keep up with the larger kangaroo rats. When a larger pocket mouse, <em>Chaetodipus baileyi</em>, showed up in the system (first gray bar), they were found primarily in the kangaroo rat exclosures. This increased the biomass ratio to above 80% of that found in the control plots. As <em>C. baileyi</em> left the system (second gray bar), the ratio returned to similar levels as before their arrival.<br><br><br></p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="working-with-plant-data">Working with Plant Data<a class="anchor" aria-label="anchor" href="#working-with-plant-data"></a>
-</h1>
-<p>While the rodent community data is the most frequently utilized data from the Portal Project, we can also use <code>portalr</code> to get plant or ant data from the site. We’ve been running some multivariate statistics on plant composition in the plots and looking for differences between rodent treatment types. This is how we get the data we need to do that.</p>
 <div class="section level2">
-<h2 id="getting-the-data-we-want-1">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want-1"></a>
+<h2 id="working-with-plant-data">Working with Plant Data<a class="anchor" aria-label="anchor" href="#working-with-plant-data"></a>
 </h2>
+<p>While the rodent community data is the most frequently utilized data from the Portal Project, we can also use <code>portalr</code> to get plant or ant data from the site. We’ve been running some multivariate statistics on plant composition in the plots and looking for differences between rodent treatment types. This is how we get the data we need to do that.</p>
+<div class="section level3">
+<h3 id="getting-the-data-we-want-1">Getting the Data We Want<a class="anchor" aria-label="anchor" href="#getting-the-data-we-want-1"></a>
+</h3>
 <p>Our site has two rainy periods and, therefore, two communities of annual plants. Let’s say we want to take a look at the abundance of the <em>winter</em> annuals in the system, and we want to see if they differ by treatment type. We can use the <code>summarize_plant_data</code> function to get the appropriate data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plant_data</span> <span class="op">&lt;-</span> <span class="fu">portalr</span><span class="fu">::</span><span class="fu"><a href="../reference/summarize_plant_data.html">summarize_plant_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">'repo'</span>, level <span class="op">=</span> <span class="st">'plot'</span>,
@@ -409,9 +409,9 @@
 </table>
 <p>That’s more like it! Now we have the data we want to run some multivariate statistics or whatever else you might want to do with the data.</p>
 </div>
-<div class="section level2">
-<h2 id="happy-coding">Happy coding!<a class="anchor" aria-label="anchor" href="#happy-coding"></a>
-</h2>
+<div class="section level3">
+<h3 id="happy-coding">Happy coding!<a class="anchor" aria-label="anchor" href="#happy-coding"></a>
+</h3>
 </div>
 </div>
   </div>
@@ -433,7 +433,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

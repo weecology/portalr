@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.10</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -81,7 +81,7 @@
       <h1 data-toc-skip>Portal Rodent Abundance Demo</h1>
                         <h4 data-toc-skip class="author">Hao Ye</h4>
             
-            <h4 data-toc-skip class="date">2021-12-03</h4>
+            <h4 data-toc-skip class="date">2022-04-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/HEAD/vignettes/rodent-abundance-demo.Rmd" class="external-link"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
@@ -90,13 +90,13 @@
 
     
     
-<div class="section level1">
-<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h1>
-<p>This vignette is a basic guide to begin exploring the Portal data. We load in the data (making sure that we’re using the most recent copy from GitHub), and then explore the rodent abundances over time, with a comparison between the “control” and “kangaroo rat exclosure” treatments.</p>
 <div class="section level2">
-<h2 id="package-setup">Package Setup<a class="anchor" aria-label="anchor" href="#package-setup"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>This vignette is a basic guide to begin exploring the Portal data. We load in the data (making sure that we’re using the most recent copy from GitHub), and then explore the rodent abundances over time, with a comparison between the “control” and “kangaroo rat exclosure” treatments.</p>
+<div class="section level3">
+<h3 id="package-setup">Package Setup<a class="anchor" aria-label="anchor" href="#package-setup"></a>
+</h3>
 <p>First we load several packages:</p>
 <ul>
 <li><p><code>tidyverse</code> contains several packages for data manipulation and plotting.</p></li>
@@ -111,18 +111,18 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://weecology.github.io/portalr/">portalr</a></span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="retrieving-the-data">Retrieving the Data<a class="anchor" aria-label="anchor" href="#retrieving-the-data"></a>
-</h1>
+<div class="section level2">
+<h2 id="retrieving-the-data">Retrieving the Data<a class="anchor" aria-label="anchor" href="#retrieving-the-data"></a>
+</h2>
 <p>Note that this package does not contain the actual Portal data, which resides online in a <a href="https://github.com/weecology/PortalData" class="external-link">GitHub repository</a>.</p>
 <p>First, we try to load the data. If there isn’t a Portal folder, than <code>load_rodent_data</code> will fall back to downloading the data, as well.</p>
 <p>check whether we already have the data. If we don’t have the data, or if the version we have isn’t the most recent, we use the <code>download_observations</code> function to download the latest copy of the data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">portal_data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># use a temporary folder to store downloaded data</span>
 <span class="va">data_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_rodent_data.html">load_rodent_data</a></span><span class="op">(</span><span class="va">portal_data_path</span>, download_if_missing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/Rtmp0PvzSE</span>
-<span class="co">#&gt; Downloading version `3.31.0` of the data...</span>
-<span class="co">#&gt; Loading in data version 3.31.0</span></code></pre></div>
+<span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpcnkKCI</span>
+<span class="co">#&gt; Downloading version `3.68.0` of the data...</span>
+<span class="co">#&gt; Loading in data version 3.68.0</span></code></pre></div>
 <p>The <code>load_rodent_data</code> function reads in several tables related to the rodent abundances. We won’t necessarily use all of these tables, but loading this now gives us access later.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">)</span><span class="op">)</span>
@@ -133,14 +133,14 @@
 <span class="co">#&gt; newmoons_table  4     data.frame list</span>
 <span class="co">#&gt; plots_table     6     data.frame list</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="rodent-abundances">Rodent Abundances<a class="anchor" aria-label="anchor" href="#rodent-abundances"></a>
-</h1>
+<div class="section level2">
+<h2 id="rodent-abundances">Rodent Abundances<a class="anchor" aria-label="anchor" href="#rodent-abundances"></a>
+</h2>
 <p>The first table that we loaded (<code>data_tables$rodent_data</code>) is a record of whatever was found in the traps, mostly rodents, but also a few other taxa. If we just wanted to get the rodent abundance data, we could use the <code>abundance</code> function, which has default arguments to filter out the non-rodents.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get rodent abundance by plot</span>
 <span class="va">rodent_abundance_by_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarize_rodent_data.html">abundance</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">portal_data_path</span>, time <span class="op">=</span> <span class="st">"date"</span>, level <span class="op">=</span> <span class="st">"plot"</span><span class="op">)</span> 
-<span class="co">#&gt; Loading in data version 3.31.0</span>
+<span class="co">#&gt; Loading in data version 3.68.0</span>
 
 <span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="va">rodent_abundance_by_plot</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">abundance</span>, <span class="op">-</span><span class="va">censusdate</span>, <span class="op">-</span><span class="va">treatment</span>, <span class="op">-</span><span class="va">plot</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -167,9 +167,9 @@
 <span class="op">}</span>
 
 <span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="fu">join_scientific_name</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="figure-abundance-over-time">Figure: abundance over time<a class="anchor" aria-label="anchor" href="#figure-abundance-over-time"></a>
-</h2>
+<div class="section level3">
+<h3 id="figure-abundance-over-time">Figure: abundance over time<a class="anchor" aria-label="anchor" href="#figure-abundance-over-time"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">make_abundance_plot_over_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span>
 <span class="op">{</span>
@@ -199,15 +199,15 @@ Monthly abundance of rodents (all plots)
 </p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
-</h2>
+<div class="section level3">
+<h3 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
+</h3>
 <p>Our next steps would likely be to dig deeper into the rodent abundances for different treatments, but first we want to know what the different treatments look like, so let’s revisit the abundances later.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="plot-treatments">Plot Treatments<a class="anchor" aria-label="anchor" href="#plot-treatments"></a>
-</h1>
+<div class="section level2">
+<h2 id="plot-treatments">Plot Treatments<a class="anchor" aria-label="anchor" href="#plot-treatments"></a>
+</h2>
 <p>A description of the experimental design and treatments can be found in this <a href="https://github.com/weecology/PortalData/tree/main/SiteandMethods" class="external-link">Readme file</a> in the PortalDate repo.</p>
 <p>For now, we are just going to use the <a href="https://github.com/weecology/PortalData/blob/main/SiteandMethods/Portal_plots.csv" class="external-link"><code>Portal_plots</code></a> table file to look at how the treatments for individual plots have changed over time. Note that this file is already loaded in as the <code>plots_table</code> from the <code>loadData</code> function we ran previously.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -232,9 +232,9 @@ Monthly abundance of rodents (all plots)
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>iso_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">year</span>, <span class="st">"-"</span>, <span class="va">month</span>, <span class="st">"-"</span>, <span class="st">"01"</span><span class="op">)</span><span class="op">)</span>, 
          plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">iso_date</span>, <span class="va">plot</span>, <span class="va">treatment</span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="figure-plot-treatments-over-time">Figure: plot treatments over time<a class="anchor" aria-label="anchor" href="#figure-plot-treatments-over-time"></a>
-</h2>
+<div class="section level3">
+<h3 id="figure-plot-treatments-over-time">Figure: plot treatments over time<a class="anchor" aria-label="anchor" href="#figure-plot-treatments-over-time"></a>
+</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">plot_treatments</span>, 
                   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">iso_date</span>, y <span class="op">=</span> <span class="va">treatment</span>, color <span class="op">=</span> <span class="va">treatment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -261,13 +261,13 @@ Treatments of Plots by Date
 </p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="identifying-control-plots">Identifying control plots<a class="anchor" aria-label="anchor" href="#identifying-control-plots"></a>
-</h2>
-<p>The treatments for the plots have changed over time: in some cases, this was due to initial ramping up of the experimental protocol, in others, exclusions of <em>Dipodomys spectabilis</em> were started and then converted back later because the species went locally extinct (e.g. plots 1, 5, 9, 24).</p>
 <div class="section level3">
-<h3 id="which-plots-have-always-been-control-plots">Which plots have always been control plots?<a class="anchor" aria-label="anchor" href="#which-plots-have-always-been-control-plots"></a>
+<h3 id="identifying-control-plots">Identifying control plots<a class="anchor" aria-label="anchor" href="#identifying-control-plots"></a>
 </h3>
+<p>The treatments for the plots have changed over time: in some cases, this was due to initial ramping up of the experimental protocol, in others, exclusions of <em>Dipodomys spectabilis</em> were started and then converted back later because the species went locally extinct (e.g. plots 1, 5, 9, 24).</p>
+<div class="section level4">
+<h4 id="which-plots-have-always-been-control-plots">Which plots have always been control plots?<a class="anchor" aria-label="anchor" href="#which-plots-have-always-been-control-plots"></a>
+</h4>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">always_control_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
@@ -327,9 +327,9 @@ Treatments of Plots by Date
 <span class="co">#&gt; <span style="color: #949494;"># … with 401 more rows</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="abundances-over-control-plots">Abundances over control plots<a class="anchor" aria-label="anchor" href="#abundances-over-control-plots"></a>
-</h2>
+<div class="section level3">
+<h3 id="abundances-over-control-plots">Abundances over control plots<a class="anchor" aria-label="anchor" href="#abundances-over-control-plots"></a>
+</h3>
 <p>We are now ready to plot abundances just over the control plots and the time span in 1977-07-01 to 2015-03-01. We do this by retrieving the abundance data by plot, and then filtering accordingly:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rodent_abundance_by_plot</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -352,9 +352,9 @@ Monthly abundance of rodents (control plots)
 </p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="abundances-over-rodent-exclosures">Abundances over rodent exclosures<a class="anchor" aria-label="anchor" href="#abundances-over-rodent-exclosures"></a>
-</h2>
+<div class="section level3">
+<h3 id="abundances-over-rodent-exclosures">Abundances over rodent exclosures<a class="anchor" aria-label="anchor" href="#abundances-over-rodent-exclosures"></a>
+</h3>
 <p>We can do the same with the “exclosure” condition. First, which plots:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mostly_exclosure_plots</span> <span class="op">&lt;-</span> <span class="va">plot_treatments</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
@@ -422,9 +422,9 @@ Monthly abundance of rodents (exclosure plots)
 </div>
 <p>Since these data have the same number of plots as the previous figure, we can directly compare abundances. Note the decreased numbers for kangaroo rats (<em>Dipodomys spp.</em>) and increased numbers for some other taxa.</p>
 </div>
-<div class="section level2">
-<h2 id="comparison-figure">Comparison Figure<a class="anchor" aria-label="anchor" href="#comparison-figure"></a>
-</h2>
+<div class="section level3">
+<h3 id="comparison-figure">Comparison Figure<a class="anchor" aria-label="anchor" href="#comparison-figure"></a>
+</h3>
 <p>Let’s merge the two datasets and produce a combined plot:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rodent_abundance_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span>
@@ -474,7 +474,7 @@ Monthly abundance of rodents (control vs. exclosure plots)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
