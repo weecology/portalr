@@ -10,15 +10,30 @@
 phenocam <- function(level = "daily", path = get_default_data_path())
 {
   level <- tolower(level)
-  pheno <- read.csv(url("http://phenocam.sr.unh.edu/data/archive/portal/ROI/portal_SH_1000_1day.csv"),
-                          skip = 22, header = TRUE, na.strings = c(""), stringsAsFactors = FALSE,
+
+  url <- "http://phenocam.sr.unh.edu/data/archive/portal/ROI/portal_SH_1000_1day.csv"
+
+  got <- tryCatch(GET(url),
+                  error = function(e) NULL)
+  if (is.null(got)) {
+      return(NULL)
+  }
+
+  got <- tryCatch(stop_for_status(got),
+                  error = function(e) NULL)
+  if (is.null(got)) {
+      return(NULL)
+  }
+
+  pheno <- read.csv(url,
+                    skip = 22, header = TRUE, na.strings = c(""), stringsAsFactors = FALSE,
                     colClasses = c("Date", rep("integer", 3), "character",
                                    rep("numeric", 22), rep("character", 5))) %>%
     dplyr::arrange(.data$date)
 
   if (level == "monthly") {
 
-    ##########Summarise by Month -----------------
+    ##########Summarize by Month -----------------
 
     pheno <- pheno %>%
       dplyr::mutate(month = lubridate::month(date)) %>%
@@ -33,7 +48,7 @@ phenocam <- function(level = "daily", path = get_default_data_path())
 
   } else if (level == "newmoon") {
 
-    ##########Summarise by lunar month -----------------
+    ##########Summarize by lunar month -----------------
     moon_dates <- load_datafile("Rodents/moon_dates.csv", na.strings = c(""), path = path)
     newmoon_number <- moon_dates$newmoonnumber[-1]
     newmoon_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
