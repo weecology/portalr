@@ -67,26 +67,30 @@ Also applies specified functions to the specified summary level.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_seasons</span><span class="op">(</span>
-  <span class="va">data</span>,
-  level <span class="op">=</span> <span class="st">"site"</span>,
-  season_level <span class="op">=</span> <span class="fl">2</span>,
-  date_column <span class="op">=</span> <span class="st">"yearmon"</span>,
-  summary_funs <span class="op">=</span> <span class="cn">NA</span>,
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  clean <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">yearly</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_seasons</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"site"</span>,</span>
+<span>  season_level <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  date_column <span class="op">=</span> <span class="st">"yearmon"</span>,</span>
+<span>  summary_funs <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  clean <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">yearly</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>data frame containing columns: date, period, newmoonnumber, or year and month</p></dd>
+
+
 <dt>level</dt>
 <dd><p>summarize by "Plot", "Treatment", or "Site"</p></dd>
+
+
 <dt>season_level</dt>
 <dd><p>either year,
 2: winter = Oct-March
@@ -95,26 +99,41 @@ Also applies specified functions to the specified summary level.</p>
    spring = March-May
    summer = Jun-Aug
    fall = Sep-Nov</p></dd>
+
+
 <dt>date_column</dt>
 <dd><p>either "date" (must be in format "y-m-d"), "period", "newmoonnumber",
 or "yearmon" (data must contain "year" and "month")</p></dd>
+
+
 <dt>summary_funs</dt>
 <dd><p>A function specified by its name (e.g. "mean").
 Default is NA (returned with seasons added but not summarized).</p></dd>
+
+
 <dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>clean</dt>
 <dd><p>logical, load only QA/QC rodent data (TRUE) or all data (FALSE)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to <code>add_seasons</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame with additional "season" and "year" column, and other columns summarized
+    
+
+<p>a data.frame with additional "season" and "year" column, and other columns summarized
         as specified. If no summary function is specified, "season" and "year" columns are
         added to original dataframe, as well as a "seasonyear" column which correctly assigns
         months to seasons for grouping (eg December 2000 in winter 2001, rather than winter 2000).</p>
@@ -132,7 +151,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -77,15 +77,15 @@ use_default_data_path has 3 steps. First, it checks for
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">check_default_data_path</span><span class="op">(</span>
-  ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span>,
-  MESSAGE_FUN <span class="op">=</span> <span class="va">message</span>,
-  DATA_NAME <span class="op">=</span> <span class="st">"Portal data"</span>
-<span class="op">)</span>
-
-<span class="fu">get_default_data_path</span><span class="op">(</span>fallback <span class="op">=</span> <span class="st">"~"</span>, ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span><span class="op">)</span>
-
-<span class="fu">use_default_data_path</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span>, ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_default_data_path</span><span class="op">(</span></span>
+<span>  ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span>,</span>
+<span>  MESSAGE_FUN <span class="op">=</span> <span class="va">message</span>,</span>
+<span>  DATA_NAME <span class="op">=</span> <span class="st">"Portal data"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_default_data_path</span><span class="op">(</span>fallback <span class="op">=</span> <span class="st">"~"</span>, ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">use_default_data_path</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span>, ENV_VAR <span class="op">=</span> <span class="st">"PORTALR_DATA_PATH"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,19 +93,32 @@ use_default_data_path has 3 steps. First, it checks for
     <dl><dt>ENV_VAR</dt>
 <dd><p>the environmental variable to check (by default
 `"PORTALR_DATA_PATH"``)</p></dd>
+
+
 <dt>MESSAGE_FUN</dt>
 <dd><p>the function to use to output messages</p></dd>
+
+
 <dt>DATA_NAME</dt>
 <dd><p>the name of the dataset to use in output messages</p></dd>
+
+
 <dt>fallback</dt>
 <dd><p>the default value to use if the setting is missing</p></dd>
+
+
 <dt>path</dt>
 <dd><p>Folder into which data will be downloaded</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>FALSE if there is no path set, TRUE otherwise
-None</p>
+    
+
+<p>FALSE if there is no path set, TRUE otherwise</p>
+
+
+<p>None</p>
     </div>
 
   </div>
@@ -120,7 +133,7 @@ None</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

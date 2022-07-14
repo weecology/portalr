@@ -77,12 +77,12 @@ The specific steps it does are, in order:
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">clean_plant_data</span><span class="op">(</span>
-  <span class="va">data_tables</span>,
-  type <span class="op">=</span> <span class="st">"All"</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,
-  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">clean_plant_data</span><span class="op">(</span></span>
+<span>  <span class="va">data_tables</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"All"</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  correct_sp <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,6 +90,8 @@ The specific steps it does are, in order:
     <dl><dt>data_tables</dt>
 <dd><p>the list of data_tables, returned from calling
 <code><a href="load_rodent_data.html">load_plant_data</a></code></p></dd>
+
+
 <dt>type</dt>
 <dd><p>specify subset of species;
 If type=Annuals, removes all non-annual species.
@@ -98,12 +100,17 @@ If type=Perennials, returns all perennial species (includes shrubs and subshrubs
 If type=Shrubs, returns only shrubs and subshrubs
 If type=Winter-annual, returns all annuals found in winter
 IF type=Summer-annual, returns all annuals found in summer</p></dd>
+
+
 <dt>unknowns</dt>
 <dd><p>either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></dd>
+
+
 <dt>correct_sp</dt>
 <dd><p>T/F whether or not to use likely corrected plant IDs,
 passed to <code>rename_species_plants</code></p></dd>
+
 </dl></div>
 
   </div>
@@ -118,7 +125,7 @@ passed to <code>rename_species_plants</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

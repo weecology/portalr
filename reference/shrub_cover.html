@@ -71,15 +71,15 @@ beginning in 2015.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">shrub_cover</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  type <span class="op">=</span> <span class="st">"Shrubs"</span>,
-  plots <span class="op">=</span> <span class="st">"all"</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,
-  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">shrub_cover</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"Shrubs"</span>,</span>
+<span>  plots <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,6 +87,8 @@ beginning in 2015.</p>
     <dl><dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>type</dt>
 <dd><p>specify subset of species;
 If type=Annuals, removes all non-annual species.
@@ -95,24 +97,37 @@ If type=Winter Annuals, returns all annual species that can be found in the wint
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 If type=Shrubs, returns only shrubs and subshrubs</p></dd>
+
+
 <dt>plots</dt>
 <dd><p>specify subset of plots; can be a vector of plots, or specific
 sets: "all" plots or "Longterm" plots (plots that have had the same
 treatment for the entire time series)</p></dd>
+
+
 <dt>unknowns</dt>
 <dd><p>either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></dd>
+
+
 <dt>correct_sp</dt>
 <dd><p>correct species names suspected to be incorrect in early data (T/F)</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to run without version messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame of percent cover and mean height</p>
+    
+
+<p>a data.frame of percent cover and mean height</p>
     </div>
 
   </div>
@@ -127,7 +142,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

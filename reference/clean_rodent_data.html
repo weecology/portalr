@@ -81,30 +81,39 @@ The specific steps it does are, in order:
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">clean_rodent_data</span><span class="op">(</span>
-  <span class="va">rodent_data</span>,
-  <span class="va">species_table</span>,
-  fillweight <span class="op">=</span> <span class="cn">FALSE</span>,
-  type <span class="op">=</span> <span class="st">"Rodents"</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">clean_rodent_data</span><span class="op">(</span></span>
+<span>  <span class="va">rodent_data</span>,</span>
+<span>  <span class="va">species_table</span>,</span>
+<span>  fillweight <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"Rodents"</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>rodent_data</dt>
 <dd><p>the raw rodent data table</p></dd>
+
+
 <dt>species_table</dt>
 <dd><p>the species table</p></dd>
+
+
 <dt>fillweight</dt>
 <dd><p>specify whether to fill in unknown weights with other
 records from that individual or species, where possible</p></dd>
+
+
 <dt>type</dt>
 <dd><p>specify subset of species; either all "Rodents" or only
 "Granivores"</p></dd>
+
+
 <dt>unknowns</dt>
 <dd><p>either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></dd>
+
 </dl></div>
 
   </div>
@@ -119,7 +128,7 @@ records from that individual or species, where possible</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

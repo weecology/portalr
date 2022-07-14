@@ -67,19 +67,21 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">load_datafile</span><span class="op">(</span>
-  <span class="va">datafile</span>,
-  na.strings <span class="op">=</span> <span class="st">""</span>,
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_datafile</span><span class="op">(</span></span>
+<span>  <span class="va">datafile</span>,</span>
+<span>  na.strings <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>datafile</dt>
 <dd><p>the path to the datafile within the folder for Portal data</p></dd>
+
+
 <dt>na.strings</dt>
 <dd><p>a character vector of strings which are to be
     interpreted as <code><a href="https://rdrr.io/r/base/NA.html" class="external-link">NA</a></code> values.  Blank fields are also
@@ -87,14 +89,21 @@
     complex fields.  Note that the test happens <em>after</em> 
     white space is stripped from the input, so <code>na.strings</code> 
     values may need their own white space stripped in advance.</p></dd>
+
+
 <dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to perform operations silently</p></dd>
+
 </dl></div>
 
   </div>
@@ -109,7 +118,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -63,38 +63,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">download_observations</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  version <span class="op">=</span> <span class="st">"latest"</span>,
-  from_zenodo <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>,
-  pause <span class="op">=</span> <span class="fl">30</span>,
-  timeout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"timeout"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">download_observations</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"latest"</span>,</span>
+<span>  from_zenodo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pause <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  timeout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"timeout"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>path</dt>
 <dd><p>Folder into which data will be downloaded</p></dd>
+
+
 <dt>version</dt>
 <dd><p>Version of the data to download (default = "latest").
 If <code>NULL</code>, returns.</p></dd>
+
+
 <dt>from_zenodo</dt>
 <dd><p>logical; if `TRUE`, get info from Zenodo, otherwise GitHub</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to download data silently.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical, whether to provide details of downloading.</p></dd>
+
+
 <dt>pause</dt>
 <dd><p>Positive <code>integer</code> or integer <code>numeric</code> seconds for pausing during steps around unzipping that require time delayment.</p></dd>
+
+
 <dt>timeout</dt>
 <dd><p>Positive <code>integer</code> or integer <code>numeric</code> seconds for timeout on downloads. Temporarily overrides the <code>"timeout"</code> option in <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>NULL invisibly.</p>
+    
+
+<p>NULL invisibly.</p>
     </div>
 
   </div>
@@ -109,7 +124,7 @@ If <code>NULL</code>, returns.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

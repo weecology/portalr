@@ -75,14 +75,14 @@ Unknowns may also be excluded from output if desired.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colony_presence_absence</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  level <span class="op">=</span> <span class="st">"Site"</span>,
-  rare_sp <span class="op">=</span> <span class="cn">FALSE</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colony_presence_absence</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"Site"</span>,</span>
+<span>  rare_sp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,24 +90,37 @@ Unknowns may also be excluded from output if desired.</p>
     <dl><dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>level</dt>
 <dd><p>level at which to summarize data: 'Site', 'Plot', or 'Stake'</p></dd>
+
+
 <dt>rare_sp</dt>
 <dd><p>include rare species (T) or not (F).
 Rare species may or may not have been censused in all years. Setting
 `rare_sp = FALSE` gives a more conservative estimate of presence/absence</p></dd>
+
+
 <dt>unknowns</dt>
 <dd><p>include unknown species (TRUE) or not (FALSE). Unknowns
 include those only identified to genus.</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to run without version messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data frame with year, species, (plot if applicable), and presence [1, 0, NA]</p>
+    
+
+<p>data frame with year, species, (plot if applicable), and presence [1, 0, NA]</p>
     </div>
 
   </div>
@@ -122,7 +135,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

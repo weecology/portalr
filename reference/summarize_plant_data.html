@@ -73,47 +73,47 @@ plant_abundance generates a table of plant abundance"><!-- mathjax --><script sr
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">summarize_plant_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  level <span class="op">=</span> <span class="st">"Site"</span>,
-  type <span class="op">=</span> <span class="st">"All"</span>,
-  length <span class="op">=</span> <span class="st">"all"</span>,
-  plots <span class="op">=</span> <span class="va">length</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,
-  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,
-  shape <span class="op">=</span> <span class="st">"flat"</span>,
-  output <span class="op">=</span> <span class="st">"abundance"</span>,
-  na_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,
-    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  zero_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,
-    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  min_quads <span class="op">=</span> <span class="fl">1</span>,
-  effort <span class="op">=</span> <span class="cn">TRUE</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">plant_abundance</span><span class="op">(</span><span class="va">...</span>, shape <span class="op">=</span> <span class="st">"flat"</span><span class="op">)</span>
-
-<span class="fu">summarise_plant_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  level <span class="op">=</span> <span class="st">"Site"</span>,
-  type <span class="op">=</span> <span class="st">"All"</span>,
-  length <span class="op">=</span> <span class="st">"all"</span>,
-  plots <span class="op">=</span> <span class="va">length</span>,
-  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,
-  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,
-  shape <span class="op">=</span> <span class="st">"flat"</span>,
-  output <span class="op">=</span> <span class="st">"abundance"</span>,
-  na_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,
-    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  zero_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,
-    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  min_quads <span class="op">=</span> <span class="fl">1</span>,
-  effort <span class="op">=</span> <span class="cn">TRUE</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarize_plant_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"Site"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"All"</span>,</span>
+<span>  length <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  plots <span class="op">=</span> <span class="va">length</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"flat"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"abundance"</span>,</span>
+<span>  na_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  zero_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  min_quads <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  effort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plant_abundance</span><span class="op">(</span><span class="va">...</span>, shape <span class="op">=</span> <span class="st">"flat"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">summarise_plant_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"Site"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"All"</span>,</span>
+<span>  length <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  plots <span class="op">=</span> <span class="va">length</span>,</span>
+<span>  unknowns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  correct_sp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"flat"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"abundance"</span>,</span>
+<span>  na_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  zero_drop <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span>, quadrat <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, treatment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    site <span class="op">=</span> <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  min_quads <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  effort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,8 +121,12 @@ plant_abundance generates a table of plant abundance"><!-- mathjax --><script sr
     <dl><dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>level</dt>
 <dd><p>summarize by "Plot", "Treatment", "Site", or "Quadrat"</p></dd>
+
+
 <dt>type</dt>
 <dd><p>specify subset of species;
 If type=Annuals, removes all non-annual species.
@@ -131,23 +135,37 @@ If type=Winter Annuals, returns all annual species that can be found in the wint
 If type=Non-woody, removes shrub and subshrub species
 If type=Perennials, returns all perennial species (includes shrubs and subshrubs)
 If type=Shrubs, returns only shrubs and subshrubs</p></dd>
+
+
 <dt>length</dt>
 <dd><p>specify subset of plots; use "All" plots or only "Longterm"
 plots (to be deprecated)</p></dd>
+
+
 <dt>plots</dt>
 <dd><p>specify subset of plots; can be a vector of plots, or specific
 sets: "all" plots or "Longterm" plots (plots that have had the same
 treatment for the entire time series)</p></dd>
+
+
 <dt>unknowns</dt>
 <dd><p>either removes all individuals not identified to species
 (unknowns = FALSE) or sums them in an additional column (unknowns = TRUE)</p></dd>
+
+
 <dt>correct_sp</dt>
 <dd><p>correct species names suspected to be incorrect in early data (T/F)</p></dd>
+
+
 <dt>shape</dt>
 <dd><p>return data as a "crosstab" or "flat" list</p></dd>
+
+
 <dt>output</dt>
 <dd><p>specify whether to return "abundance", or "cover" [cover data
 starts in summer 2015]</p></dd>
+
+
 <dt>na_drop</dt>
 <dd><p>logical, drop NA values (representing insufficient sampling)
 filling missing combinations of year-month-treatment/plot-species with NA could
@@ -155,25 +173,40 @@ represent one of a few slightly different meanings:
  1) that combo doesn't exist
  2) that combo was skipped that month, or
  3) that combo was trapped, but is unusable (a negative period code))</p></dd>
+
+
 <dt>zero_drop</dt>
 <dd><p>logical, drop 0s (representing sufficient sampling, but no
 detections)</p></dd>
+
+
 <dt>min_quads</dt>
 <dd><p>numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included</p></dd>
+
+
 <dt>effort</dt>
 <dd><p>logical as to whether or not the effort columns should be
 included in the output</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to run without version messages</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to <code>summarize_plant_data</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame in either "long" or "wide" format, depending on the
+    
+
+<p>a data.frame in either "long" or "wide" format, depending on the
   value of `shape`</p>
     </div>
 
@@ -189,7 +222,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

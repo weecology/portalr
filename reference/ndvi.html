@@ -63,30 +63,39 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ndvi</span><span class="op">(</span>
-  level <span class="op">=</span> <span class="st">"monthly"</span>,
-  sensor <span class="op">=</span> <span class="st">"landsat"</span>,
-  fill <span class="op">=</span> <span class="cn">FALSE</span>,
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ndvi</span><span class="op">(</span></span>
+<span>  level <span class="op">=</span> <span class="st">"monthly"</span>,</span>
+<span>  sensor <span class="op">=</span> <span class="st">"landsat"</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>level</dt>
 <dd><p>specify "monthly" or "newmoon"</p></dd>
+
+
 <dt>sensor</dt>
 <dd><p>specify "landsat", "modis", "gimms", or "all"</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>specify if missing data should be filled, passed to
 <code>fill_missing_ndvi</code></p></dd>
+
+
 <dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
 </dl></div>
 
   </div>
@@ -101,7 +110,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

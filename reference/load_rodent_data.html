@@ -75,31 +75,31 @@ load_trapping_data loads just the rodent trapping files"><!-- mathjax --><script
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">load_rodent_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  clean <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">load_plant_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">load_ant_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">load_trapping_data</span><span class="op">(</span>
-  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,
-  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,
-  clean <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_rodent_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  clean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">load_plant_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">load_ant_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">load_trapping_data</span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  clean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -107,18 +107,35 @@ load_trapping_data loads just the rodent trapping files"><!-- mathjax --><script
     <dl><dt>path</dt>
 <dd><p>either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository</p></dd>
+
+
 <dt>download_if_missing</dt>
 <dd><p>if the specified file path doesn't have the
 PortalData folder, then download it</p></dd>
+
+
 <dt>clean</dt>
 <dd><p>logical, load only QA/QC rodent data (TRUE) or all data (FALSE)</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, whether to run without version messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>load_rodent_data</code> returns a list of 5 dataframes:</p><table class="table table"><tr><td><code>rodent_data</code></td><td>raw data on rodent captures</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>trapping_table</code></td><td>when each plot was trapped</td></tr><tr><td><code>newmoons_table</code></td><td>pairs census periods with newmoons</td></tr><tr><td><code>plots_table</code></td><td>rodent treatment assignments for each plot</td></tr></table><p><code>load_plant_data</code> returns a list of 7 dataframes:</p><table class="table table"><tr><td><code>quadrat_data</code></td><td>raw plant quadrat data</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>census_table</code></td><td>indicates whether each quadrat was counted in each
-      census; area of each quadrat</td></tr><tr><td><code>date_table</code></td><td>start and end date of each plant census</td></tr><tr><td><code>plots_table</code></td><td>rodent treatment assignments for each plot</td></tr><tr><td><code>transect_data</code></td><td>raw plant transect data with length and height (2015-present)</td></tr><tr><td><code>oldtransect_data</code></td><td>raw plant transect data as point counts (1989-2009)</td></tr></table><p><code>load_ant_data</code> returns a list of 4 dataframes:</p><table class="table table"><tr><td><code>bait_data</code></td><td>raw ant bait data</td></tr><tr><td><code>colony_data</code></td><td>raw ant colony data</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>plots_table</code></td><td>treatment assignments for each plot</td></tr></table><p><code>load_trapping_data</code> returns a list of 2 dataframes:</p><table class="table table"><tr><td><code>trapping_table</code></td><td>when each plot was trapped</td></tr><tr><td><code>newmoons_table</code></td><td>pairs census periods with newmoons</td></tr></table></div>
+    
+
+<p><code>load_rodent_data</code> returns a list of 5 dataframes:</p>
+<p></p>
+<table class="table table"><tr><td><code>rodent_data</code></td><td>raw data on rodent captures</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>trapping_table</code></td><td>when each plot was trapped</td></tr><tr><td><code>newmoons_table</code></td><td>pairs census periods with newmoons</td></tr><tr><td><code>plots_table</code></td><td>rodent treatment assignments for each plot</td></tr></table><p><code>load_plant_data</code> returns a list of 7 dataframes:</p>
+<p></p>
+<table class="table table"><tr><td><code>quadrat_data</code></td><td>raw plant quadrat data</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>census_table</code></td><td>indicates whether each quadrat was counted in each
+      census; area of each quadrat</td></tr><tr><td><code>date_table</code></td><td>start and end date of each plant census</td></tr><tr><td><code>plots_table</code></td><td>rodent treatment assignments for each plot</td></tr><tr><td><code>transect_data</code></td><td>raw plant transect data with length and height (2015-present)</td></tr><tr><td><code>oldtransect_data</code></td><td>raw plant transect data as point counts (1989-2009)</td></tr></table><p><code>load_ant_data</code> returns a list of 4 dataframes:</p>
+<p></p>
+<table class="table table"><tr><td><code>bait_data</code></td><td>raw ant bait data</td></tr><tr><td><code>colony_data</code></td><td>raw ant colony data</td></tr><tr><td><code>species_table</code></td><td>species code, names, types</td></tr><tr><td><code>plots_table</code></td><td>treatment assignments for each plot</td></tr></table><p><code>load_trapping_data</code> returns a list of 2 dataframes:</p>
+<p></p>
+<table class="table table"><tr><td><code>trapping_table</code></td><td>when each plot was trapped</td></tr><tr><td><code>newmoons_table</code></td><td>pairs census periods with newmoons</td></tr></table></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -132,7 +149,7 @@ PortalData folder, then download it</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
