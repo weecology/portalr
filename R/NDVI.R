@@ -15,10 +15,10 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
 {
   sensor <- tolower(sensor)
   filtering <- switch(sensor,
-                     "landsat" = c("Landsat5", "Landsat7", "Landsat8"),
+                     "landsat" = c("Landsat5", "Landsat7", "Landsat8", "Landsat9"),
                      "modis" = c("MODIS"),
                      "gimms" = c("GIMMSv0"),
-                     "all" = c("GIMMSv0", "Landsat5", "Landsat7", "MODIS", "Landsat8"))
+                     "all" = c("GIMMSv0", "Landsat5", "Landsat7", "MODIS", "Landsat8", "Landsat9"))
 
   NDVI <- load_datafile(file.path("NDVI", "ndvi.csv"),
                         na.strings = "", path = path,
