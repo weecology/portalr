@@ -48,7 +48,7 @@ load_rodent_data <- function(path = get_default_data_path(),
   # reformat species columns
   if (!"species" %in% names(species_table))
   {
-    species_table <- dplyr::rename(species_table, species = .data$speciescode)
+    species_table <- dplyr::rename(species_table, species = speciescode)
   }
 
   # convert rodent tags to characters if not already
@@ -243,8 +243,8 @@ reformat_species_table <- function(species_table)
   if (!"sp" %in% names(species_table))
   {
     species_table <- dplyr::rename(species_table,
-                                   sp = .data$species,
-                                   species = .data$speciescode)
+                                   sp = species,
+                                   species = speciescode)
   }
   return(species_table)
 }
