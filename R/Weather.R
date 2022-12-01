@@ -19,10 +19,19 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
   level <- tolower(level)
   weather_new <- load_datafile("Weather/Portal_weather.csv", na.strings = c(""), path = path)
   weather_old <- load_datafile("Weather/Portal_weather_19801989.csv", na.strings = c("-99"), path = path)
+  weather_overlap <- load_datafile("Weather/Portal_weather_overlap.csv", na.strings = c(""), path = path) %>%
+      dplyr::select(-c("record","battv","airtemp","precipitation","RH"))
   moon_dates <- load_datafile("Rodents/moon_dates.csv", na.strings = c(""), path = path)
 
   ###########Summarize by Day ----------------------
   days <- weather_new %>%
+      dplyr::full_join(weather_overlap,by = c("year", "month", "day", "hour", "timestamp")) %>%
+      dplyr::mutate(record = dplyr::coalesce(record, record2),
+                    battv = dplyr::coalesce(battv, battv2),
+                    airtemp = dplyr::coalesce(airtemp, airtemp2),
+                    precipitation = dplyr::coalesce(precipitation, precipitation2),
+                    RH = dplyr::coalesce(RH, RH2)) %>%
+      dplyr::select(colnames(weather_new)) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
     dplyr::summarize(mintemp = min(.data$airtemp),
                      maxtemp = max(.data$airtemp),
@@ -158,8 +167,8 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::select(c("year", "month", "day", "date", "prcp", "tmax", "tmin", "tobs")) %>%
     dplyr::arrange(.data$year,.data$month, .data$day) %>%
     dplyr::filter(.data$date >= "1980-01-01") %>%
-    dplyr::rename(precipitation = .data$prcp, maxtemp = .data$tmax, mintemp = .data$tmin,
-                  meantemp = .data$tobs)
+    dplyr::rename(precipitation = "prcp", maxtemp = "tmax", mintemp = "tmin",
+                  meantemp = "tobs")
 
   sansimon <- read.csv(file.path(path, 'PortalData/Weather/Sansimon_regional_weather.csv'),
                        na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
