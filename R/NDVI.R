@@ -15,10 +15,10 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
 {
   sensor <- tolower(sensor)
   filtering <- switch(sensor,
-                     "landsat" = c("Landsat5", "Landsat7", "Landsat8"),
+                     "landsat" = c("Landsat5", "Landsat7", "Landsat8", "Landsat9"),
                      "modis" = c("MODIS"),
                      "gimms" = c("GIMMSv0"),
-                     "all" = c("GIMMSv0", "Landsat5", "Landsat7", "MODIS", "Landsat8"))
+                     "all" = c("GIMMSv0", "Landsat5", "Landsat7", "MODIS", "Landsat8", "Landsat9"))
 
   NDVI <- load_datafile(file.path("NDVI", "ndvi.csv"),
                         na.strings = "", path = path,
@@ -41,7 +41,7 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
                        date = min(.data$date)) %>%
       dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
-      dplyr::select( .data$date, .data$ndvi)
+      dplyr::select( "date", "ndvi")
     if (fill) {
       curr_yearmonth <- format(Sys.Date(), "%Y-%m")
       last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))

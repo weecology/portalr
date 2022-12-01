@@ -84,7 +84,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
 
     full_data$season <- seasons[match(unlist(full_data$month), names(seasons))]
     full_data$seasonyear <- paste(full_data$season, full_data$wateryear)
-    full_data <- full_data %>% dplyr::select(-.data$wateryear) %>%
+    full_data <- full_data %>% dplyr::select(-"wateryear") %>%
       dplyr::mutate(season = factor(.data$season, unique(seasons))) %>%
       dplyr::arrange(.data$year, .data$month)
 
@@ -100,7 +100,7 @@ add_seasons <- function(data, level = "site", season_level = 2,
                       year = sub( ".* ", "", .data$seasonyear )) %>%
         dplyr::mutate(season = factor(.data$season, unique(seasons))) %>%
         dplyr::group_by(.data$year, .data$season) %>%
-        dplyr::select(-.data$seasonyear) %>%
+        dplyr::select(-"seasonyear") %>%
         dplyr::arrange(.data$year, .data$season)
     }
 

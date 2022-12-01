@@ -16,10 +16,10 @@ summarize_plant_data(
   correct_sp = TRUE,
   shape = "flat",
   output = "abundance",
-  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE,
-    site = TRUE, TRUE),
-  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE,
-    site = TRUE, TRUE),
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
   min_quads = 1,
   effort = TRUE,
   download_if_missing = TRUE,
@@ -38,10 +38,10 @@ summarise_plant_data(
   correct_sp = TRUE,
   shape = "flat",
   output = "abundance",
-  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE,
-    site = TRUE, TRUE),
-  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE,
-    site = TRUE, TRUE),
+  na_drop = switch(tolower(level), quadrat = FALSE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
+  zero_drop = switch(tolower(level), quadrat = TRUE, plot = FALSE, treatment = TRUE, site
+    = TRUE, TRUE),
   min_quads = 1,
   effort = TRUE,
   download_if_missing = TRUE,
