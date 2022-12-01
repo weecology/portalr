@@ -26,11 +26,11 @@ weather <- function(level = "daily", fill = FALSE, horizon = 365, temperature_li
   ###########Summarize by Day ----------------------
   days <- weather_new %>%
       dplyr::full_join(weather_overlap,by = c("year", "month", "day", "hour", "timestamp")) %>%
-      dplyr::mutate(record = dplyr::coalesce(record, record2),
-                    battv = dplyr::coalesce(battv, battv2),
-                    airtemp = dplyr::coalesce(airtemp, airtemp2),
-                    precipitation = dplyr::coalesce(precipitation, precipitation2),
-                    RH = dplyr::coalesce(RH, RH2)) %>%
+      dplyr::mutate(record = dplyr::coalesce(.data$record, .data$record2),
+                    battv = dplyr::coalesce(.data$battv, .data$battv2),
+                    airtemp = dplyr::coalesce(.data$airtemp, .data$airtemp2),
+                    precipitation = dplyr::coalesce(.data$precipitation, .data$precipitation2),
+                    RH = dplyr::coalesce(.data$RH, .data$RH2)) %>%
       dplyr::select(colnames(weather_new)) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
     dplyr::summarize(mintemp = min(.data$airtemp),

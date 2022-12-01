@@ -41,7 +41,7 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
                        date = min(.data$date)) %>%
       dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
-      dplyr::select( .data$date, .data$ndvi)
+      dplyr::select( "date", "ndvi")
     if (fill) {
       curr_yearmonth <- format(Sys.Date(), "%Y-%m")
       last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))

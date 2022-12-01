@@ -304,7 +304,7 @@ find_incomplete_censuses <- function(trapping_table, min_plots, min_traps) {
     dplyr::mutate(sampled = as.numeric(.data$effort >= min_traps)) %>%
     dplyr::summarize(nplots = sum(.data$sampled)) %>%
     dplyr::filter(.data$nplots < min_plots) %>%
-    dplyr::select(.data$period)
+    dplyr::select("period")
 }
 
 #' @title Fill Weight
@@ -357,7 +357,7 @@ fill_weight <- function(rodent_data, tofill)
   rodent_data$wgt[missing_wgt_idx & !juv_idx] <- rodent_data$meanwgt[missing_wgt_idx & !juv_idx]
 
   #      (v) remove added columns for juvenile and average weight
-  rodent_data <- dplyr::select(rodent_data, -.data$juvwgt, -.data$meanwgt)
+  rodent_data <- dplyr::select(rodent_data, -"juvwgt", -"meanwgt")
 
   #      (vi) if all else fails, convert to 0, so that sums will work correctly
   rodent_data$wgt[is.na(rodent_data$wgt)] <- 0
