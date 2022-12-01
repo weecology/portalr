@@ -19,7 +19,7 @@ test_that("download_observations and check_for_newer_data work", {
     expect_error(download_observations(portal_data_path, version = "1.5.9"))
     expect_error(download_observations(portal_data_path, version = "1.000.0"))
 
-    expect_error(download_observations(portal_data_path, from_zenodo = TRUE), NA)
+    expect_error(download_observations(portal_data_path, from_zenodo = TRUE, timeout = 300), NA)
     expect_false(check_for_newer_data(portal_data_path))
     #unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
