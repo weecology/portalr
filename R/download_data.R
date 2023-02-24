@@ -18,7 +18,9 @@
 #'
 #' @param timeout Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.
 #'
-#' @param from_zenodo logical; if `TRUE`, get info from Zenodo, otherwise GitHub
+#' @param from_zenodo \code{logical}; if `TRUE`, get info from Zenodo, otherwise GitHub
+#'
+#' @param overwrite \code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).
 #'
 #' @return NULL invisibly.
 #'
@@ -31,7 +33,8 @@ download_observations <- function(path        = get_default_data_path(),
                                   quiet       = FALSE,
                                   verbose     = FALSE,
                                   pause       = 30,
-                                  timeout     = getOption("timeout")) {
+                                  timeout     = getOption("timeout"),
+                                  overwrite   = FALSE) {
 
   if (is.null(version)) {
 
@@ -96,12 +99,34 @@ download_observations <- function(path        = get_default_data_path(),
   }
   
 
+  temp <- file.path(tempdir(), "PortalData.zip")
+  final <- file.path(path, "PortalData")
+  version_file <- file.path(final, "version.txt")
+
+  if (!overwrite & file.exists(version_file)) {
+
+    existing_version <- scan(file  = version_file, 
+                             what  = character(), 
+                             quiet = TRUE)
+  
+
+    if (existing_version == version) {
+
+      if (!quiet) {
+        message("Existing local version (", existing_version, ") is up-to-date with remote version (", version, ") requested and `overwrite` is FALSE, download is skipped")
+      }
+
+      return(invisible())
+
+    }
+
+  }
+
   if (!quiet) {
     message("Downloading version `", version, "` of the data...")
   }
 
-  temp <- file.path(tempdir(), "PortalData.zip")
-  final <- file.path(path, "PortalData")
+
 
   download.file(zipball_url, temp, quiet = !verbose, mode = "wb")
   if (file.exists(final)) {

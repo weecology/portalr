@@ -11,6 +11,12 @@ test_that("download_observations and check_for_newer_data work", {
     })
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
+    expect_message(download_observations(portal_data_path))
+    expect_message(download_observations(portal_data_path))
+    unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
+
+
+
     expect_error(download_observations(portal_data_path, version = "1.6.0"), NA)
     expect_true(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
