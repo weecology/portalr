@@ -11,7 +11,8 @@ download_observations(
   quiet = FALSE,
   verbose = FALSE,
   pause = 30,
-  timeout = getOption("timeout")
+  timeout = getOption("timeout"),
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -20,7 +21,7 @@ download_observations(
 \item{version}{Version of the data to download (default = "latest").
 If \code{NULL}, returns.}
 
-\item{from_zenodo}{logical; if `TRUE`, get info from Zenodo, otherwise GitHub}
+\item{from_zenodo}{\code{logical}; if `TRUE`, get info from Zenodo, otherwise GitHub}
 
 \item{quiet}{logical, whether to download data silently.}
 
@@ -29,6 +30,8 @@ If \code{NULL}, returns.}
 \item{pause}{Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment.}
 
 \item{timeout}{Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.}
+
+\item{overwrite}{\code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).}
 }
 \value{
 NULL invisibly.
