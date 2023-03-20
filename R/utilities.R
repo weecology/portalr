@@ -22,7 +22,7 @@ return_if_null <- function (x, value = NULL) {
 
   if (is.null(x)) {
 
-    do.call(what  = return, 
+    do.call(what  = "return", 
             args  = list(value), 
             envir = sys.frame(-1))
 

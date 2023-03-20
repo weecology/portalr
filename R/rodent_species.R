@@ -3,6 +3,8 @@
 #'
 #' @description Creates a simple \code{character} vector of abbreviations for the Portal \href{https://portal.naturecast.org/profiles.html}{Rodents}.
 #'
+#' @param path \code{character} Folder into which data will be downloaded.
+#'
 #' @param set \code{character} input of a specified set of species. Options include \code{"all"} (default, all species included) and \code{"forecasting"} (the species used in forecating pipelines). 
 #'
 #' @param total \code{logical} value indicating if \code{"total"} should be added or not.
@@ -11,14 +13,6 @@
 #'
 #' @return \code{character} vector of species abbreviations.
 #' 
-#' @examples 
-#'  rodent_species()
-#'  rodent_species(type = "Latin")
-#'  rodent_species(type = "code")
-#'  rodent_species(type = "common")
-#'  rodent_species(type = "code", total = TRUE)
-#'  rodent_species(set = "forecasting")
-#'
 #' @export
 #'
 rodent_species <- function (path = get_default_data_path( ),
