@@ -13,6 +13,5 @@ check_for_newer_data(path = get_default_data_path())
 bool TRUE if there is a newer version of the data online
 }
 \description{
-Check the latest version against the data that exists on
-  the GitHub repo
+Check the latest version against the data that exists on the GitHub repo
 }

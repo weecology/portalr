@@ -26,7 +26,7 @@ use_default_data_path(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
 
 \item{fallback}{the default value to use if the setting is missing}
 
-\item{path}{Folder into which data will be downloaded}
+\item{path}{\code{character} Folder into which data will be downloaded.}
 }
 \value{
 FALSE if there is no path set, TRUE otherwise

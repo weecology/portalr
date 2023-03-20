@@ -188,3 +188,41 @@ test_that("abundance filters at the plot level correctly", {
     dplyr::filter(ntraps < 49, period <= 463)
   expect_equal(NROW(incomplete_plots), 0)
 })
+
+
+
+test_that("rodent_species provides proper vectors", {
+  skip_on_cran()
+
+  rodents <- rodent_species()
+  expect_equal(length(rodents), 30)
+
+  all_rodents <- rodent_species(set = "all")
+  expect_equal(length(all_rodents), 30)
+
+  fc_rodents <- rodent_species(set = "forecasting")
+  expect_equal(length(fc_rodents), 20)
+
+  fc_rodents <- rodent_species(set = "forecasting", total = TRUE)
+  expect_equal(length(fc_rodents), 21)
+
+
+  rodent_abbr <- rodent_species(type = "abbreviation")
+  expect_equal(unique(nchar(rodent_abbr)), 2)
+
+  rodent_comm <- rodent_species(type = "common")
+  expect_equal(unique(nchar(rodent_comm)), c(26, 20, 21, 19, 17, 31, 22, 18, 12, 10, 13, 24, 23, 28))
+
+  rodent_scie <- rodent_species(type = "scientific")
+  expect_equal(unique(nchar(rodent_scie)), c(24, 15, 19, 20, 23, 26, 18, 13, 21, 16, 22, 25, 10, 17, 12, 29))
+
+  expect_error(rodent_species(type = "error"))
+  expect_error(rodent_species(set = "error"))
+
+
+  forecasters <- rodent_species(set = "forecasting")
+
+})
+
+
+
