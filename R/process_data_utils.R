@@ -47,7 +47,7 @@ filter_plots <- function(data, plots = NULL)
   }
 
   # if no selection then return unaltered data
-  return_if_null(x = got, value = data)
+  return_if_null(x = plots, value = data)
 
 
   # otherwise return filtered data
