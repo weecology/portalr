@@ -12,6 +12,8 @@ rodent_species(
 )
 }
 \arguments{
+\item{path}{\code{character} Folder into which data will be downloaded.}
+
 \item{type}{\code{character} value indicating the output type. Current options include \code{'abbreviation'} (default, two-letter abbreviation), \code{'Latin'} (full scientific names), \code{'common'} (common names).}
 
 \item{set}{\code{character} input of a specified set of species. Options include \code{"all"} (default, all species included) and \code{"forecasting"} (the species used in forecating pipelines).}
@@ -23,13 +25,4 @@ rodent_species(
 }
 \description{
 Creates a simple \code{character} vector of abbreviations for the Portal \href{https://portal.naturecast.org/profiles.html}{Rodents}.
-}
-\examples{
- rodent_species()
- rodent_species(type = "Latin")
- rodent_species(type = "code")
- rodent_species(type = "common")
- rodent_species(type = "code", total = TRUE)
- rodent_species(set = "forecasting")
-
 }
