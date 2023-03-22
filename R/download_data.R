@@ -23,7 +23,6 @@
 #'
 #' @return NULL invisibly.
 #'
-#'
 #' @export
 #'
 download_observations <- function (path      = get_default_data_path(),
