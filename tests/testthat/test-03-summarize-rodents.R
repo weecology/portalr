@@ -203,24 +203,29 @@ test_that("rodent_species provides proper vectors", {
   fc_rodents <- rodent_species(set = "forecasting")
   expect_equal(length(fc_rodents), 20)
 
-  fc_rodents <- rodent_species(set = "forecasting", total = TRUE)
-  expect_equal(length(fc_rodents), 21)
+  fct_rodents <- rodent_species(set = "forecasting", total = TRUE)
+  expect_equal(length(fct_rodents), 21)
 
+  expect_is(rodents, "character")
+  expect_is(all_rodents, "character")
+  expect_is(fc_rodents, "character")
+  expect_is(fct_rodents, "character")
 
   rodent_abbr <- rodent_species(type = "abbreviation")
+  expect_is(rodent_abbr, "character")
   expect_equal(unique(nchar(rodent_abbr)), 2)
 
   rodent_comm <- rodent_species(type = "common")
+  expect_is(rodent_comm , "character")
   expect_equal(unique(nchar(rodent_comm)), c(26, 20, 21, 19, 17, 31, 22, 18, 12, 10, 13, 24, 23, 28))
 
   rodent_scie <- rodent_species(type = "scientific")
+  expect_is(rodent_scie, "character")
   expect_equal(unique(nchar(rodent_scie)), c(24, 15, 19, 20, 23, 26, 18, 13, 21, 16, 22, 25, 10, 17, 12, 29))
 
   expect_error(rodent_species(type = "error"))
   expect_error(rodent_species(set = "error"))
 
-
-  forecasters <- rodent_species(set = "forecasting")
 
 })
 
