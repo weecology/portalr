@@ -2,6 +2,7 @@
 % Please edit documentation in R/rodent_species.R
 \name{rodent_species}
 \alias{rodent_species}
+\alias{forecasting_species}
 \title{Rodent species abbreviations}
 \usage{
 rodent_species(
@@ -9,6 +10,12 @@ rodent_species(
   type = "code",
   set = "all",
   total = FALSE
+)
+
+forecasting_species(
+  path = get_default_data_path(),
+  total = FALSE,
+  type = "abbreviation"
 )
 }
 \arguments{

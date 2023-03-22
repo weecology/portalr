@@ -231,3 +231,18 @@ test_that("rodent_species provides proper vectors", {
 
 
 
+test_that(desc = "na_conformer makes NA into `NA` in vectors and data frames",
+          code = {
+
+  # work on vectors
+
+    xx <- c("a", "b", NA, "c")
+    expect_equal(na_conformer(xx)[3], "NA")
+
+  # works on dfs
+
+    xx <- data.frame(w = "a", n = as.character(c("d", NA, "a", "b", "c")))
+    expect_is(na_conformer(xx, "n"), "data.frame")
+    expect_equal(na_conformer(xx, "n")[2,2], "NA")
+})
+

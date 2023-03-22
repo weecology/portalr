@@ -17,3 +17,4 @@ Version numbers follow [Semantic Versioning](https://semver.org/).
 ### addition of new functions (pulled from portalcasting)
 * `return_if_null` 
 * `rodent_species`: helper function that now operates off of the rodent table, not hard-coded
+* `na_conformer`: makes sure the species abbreviation for Neotoma albigula is a character value
