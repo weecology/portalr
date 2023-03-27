@@ -112,7 +112,7 @@ download_observations <- function (path      = get_default_data_path(),
     if (existing_version == version) {
 
       if (!quiet) {
-        message("Existing local version (", existing_version, ") is up-to-date with remote version (", version, ") requested and `overwrite` is FALSE, download is skipped")
+        message("Existing local version is up-to-date with remote version (", version, ") requested and `overwrite` is FALSE, download is skipped")
       }
 
       return(invisible())
