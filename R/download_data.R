@@ -19,20 +19,20 @@
 #'
 #' @param source \code{character} indicator of the source for the download. Either \code{"github"} (default) or \code{"zenodo"}.
 #'
-#' @param overwrite \code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).
+#' @param force \code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).
 #'
 #' @return NULL invisibly.
 #'
 #' @export
 #'
-download_observations <- function (path      = get_default_data_path(),
-                                   version   = "latest", 
-                                   source    = "github",
-                                   quiet     = FALSE,
-                                   verbose   = FALSE,
-                                   pause     = 30,
-                                   timeout   = getOption("timeout"),
-                                   overwrite = FALSE) {
+download_observations <- function (path    = get_default_data_path(),
+                                   version = "latest", 
+                                   source  = "github",
+                                   quiet   = FALSE,
+                                   verbose = FALSE,
+                                   pause   = 30,
+                                   timeout = getOption("timeout"),
+                                   force   = FALSE) {
 
   return_if_null(x = version)
 
@@ -102,7 +102,7 @@ download_observations <- function (path      = get_default_data_path(),
   final <- file.path(path, "PortalData")
   version_file <- file.path(final, "version.txt")
 
-  if (!overwrite & file.exists(version_file)) {
+  if (!force & file.exists(version_file)) {
 
     existing_version <- scan(file  = version_file, 
                              what  = character(), 
@@ -112,7 +112,7 @@ download_observations <- function (path      = get_default_data_path(),
     if (existing_version == version) {
 
       if (!quiet) {
-        message("Existing local version is up-to-date with remote version (", version, ") requested and `overwrite` is FALSE, download is skipped")
+        message("Existing local version is up-to-date with remote version (", version, ") requested and `force` is FALSE, download is skipped")
       }
 
       return(invisible())

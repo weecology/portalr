@@ -12,7 +12,7 @@ download_observations(
   verbose = FALSE,
   pause = 30,
   timeout = getOption("timeout"),
-  overwrite = FALSE
+  force = FALSE
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ download_observations(
 
 \item{timeout}{Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.}
 
-\item{overwrite}{\code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).}
+\item{force}{\code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).}
 }
 \value{
 NULL invisibly.
