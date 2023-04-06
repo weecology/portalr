@@ -191,7 +191,7 @@ test_that("abundance filters at the plot level correctly", {
 
 
 
-test_that("rodent_species provides proper vectors", {
+test_that("rodent_species provides proper vectors or data frame", {
   skip_on_cran()
 
   rodents <- rodent_species()
@@ -222,6 +222,18 @@ test_that("rodent_species provides proper vectors", {
   rodent_scie <- rodent_species(type = "scientific")
   expect_is(rodent_scie, "character")
   expect_equal(unique(nchar(rodent_scie)), c(24, 15, 19, 20, 23, 26, 18, 13, 21, 16, 22, 25, 10, 17, 12, 29))
+
+  rodent_gs <- rodent_species(type = "g_species")
+  expect_is(rodent_gs, "character")
+  expect_equal(unique(nchar(rodent_gs)), c(10, 11, 14, 15, 6, 8, 9, 13, 12))
+
+  rodent_t <- rodent_species(type = "table")
+  expect_is(rodent_t, "data.frame")
+  expect_equal(dim(rodent_t), c(30, 4))
+
+  rodent_tt <- rodent_species(type = "table", total = TRUE)
+  expect_is(rodent_tt, "data.frame")
+  expect_equal(dim(rodent_tt), c(31, 4))
 
   expect_error(rodent_species(type = "error"))
   expect_error(rodent_species(set = "error"))

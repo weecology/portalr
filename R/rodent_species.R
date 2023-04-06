@@ -9,7 +9,7 @@
 #'
 #' @param total \code{logical} value indicating if \code{"total"} should be added or not.
 #'
-#' @param type \code{character} value indicating the output type. Current options include \code{'abbreviation'} (default, two-letter abbreviation), \code{'Latin'} (full scientific names), \code{'common'} (common names).
+#' @param type \code{character} value indicating the output type. Current options include \code{'abbreviation'} or \code{'code'} (default, two-letter abbreviation), \code{'g_species'} (abbreviated genus and species), \code{'Latin'} (full scientific names), \code{'common'} (common names), and  \code{'table'} (a \code{data.frame} of all the options).
 #'
 #' @return \code{character} vector of species abbreviations.
 #' 
@@ -45,6 +45,19 @@ rodent_species <- function (path = get_default_data_path( ),
   code       <- table_in$speciescode
   latin      <- table_in$scientificname
   common     <- table_in$commonname
+  g_species  <- paste0(substr(latin, 1, 1), ". ", unlist(lapply(strsplit(latin, " "), getElement, 2)))
+
+
+  if (total) {
+
+    code      <- c(code, "total")
+    latin     <- c(latin, "Total abundance")
+    common    <- c(common, "Total abundance")
+    g_species <- c(g_species, "Total")
+
+  }
+
+  table_out  <- data.frame(code = code, Latin = latin, common = common, g_species = g_species)
 
   if (tolower(type) %in% c("code", "abbreviation", "abbr")) {
  
@@ -58,17 +71,20 @@ rodent_species <- function (path = get_default_data_path( ),
  
     out <- common
 
+  } else if (tolower(type) %in% c("g_species")) {
+ 
+    out <- g_species
+
+  } else if (tolower(type) %in% c("table")) {
+ 
+    out <- table_out
+
   } else {
 
-    stop("type not recognized, should be `code`, `latin`, or `common`")
+    stop("type not recognized, should be `code`, `abbreviation`, `Latin`, `scientific`, `g_species`, `common`, or `table`")
 
   }
 
-  if (total) {
-
-    out <- c(out, "total")
-
-  }
 
   out
 
@@ -80,12 +96,12 @@ rodent_species <- function (path = get_default_data_path( ),
 #'
 #' @export
 #'
-forecasting_species <- function (path = get_default_data_path( ),
-                                 total   = FALSE,
-                                 type    = "abbreviation") {
+forecasting_species <- function (path  = get_default_data_path( ),
+                                 total = FALSE,
+                                 type  = "abbreviation") {
 
-  rodent_species(path = path,
-                 set  = "forecasting", 
+  rodent_species(path  = path,
+                 set   = "forecasting", 
                  total = total,
                  type  = type)
 
@@ -119,7 +135,7 @@ na_conformer <- function(dfv, colname = "species"){
   } else if (is.data.frame(dfv)) {
 
     nasppname <- which(is.na(dfv[ , colname]))
-
+    class(dfv[ , colname]) <- "character"
     if (length(nasppname) > 0) {
 
       dfv[nasppname, colname] <- "NA"

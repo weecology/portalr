@@ -21,7 +21,7 @@ forecasting_species(
 \arguments{
 \item{path}{\code{character} Folder into which data will be downloaded.}
 
-\item{type}{\code{character} value indicating the output type. Current options include \code{'abbreviation'} (default, two-letter abbreviation), \code{'Latin'} (full scientific names), \code{'common'} (common names).}
+\item{type}{\code{character} value indicating the output type. Current options include \code{'abbreviation'} or \code{'code'} (default, two-letter abbreviation), \code{'g_species'} (abbreviated genus and species), \code{'Latin'} (full scientific names), \code{'common'} (common names), and  \code{'table'} (a \code{data.frame} of all the options).}
 
 \item{set}{\code{character} input of a specified set of species. Options include \code{"all"} (default, all species included) and \code{"forecasting"} (the species used in forecating pipelines).}
 

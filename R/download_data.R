@@ -127,18 +127,33 @@ download_observations <- function (path    = get_default_data_path(),
 
 
 
-  download.file(zipball_url, temp, quiet = !verbose, mode = "wb")
+  result <- tryCatch(
+              expr  = download.file(url      = zipball_url, 
+                                    destfile = temp, 
+                                    quiet    = !verbose, 
+                                    mode     = "wb"),
+              error = function(x){NA})
+
+  if (is.na(result)) {
+
+    warning("Archive version `", version, "` could not be downloaded")
+    return(invisible( ))
+
+  }
+
+
   if (file.exists(final)) {
 
-    old_files <- list.files(final,
-                            full.names = TRUE,
-                            all.files = TRUE,
-                            recursive = TRUE,
+    old_files <- list.files(path         = final,
+                            full.names   = TRUE,
+                            all.files    = TRUE,
+                            recursive    = TRUE,
                             include.dirs = FALSE)
 
-    file.remove(normalizePath(old_files))
+    file.remove(old_files)
 
-    unlink(final, recursive = TRUE)
+    unlink(x         = final, 
+           recursive = TRUE)
 
   }
 
