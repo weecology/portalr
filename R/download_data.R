@@ -5,48 +5,42 @@
 #'
 #' @description Downloads specified version of the Portal data.
 #'
-#' @param path Folder into which data will be downloaded
+#' @param path \code{character} Folder into which data will be downloaded.
 #'
-#' @param version Version of the data to download (default = "latest").
-#'                 If \code{NULL}, returns.
+#' @param version \code{character} Version of the data to download (default = "latest"). If \code{NULL}, returns.
 #'
-#' @param quiet logical, whether to download data silently.
+#' @param quiet \code{logical} whether to download data silently.
 #'
-#' @param verbose logical, whether to provide details of downloading.
+#' @param verbose \code{logical} whether to provide details of downloading.
 #'
 #' @param pause Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment. 
 #'
 #' @param timeout Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.
 #'
-#' @param from_zenodo \code{logical}; if `TRUE`, get info from Zenodo, otherwise GitHub
+#' @param source \code{character} indicator of the source for the download. Either \code{"github"} (default) or \code{"zenodo"}.
 #'
-#' @param overwrite \code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).
+#' @param force \code{logical} indicator of whether or not existing files or folders (such as the archive) should be over-written if an up-to-date copy exists (most users should leave as \code{FALSE}).
 #'
 #' @return NULL invisibly.
 #'
-#'
 #' @export
 #'
-download_observations <- function(path        = get_default_data_path(),
-                                  version     = "latest", 
-                                  from_zenodo = FALSE,
-                                  quiet       = FALSE,
-                                  verbose     = FALSE,
-                                  pause       = 30,
-                                  timeout     = getOption("timeout"),
-                                  overwrite   = FALSE) {
+download_observations <- function (path    = get_default_data_path(),
+                                   version = "latest", 
+                                   source  = "github",
+                                   quiet   = FALSE,
+                                   verbose = FALSE,
+                                   pause   = 30,
+                                   timeout = getOption("timeout"),
+                                   force   = FALSE) {
 
-  if (is.null(version)) {
-
-    return(invisible())
-
-  }
+  return_if_null(x = version)
 
   timeout_backup <- getOption("timeout")
   on.exit(options(timeout = timeout_backup))
   options(timeout = timeout) 
 
-  if (from_zenodo) {
+  if (source == "zenodo") {
 
     base_url <- "https://zenodo.org/api/records/" 
 
@@ -82,7 +76,7 @@ download_observations <- function(path        = get_default_data_path(),
     version <- ifelse(version == "latest", 
                       metadata[[selected]]$version, version)
 
-  } else {
+  } else if (source == "github") {
 
     base_url <- "https://api.github.com/repos/weecology/PortalData/releases/" 
     url <- ifelse(version == "latest", 
@@ -96,6 +90,11 @@ download_observations <- function(path        = get_default_data_path(),
     zipball_url <- content(got)$zipball_url      
  
     version <- ifelse(version == "latest", content(got)$name, version)
+
+  } else {
+
+    stop("`source` must be either 'zenodo' or 'github'")
+
   }
   
 
@@ -103,7 +102,7 @@ download_observations <- function(path        = get_default_data_path(),
   final <- file.path(path, "PortalData")
   version_file <- file.path(final, "version.txt")
 
-  if (!overwrite & file.exists(version_file)) {
+  if (!force & file.exists(version_file)) {
 
     existing_version <- scan(file  = version_file, 
                              what  = character(), 
@@ -113,7 +112,7 @@ download_observations <- function(path        = get_default_data_path(),
     if (existing_version == version) {
 
       if (!quiet) {
-        message("Existing local version (", existing_version, ") is up-to-date with remote version (", version, ") requested and `overwrite` is FALSE, download is skipped")
+        message("Existing local version is up-to-date with remote version (", version, ") requested and `force` is FALSE, download is skipped")
       }
 
       return(invisible())
@@ -128,18 +127,33 @@ download_observations <- function(path        = get_default_data_path(),
 
 
 
-  download.file(zipball_url, temp, quiet = !verbose, mode = "wb")
+  result <- tryCatch(
+              expr  = download.file(url      = zipball_url, 
+                                    destfile = temp, 
+                                    quiet    = !verbose, 
+                                    mode     = "wb"),
+              error = function(x){NA})
+
+  if (is.na(result)) {
+
+    warning("Archive version `", version, "` could not be downloaded")
+    return(invisible( ))
+
+  }
+
+
   if (file.exists(final)) {
 
-    old_files <- list.files(final,
-                            full.names = TRUE,
-                            all.files = TRUE,
-                            recursive = TRUE,
+    old_files <- list.files(path         = final,
+                            full.names   = TRUE,
+                            all.files    = TRUE,
+                            recursive    = TRUE,
                             include.dirs = FALSE)
 
-    file.remove(normalizePath(old_files))
+    file.remove(old_files)
 
-    unlink(final, recursive = TRUE)
+    unlink(x         = final, 
+           recursive = TRUE)
 
   }
 
@@ -156,13 +170,15 @@ download_observations <- function(path        = get_default_data_path(),
 }
 
 #' @title Check for latest version of data files
-#' @description Check the latest version against the data that exists on
-#'   the GitHub repo
+#'
+#' @description Check the latest version against the data that exists on the GitHub repo
+#'
 #' @param path Folder in which data will be checked
 #'
 #' @return bool TRUE if there is a newer version of the data online
 #'
 #' @export
+#'
 check_for_newer_data <- function (path = get_default_data_path()) {
 
   tryCatch(
@@ -179,9 +195,7 @@ check_for_newer_data <- function (path = get_default_data_path()) {
   url <- "https://api.github.com/repos/weecology/PortalData/releases/latest" 
   got <- tryCatch(GET(url),
                   error = function(e) NULL)
-  if (is.null(got)) {
-    return(FALSE)
-  }
+  return_if_null(x = got, value = FALSE)
 
   stop_for_status(got, task = paste0("locate latest GitHub version"))
 

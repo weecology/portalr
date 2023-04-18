@@ -47,8 +47,8 @@ filter_plots <- function(data, plots = NULL)
   }
 
   # if no selection then return unaltered data
-  if (is.null(plots))
-    return(data)
+  return_if_null(x = plots, value = data)
+
 
   # otherwise return filtered data
   dplyr::filter(data, .data$plot %in% plots)

@@ -15,15 +15,13 @@ phenocam <- function(level = "daily", path = get_default_data_path())
 
   got <- tryCatch(GET(url),
                   error = function(e) NULL)
-  if (is.null(got)) {
-      return(NULL)
-  }
+  return_if_null(x = got)
+
 
   got <- tryCatch(stop_for_status(got),
                   error = function(e) NULL)
-  if (is.null(got)) {
-      return(NULL)
-  }
+  return_if_null(x = got)
+
 
   pheno <- read.csv(url,
                     skip = 22, header = TRUE, na.strings = c(""), stringsAsFactors = FALSE,
