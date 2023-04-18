@@ -31,6 +31,9 @@
     <loc>https://weecology.github.io/portalr/index.html</loc>
   </url>
   <url>
+    <loc>https://weecology.github.io/portalr/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://weecology.github.io/portalr/reference/add_seasons.html</loc>
   </url>
   <url>
@@ -73,7 +76,7 @@
     <loc>https://weecology.github.io/portalr/reference/get_dataset_citation.html</loc>
   </url>
   <url>
-    <loc>https://weecology.github.io/portalr/reference/get_future_moons.html</loc>
+    <loc>https://weecology.github.io/portalr/reference/get_future_newmoons.html</loc>
   </url>
   <url>
     <loc>https://weecology.github.io/portalr/reference/index.html</loc>
@@ -83,6 +86,9 @@
   </url>
   <url>
     <loc>https://weecology.github.io/portalr/reference/load_rodent_data.html</loc>
+  </url>
+  <url>
+    <loc>https://weecology.github.io/portalr/reference/na_conformer.html</loc>
   </url>
   <url>
     <loc>https://weecology.github.io/portalr/reference/ndvi.html</loc>
@@ -95,6 +101,12 @@
   </url>
   <url>
     <loc>https://weecology.github.io/portalr/reference/portalr.html</loc>
+  </url>
+  <url>
+    <loc>https://weecology.github.io/portalr/reference/return_if_null.html</loc>
+  </url>
+  <url>
+    <loc>https://weecology.github.io/portalr/reference/rodent_species.html</loc>
   </url>
   <url>
     <loc>https://weecology.github.io/portalr/reference/shrub_cover.html</loc>

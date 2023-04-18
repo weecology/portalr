@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">portalr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -56,6 +56,9 @@
       <a href="../articles/rodent-abundance-demo.html">Portal Rodent Abundance Demo</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -81,7 +84,7 @@
       <h1 data-toc-skip>Portal Rodent Abundance Demo</h1>
                         <h4 data-toc-skip class="author">Hao Ye</h4>
             
-            <h4 data-toc-skip class="date">2022-12-01</h4>
+            <h4 data-toc-skip class="date">2023-04-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/weecology/portalr/blob/HEAD/vignettes/rodent-abundance-demo.Rmd" class="external-link"><code>vignettes/rodent-abundance-demo.Rmd</code></a></small>
       <div class="hidden name"><code>rodent-abundance-demo.Rmd</code></div>
@@ -134,9 +137,9 @@ of the data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">portal_data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># use a temporary folder to store downloaded data</span></span>
 <span><span class="va">data_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_rodent_data.html">load_rodent_data</a></span><span class="op">(</span><span class="va">portal_data_path</span>, download_if_missing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/Rtmp4jMcZX</span></span>
-<span><span class="co">#&gt; Downloading version `3.147.0` of the data...</span></span>
-<span><span class="co">#&gt; Loading in data version 3.147.0</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/Rtmp4yLSb7</span></span>
+<span><span class="co">#&gt; Downloading version `4.6.0` of the data...</span></span>
+<span><span class="co">#&gt; Loading in data version 4.6.0</span></span></code></pre></div>
 <p>The <code>load_rodent_data</code> function reads in several tables
 related to the rodent abundances. We won’t necessarily use all of these
 tables, but loading this now gives us access later.</p>
@@ -160,7 +163,7 @@ arguments to filter out the non-rodents.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get rodent abundance by plot</span></span>
 <span><span class="va">rodent_abundance_by_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarize_rodent_data.html">abundance</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">portal_data_path</span>, time <span class="op">=</span> <span class="st">"date"</span>, level <span class="op">=</span> <span class="st">"plot"</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; Loading in data version 3.147.0</span></span>
+<span><span class="co">#&gt; Loading in data version 4.6.0</span></span>
 <span></span>
 <span><span class="va">rodent_abundance</span> <span class="op">&lt;-</span> <span class="va">rodent_abundance_by_plot</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">abundance</span>, <span class="op">-</span><span class="va">censusdate</span>, <span class="op">-</span><span class="va">treatment</span>, <span class="op">-</span><span class="va">plot</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -168,12 +171,12 @@ arguments to filter out the non-rodents.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>abundance <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    species            censusdate           abundance      </span></span>
-<span><span class="co">#&gt;  Length:9135        Min.   :1979-09-22   Min.   :  0.000  </span></span>
-<span><span class="co">#&gt;  Class :character   1st Qu.:1989-07-03   1st Qu.:  0.000  </span></span>
-<span><span class="co">#&gt;  Mode  :character   Median :1998-08-22   Median :  0.000  </span></span>
-<span><span class="co">#&gt;                     Mean   :1999-06-19   Mean   :  6.635  </span></span>
-<span><span class="co">#&gt;                     3rd Qu.:2009-06-20   3rd Qu.:  5.000  </span></span>
-<span><span class="co">#&gt;                     Max.   :2021-10-16   Max.   :285.000</span></span></code></pre></div>
+<span><span class="co">#&gt;  Length:9240        Min.   :1979-09-22   Min.   :  0.000  </span></span>
+<span><span class="co">#&gt;  Class :character   1st Qu.:1989-08-25   1st Qu.:  0.000  </span></span>
+<span><span class="co">#&gt;  Mode  :character   Median :1998-11-07   Median :  0.000  </span></span>
+<span><span class="co">#&gt;                     Mean   :1999-09-20   Mean   :  6.641  </span></span>
+<span><span class="co">#&gt;                     3rd Qu.:2009-09-26   3rd Qu.:  5.000  </span></span>
+<span><span class="co">#&gt;                     Max.   :2022-02-26   Max.   :285.000</span></span></code></pre></div>
 <p>Let’s convert the data to long format for easier facetting. Also, we
 want the scientific names instead of the two-letter species codes, so
 let’s do that matching, too:</p>
@@ -214,7 +217,7 @@ let’s do that matching, too:</p>
 <span><span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu">make_abundance_plot_over_time</span><span class="op">(</span><span class="va">rodent_abundance</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_plot</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 23 rows containing missing values (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 28 rows containing missing values (`geom_line()`).</span></span></code></pre></div>
 <div class="figure">
 <img src="rodent-abundance-demo_files/figure-html/unnamed-chunk-6-1.png" alt="Monthly abundance of rodents (all plots)" width="720"><p class="caption">
 Monthly abundance of rodents (all plots)
@@ -243,15 +246,15 @@ changed over time. Note that this file is already loaded in as the
 previously.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data_tables</span><span class="op">$</span><span class="va">plots_table</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       year          month            plot        treatment        </span></span>
-<span><span class="co">#&gt;  Min.   :1977   Min.   : 1.00   Min.   : 1.00   Length:11144      </span></span>
-<span><span class="co">#&gt;  1st Qu.:1988   1st Qu.: 4.00   1st Qu.: 6.00   Class :character  </span></span>
-<span><span class="co">#&gt;  Median :1998   Median : 7.00   Median :12.00   Mode  :character  </span></span>
-<span><span class="co">#&gt;  Mean   :1999   Mean   : 6.55   Mean   :12.49                     </span></span>
-<span><span class="co">#&gt;  3rd Qu.:2009   3rd Qu.:10.00   3rd Qu.:18.00                     </span></span>
-<span><span class="co">#&gt;  Max.   :2021   Max.   :12.00   Max.   :24.00                     </span></span>
+<span><span class="co">#&gt;       year          month             plot        treatment        </span></span>
+<span><span class="co">#&gt;  Min.   :1977   Min.   : 1.000   Min.   : 1.00   Length:11240      </span></span>
+<span><span class="co">#&gt;  1st Qu.:1988   1st Qu.: 4.000   1st Qu.: 6.00   Class :character  </span></span>
+<span><span class="co">#&gt;  Median :1999   Median : 7.000   Median :12.00   Mode  :character  </span></span>
+<span><span class="co">#&gt;  Mean   :1999   Mean   : 6.549   Mean   :12.49                     </span></span>
+<span><span class="co">#&gt;  3rd Qu.:2009   3rd Qu.:10.000   3rd Qu.:18.00                     </span></span>
+<span><span class="co">#&gt;  Max.   :2022   Max.   :12.000   Max.   :24.00                     </span></span>
 <span><span class="co">#&gt;  resourcetreatment  anttreatment      </span></span>
-<span><span class="co">#&gt;  Length:11144       Length:11144      </span></span>
+<span><span class="co">#&gt;  Length:11240       Length:11240      </span></span>
 <span><span class="co">#&gt;  Class :character   Class :character  </span></span>
 <span><span class="co">#&gt;  Mode  :character   Mode  :character  </span></span>
 <span><span class="co">#&gt;                                       </span></span>
@@ -285,6 +288,9 @@ previously.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as</span></span>
 <span><span class="co">#&gt; of ggplot2 3.3.4.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_plot</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
@@ -363,7 +369,7 @@ controls:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1978-02-01 TRUE       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 1978-03-01 TRUE       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 1978-04-01 TRUE       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 401 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 401 more rows</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -440,7 +446,7 @@ plots:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1988-08-01 TRUE         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 1988-09-01 TRUE         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 1988-10-01 TRUE         </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 287 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 287 more rows</span></span></span></code></pre></div>
 <p>Finally, the figure:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rodent_abundance_by_plot</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -472,7 +478,7 @@ some other taxa.</p>
 </h3>
 <p>Let’s merge the two datasets and produce a combined plot:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rodent_abundance_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rodent_abundance_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">rodent_abundance_control</span>, treatment <span class="op">=</span> <span class="st">"control"</span><span class="op">)</span>, </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">rodent_abundance_exclosure</span>, treatment <span class="op">=</span> <span class="st">"exclosure"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -523,7 +529,7 @@ megalotis”)</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
