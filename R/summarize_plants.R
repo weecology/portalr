@@ -158,7 +158,7 @@ shrub_cover <- function(path = get_default_data_path(),
     dplyr::ungroup() %>%
     dplyr::mutate(cover = .data$count/1000, height = NA,
                   species = as.character(.data$species)) %>%
-    dplyr::select(-.data$count)
+    dplyr::select(-"count")
 
   transect_data <- data_tables$transect_data %>%
     dplyr::filter(!grepl(3, .data$notes)) %>%
@@ -171,7 +171,7 @@ shrub_cover <- function(path = get_default_data_path(),
     dplyr::ungroup() %>%
     dplyr::mutate(cover = .data$length/(2*7071.1),
                   species = as.character(.data$species)) %>%
-    dplyr::select(c("year", "treatment", "plot", "species", "cover", "height"))
+    dplyr::select(dplyr::all_of(c("year", "treatment", "plot", "species", "cover", "height")))
 
   dplyr::bind_rows(oldtransect_data, transect_data) %>%
     as.data.frame()

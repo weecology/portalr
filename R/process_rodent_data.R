@@ -68,11 +68,11 @@ make_plot_data <- function(rodent_data, trapping_data, output, min_traps = 1) {
     dplyr::count(!!!grouping, wt = !!wt)  %>%
     tidyr::complete(!!!grouping, fill = filler) %>%
     dplyr::right_join(trapping_data, by = c("period", "plot")) %>%
-    dplyr::select(c("period", "plot", "species", "n", "effort", "treatment")) %>%
+    dplyr::select(dplyr::all_of(c("period", "plot", "species", "n", "effort", "treatment"))) %>%
     dplyr::filter(!is.na(.data$species)) %>%
     dplyr::mutate(n = replace(.data$n, .data$effort < min_traps, NA),
                   effort = replace(.data$effort, .data$effort < min_traps, NA)) %>%
-    dplyr::rename(!!output := .data$n)
+    dplyr::rename(!!output := "n")
 }
 
 #' Rodent data summarized at the relevant level (plot, treatment, site)
@@ -109,7 +109,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
       dplyr::mutate(n = replace(.data$n, is.na(.data$n), 0L),
                     ntraps = replace(.data$effort, is.na(.data$effort), 0),
                     nplots = ifelse(is.na(.data$effort), 0, 1)) %>%
-      dplyr::select(c("period", "treatment", "plot", "species", "n", "ntraps", "nplots"))
+      dplyr::select(dplyr::all_of(c("period", "treatment", "plot", "species", "n", "ntraps", "nplots")))
   } else {
     level_data <- plot_data %>%
       dplyr::mutate(plot_sampled = as.numeric(!is.na(.data$effort))) %>%
@@ -138,7 +138,7 @@ make_level_data <- function(plot_data, trapping_table, level, output,
   }
 
   level_data %>%
-    dplyr::rename(!!output := .data$n)
+    dplyr::rename(!!output := "n")
 }
 
 #' Rodent data prepared for output
@@ -162,9 +162,9 @@ prep_rodent_output <- function(level_data, effort, na_drop,
   species <- na.omit(as.character(unique(level_data$species)))
 
   if (effort == FALSE) {
-    level_data <- dplyr::select(level_data, -.data$nplots, -.data$ntraps)
+    level_data <- dplyr::select(level_data, -"nplots", -"ntraps")
   } else if (level == "plot") {
-    level_data <- dplyr::select(level_data, -.data$nplots)
+    level_data <- dplyr::select(level_data, -"nplots")
   }
 
   if (output == "rates") {

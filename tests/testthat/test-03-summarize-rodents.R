@@ -8,7 +8,7 @@ test_that("summarize_rodent_data returns expected results, and filters by plots 
                                         na_drop = TRUE)
 
   rodent_counts <- ab_all_plots %>%
-    dplyr::filter(plot == 4) %>% dplyr::select(-treatment, -plot)
+    dplyr::filter(plot == 4) %>% dplyr::select(-"treatment", -"plot")
 
   ab_plot_4 <- summarize_rodent_data(path = portal_data_path, plots = 4,
                                      na_drop = TRUE, zero_drop = FALSE)
@@ -17,7 +17,7 @@ test_that("summarize_rodent_data returns expected results, and filters by plots 
 
   rodent_counts <- ab_all_plots %>%
     dplyr::filter(plot %in% c(4, 8, 10, 12)) %>%
-    dplyr::select(-treatment, -plot) %>%
+    dplyr::select(-"treatment", -"plot") %>%
     tidyr::gather(species, abundance, BA:SO) %>%
     dplyr::count(period, species, wt = abundance) %>%
     tidyr::spread(species, n)
