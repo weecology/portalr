@@ -160,7 +160,7 @@ my_plot <- ggplot(plot_treatments,
   scale_color_manual(values = rainbow(4)) + 
   scale_x_date(breaks = seq(as.Date("1977-01-01"), to = as.Date("2018-01-01"), "+5 years"), date_labels = "%Y") + 
   theme_cowplot() + 
-  guides(color = FALSE) + 
+  guides(color = "none") + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 print(my_plot)

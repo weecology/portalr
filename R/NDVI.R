@@ -66,7 +66,7 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
       dplyr::filter(.data$sensor %in% filtering) %>%
       dplyr::group_by(.data$newmoonnumber) %>%
       dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T)) %>%
-      tidyr::drop_na(.data$newmoonnumber) %>%
+      tidyr::drop_na("newmoonnumber") %>%
       dplyr::arrange(.data$newmoonnumber)
 
     if (fill == TRUE) {

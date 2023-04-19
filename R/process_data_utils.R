@@ -136,5 +136,5 @@ make_crosstab <- function(summary_data,
   summary_data %>%
     tidyr::spread(.data$species, !!variable_name, ...) %>%
     dplyr::ungroup() %>%
-    dplyr::select(vars_to_keep)
+    dplyr::select(tidyselect::all_of(vars_to_keep))
 }

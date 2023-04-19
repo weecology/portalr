@@ -138,9 +138,13 @@ compute_presence <- function(df, level)
                      "site" = rlang::quos(.data$year, .data$species),
                      "plot" = rlang::quos(.data$year, .data$plot, .data$species),
                      "stake" = rlang::quos(.data$year, .data$plot, .data$stake, .data$species))
+  vars_to_keep <- switch(level,
+                         "site" = c("year", "species"),
+                         "plot" = c("year", "plot", "species"),
+                         "stake" = c("year", "plot", "stake", "species"))
 
   df %>%
-    dplyr::select(!!!grouping) %>%
+    dplyr::select(dplyr::all_of(vars_to_keep)) %>%
     dplyr::distinct() %>%
     dplyr::mutate(presence = 1) %>%
     tidyr::complete(!!!grouping,

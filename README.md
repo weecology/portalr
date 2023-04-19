@@ -17,7 +17,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.
 [![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929730)
 <!-- badges: end -->
 
-<img src="man/figures/portalr.png" width="200px">
+<img src="man/figures/portalr.png" alt="hexagon software logo, designed to look like a 3D cube, basic lettering in the top right blue-and-grey-striped side of the cube says portalr, a drawn all black rodent jumps from a blue portal on a grey background on the left of the cube, to an orange portal on a checkerboard background on the bottom." width="200px" align="right">
 
 ## Overview
 
