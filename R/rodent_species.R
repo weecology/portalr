@@ -1,7 +1,7 @@
 
 #' @title Rodent species abbreviations
 #'
-#' @description Creates a simple \code{character} vector of abbreviations for the Portal \href{http://portal.naturecast.org/profiles.html}{Rodents}.
+#' @description Creates a simple \code{character} vector of abbreviations for the Portal \href{https://portal.naturecast.org/}{Rodents}.
 #'
 #' @param path \code{character} Folder into which data will be downloaded.
 #'

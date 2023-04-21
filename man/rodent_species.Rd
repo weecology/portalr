@@ -31,5 +31,5 @@ forecasting_species(
 \code{character} vector of species abbreviations.
 }
 \description{
-Creates a simple \code{character} vector of abbreviations for the Portal \href{http://portal.naturecast.org/profiles.html}{Rodents}.
+Creates a simple \code{character} vector of abbreviations for the Portal \href{https://portal.naturecast.org/}{Rodents}.
 }

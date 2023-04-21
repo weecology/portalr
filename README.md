@@ -14,10 +14,10 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
-[![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1929730)
+[![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929730)
 <!-- badges: end -->
 
-<img src="man/figures/portalr.png" alt="hexagon software logo, designed to look like a 3D cube, basic lettering in the top right blue-and-grey-striped side of the cube says portalr, a drawn all black rodent jumps from a blue portal on a grey background on the left of the cube, to an orange portal on a checkerboard background on the bottom." width="200px" align="right">
+<img src="man/figures/portalr.png" width="200px">
 
 ## Overview
 
@@ -34,43 +34,49 @@ collected each summer and fall.
 
 You can install portalr from CRAN with:
 
-    install.packages("portalr")
+``` r
+install.packages("portalr")
+```
 
 OR from github with:
 
-    # install.packages("remotes")
-    remotes::install_github("weecology/portalr")
+``` r
+# install.packages("remotes")
+remotes::install_github("weecology/portalr")
+```
 
 ## Examples
 
 1.  Load all data tables from the [PortalData GitHub
     repo](https://github.com/weecology/portalData):
 
-<!-- -->
+``` r
+data_tables <- load_rodent_data("repo")
+```
 
-    data_tables <- load_rodent_data("repo")
+2.  Download and generate summaries of rodent abundance and biomass:
 
-1.  Download and generate summaries of rodent abundance and biomass:
+``` r
+download_observations(".")
 
-<!-- -->
+rodent_data <- abundance(".") # default grouping is by sampling period
 
-    download_observations(".")
+rodent_biomass_by_plot <- biomass(".", level = "plot", type = "granivores", 
+shape = "flat", time = "date")
+```
 
-    rodent_data <- abundance(".") # default grouping is by sampling period
+3.  Retrieve weather data:
 
-    rodent_biomass_by_plot <- biomass(".", level = "plot", type = "granivores", 
-    shape = "flat", time = "date")
-
-1.  Retrieve weather data:
-
-<!-- -->
-
-    weatherdata <- weather("Monthly", ".")
+``` r
+weatherdata <- weather("Monthly", ".")
+```
 
 For more detailed info, checkout the vignettes associated with the
 package:
 
-    browseVignettes("portalr")
+``` r
+browseVignettes("portalr")
+```
 
 ## More Information
 
@@ -95,41 +101,42 @@ project and at the site.
 
 To cite `portalr`, please refer to either:
 
--   [JOSS publication](https://doi.org/10.21105/joss.01098):
+- [JOSS publication](https://doi.org/10.21105/joss.01098):
 
-    Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,
-    Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,
-    and S. K. Morgan Ernest. (2019). portalr: an R package for
-    summarizing and using the Portal Project Data. Journal of Open
-    Source Software, 4(33), 1098,
-    <a href="https://doi.org/10.21105/joss.01098" class="uri">https://doi.org/10.21105/joss.01098</a>
+  Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,
+  Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,
+  and S. K. Morgan Ernest. (2019). portalr: an R package for summarizing
+  and using the Portal Project Data. Journal of Open Source Software,
+  4(33), 1098, <https://doi.org/10.21105/joss.01098>
 
--   or use the most recent release on
-    [Zenodo](https://doi.org/10.5281/zenodo.1429290).
+- or use the most recent release on
+  [Zenodo](https://doi.org/10.5281/zenodo.1429290).
 
 ### Dataset Citation
 
 To cite the Portal dataset, use:
 
-    get_dataset_citation()
-    #> 
-    #> To cite the Portal Data in publications, use:
-    #> 
-    #>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
-    #>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.
-    #>   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim
-    #>   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,
-    #>   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan
-    #>   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.
-    #>   (2018). The Portal Project: a long-term study of a Chihuahuan desert
-    #>   ecosystem. bioRxiv, https://doi.org/10.1101/332783
-    #> 
-    #> A BibTeX entry for LaTeX users is
-    #> 
-    #>   @Article{ernest2018portal,
-    #>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
-    #>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
-    #>     year = {2018},
-    #>     journal = {bioRxiv},
-    #>     doi = {10.1101/332783},
-    #>   }
+``` r
+get_dataset_citation()
+#> 
+#> To cite the Portal Data in publications, use:
+#> 
+#>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
+#>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.
+#>   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim
+#>   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,
+#>   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan
+#>   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.
+#>   (2018). The Portal Project: a long-term study of a Chihuahuan desert
+#>   ecosystem. bioRxiv, https://doi.org/10.1101/332783
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{ernest2018portal,
+#>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
+#>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
+#>     year = {2018},
+#>     journal = {bioRxiv},
+#>     doi = {10.1101/332783},
+#>   }
+```

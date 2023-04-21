@@ -1,9 +1,9 @@
 citHeader("To cite the Portal Data in publications, use:")
 
-citEntry(key = "ernest2018portal",
-         entry = "Article",
+bibentry(key = "ernest2018portal",
+         bibtype = "Article",
          title = "The Portal Project: a long-term study of a Chihuahuan desert ecosystem",
-         author = personList(as.person("S. K. Morgan Ernest"),
+         author =          c(as.person("S. K. Morgan Ernest"),
                              as.person("Glenda M. Yenni"),
                              as.person("Ginger Allington"),
                              as.person("Ellen K. Bledsoe"),
