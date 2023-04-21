@@ -1,18 +1,18 @@
 
 #' @title Rodent species abbreviations
 #'
-#' @description Creates a simple \code{character} vector of abbreviations for the Portal \href{https://portal.naturecast.org/profiles.html}{Rodents}.
+#' @description Creates a simple \code{character} vector of abbreviations for the Portal \href{http://portal.naturecast.org/profiles.html}{Rodents}.
 #'
 #' @param path \code{character} Folder into which data will be downloaded.
 #'
-#' @param set \code{character} input of a specified set of species. Options include \code{"all"} (default, all species included) and \code{"forecasting"} (the species used in forecating pipelines). 
+#' @param set \code{character} input of a specified set of species. Options include \code{"all"} (default, all species included) and \code{"forecasting"} (the species used in forecating pipelines).
 #'
 #' @param total \code{logical} value indicating if \code{"total"} should be added or not.
 #'
 #' @param type \code{character} value indicating the output type. Current options include \code{'abbreviation'} or \code{'code'} (default, two-letter abbreviation), \code{'g_species'} (abbreviated genus and species), \code{'Latin'} (full scientific names), \code{'common'} (common names), and  \code{'table'} (a \code{data.frame} of all the options).
 #'
 #' @return \code{character} vector of species abbreviations.
-#' 
+#'
 #' @export
 #'
 rodent_species <- function (path = get_default_data_path( ),
@@ -21,8 +21,8 @@ rodent_species <- function (path = get_default_data_path( ),
                             total = FALSE) {
 
   species_table <- load_datafile(datafile            = file.path("Rodents", "Portal_rodent_species.csv"),
-                                 na.strings          = "", 
-                                 path                = path, 
+                                 na.strings          = "",
+                                 path                = path,
                                  download_if_missing = TRUE)
 
   if (tolower(set) %in% c("forecast", "forecasting")) {
@@ -60,23 +60,23 @@ rodent_species <- function (path = get_default_data_path( ),
   table_out  <- data.frame(code = code, Latin = latin, common = common, g_species = g_species)
 
   if (tolower(type) %in% c("code", "abbreviation", "abbr")) {
- 
+
     out <- code
 
   } else if (tolower(type) %in% c("latin", "scientific")) {
- 
+
     out <- latin
 
   } else if (tolower(type) %in% c("common")) {
- 
+
     out <- common
 
   } else if (tolower(type) %in% c("g_species")) {
- 
+
     out <- g_species
 
   } else if (tolower(type) %in% c("table")) {
- 
+
     out <- table_out
 
   } else {
@@ -101,7 +101,7 @@ forecasting_species <- function (path  = get_default_data_path( ),
                                  type  = "abbreviation") {
 
   rodent_species(path  = path,
-                 set   = "forecasting", 
+                 set   = "forecasting",
                  total = total,
                  type  = type)
 
@@ -112,7 +112,7 @@ forecasting_species <- function (path  = get_default_data_path( ),
 
 #' @title Conform NA entries to "NA" entries
 #'
-#' @description Given the species abbreviation \emph{Neotoma albigula} (NA), when data are read in, there can be an \code{NA} when it should be an \code{"NA"}. This function conforms the entries to be proper character values. 
+#' @description Given the species abbreviation \emph{Neotoma albigula} (NA), when data are read in, there can be an \code{NA} when it should be an \code{"NA"}. This function conforms the entries to be proper character values.
 #'
 #' @param dfv Either [1] a \code{data.frame} containing \code{colname} as a column with \code{NA}s that need to be conformed to \code{"NA"}s or [2] a vector with \code{NA}s that need to be conformed to \code{"NA"}s.
 #'
@@ -126,7 +126,7 @@ forecasting_species <- function (path  = get_default_data_path( ),
 #' @export
 #'
 na_conformer <- function(dfv, colname = "species"){
-  
+
   if (is.vector(dfv)) {
 
     naentries <- which(is.na(dfv))
@@ -142,7 +142,7 @@ na_conformer <- function(dfv, colname = "species"){
 
     }
 
-  } 
+  }
 
   dfv
 
