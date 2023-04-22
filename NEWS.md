@@ -2,7 +2,8 @@
 
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
-# [portalr 0.4.0](https://github.com/weecology/portalcasting/releases/tag/v0.4.0)
+# [portalr 0.4.0](https://github.com/weecology/portalr/releases/tag/v0.4.0)
+*2023-04-21*
 
 ### NEWS file included for the first time
 
