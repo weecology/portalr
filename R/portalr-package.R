@@ -1,10 +1,9 @@
+#' @keywords internal
 #' @title Creates summaries of the Portal data
 #'
 #' @description This package is designed to be an interface to the Portal data, which resides online at \url{https://github.com/weecology/portalData}. Its contains a set of functions to download, clean, and summarize the data.
 #'
 #' @name portalr
-#' @docType package
-#' @keywords package
 #'
 #' @importFrom lubridate "%m+%"
 #' @importFrom rlang "!!" "!!!" ":=" .data
@@ -12,12 +11,12 @@
 #' @importFrom stats median na.omit
 #' @importFrom httr content GET stop_for_status
 
-NULL
+"_PACKAGE"
 
 ## quiets concerns of R CMD check re: variables used in NSE functions
 if (getRversion() >= "2.15.1") utils::globalVariables(
-  c(".", "n")
-  )
+    c(".", "n")
+)
 
 #' @title Return Citation for Portal Data
 #'
@@ -25,7 +24,7 @@ if (getRversion() >= "2.15.1") utils::globalVariables(
 #' @export
 get_dataset_citation <- function()
 {
-  path <- system.file("CITATION-PORTAL-DATA",
-                      package = "portalr", mustWork = TRUE)
-  utils::readCitationFile(path)
+    path <- system.file("CITATION-PORTAL-DATA",
+                        package = "portalr", mustWork = TRUE)
+    utils::readCitationFile(path)
 }
