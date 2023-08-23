@@ -177,17 +177,7 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
     dplyr::filter(.data$date >= "1980-01-01") %>%
     dplyr::rename(precipitation = "prcp")
 
-  rustys <- read.csv(file.path(path, 'PortalData/Weather/Rustys_regional_weather.csv'),
-                       na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
-    dplyr::group_by(.data$year, .data$month, .data$day) %>%
-    dplyr::summarize(mintemp = min(.data$templow),
-                     maxtemp = max(.data$temphigh),
-                     meantemp = mean(.data$tempavg),
-                     precipitation = sum(.data$preciptotal)) %>%
-    dplyr::select(dplyr::all_of(c("year", "month", "day", "mintemp", "maxtemp", "meantemp","precipitation"))) %>%
-    dplyr::arrange(.data$year,.data$month, .data$day)
-
-  rodeo <- read.csv(file.path(path, 'PortalData/Weather/Rodeo_regional_weather.csv'),
+  region1 <- read.csv(file.path(path, 'PortalData/Weather/Rodeo_regional_weather.csv'),
                      na.strings = c(""), header = TRUE, stringsAsFactors = FALSE) %>%
     dplyr::group_by(.data$year, .data$month, .data$day) %>%
     dplyr::summarize(mintemp = min(.data$templow),
@@ -196,18 +186,6 @@ fill_missing_weather <- function(weather, path = get_default_data_path())
                      precipitation = sum(.data$preciptotal)) %>%
     dplyr::select(dplyr::all_of(c("year", "month", "day", "mintemp", "maxtemp", "meantemp","precipitation"))) %>%
     dplyr::arrange(.data$year,.data$month, .data$day)
-
-  region1 <- dplyr::full_join(rodeo, rustys, by = c("year", "month", "day")) %>%
-    dplyr::group_by(.data$year, .data$month, .data$day) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(mintemp = mean(c(.data$mintemp.y, .data$mintemp.x), na.rm=TRUE),
-                  maxtemp = mean(c(.data$maxtemp.y, .data$maxtemp.x), na.rm=TRUE),
-                  meantemp = mean(c(.data$meantemp.y, .data$meantemp.x), na.rm=TRUE),
-                  precipitation = mean(c(.data$precipitation.y, .data$precipitation.x), na.rm=TRUE)) %>%
-    dplyr::ungroup() %>%
-    dplyr::filter(!(is.na(.data$mintemp) & is.na(.data$maxtemp) &
-                      is.na(.data$meantemp) & is.na(.data$precipitation))) %>%
-    dplyr::select(dplyr::all_of(c("year", "month", "day", "precipitation", "mintemp", "maxtemp", "meantemp")))
 
   region2 <- dplyr::full_join(portal4sw, sansimon, by = c("date", "year", "month", "day")) %>%
     dplyr::group_by(.data$year, .data$month, .data$day, .data$date) %>%

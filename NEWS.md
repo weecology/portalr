@@ -2,6 +2,11 @@
 
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
+# [portalr 0.4.1](https://github.com/weecology/portalr/releases/tag/v0.4.1)
+*2023-08-223*
+
+### Regional weather filling includes more stations
+
 # [portalr 0.4.0](https://github.com/weecology/portalr/releases/tag/v0.4.0)
 *2023-04-21*
 

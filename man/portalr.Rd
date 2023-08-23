@@ -3,8 +3,39 @@
 \docType{package}
 \name{portalr}
 \alias{portalr}
+\alias{portalr-package}
 \title{Creates summaries of the Portal data}
 \description{
 This package is designed to be an interface to the Portal data, which resides online at \url{https://github.com/weecology/portalData}. Its contains a set of functions to download, clean, and summarize the data.
 }
-\keyword{package}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://weecology.github.io/portalr/}
+  \item \url{https://github.com/weecology/portalr}
+  \item Report bugs at \url{https://github.com/weecology/portalr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Glenda M. Yenni \email{glenda@weecology.org} (\href{https://orcid.org/0000-0001-6969-1848}{ORCID})
+
+Authors:
+\itemize{
+  \item Hao Ye (\href{https://orcid.org/0000-0002-8630-1458}{ORCID})
+  \item Erica M. Christensen (\href{https://orcid.org/0000-0002-5635-2502}{ORCID})
+  \item Juniper L. Simonis (\href{https://orcid.org/0000-0001-9798-0460}{ORCID})
+  \item Ellen K. Bledsoe (\href{https://orcid.org/0000-0002-3629-7235}{ORCID})
+  \item Renata M. Diaz (\href{https://orcid.org/0000-0003-0803-4734}{ORCID})
+  \item Shawn D. Taylor (\href{https://orcid.org/0000-0002-6178-6903}{ORCID})
+  \item Ethan P, White (\href{https://orcid.org/0000-0001-6728-7745}{ORCID})
+  \item S.K. Morgan Ernest (\href{https://orcid.org/0000-0002-6026-8530}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Weecology [copyright holder]
+}
+
+}
+\keyword{internal}
