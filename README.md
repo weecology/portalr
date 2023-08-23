@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg)](https://github.com/weecology/portalr/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/main/LICENSE)
 [![Coverage
-status](https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg)](https://codecov.io/github/weecology/portalr?branch=main)
+status](https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg)](https://app.codecov.io/github/weecology/portalr?branch=main)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.R-project.org/package=portalr)
 
@@ -118,7 +118,6 @@ To cite the Portal dataset, use:
 
 ``` r
 get_dataset_citation()
-#> 
 #> To cite the Portal Data in publications, use:
 #> 
 #>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
