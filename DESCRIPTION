@@ -1,6 +1,6 @@
 Package: portalr
 Title: Create Useful Summaries of the Portal Data
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: 
     c(person(given = c("Glenda", "M."),
              family = "Yenni",
@@ -43,7 +43,7 @@ Authors@R:
              role = "cph"))
 Description: Download and generate summaries for the rodent,
     plant, ant, and weather data from the Portal Project. Portal is a
-    long-term (and ongoing) experimental monitoring site in the Chihuahua
+    long-term (and ongoing) experimental monitoring site in the Chihuahuan
     desert. The raw data files can be found at
     <https://github.com/weecology/portaldata>.
 License: MIT + file LICENSE
