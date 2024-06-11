@@ -14,7 +14,7 @@ clean_data <- function(full_data, trapping_table, ...) {
   full_data <- full_data %>%
     dplyr::left_join(trapping_table, ...) %>%
     dplyr::filter(.data$qcflag == 1) %>%
-    dplyr::select(columns_to_keep) %>%
+    dplyr::select(dplyr::all_of(columns_to_keep)) %>%
     unique()
 
   return(full_data)

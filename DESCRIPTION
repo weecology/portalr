@@ -64,7 +64,7 @@ Imports:
     magrittr,
     rlang,
     tidyr,
-    tidyselect (>= 1.0.0),
+    tidyselect (>= 1.2.1),
     zoo
 Suggests:
     covr,
