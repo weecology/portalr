@@ -11,12 +11,16 @@ test_that("download_observations and check_for_newer_data work", {
     })
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
+    # Expect a message if requesting latest data
     expect_message(download_observations(portal_data_path))
+    # Expecting a message that latest data is already available
     expect_message(download_observations(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
 
 
+    # Error here
+    # do not know how to convert 'pub_date' to class "Date"
     expect_no_error(download_observations(portal_data_path, version = "1.6.0"))
     expect_true(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)

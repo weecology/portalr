@@ -35,6 +35,7 @@ download_observations <- function (path    = get_default_data_path(),
                                    force   = FALSE) {
 
   return_if_null(x = version)
+  latest_requested <- identical(version, "latest")
 
   timeout_backup <- getOption("timeout")
   on.exit(options(timeout = timeout_backup))
@@ -113,6 +114,10 @@ download_observations <- function (path    = get_default_data_path(),
 
       if (!quiet) {
         message("Existing local version is up-to-date with remote version (", version, ") requested and `force` is FALSE, download is skipped")
+      # Avoid showing message in test (except if latest version is requested)
+      # use rlang::local_interactive() to simulate this message in non-interactive session.
+      if (!quiet && (rlang::is_interactive() || latest_requested)) {
+    	message("Existing local version is up-to-date with remote version (", version, ") requested and `force` is FALSE, download is skipped")
       }
 
       return(invisible())
