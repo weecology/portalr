@@ -243,7 +243,7 @@ test_that("rodent_species provides proper vectors or data frame", {
 
 
 
-test_that(desc = "na_conformer makes NA into `NA` in vectors and data frames", {
+test_that("na_conformer makes NA into `NA` in vectors and data frames", {
 
   # work on vectors
 
