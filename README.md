@@ -1,11 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# portalr
+# portalr <img src="man/figures/logo.png" width="200px">
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/weecology/portalr/workflows/R-CMD-check/badge.svg)](https://github.com/weecology/portalr/actions)
+[![R-CMD-check](https://github.com/weecology/portalr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/weecology/portalr/actions/workflows/R-CMD-check.yaml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/main/LICENSE)
 [![Coverage
 status](https://codecov.io/gh/weecology/portalr/branch/main/graph/badge.svg)](https://app.codecov.io/github/weecology/portalr?branch=main)
@@ -16,8 +16,6 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
 [![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929730)
 <!-- badges: end -->
-
-<img src="man/figures/portalr.png" width="200px">
 
 ## Overview
 
@@ -118,6 +116,7 @@ To cite the Portal dataset, use:
 
 ``` r
 get_dataset_citation()
+#> 
 #> To cite the Portal Data in publications, use:
 #> 
 #>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.

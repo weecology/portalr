@@ -17,10 +17,6 @@ test_that("download_observations and check_for_newer_data work", {
     expect_message(download_observations(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
-
-
-    # Error here
-    # do not know how to convert 'pub_date' to class "Date"
     expect_no_error(download_observations(portal_data_path, version = "1.6.0"))
     expect_true(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
@@ -29,6 +25,8 @@ test_that("download_observations and check_for_newer_data work", {
     expect_error(download_observations(portal_data_path, version = "1.5.9"))
     expect_error(download_observations(portal_data_path, version = "1.000.0"))
 
+    # Error here
+    # do not know how to convert 'pub_date' to class "Date"
     expect_no_error(download_observations(portal_data_path, source = "zenodo", timeout = 300))
     expect_error(download_observations(portal_data_path, source = "xxx"), "`source` must be either 'zenodo' or 'github'")
     expect_false(check_for_newer_data(portal_data_path))
