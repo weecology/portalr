@@ -12,4 +12,6 @@
 ^paper$
 ^.Renviron$
 ^_pkgdown\.yml$
+^pkgdown$
 ^\.github$
+^man/figures/portalr.png$

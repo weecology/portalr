@@ -1,4 +1,8 @@
 url: https://weecology.github.io/portalr
+
+template:
+  bootstrap: 5
+
 development:
   mode: auto
 reference:
@@ -46,4 +50,4 @@ reference:
       - return_if_null
       - rodent_species
       - portalr
-      
+
