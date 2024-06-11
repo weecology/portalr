@@ -82,10 +82,10 @@ test_that("does filter_plots work properly?", {
 
 test_that("does find_incomplete_censuses work properly?", {
   trappings <- data_tables$trapping_table
-  expect_error(fewer_than_24_plots <- find_incomplete_censuses(trappings, 24, 1), NA)
+  expect_no_error(fewer_than_24_plots <- find_incomplete_censuses(trappings, 24, 1))
   expect_equal(dim(dplyr::filter(fewer_than_24_plots, period < 100)), c(27, 1))
-  expect_error(any_incomplete <- find_incomplete_censuses(trappings, 24, 49), NA)
-  expect_error(missing_traps <- find_incomplete_censuses(trappings, 24, 47), NA)
+  expect_no_error(any_incomplete <- find_incomplete_censuses(trappings, 24, 49))
+  expect_no_error(missing_traps <- find_incomplete_censuses(trappings, 24, 47))
   expect_gt(NROW(any_incomplete), NROW(missing_traps))
   periods_47_traps <- setdiff(any_incomplete$period, missing_traps$period)
   idx <- periods_47_traps > 320 & periods_47_traps < 450
@@ -117,7 +117,7 @@ test_that("species data.frame has correct column names", {
 })
 
 test_that("clean_plant_data works", {
-  expect_error(plants <- clean_plant_data(plant_tables), NA)
+  expect_no_error(plants <- clean_plant_data(plant_tables))
 })
 
 plants <- clean_plant_data(plant_tables)

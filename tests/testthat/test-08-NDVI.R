@@ -10,8 +10,8 @@ test_that("Monthly option returns 2 columns", {
 })
 
 test_that("Newmoon option returns 2 columns", {
-  expect_equal(colnames(newmoon_ndvi), c("newmoonnumber", "ndvi"))
   expect_equal(dim(newmoon_ndvi)[2], 2)
+  expect_named(newmoon_ndvi, c("newmoonnumber", "ndvi"))
 })
 
 test_that("Missing monthly option data are filled", {

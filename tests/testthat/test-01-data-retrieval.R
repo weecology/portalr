@@ -3,7 +3,8 @@ portal_data_path <- tempdir()
 
 test_that("download_observations and check_for_newer_data work", {
     skip_on_cran() # these download checks take a while to run
-    expect_error(download_observations(portal_data_path, version = "1.20.0"), NA)
+    skip_if_not_installed("httptest")
+    expect_no_error(download_observations(portal_data_path, version = "1.20.0"))
     expect_true(check_for_newer_data(portal_data_path))
     httptest::without_internet({
         expect_false(check_for_newer_data(portal_data_path))
@@ -16,7 +17,7 @@ test_that("download_observations and check_for_newer_data work", {
 
 
 
-    expect_error(download_observations(portal_data_path, version = "1.6.0"), NA)
+    expect_no_error(download_observations(portal_data_path, version = "1.6.0"))
     expect_true(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
     expect_true(check_for_newer_data(portal_data_path))
@@ -24,12 +25,12 @@ test_that("download_observations and check_for_newer_data work", {
     expect_error(download_observations(portal_data_path, version = "1.5.9"))
     expect_error(download_observations(portal_data_path, version = "1.000.0"))
 
-    expect_error(download_observations(portal_data_path, source = "zenodo", timeout = 300), NA)
+    expect_no_error(download_observations(portal_data_path, source = "zenodo", timeout = 300))
     expect_error(download_observations(portal_data_path, source = "xxx"), "`source` must be either 'zenodo' or 'github'")
     expect_false(check_for_newer_data(portal_data_path))
     #unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 
-    expect_error(download_observations(portal_data_path), NA)
+    expect_no_error(download_observations(portal_data_path))
     expect_false(check_for_newer_data(portal_data_path))
     unlink(file.path(portal_data_path, "PortalData"), recursive = TRUE)
 })
@@ -43,28 +44,28 @@ test_that("load_rodent_data downloads data if missing", {
 
 test_that("load_rodent_data has the right format", {
     skip_on_cran()
-    expect_error(data_tables <- load_rodent_data("repo"), NA)
-    expect_equal(length(data_tables), 5)
-    expect_equal(names(data_tables),
+    expect_no_error(data_tables <- load_rodent_data("repo"))
+    expect_length(data_tables, 5)
+    expect_named(data_tables,
                  c("rodent_data", "species_table", "trapping_table",
                    "newmoons_table", "plots_table"))
 
     data_tables <- load_rodent_data(portal_data_path)
-    expect_equal(length(data_tables), 5)
-    expect_equal(names(data_tables),
+    expect_length(data_tables, 5)
+    expect_named(data_tables,
                  c("rodent_data", "species_table", "trapping_table",
                    "newmoons_table", "plots_table"))
 })
 
 test_that("load_plant_data has the right format", {
     skip_on_cran()
-    expect_error(data_tables <- load_plant_data("repo"), NA)
-    expect_equal(length(data_tables), 7)
-    expect_equal(names(data_tables),
+    expect_no_error(data_tables <- load_plant_data("repo"))
+    expect_length(data_tables, 7)
+    expect_named(data_tables,
                  c("quadrat_data", "species_table", "census_table",
                    "date_table", "plots_table", "transect_data", "oldtransect_data"))
 
-    expect_error(data_tables <- load_plant_data(portal_data_path), NA)
+    expect_no_error(data_tables <- load_plant_data(portal_data_path))
     expect_equal(length(data_tables), 7)
     expect_equal(names(data_tables),
                  c("quadrat_data", "species_table", "census_table",
@@ -73,15 +74,15 @@ test_that("load_plant_data has the right format", {
 
 test_that("load_ant_data works", {
     skip_on_cran()
-    expect_error(data_tables <- load_ant_data("repo"), NA)
-    expect_equal(length(data_tables), 4)
-    expect_equal(names(data_tables),
+    expect_no_error(data_tables <- load_ant_data("repo"))
+    expect_length(data_tables, 4)
+    expect_named(data_tables,
                  c("bait_data", "colony_data", "species_table",
                    "plots_table"))
 
-    expect_error(data_tables <- load_ant_data(portal_data_path), NA)
-    expect_equal(length(data_tables), 4)
-    expect_equal(names(data_tables),
+    expect_no_error(data_tables <- load_ant_data(portal_data_path))
+    expect_length(data_tables, 4)
+    expect_named(data_tables,
                  c("bait_data", "colony_data", "species_table",
                    "plots_table"))
 })

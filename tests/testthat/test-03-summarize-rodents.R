@@ -195,16 +195,16 @@ test_that("rodent_species provides proper vectors or data frame", {
   skip_on_cran()
 
   rodents <- rodent_species()
-  expect_equal(length(rodents), 30)
+  expect_length(rodents, 30)
 
   all_rodents <- rodent_species(set = "all")
-  expect_equal(length(all_rodents), 30)
+  expect_length(all_rodents, 30)
 
   fc_rodents <- rodent_species(set = "forecasting")
-  expect_equal(length(fc_rodents), 20)
+  expect_length(fc_rodents, 20)
 
   fct_rodents <- rodent_species(set = "forecasting", total = TRUE)
-  expect_equal(length(fct_rodents), 21)
+  expect_length(fct_rodents, 21)
 
   expect_type(rodents, "character")
   expect_type(all_rodents, "character")

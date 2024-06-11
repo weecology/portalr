@@ -6,17 +6,17 @@ monthly_weather <- weather("monthly", path = portal_data_path)
 newmoon_weather <- weather("newmoon", path = portal_data_path)
 
 test_that("'Daily' option returns 13 columns", {
-  expect_equal(colnames(daily_weather),
   expect_equal(dim(daily_weather)[2], 13)
+  expect_named(daily_weather,
                c("date", "year", "month", "day", "mintemp", "maxtemp", "meantemp",
                  "precipitation", "locally_measured", "battery_low", "warm_days",
                  "cool_precip", "warm_precip"))
 })
 
 test_that("Daily temperatures ok", {
-  expect_equal(length(which((daily_weather$mintemp <= daily_weather$maxtemp) == FALSE)),0)
-  expect_equal(length(which((daily_weather$meantemp <= daily_weather$maxtemp) == FALSE)),0)
-  expect_equal(length(which((daily_weather$mintemp <= daily_weather$meantemp) == FALSE)),0)
+  expect_length(which((daily_weather$mintemp <= daily_weather$maxtemp) == FALSE), 0)
+  expect_length(which((daily_weather$meantemp <= daily_weather$maxtemp) == FALSE), 0)
+  expect_length(which((daily_weather$mintemp <= daily_weather$meantemp) == FALSE), 0)
 })
 
 test_that("Monthly option returns 11 columns", {
@@ -29,9 +29,9 @@ test_that("Monthly option returns 11 columns", {
 })
 
 test_that("Monthly temperatures ok", {
-  expect_equal(length(which((monthly_weather$mintemp <= monthly_weather$maxtemp) == FALSE)),0)
-  expect_equal(length(which((monthly_weather$meantemp <= monthly_weather$maxtemp) == FALSE)),0)
-  expect_equal(length(which((monthly_weather$mintemp <= monthly_weather$meantemp) == FALSE)),0)
+  expect_length(which((monthly_weather$mintemp <= monthly_weather$maxtemp) == FALSE), 0)
+  expect_length(which((monthly_weather$meantemp <= monthly_weather$maxtemp) == FALSE), 0)
+  expect_length(which((monthly_weather$mintemp <= monthly_weather$meantemp) == FALSE), 0)
 })
 
 test_that("Newmoon option returns 11 columns", {
@@ -43,7 +43,7 @@ test_that("Newmoon option returns 11 columns", {
 })
 
 test_that("Newmoon temperatures ok", {
-  expect_equal(length(which((newmoon_weather$mintemp <= newmoon_weather$maxtemp) == FALSE)), 0)
-  expect_equal(length(which((newmoon_weather$meantemp <= newmoon_weather$maxtemp) == FALSE)), 0)
-  expect_equal(length(which((newmoon_weather$mintemp <= newmoon_weather$meantemp) == FALSE)), 0)
+  expect_length(which((newmoon_weather$mintemp <= newmoon_weather$maxtemp) == FALSE), 0)
+  expect_length(which((newmoon_weather$meantemp <= newmoon_weather$maxtemp) == FALSE), 0)
+  expect_length(which((newmoon_weather$mintemp <= newmoon_weather$meantemp) == FALSE), 0)
 })
