@@ -125,8 +125,9 @@ download_observations <- function (path    = get_default_data_path(),
     }
 
   }
-
-  if (!quiet) {
+  # Avoid showing message in test (inform of version if latest is requested)
+  # use rlang::local_interactive() to simulate this message in non-interactive session.
+  if (!quiet && (rlang::is_interactive() || latest_requested)) {
     message("Downloading version `", version, "` of the data...")
   }
 
