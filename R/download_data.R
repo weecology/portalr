@@ -244,12 +244,14 @@ check_default_data_path <- function(ENV_VAR = "PORTALR_DATA_PATH",
 {
   if (is.na(get_default_data_path(fallback = NA, ENV_VAR)))
   {
-    MESSAGE_FUN("You don't appear to have a defined location for storing ", DATA_NAME, ".")
-    MESSAGE_FUN(format_todo(" Call ",
-                            format_code('use_default_data_path(\"<path>\")'),
-                            " if you wish to set the default data path."))
-    MESSAGE_FUN(DATA_NAME, " will be downloaded into ",
-                format_code(path.expand("~")), " otherwise.")
+  	msg <- cli::format_message(
+  		c(
+  			"You don't appear to have a defined location for storing {DATA_NAME}.",
+  			"i" = "Call {.code use_default_data_path(\"path\")} if you wish to set the default data path.",
+  			"i" = "{DATA_NAME} will be downloaded into {.path {path.expand('~')}} otherwise."
+  		)
+  	)
+  	MESSAGE_FUN(msg)
     return(FALSE)
   }
   return(TRUE)
@@ -309,14 +311,17 @@ use_default_data_path <- function(path = NULL, ENV_VAR = "PORTALR_DATA_PATH")
 
   # display message and copy new path setting to clipboard
   path_setting_string <- paste0(ENV_VAR, "=", '"', path, '"')
-  message(format_todo("Call ", format_code('usethis::edit_r_environ()'), " to open ",
-               format_value('.Renviron')))
-  message(format_todo("Store your data path with a line like:"))
-  message("  ", format_code(path_setting_string))
+  cli::cli_inform(c(
+    "*" = "Call {.run usethis::edit_r_environ()} to open {.val .Renviron}.",
+    "*" = "Store your data path with a line like:",
+    " " = path_setting_string
+  ))
   if (rlang::is_interactive() && clipr::clipr_available()) {
     clipr::write_clip(path_setting_string)
-    message("  [Copied to clipboard]")
+    cli::cli_inform("  [Copied to clipboard]")
   }
-  message(format_todo("Make sure ", format_value('.Renviron'), " ends with a newline!"))
+  cli::cli_inform(c(
+      "*" = "Make sure {.val .Renviron} ends with a newline!"
+  ))
   return()
 }

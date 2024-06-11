@@ -53,9 +53,8 @@ BugReports: https://github.com/weecology/portalr/issues
 Depends: 
     R (>= 3.2.3)
 Imports:
-    clipr, 
-    clisymbols,
-    crayon,
+    cli,
+    clipr,
     dplyr,
     forecast,
     httr,
