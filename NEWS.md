@@ -3,7 +3,7 @@
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
 # [portalr 0.4.1](https://github.com/weecology/portalr/releases/tag/v0.4.1)
-*2023-08-223*
+*2023-08-23*
 
 ### Regional weather filling includes more stations
 
@@ -20,6 +20,6 @@ Version numbers follow [Semantic Versioning](https://semver.org/).
 * now defaulty for number of moons to add is `NULL`  and there is a call to `return_if_null` on it
 
 ### addition of new functions (pulled from portalcasting)
-* `return_if_null` 
-* `rodent_species`: helper function that now operates off of the rodent table, not hard-coded
-* `na_conformer`: makes sure the species abbreviation for Neotoma albigula is a character value
+* `return_if_null()` 
+* `rodent_species()`: helper function that now operates off of the rodent table, not hard-coded
+* `na_conformer()`: makes sure the species abbreviation for Neotoma albigula is a character value
