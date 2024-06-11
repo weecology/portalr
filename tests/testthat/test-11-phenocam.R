@@ -1,4 +1,4 @@
-context("checks phenocam summary output")
+# Checks phenocam summary output
 
 portal_data_path <- tempdir()
 daily_pheno <- tryCatch(phenocam("daily", path = portal_data_path), error = function(e) NULL)
@@ -25,7 +25,7 @@ test_that("Monthly option returns 7 columns", {
 
 test_that("Newmoon option returns 6 columns", {
   skip_if(is.null(newmoon_pheno))
-  expect_that(dim(newmoon_pheno)[2], equals(6))
   expect_equal(colnames(newmoon_pheno), c("newmoonnumber","mean_image_count","midday_gcc","midday_rcc",
                                           "gcc_mean","rcc_mean"))
+  expect_equal(dim(newmoon_pheno)[2], 6)
 })

@@ -67,15 +67,14 @@ Imports:
     tidyselect (>= 1.2.1),
     zoo
 Suggests:
-    covr,
     cowplot,
     ggplot2,
     httptest,
     knitr,
-    pkgdown,
     rmarkdown,
-    testthat
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Config/testthat/edition: 3

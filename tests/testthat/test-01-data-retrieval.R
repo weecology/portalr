@@ -1,5 +1,4 @@
-context("Check data retrieval")
-
+# Check data retrieval
 portal_data_path <- tempdir()
 
 test_that("download_observations and check_for_newer_data work", {
@@ -93,19 +92,24 @@ test_that("default data path functions work if unset", {
                    "You don't appear to have a defined location for storing Portal data.")
     expect_false(result)
 
-    m <- capture_messages(check_default_data_path())
-    expect_match(m, "You don't appear to have a defined location for storing Portal data.", all = FALSE)
-    expect_match(m, "Call .+ if you wish to set the default data path.", all = FALSE)
-    expect_match(m, "Portal data will be downloaded into .+ otherwise.", all = FALSE)
+    # Use snapshot to test for no error + message
+    expect_snapshot(
+    	check_default_data_path(),
+    	# transform user path (in case cli uses double quotes on path one day)
+    	# If check_default_data_path message changes, the regex here will need to be adjusted
+    	transform = function(x) sub("into ['\"].+['\"]", "into '<user_path>'", x)
+    )
 
     expect_error(use_default_data_path())
 
     data_path <- tempdir()
-    expect_error(m <- capture_messages(use_default_data_path(data_path)), NA)
-    expect_match(m, "Call `usethis::edit_r_environ()` to open '.Renviron'", fixed = TRUE, all = FALSE)
-    expect_match(m, "Store your data path with a line like:", all = FALSE)
-    expect_match(m, "PORTALR_DATA_PATH=", all = FALSE)
-    expect_match(m, "Make sure '.Renviron' ends with a newline!", all = FALSE)
+    # Use snapshot to test for no error + message
+    expect_snapshot(
+    	use_default_data_path(data_path),
+    	# avoid showing temp path in snapshot
+    	# If use_default_data_path message changes, the regex here will need to be adjusted
+    	transform = function(x) sub("=\".+\"", "=\"<portalr_path>\"", x)
+    )
 })
 
 test_that("default data path functions work if set", {

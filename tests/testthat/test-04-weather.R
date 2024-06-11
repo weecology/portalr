@@ -1,4 +1,4 @@
-context("checks weather summary output")
+# checks weather summary output
 
 portal_data_path <- tempdir()
 daily_weather <- weather("daily", path = portal_data_path)
@@ -6,8 +6,8 @@ monthly_weather <- weather("monthly", path = portal_data_path)
 newmoon_weather <- weather("newmoon", path = portal_data_path)
 
 test_that("'Daily' option returns 13 columns", {
-  expect_that(dim(daily_weather)[2], equals(13))
   expect_equal(colnames(daily_weather),
+  expect_equal(dim(daily_weather)[2], 13)
                c("date", "year", "month", "day", "mintemp", "maxtemp", "meantemp",
                  "precipitation", "locally_measured", "battery_low", "warm_days",
                  "cool_precip", "warm_precip"))

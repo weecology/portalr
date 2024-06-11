@@ -1,4 +1,4 @@
-context("Check get_future_newmoons")
+# Check get_future_newmoons
 
 portal_data_path <- tempdir()
 

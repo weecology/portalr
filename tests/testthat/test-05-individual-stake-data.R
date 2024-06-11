@@ -1,4 +1,4 @@
-context("Check rodent stake data")
+# Check rodent stake data
 
 portal_data_path <- tempdir()
 

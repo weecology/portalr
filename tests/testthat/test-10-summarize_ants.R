@@ -1,4 +1,4 @@
-context("Check ant data summaries")
+# Check ant data summaries
 
 portal_data_path <- tempdir()
 

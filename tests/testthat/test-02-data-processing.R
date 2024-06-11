@@ -1,4 +1,4 @@
-context("Check data processing")
+# Check data processing
 
 eps <- if (capabilities("long.double"))
   sqrt(.Machine$double.eps) else
@@ -44,9 +44,9 @@ test_that("clean_rodent_data has correct columns", {
   expect_true("wgt" %in% rodent_cols)
   expect_true("energy" %in% rodent_cols)
 
-  expect_is(rodents$species, "factor")
-  expect_is(rodents$wgt, "numeric")
-  expect_is(rodents$energy, "numeric")
+  expect_s3_class(rodents$species, "factor")
+  expect_type(rodents$wgt, "double")
+  expect_type(rodents$energy, "double")
   expect_equal(is.na(rodents$wgt), is.na(rodents$energy), tolerance = eps)
   expect_equal(5.69 * rodents$wgt[!is.na(rodents$wgt)] ^ 0.75,
                rodents$energy[!is.na(rodents$energy)], tolerance = eps)
@@ -135,7 +135,7 @@ test_that("clean_plant_data has correct columns", {
   expect_true('duration' %in% plant_cols)
   expect_true('community' %in% plant_cols)
 
-  expect_is(plants$species, "factor")
-  expect_is(plants$abundance, "integer")
-  expect_is(plants$cover, "numeric")
+  expect_s3_class(plants$species, "factor")
+  expect_type(plants$abundance, "integer")
+  expect_type(plants$cover, "double")
 })

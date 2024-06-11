@@ -1,5 +1,6 @@
 # portalr
 
+* `portalr` now uses [testthat 3rd edition](https://testthat.r-lib.org/articles/third-edition.html)
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
 # [portalr 0.4.1](https://github.com/weecology/portalr/releases/tag/v0.4.1)

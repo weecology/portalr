@@ -1,4 +1,4 @@
-context("Check seasonal data summaries")
+# Check seasonal data summaries
 
 eps <- if (capabilities("long.double"))
   sqrt(.Machine$double.eps) else

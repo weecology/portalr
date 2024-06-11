@@ -1,4 +1,4 @@
-context("Check rodent data summaries")
+# Check rodent data summaries
 
 portal_data_path <- tempdir()
 
@@ -206,33 +206,33 @@ test_that("rodent_species provides proper vectors or data frame", {
   fct_rodents <- rodent_species(set = "forecasting", total = TRUE)
   expect_equal(length(fct_rodents), 21)
 
-  expect_is(rodents, "character")
-  expect_is(all_rodents, "character")
-  expect_is(fc_rodents, "character")
-  expect_is(fct_rodents, "character")
+  expect_type(rodents, "character")
+  expect_type(all_rodents, "character")
+  expect_type(fc_rodents, "character")
+  expect_type(fct_rodents, "character")
 
   rodent_abbr <- rodent_species(type = "abbreviation")
-  expect_is(rodent_abbr, "character")
+  expect_type(rodent_abbr, "character")
   expect_equal(unique(nchar(rodent_abbr)), 2)
 
   rodent_comm <- rodent_species(type = "common")
-  expect_is(rodent_comm , "character")
+  expect_type(rodent_comm , "character")
   expect_equal(unique(nchar(rodent_comm)), c(26, 20, 21, 19, 17, 31, 22, 18, 12, 10, 13, 24, 23, 28))
 
   rodent_scie <- rodent_species(type = "scientific")
-  expect_is(rodent_scie, "character")
+  expect_type(rodent_scie, "character")
   expect_equal(unique(nchar(rodent_scie)), c(24, 15, 19, 20, 23, 26, 18, 13, 21, 16, 22, 25, 10, 17, 12, 29))
 
   rodent_gs <- rodent_species(type = "g_species")
-  expect_is(rodent_gs, "character")
+  expect_type(rodent_gs, "character")
   expect_equal(unique(nchar(rodent_gs)), c(10, 11, 14, 15, 6, 8, 9, 13, 12))
 
   rodent_t <- rodent_species(type = "table")
-  expect_is(rodent_t, "data.frame")
+  expect_s3_class(rodent_t, "data.frame")
   expect_equal(dim(rodent_t), c(30, 4))
 
   rodent_tt <- rodent_species(type = "table", total = TRUE)
-  expect_is(rodent_tt, "data.frame")
+  expect_s3_class(rodent_tt, "data.frame")
   expect_equal(dim(rodent_tt), c(31, 4))
 
   expect_error(rodent_species(type = "error"))
@@ -243,8 +243,7 @@ test_that("rodent_species provides proper vectors or data frame", {
 
 
 
-test_that(desc = "na_conformer makes NA into `NA` in vectors and data frames",
-          code = {
+test_that(desc = "na_conformer makes NA into `NA` in vectors and data frames", {
 
   # work on vectors
 
@@ -254,7 +253,7 @@ test_that(desc = "na_conformer makes NA into `NA` in vectors and data frames",
   # works on dfs
 
     xx <- data.frame(w = "a", n = as.character(c("d", NA, "a", "b", "c")))
-    expect_is(na_conformer(xx, "n"), "data.frame")
+    expect_s3_class(na_conformer(xx, "n"), "data.frame")
     expect_equal(na_conformer(xx, "n")[2,2], "NA")
 })
 

@@ -1,4 +1,4 @@
-context("Regression tests for rodent, ant, and plant output")
+# Regression tests for rodent, ant, and plant output
 
 portal_data_path <- tempdir()
 
