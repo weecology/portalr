@@ -13,7 +13,7 @@
 #'
 #' @param verbose \code{logical} whether to provide details of downloading.
 #'
-#' @param pause Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment. 
+#' @param pause Positive \code{integer} or integer \code{numeric} seconds for pausing during steps around unzipping that require time delayment.
 #'
 #' @param timeout Positive \code{integer} or integer \code{numeric} seconds for timeout on downloads. Temporarily overrides the \code{"timeout"} option in \code{\link[base]{options}}.
 #'
@@ -26,7 +26,7 @@
 #' @export
 #'
 download_observations <- function (path    = get_default_data_path(),
-                                   version = "latest", 
+                                   version = "latest",
                                    source  = "github",
                                    quiet   = FALSE,
                                    verbose = FALSE,
@@ -38,28 +38,30 @@ download_observations <- function (path    = get_default_data_path(),
 
   timeout_backup <- getOption("timeout")
   on.exit(options(timeout = timeout_backup))
-  options(timeout = timeout) 
+  options(timeout = timeout)
 
   if (source == "zenodo") {
 
-    base_url <- "https://zenodo.org/api/records/" 
+    base_url <- "https://zenodo.org/api/records/"
 
     got <- GET(base_url, query = list(q = "conceptrecid:1215988",
-                                      size = 9999, 
+                                      size = 9999,
                                       all_versions = "true"))
 
     stop_for_status(got, task = paste0("locate Zenodo concept record"))
 
-    contents <- content(got)    
+    contents <- content(got)
+    hits=getElement(contents, name = "hits")
+    hits=getElement(hits, name = "hits")
 
-    metadata <- lapply(FUN = getElement, 
-                       X = contents, 
+    metadata <- lapply(FUN = getElement,
+                       X = hits,
                        name = "metadata")
-    versions <- sapply(FUN = getElement, 
-                       X = metadata, 
+    versions <- sapply(FUN = getElement,
+                       X = metadata,
                        name = "version")
-    pub_date <- sapply(FUN = getElement, 
-                       X = metadata, 
+    pub_date <- sapply(FUN = getElement,
+                       X = metadata,
                        name = "publication_date")
 
     selected <- ifelse(version == "latest",
@@ -69,17 +71,17 @@ download_observations <- function (path    = get_default_data_path(),
     if (length(selected) == 0){
 
       stop(paste0("Failed to locate version `", version, "`"))
-   
+
     }
-    
-    zipball_url <- contents[[selected]]$files[[1]]$links$download     
-    version <- ifelse(version == "latest", 
+
+    zipball_url <- hits[[selected]]$files[[1]]$links$self
+    version <- ifelse(version == "latest",
                       metadata[[selected]]$version, version)
 
   } else if (source == "github") {
 
-    base_url <- "https://api.github.com/repos/weecology/PortalData/releases/" 
-    url <- ifelse(version == "latest", 
+    base_url <- "https://api.github.com/repos/weecology/PortalData/releases/"
+    url <- ifelse(version == "latest",
                   paste0(base_url, "latest"),
                   paste0(base_url, "tags/", version))
 
@@ -87,8 +89,8 @@ download_observations <- function (path    = get_default_data_path(),
 
     stop_for_status(got, task = paste0("locate version `", version, "`"))
 
-    zipball_url <- content(got)$zipball_url      
- 
+    zipball_url <- content(got)$zipball_url
+
     version <- ifelse(version == "latest", content(got)$name, version)
 
   } else {
@@ -96,7 +98,7 @@ download_observations <- function (path    = get_default_data_path(),
     stop("`source` must be either 'zenodo' or 'github'")
 
   }
-  
+
 
   temp <- file.path(tempdir(), "PortalData.zip")
   final <- file.path(path, "PortalData")
@@ -104,10 +106,10 @@ download_observations <- function (path    = get_default_data_path(),
 
   if (!force & file.exists(version_file)) {
 
-    existing_version <- scan(file  = version_file, 
-                             what  = character(), 
+    existing_version <- scan(file  = version_file,
+                             what  = character(),
                              quiet = TRUE)
-  
+
 
     if (existing_version == version) {
 
@@ -128,9 +130,9 @@ download_observations <- function (path    = get_default_data_path(),
 
 
   result <- tryCatch(
-              expr  = download.file(url      = zipball_url, 
-                                    destfile = temp, 
-                                    quiet    = !verbose, 
+              expr  = download.file(url      = zipball_url,
+                                    destfile = temp,
+                                    quiet    = !verbose,
                                     mode     = "wb"),
               error = function(x){NA})
 
@@ -152,7 +154,7 @@ download_observations <- function (path    = get_default_data_path(),
 
     file.remove(old_files)
 
-    unlink(x         = final, 
+    unlink(x         = final,
            recursive = TRUE)
 
   }
@@ -192,7 +194,7 @@ check_for_newer_data <- function (path = get_default_data_path()) {
   }
 
 
-  url <- "https://api.github.com/repos/weecology/PortalData/releases/latest" 
+  url <- "https://api.github.com/repos/weecology/PortalData/releases/latest"
   got <- tryCatch(GET(url),
                   error = function(e) NULL)
   return_if_null(x = got, value = FALSE)
