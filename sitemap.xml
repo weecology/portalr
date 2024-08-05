@@ -1,129 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://weecology.github.io/portalr/404.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/articles/portal_researcher_examples.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/articles/rodent-abundance-demo.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/index.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/add_seasons.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/bait_presence_absence.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/check_for_newer_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/clean_plant_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/clean_rodent_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/colony_presence_absence.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/download_observations.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/fcast_ndvi.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/fill_missing_ndvi.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/find_incomplete_censuses.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/format_code.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/format_todo.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/format_value.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/get_dataset_citation.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/get_future_newmoons.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/load_datafile.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/load_rodent_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/na_conformer.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/ndvi.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/phenocam.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/portalr.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/return_if_null.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/rodent_species.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/shrub_cover.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/summarize_individual_rodents.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/summarize_plant_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/summarize_rodent_data.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/use_default_data_path.html</loc>
-  </url>
-  <url>
-    <loc>https://weecology.github.io/portalr/reference/weather.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://weecology.github.io/portalr/404.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/CONTRIBUTING.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/LICENSE-text.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/LICENSE.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/articles/index.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/articles/portal_researcher_examples.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/articles/rodent-abundance-demo.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/authors.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/index.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/news/index.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/add_seasons.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/bait_presence_absence.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/check_for_newer_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/clean_plant_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/clean_rodent_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/colony_presence_absence.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/download_observations.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/fcast_ndvi.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/fill_missing_ndvi.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/find_incomplete_censuses.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/format_code.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/format_todo.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/format_value.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/get_dataset_citation.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/get_future_newmoons.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/index.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/load_datafile.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/load_rodent_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/na_conformer.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/ndvi.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/phenocam.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/pipe.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/portalr.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/return_if_null.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/rodent_species.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/shrub_cover.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/summarize_individual_rodents.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/summarize_plant_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/summarize_rodent_data.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/use_default_data_path.html</loc></url>
+<url><loc>https://weecology.github.io/portalr/reference/weather.html</loc></url>
 </urlset>
+
