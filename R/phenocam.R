@@ -24,7 +24,7 @@ phenocam <- function(level = "daily", path = get_default_data_path())
 
 
   pheno <- read.csv(url,
-                    skip = 22, header = TRUE, na.strings = c(""), stringsAsFactors = FALSE,
+                    skip = 22, header = TRUE, na.strings = c("", "NA"), stringsAsFactors = FALSE,
                     colClasses = c("Date", rep("integer", 3), "character",
                                    rep("numeric", 22), rep("character", 5))) %>%
     dplyr::arrange(.data$date)
