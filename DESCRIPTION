@@ -50,7 +50,7 @@ License: MIT + file LICENSE
 URL: https://weecology.github.io/portalr/,
     https://github.com/weecology/portalr
 BugReports: https://github.com/weecology/portalr/issues
-Depends: 
+Depends:
     R (>= 3.2.3)
 Imports:
     cli,
@@ -72,7 +72,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2
