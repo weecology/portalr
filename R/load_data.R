@@ -219,7 +219,8 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   }
 
   ## output message about data version
-  if (!quiet)
+  # Silence this message in testing.
+  if (!quiet && !identical(Sys.getenv("TESTTHAT"), "true"))
   {
     version_file <- file.path(base_path, "version.txt")
     if (tolower(path) != "repo" && !file.exists(version_file))

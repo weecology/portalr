@@ -1,9 +1,15 @@
 # portalr
 
+* `portalr` now uses [testthat 3rd edition](https://testthat.r-lib.org/articles/third-edition.html)
+* `portalr` no longer imports clisymbols and crayon. Its messages are gemerated with cli.
+* `format_todo()`, `format_code()`, and `format_value()` can be replaced with
+  [inline markup](https://cli.r-lib.org/articles/usethis-ui.html) (i.e. `{.val}`, `{.code}`, etc.) and
+  may be removed from the package.
+
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
 # [portalr 0.4.1](https://github.com/weecology/portalr/releases/tag/v0.4.1)
-*2023-08-223*
+*2023-08-23*
 
 ### Regional weather filling includes more stations
 
@@ -20,6 +26,6 @@ Version numbers follow [Semantic Versioning](https://semver.org/).
 * now defaulty for number of moons to add is `NULL`  and there is a call to `return_if_null` on it
 
 ### addition of new functions (pulled from portalcasting)
-* `return_if_null` 
-* `rodent_species`: helper function that now operates off of the rodent table, not hard-coded
-* `na_conformer`: makes sure the species abbreviation for Neotoma albigula is a character value
+* `return_if_null()` 
+* `rodent_species()`: helper function that now operates off of the rodent table, not hard-coded
+* `na_conformer()`: makes sure the species abbreviation for Neotoma albigula is a character value

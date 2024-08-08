@@ -8,7 +8,7 @@ format_value <- function(...)
 {
     x <- paste0(..., collapse = "")
     x <- encodeString(x, quote = "'")
-    crayon::blue(x)
+    cli::col_blue(x)
 }
 
 #' Format content as an action to be performed by the user
@@ -19,7 +19,7 @@ format_value <- function(...)
 #' @export
 format_todo <- function(...)
 {
-    paste0(crayon::red(clisymbols::symbol$bullet), " ", ..., collapse = "")
+    paste0(cli::col_red(cli::symbol$bullet), " ", ..., collapse = "")
 }
 
 #' Format content as code
@@ -32,5 +32,5 @@ format_code <- function(...)
 {
     x <- paste0(..., collapse = "")
     x <- encodeString(x, quote = "`")
-    crayon::silver(x)
+    cli::col_silver(x)
 }

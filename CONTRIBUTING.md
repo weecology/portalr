@@ -65,4 +65,4 @@ The suggested workflow is:
 
 If you are also prepping the package as a whole, then you will also want to run `devtools::check()` and/or `devtools::check_cran()` to make sure that the package is complete.
 
-For more info, see the [GitHub repo](https://github.com/hadley/devtools) for the `devtools` package. 
+For more info, see the [GitHub repo](https://github.com/r-lib/devtools) for the `devtools` package. 

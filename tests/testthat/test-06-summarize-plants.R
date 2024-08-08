@@ -1,4 +1,4 @@
-context("Check plant data summaries")
+# Check plant data summaries
 
 portal_data_path <- tempdir()
 
