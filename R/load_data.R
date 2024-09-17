@@ -18,6 +18,7 @@
 #'
 #' @param clean logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
 #' @param quiet logical, whether to run without version messages
+#' @param ... arguments passed to \code{\link{download_observations}}
 #'
 #' @return \code{\link{load_rodent_data}} returns a list of 5 dataframes:
 #'   \tabular{ll}{
@@ -31,19 +32,19 @@
 #' @export
 #'
 load_rodent_data <- function(path = get_default_data_path(),
-                             download_if_missing = TRUE, clean = TRUE, quiet = FALSE)
+                             download_if_missing = TRUE, clean = TRUE, quiet = FALSE, ...)
 {
   rodent_data <- load_datafile(file.path("Rodents", "Portal_rodent.csv"),
                                na.strings = "", path, download_if_missing,
-                               quiet = quiet)
+                               quiet = quiet, ...)
   species_table <- load_datafile(file.path("Rodents", "Portal_rodent_species.csv"),
-                                 na.strings = "", path, download_if_missing)
+                                 na.strings = "", path, download_if_missing, ...)
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
-                                  na.strings = "NA", path, download_if_missing)
+                                  na.strings = "NA", path, download_if_missing, ...)
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
-                                  na.strings = "NA", path, download_if_missing)
+                                  na.strings = "NA", path, download_if_missing, ...)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
-                               na.strings = "NA", path, download_if_missing)
+                               na.strings = "NA", path, download_if_missing, ...)
 
   # reformat species columns
   if (!"species" %in% names(species_table))
@@ -63,9 +64,10 @@ load_rodent_data <- function(path = get_default_data_path(),
                               by = c("year", "month", "plot"))
     trapping_table <- dplyr::filter(trapping_table, .data$qcflag == 1)
   }
-
-  return(mget(c("rodent_data", "species_table", "trapping_table",
-                "newmoons_table", "plots_table")))
+  tables <- mget(c("rodent_data", "species_table", "trapping_table",
+         "newmoons_table", "plots_table"))
+  class(tables) <- append(class(tables), "portal_data_list")
+  return(tables)
 }
 
 #' @rdname load_rodent_data
@@ -87,30 +89,32 @@ load_rodent_data <- function(path = get_default_data_path(),
 #'
 
 load_plant_data <- function(path = get_default_data_path(),
-                            download_if_missing = TRUE, quiet = FALSE)
+                            download_if_missing = TRUE, quiet = FALSE, ...)
 {
   quadrat_data <- load_datafile(file.path("Plants", "Portal_plant_quadrats.csv"),
                                 na.strings = "", path, download_if_missing,
-                                quiet = quiet)
+                                quiet = quiet, ...)
   species_table <- load_datafile(file.path("Plants", "Portal_plant_species.csv"),
-                                 na.strings = "", path, download_if_missing)
+                                 na.strings = "", path, download_if_missing, ...)
   census_table <- load_datafile(file.path("Plants", "Portal_plant_censuses.csv"),
-                                na.strings = "NA", path, download_if_missing)
+                                na.strings = "NA", path, download_if_missing, ...)
   date_table <- load_datafile(file.path("Plants", "Portal_plant_census_dates.csv"),
-                              na.strings = c("", "none", "unknown"), path, download_if_missing)
+                              na.strings = c("", "none", "unknown"), path, download_if_missing, ...)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
-                               na.strings = "NA", path, download_if_missing)
+                               na.strings = "NA", path, download_if_missing, ...)
   transect_data <- load_datafile(file.path("Plants", "Portal_plant_transects_2015_present.csv"),
-                                 na.strings = "", path, download_if_missing)
+                                 na.strings = "", path, download_if_missing, ...)
   oldtransect_data <- load_datafile(file.path("Plants", "Portal_plant_transects_1989_2009.csv"),
-                                    na.strings = "", path, download_if_missing)
+                                    na.strings = "", path, download_if_missing, ...)
 
   # reformat species columns
   species_table <- reformat_species_table(species_table)
 
-  return(mget(c("quadrat_data", "species_table", "census_table",
-                "date_table", "plots_table",
-                "transect_data", "oldtransect_data")))
+  tables <- mget(c("quadrat_data", "species_table", "census_table",
+                   "date_table", "plots_table",
+                   "transect_data", "oldtransect_data"))
+  class(tables) <- append(class(tables), "portal_data_list")
+  return(tables)
 }
 
 #' @rdname load_rodent_data
@@ -128,23 +132,25 @@ load_plant_data <- function(path = get_default_data_path(),
 #'
 
 load_ant_data <- function(path = get_default_data_path(),
-                          download_if_missing = TRUE, quiet = FALSE)
+                          download_if_missing = TRUE, quiet = FALSE, ...)
 {
   bait_data <- load_datafile(file.path("Ants", "Portal_ant_bait.csv"),
                              na.strings = "", path, download_if_missing,
-                             quiet = TRUE)
+                             quiet = TRUE, ...)
   colony_data <- load_datafile(file.path("Ants", "Portal_ant_colony.csv"),
-                               na.strings = "", path, download_if_missing)
+                               na.strings = "", path, download_if_missing, ...)
   species_table <- load_datafile(file.path("Ants", "Portal_ant_species.csv"),
-                                 na.strings = "NA", path, download_if_missing)
+                                 na.strings = "NA", path, download_if_missing, ...)
   plots_table <- load_datafile(file.path("SiteandMethods", "Portal_plots.csv"),
-                               na.strings = "NA", path, download_if_missing)
+                               na.strings = "NA", path, download_if_missing, ...)
 
   # reformat species columns
   species_table <- reformat_species_table(species_table)
 
-  return(mget(c("bait_data", "colony_data",
-                "species_table", "plots_table")))
+  tables <- mget(c("bait_data", "colony_data",
+                   "species_table", "plots_table"))
+  class(tables) <- append(class(tables), "portal_data_list")
+  return(tables)
 }
 
 #' @rdname load_rodent_data
@@ -159,12 +165,12 @@ load_ant_data <- function(path = get_default_data_path(),
 #' @export
 load_trapping_data <- function(path = get_default_data_path(),
                                download_if_missing = TRUE, clean = TRUE,
-                               quiet = FALSE)
+                               quiet = FALSE, ...)
 {
   trapping_table <- load_datafile(file.path("Rodents", "Portal_rodent_trapping.csv"),
-                                  na.strings = "NA", path, download_if_missing, quiet = quiet)
+                                  na.strings = "NA", path, download_if_missing, quiet = quiet, ...)
   newmoons_table <- load_datafile(file.path("Rodents", "moon_dates.csv"),
-                                  na.strings = "NA", path, download_if_missing)
+                                  na.strings = "NA", path, download_if_missing, ...)
 
   # remove data still under quality control
   if (clean)
@@ -173,7 +179,9 @@ load_trapping_data <- function(path = get_default_data_path(),
                                  by = "period")
   }
 
-  return(mget(c("trapping_table", "newmoons_table")))
+  tables <- mget(c("trapping_table", "newmoons_table"))
+  class(tables) <- append(class(tables), "portal_data_list")
+  return(tables)
 }
 
 #' @name load_datafile
@@ -191,9 +199,8 @@ load_trapping_data <- function(path = get_default_data_path(),
 #'
 #' @export
 load_datafile <- function(datafile, na.strings = "", path = get_default_data_path(),
-                          download_if_missing = TRUE, quiet = TRUE)
+                          download_if_missing = TRUE, quiet = TRUE, ...)
 {
-
   ## define file paths
   if (tolower(path) == "repo")
   {
@@ -210,7 +217,7 @@ load_datafile <- function(datafile, na.strings = "", path = get_default_data_pat
   {
     if (download_if_missing) {
       warning("Proceeding to download data into specified path", path, "\n")
-      tryCatch(download_observations(path),
+      tryCatch(download_observations(path, ...),
                error = function(e) e,
                warning = function(w) w)
     } else {
@@ -248,4 +255,22 @@ reformat_species_table <- function(species_table)
                                    species = "speciescode")
   }
   return(species_table)
+}
+
+#' Prints a portal_data_list object
+#' @rdname print
+#' @aliases print
+#' @name print.portal_data_list
+#' @param x A portal_data_list object.
+#' @param ... arguments passed to \code{\link{print}}
+#' @export
+#'
+print.portal_data_list <- function(x, ...) {
+    x_name <- deparse(substitute(x))
+    tbls <- names(x)
+    message("\nPortal data: a list with the following data frames:\n")
+    print(tbls, ...)
+    access_msg <- paste0("'", x_name, "$", tbls[1], "'")
+    message(paste("\nAccess individual data sets with e.g.", access_msg))
+    invisible(x)
 }
