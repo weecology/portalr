@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">portalr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,20 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/weecology/portalr/blob/v0.4.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/weecology/portalr/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.2" id="portalr-042"><a href="https://github.com/weecology/portalr/releases/tag/v0.4.2" class="external-link">portalr 0.4.2</a><a class="anchor" aria-label="anchor" href="#portalr-042"></a></h2><p class="text-muted">CRAN release: 2024-08-28</p>
+<p><em>2024-08-08</em></p>
+<ul><li>
+<code>portalr</code> now uses <a href="https://testthat.r-lib.org/articles/third-edition.html" class="external-link">testthat 3rd edition</a>
+</li>
+<li>
+<code>portalr</code> no longer imports clisymbols and crayon. Its messages are generated with cli.</li>
+<li>
+<code><a href="../reference/format_todo.html">format_todo()</a></code>, <code><a href="../reference/format_code.html">format_code()</a></code>, and <code><a href="../reference/format_value.html">format_value()</a></code> can be replaced with <a href="https://cli.r-lib.org/articles/usethis-ui.html" class="external-link">inline markup</a> (i.e. <code>{.val}</code>, <code>{.code}</code>, etc.) and may be removed from the package.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="portalr-041"><a href="https://github.com/weecology/portalr/releases/tag/v0.4.1" class="external-link">portalr 0.4.1</a><a class="anchor" aria-label="anchor" href="#portalr-041"></a></h2><p class="text-muted">CRAN release: 2023-08-23</p>
 <p><em>2023-08-23</em></p>
@@ -82,7 +93,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
