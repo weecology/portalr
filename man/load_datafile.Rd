@@ -9,7 +9,8 @@ load_datafile(
   na.strings = "",
   path = get_default_data_path(),
   download_if_missing = TRUE,
-  quiet = TRUE
+  quiet = TRUE,
+  ...
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ load_datafile(
 PortalData folder, then download it}
 
 \item{quiet}{logical, whether to perform operations silently}
+
+\item{...}{arguments passed to \code{\link{download_observations}}}
 }
 \description{
 does checking for whether a particular datafile exists and then

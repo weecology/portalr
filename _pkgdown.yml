@@ -32,6 +32,7 @@ reference:
     contents:
       - load_datafile
       - load_rodent_data
+      - print
   - title: "Data Processing"
     desc: "Functions to do various data processing steps"
     contents:
