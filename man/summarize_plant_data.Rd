@@ -87,7 +87,7 @@ represent one of a few slightly different meanings:
  3) that combo was trapped, but is unusable (a negative period code))}
 
 \item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
-detections)}
+detection)}
 
 \item{min_quads}{numeric [1:16], minimum number of quadrats (out of 16) for a plot to be included}
 

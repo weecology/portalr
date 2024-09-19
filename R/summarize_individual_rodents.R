@@ -12,10 +12,16 @@
 #' @export
 #'
 summarize_individual_rodents <- function(path = get_default_data_path(),
-                                         clean = TRUE, type = "Rodents",
-                                         length = "all", unknowns = FALSE, time = "period",
-                                         fillweight = FALSE, min_plots = 1, min_traps = 1,
-                                         download_if_missing = TRUE, quiet = FALSE)
+                                         clean = TRUE,
+                                         type = "Rodents",
+                                         length = "all",
+                                         unknowns = FALSE,
+                                         time = "period",
+                                         fillweight = FALSE,
+                                         min_plots = 1,
+                                         min_traps = 1,
+                                         download_if_missing = TRUE,
+                                         quiet = FALSE)
 {
 
   #### Get Data ----
@@ -38,8 +44,15 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
                     "sex", "reprod", "age", "testes", "vagina","pregnant", "nipples","lactation",
                     "hfl", "wgt", "tag", "note2", "ltag", "note3"))
 
-  #### use new moon number as time index if time == "newmoon" ----
-  return(add_time(rodents, data_tables$newmoons_table, time))
+  rodents <- add_time(rodents, data_tables$newmoons_table, time)
+
+  if(time == "newmoon") {
+      rodents <- rodents %>%
+                    dplyr::select("newmoonnumber","month","day","year","treatment","plot","stake",
+                    "species","sex","reprod","age","testes","vagina","pregnant",
+                    "nipples","lactation","hfl","wgt","tag","note2","ltag","note3")
+            }
+ return(rodents)
 }
 
 #' @rdname summarize_individual_rodents

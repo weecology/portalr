@@ -33,7 +33,7 @@
 #'  2) that combo was skipped that month, or
 #'  3) that combo was trapped, but is unusable (a negative period code))
 #' @param zero_drop logical, drop 0s (representing sufficient sampling, but no
-#'   detections)
+#'   detection)
 #' @param min_traps minimum number of traps for a plot to be included
 #' @param min_plots minimum number of plots within a period for an
 #'   observation to be included
@@ -50,18 +50,26 @@
 #' @export
 #'
 summarize_rodent_data <- function(path = get_default_data_path(),
-                                  clean = TRUE, level = "Site",
-                                  type = "Rodents", length = "all", plots = length,
-                                  unknowns = FALSE, shape = "crosstab",
-                                  time = "period", output = "abundance",
+                                  clean = TRUE,
+                                  level = "Site",
+                                  type = "Rodents",
+                                  length = "all",
+                                  plots = length,
+                                  unknowns = FALSE,
+                                  shape = "crosstab",
+                                  time = "period",
+                                  output = "abundance",
                                   fillweight = (output != "abundance"),
                                   na_drop = TRUE,
                                   zero_drop = switch(tolower(level),
                                                      "plot" = FALSE,
                                                      "treatment" = TRUE,
                                                      "site" = TRUE),
-                                  min_traps = 1, min_plots = 24, effort = FALSE,
-                                  download_if_missing = TRUE, quiet = FALSE,
+                                  min_traps = 1,
+                                  min_plots = 24,
+                                  effort = FALSE,
+                                  download_if_missing = TRUE,
+                                  quiet = FALSE,
                                   include_unsampled = FALSE)
 {
   if (include_unsampled)
