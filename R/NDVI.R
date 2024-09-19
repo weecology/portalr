@@ -22,7 +22,8 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
 
   NDVI <- load_datafile(file.path("NDVI", "ndvi.csv"),
                         na.strings = "", path = path,
-                        download_if_missing = download_if_missing)
+                        download_if_missing = download_if_missing)  %>%
+          dplyr::filter(.data$sensor %in% filtering)
   moon_dates <-  load_datafile(file.path("Rodents", "moon_dates.csv"),
                                na.strings = "", path = path,
                                download_if_missing = download_if_missing)
@@ -34,14 +35,13 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
   if (level == "monthly") {
 
     NDVI <- NDVI %>%
-      dplyr::filter(.data$sensor %in% filtering) %>%
       dplyr::mutate(date = as.Date(paste(.data$year, .data$month, "01", sep = "-"))) %>%
       dplyr::group_by(.data$year, .data$month) %>%
       dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T),
                        date = min(.data$date)) %>%
       dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
-      dplyr::select( "date", "ndvi")
+      dplyr::select("date", "ndvi")
     if (fill) {
       curr_yearmonth <- format(Sys.Date(), "%Y-%m")
       last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
@@ -63,7 +63,6 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
 
     NDVI$newmoonnumber <- nm_match_number[match(as.Date(NDVI$date), nm_match_date)]
     NDVI <- NDVI %>%
-      dplyr::filter(.data$sensor %in% filtering) %>%
       dplyr::group_by(.data$newmoonnumber) %>%
       dplyr::summarize(ndvi = mean(.data$ndvi, na.rm = T)) %>%
       tidyr::drop_na("newmoonnumber") %>%

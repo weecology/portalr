@@ -2,6 +2,7 @@
 * `load_rodent_data()` now returns an object with an S3 class, and provides a useful message on `print`.
 * Users can now pass arguments to `download_observations()` from `load_rodent_data()` and other calling functions.
 * Fix bug in `na_drop = FALSE` that failed to complete missing rows to the species level when `time = "newmoon"`.
+* Fix bug in `ndvi()` that filtered by sensor only for higher levels.
 
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
