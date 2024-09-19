@@ -28,7 +28,7 @@ clean_data <- function(full_data, trapping_table, ...) {
 #'
 #' @param data any data.frame with a plot column.
 #' @param plots specify subset of plots; can be a vector of plots, or specific
-#'   sets: "all" plots or "Longterm" plots (plots that have had the same
+#'   sets: "all" plots or "longterm" plots (plots that have had the same
 #'   treatment for the entire time series)
 #' @return Data.table filtered to the desired subset of plots.
 #'
@@ -79,15 +79,15 @@ join_plots <- function(df, plots_table) {
 #' period codes denote the number of censuses that have occurred, but are
 #' not the same as the number of censuses that should have occurred. Sometimes
 #' censuses are missed (weather, transport issues,etc). You can't pick this
-#' up with the period code. Because censues may not always occur monthly due to
-#' the newmoon -  a new moon code was devised to give a standardized language
-#' of time for forcasting in particular. This function allows the user to decide
+#' up with the period code. Because censuses may not always occur monthly due to
+#' the new moon -  a new moon code was devised to give a standardized language
+#' of time for forecasting in particular. This function allows the user to decide
 #' if they want to use the rodent period code, the new moon code, the date of
 #' the rodent census, or have their data with all three time formats
 #'
 #' @param summary_table Data.table with summarized rodent data.
-#' @param newmoon_table Data_table linking newmoon codes with period codes.
-#' @param time Character. Denotes whether newmoon codes, period codes,
+#' @param newmoon_table Data_table linking new moon codes with period codes.
+#' @param time Character. Denotes whether new moon codes, period codes,
 #' and/or date are desired.
 #'
 #' @return Data.table of summarized rodent data with user-specified time format
@@ -104,8 +104,14 @@ add_time <- function(summary_table, newmoons_table, time = "period") {
   } else {
     newmoons_table$censusdate[is.na(newmoons_table$censusdate)] <-
       newmoons_table$newmoondate[is.na(newmoons_table$censusdate)]
+    vars_to_complete <- names(dplyr::select(summary_table,tidyselect::any_of(c("species","plot"))))
     join_summary_newmoon <- dplyr::left_join(newmoons_table, summary_table,
-                                             by = "period")
+                                             by = "period") %>%
+                            tidyr::complete(tidyr::nesting(!!!rlang::syms(c("newmoonnumber",
+                                                           "newmoondate",
+                                                           "censusdate"))),
+                                            !!!rlang::syms(vars_to_complete)) %>%
+                            tidyr::drop_na(tidyselect::any_of(c("species","plot")))
   }
   date_vars <- c("newmoondate", "newmoonnumber", "period", "censusdate")
   vars_to_keep <- switch(tolower(time),

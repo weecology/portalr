@@ -102,7 +102,7 @@ represent one of a few slightly different meanings:
  3) that combo was trapped, but is unusable (a negative period code))}
 
 \item{zero_drop}{logical, drop 0s (representing sufficient sampling, but no
-detections)}
+detection)}
 
 \item{min_traps}{minimum number of traps for a plot to be included}
 
