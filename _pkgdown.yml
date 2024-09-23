@@ -44,9 +44,6 @@ reference:
   - title: "Utilities"
     desc: "Formatting"
     contents:
-      - format_todo
-      - format_value
-      - format_code
       - na_conformer
       - return_if_null
       - rodent_species
