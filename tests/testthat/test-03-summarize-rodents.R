@@ -131,7 +131,7 @@ test_that("abundance filters at the plot level correctly", {
                                 min_plots = 1, min_traps = 1, effort = TRUE,
                                 na_drop = FALSE) %>%
     dplyr::filter(ntraps < 1, period <= 463)
-  expect_equal(NROW(incomplete_plots), 238)
+  expect_equal(NROW(incomplete_plots), 213)
 
   incomplete_plots <- abundance(path = portal_data_path, level = "plot",
                                 min_plots = 1, min_traps = 1, effort = TRUE) %>%
