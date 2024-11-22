@@ -100,18 +100,20 @@ add_time <- function(summary_table, newmoons_table, time = "period") {
   {
     join_summary_newmoon <- dplyr::right_join(newmoons_table, summary_table,
                                               by = c("period" = "period")) %>%
-      dplyr::filter(.data$period <= max(.data$period, na.rm = TRUE))
+      dplyr::filter(.data$period <= max(.data$period, na.rm = TRUE))  %>%
+        tidyr::drop_na(tidyselect::any_of(c("species","plot","treatment")))
   } else {
     newmoons_table$censusdate[is.na(newmoons_table$censusdate)] <-
       newmoons_table$newmoondate[is.na(newmoons_table$censusdate)]
-    vars_to_complete <- names(dplyr::select(summary_table,tidyselect::any_of(c("species","plot"))))
+    vars_to_complete <-
+        names(dplyr::select(summary_table,tidyselect::any_of(c("species","plot","treatment"))))
     join_summary_newmoon <- dplyr::left_join(newmoons_table, summary_table,
                                              by = "period") %>%
                             tidyr::complete(tidyr::nesting(!!!rlang::syms(c("newmoonnumber",
                                                            "newmoondate",
                                                            "censusdate"))),
                                             !!!rlang::syms(vars_to_complete)) %>%
-                            tidyr::drop_na(tidyselect::any_of(c("species","plot")))
+                            tidyr::drop_na(tidyselect::any_of(c("species","plot","treatment")))
   }
   date_vars <- c("newmoondate", "newmoonnumber", "period", "censusdate")
   vars_to_keep <- switch(tolower(time),

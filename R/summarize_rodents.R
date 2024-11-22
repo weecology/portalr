@@ -87,6 +87,10 @@ summarize_rodent_data <- function(path = get_default_data_path(),
   time <- tolower(time)
   output <- tolower(output)
 
+  if (! (level %in% c("plot", "treatment", "site"))) {
+      warning("The `treatment` argument must be one of `c('plot', 'treatment', 'site')`.")
+      }
+
   if (!missing("length"))
   {
     warning("The `length` argument is deprecated; please use `plots` instead.")
