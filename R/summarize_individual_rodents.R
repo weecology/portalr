@@ -42,7 +42,7 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
     dplyr::select(c("period", "month", "day" = "day.x", "year",
                     "treatment", "plot", "stake", "species",
                     "sex", "reprod", "age", "testes", "vagina","pregnant", "nipples","lactation",
-                    "hfl", "wgt", "tag", "note2", "ltag", "note3"))
+                    "hfl", "wgt", "tag", "note2", "ltag", "note3", "id"))
 
   rodents <- add_time(rodents, data_tables$newmoons_table, time)
 
@@ -50,7 +50,7 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
       rodents <- rodents %>%
                     dplyr::select("newmoonnumber","month","day","year","treatment","plot","stake",
                     "species","sex","reprod","age","testes","vagina","pregnant",
-                    "nipples","lactation","hfl","wgt","tag","note2","ltag","note3")
+                    "nipples","lactation","hfl","wgt","tag","note2","ltag","note3", "id")
             }
  return(rodents)
 }
