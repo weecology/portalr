@@ -6,11 +6,13 @@
 #' @param sensor specify "landsat", "modis", "gimms", or "all"
 #' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
+#' @param forecast specify ndvi should be forecast from the end of the data to the present,
+#'  passed to \code{fcast_ndvi}
 #' @inheritParams load_datafile
 #'
 #' @export
 #'
-ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
+ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE, forecast = FALSE,
                  path = get_default_data_path(), download_if_missing = TRUE)
 {
   sensor <- tolower(sensor)
@@ -42,12 +44,22 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
       dplyr::arrange(.data$date) %>%
       dplyr::ungroup() %>%
       dplyr::select("date", "ndvi")
-    if (fill) {
-      curr_yearmonth <- format(Sys.Date(), "%Y-%m")
-      last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
+
+    curr_yearmonth <- format(Sys.Date(), "%Y-%m")
+    last_time <- as.Date(paste(curr_yearmonth, "-01", sep = ""))
+    if (fill==TRUE) {
       NDVI <- fill_missing_ndvi(NDVI, "monthly", last_time)
     }
+    if (forecast==TRUE) {
+        max_hist_time <- max(NDVI$date)
+        if (max_hist_time < last_time) {
+            lead_fcast <- length(seq.Date(max_hist_time, last_time , "month")[-1])
+            ndvi_fcast <- fcast_ndvi(NDVI, "monthly", lead_fcast)
+            NDVI <- rbind(NDVI, ndvi_fcast)
+        }}
+
   } else if (level == "newmoon") {
+
     nm_number <- moon_dates$newmoonnumber[-1]
     nm_start <- as.Date(moon_dates$newmoondate[-nrow(moon_dates)])
     nm_end <- as.Date(moon_dates$newmoondate[-1])
@@ -68,12 +80,20 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE,
       tidyr::drop_na("newmoonnumber") %>%
       dplyr::arrange(.data$newmoonnumber)
 
-    if (fill == TRUE) {
-      today <- Sys.Date()
-      prev_time <- moon_dates$newmoonnumber[moon_dates$newmoondate < today]
-      last_time <- tail(prev_time, 1)
+    today <- Sys.Date()
+    prev_time <- moon_dates$newmoonnumber[moon_dates$newmoondate < today]
+    last_time <- tail(prev_time, 1)
+
+    if (fill==TRUE) {
       NDVI <- fill_missing_ndvi(NDVI, "newmoon", last_time, moon_dates)
     }
+    if (forecast==TRUE) {
+        max_hist_time <- max(NDVI$newmoonnumber)
+        if (max_hist_time < last_time) {
+            lead_fcast <- length((max_hist_time + 1):last_time)
+            ndvi_fcast <- fcast_ndvi(NDVI, "newmoon", lead_fcast, moon_dates)
+            NDVI <- rbind(NDVI, ndvi_fcast)
+    }}
   }
 
   return(NDVI)
@@ -104,34 +124,24 @@ fill_missing_ndvi <- function(ndvi, level, last_time, moons = NULL)
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
     hist_time <- seq.Date(min_hist_time, max_hist_time , "month")
-    hist_ndvi <- data.frame(date = hist_time, ndvi = NA)
+    hist_ndvi <- tibble::tibble(date = hist_time, ndvi = NA)
     time_match <- match(hist_ndvi$date, ndvi$date)
     hist_ndvi$ndvi <- ndvi$ndvi[time_match]
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
-    hist_ndvi$ndvi <- as.numeric(ndvi_interp)
-
-    if (max_hist_time < last_time) {
-      lead_fcast <- length(seq.Date(max_hist_time, last_time , "month")[-1])
-      ndvi_fcast <- fcast_ndvi(hist_ndvi, "monthly", lead_fcast)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
-    }
+    hist_ndvi <- hist_ndvi %>%
+                 dplyr::mutate(ndvi = as.numeric(ndvi_interp))
   }
   if (level == "newmoon") {
     hist_time_obs <- ndvi$newmoonnumber
     min_hist_time <- min(hist_time_obs)
     max_hist_time <- max(hist_time_obs)
     hist_time <- min_hist_time:max_hist_time
-    hist_ndvi <- data.frame(newmoonnumber = hist_time, ndvi = NA)
+    hist_ndvi <- tibble::tibble(newmoonnumber = hist_time, ndvi = NA)
     time_match <- match(hist_ndvi$newmoonnumber, ndvi$newmoonnumber, nomatch = NA)
     hist_ndvi$ndvi <- ndvi$ndvi[time_match]
     ndvi_interp <- forecast::na.interp(hist_ndvi$ndvi)
-    hist_ndvi$ndvi <- as.numeric(ndvi_interp)
-
-    if (max_hist_time < last_time) {
-      lead_fcast <- length((max_hist_time + 1):last_time)
-      ndvi_fcast <- fcast_ndvi(hist_ndvi, "newmoon", lead_fcast, moons)
-      hist_ndvi <- rbind(hist_ndvi, ndvi_fcast)
-    }
+    hist_ndvi <- hist_ndvi %>%
+                 dplyr::mutate(ndvi = as.numeric(ndvi_interp))
   }
 
   return(hist_ndvi)
@@ -209,11 +219,10 @@ fcast_ndvi <- function(hist_ndvi, level, lead, moons = NULL){
   fcast_ndvi <- as.numeric(fcast$mean)
 
   if (level == "newmoon") {
-    ndvi_tab <- data.frame(newmoonnumber = time_to_fcast, ndvi = fcast_ndvi)
+    ndvi_tab <- tibble::tibble(newmoonnumber = time_to_fcast, ndvi = fcast_ndvi)
   } else if (level == "monthly") {
-    ndvi_tab <- data.frame(date = time_to_fcast, ndvi = fcast_ndvi)
+    ndvi_tab <- tibble::tibble(date = time_to_fcast, ndvi = fcast_ndvi)
   }
 
   return(ndvi_tab)
 }
-

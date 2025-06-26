@@ -50,7 +50,7 @@ summarize_individual_rodents <- function(path = get_default_data_path(),
       rodents <- rodents %>%
                     dplyr::select("newmoonnumber","month","day","year","treatment","plot","stake",
                     "species","sex","reprod","age","testes","vagina","pregnant",
-                    "nipples","lactation","hfl","wgt","tag","note2","ltag","note3", "id")
+                    "nipples","lactation","hfl","wgt","tag","note2","ltag","note3","id")
             }
  return(rodents)
 }
