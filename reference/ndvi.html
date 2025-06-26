@@ -47,6 +47,7 @@
 <span>  level <span class="op">=</span> <span class="st">"monthly"</span>,</span>
 <span>  sensor <span class="op">=</span> <span class="st">"landsat"</span>,</span>
 <span>  fill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  forecast <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="use_default_data_path.html">get_default_data_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  download_if_missing <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -67,6 +68,11 @@
 <dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
 <dd><p>specify if missing data should be filled, passed to
 <code>fill_missing_ndvi</code></p></dd>
+
+
+<dt id="arg-forecast">forecast<a class="anchor" aria-label="anchor" href="#arg-forecast"></a></dt>
+<dd><p>specify ndvi should be forecast from the end of the data to the present,
+passed to <code>fcast_ndvi</code></p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
