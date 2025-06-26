@@ -2,8 +2,12 @@
 
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
-# portalr 0.4.4
+# [portalr 0.4.4](https://github.com/weecology/portalr/releases/tag/v0.4.4)
+*2025-06-25*
 
+* Separate fill argument into fill and forecast arguments in `ndvi` function.
+* Fix bug in `ndvi` function that returned a tibble, except with fill=TRUE which returned a data.frame.
+* Add unique id to individual rodents table.
 * Fix bug in `na_drop = FALSE` that failed to complete missing rows to the treatment level when `time = "newmoon"`.
 
 # [portalr 0.4.3](https://github.com/weecology/portalr/releases/tag/v0.4.3)

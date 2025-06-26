@@ -34,7 +34,7 @@ test_that("Missing moon option data are filled", {
 
 test_that("Monthly NDVI can be forecast", {
   fcast_vals <- fcast_ndvi(monthly_ndvi, "monthly", 1)
-  expect_type(fcast_vals[ , "ndvi"], "double")
+  expect_type(fcast_vals$ndvi, "double")
 })
 
 test_that("Newmoon NDVI can be forecast", {
@@ -42,5 +42,5 @@ test_that("Newmoon NDVI can be forecast", {
     file.path(portal_data_path, "PortalData", "Rodents", "moon_dates.csv"),
     na.strings = c(""), stringsAsFactors = FALSE)
   fcast_vals <- suppressWarnings(fcast_ndvi(newmoon_ndvi, "newmoon", 1, moons))
-  expect_type(fcast_vals[ , "ndvi"], "double")
+  expect_type(fcast_vals$ndvi, "double")
 })

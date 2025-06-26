@@ -8,6 +8,7 @@ ndvi(
   level = "monthly",
   sensor = "landsat",
   fill = FALSE,
+  forecast = FALSE,
   path = get_default_data_path(),
   download_if_missing = TRUE
 )
@@ -19,6 +20,9 @@ ndvi(
 
 \item{fill}{specify if missing data should be filled, passed to
 \code{fill_missing_ndvi}}
+
+\item{forecast}{specify ndvi should be forecast from the end of the data to the present,
+passed to \code{fcast_ndvi}}
 
 \item{path}{either the file path that contains the PortalData folder or
 "repo", which then pulls data from the PortalData GitHub repository}

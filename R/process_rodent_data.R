@@ -169,7 +169,8 @@ prep_rodent_output <- function(level_data, effort, na_drop,
 
   if (level == "treatment" && "newmoonnumber" %in% names(level_data)) {
     level_data <- dplyr::filter(level_data,
-                                !(.data$treatment == 'spectabs' & .data$newmoonnumber > 340))
+                                !(.data$treatment == 'spectabs' & .data$newmoonnumber > 340),
+                                !(.data$treatment == 'setup' & .data$newmoonnumber > 3))
   }
 
   if (output == "rates") {

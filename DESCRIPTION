@@ -62,6 +62,7 @@ Imports:
     lunar,
     magrittr,
     rlang,
+    tibble,
     tidyr,
     tidyselect (>= 1.2.1),
     zoo
