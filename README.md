@@ -7,15 +7,14 @@
 
 [![R-CMD-check](https://github.com/weecology/portalr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/weecology/portalr/actions/workflows/R-CMD-check.yaml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/portalr/main/LICENSE)
-[![Codecov test 
+[![Codecov test
 coverage](https://codecov.io/gh/weecology/portalr/graph/badge.svg)](https://app.codecov.io/gh/weecology/portalr)
-
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.R-project.org/package=portalr)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
-[![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929730)
+[![NSF-2430620](https://img.shields.io/badge/NSF-2430620-blue.svg)](https://www.nsf.gov/awardsearch/show-award/?AWD_ID=2430620)
 <!-- badges: end -->
 
 ## Overview
@@ -117,7 +116,6 @@ To cite the Portal dataset, use:
 
 ``` r
 get_dataset_citation()
-#> 
 #> To cite the Portal Data in publications, use:
 #> 
 #>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.

@@ -6,14 +6,15 @@
 #' @param sensor specify "landsat", "modis", "gimms", or "all"
 #' @param fill specify if missing data should be filled, passed to
 #'   \code{fill_missing_ndvi}
+#' @param corrected specify if data should be corrected using calibration between landsat sensors
 #' @param forecast specify ndvi should be forecast from the end of the data to the present,
 #'  passed to \code{fcast_ndvi}
 #' @inheritParams load_datafile
 #'
 #' @export
 #'
-ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE, forecast = FALSE,
-                 path = get_default_data_path(), download_if_missing = TRUE)
+ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE, corrected = TRUE,
+                 forecast = FALSE, path = get_default_data_path(), download_if_missing = TRUE)
 {
   sensor <- tolower(sensor)
   filtering <- switch(sensor,
@@ -32,6 +33,21 @@ ndvi <- function(level = "monthly", sensor = "landsat", fill = FALSE, forecast =
   if (!all(c("year", "month") %in% names(NDVI))) {
     NDVI$month <- lubridate::month(paste0(NDVI$date, "-01"))
     NDVI$year <- lubridate::year(paste0(NDVI$date, "-01"))
+  }
+
+  if (sensor == "landsat" && corrected == TRUE) {
+    Landsat7=0.00179
+    Landsat8=-0.0361
+    Landsat9=-0.00249
+    NDVI <- NDVI %>%
+            dplyr::mutate(ndvi_corrected = dplyr::case_when(
+                          sensor == "Landsat9" ~ .data$ndvi + Landsat9 + Landsat8 + Landsat7,
+                          sensor == "Landsat8" ~ .data$ndvi + Landsat8 + Landsat7,
+                          sensor == "Landsat7" ~ .data$ndvi + Landsat7,
+                          TRUE                 ~ .data$ndvi
+                      )) %>%
+            dplyr::select(-"ndvi") %>%
+            dplyr::rename(ndvi = "ndvi_corrected")
   }
 
   if (level == "monthly") {
