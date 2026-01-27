@@ -45,9 +45,10 @@ download_observations <- function (path    = get_default_data_path(),
 
     base_url <- "https://zenodo.org/api/records/"
 
+    version_request <- ifelse(version == "latest", 0, 1)
+
     got <- GET(base_url, query = list(q = "conceptrecid:1215988",
-                                      size = 9999,
-                                      all_versions = "true"))
+                                      all_versions = version_request))
 
     stop_for_status(got, task = paste0("locate Zenodo concept record"))
 
@@ -72,7 +73,6 @@ download_observations <- function (path    = get_default_data_path(),
     if (length(selected) == 0){
 
       stop(paste0("Failed to locate version `", version, "`"))
-
     }
 
     zipball_url <- hits[[selected]]$files[[1]]$links$self
