@@ -146,7 +146,7 @@ prep_plant_output <- function(level_data, effort, na_drop,
         dplyr::filter(rowSums(dplyr::select_at(., species_names)) != 0)
     } else { # shape == "flat"
       out_data <- out_data %>%
-        dplyr::filter(output != 0)
+        dplyr::filter(get(output) != 0)
     }
   }
 
