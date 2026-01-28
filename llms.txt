@@ -1,0 +1,236 @@
+# portalr
+
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/portalr)](https://CRAN.R-project.org/package=portalr)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1429290.svg)](https://doi.org/10.5281/zenodo.1429290)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.01098/status.svg)](https://doi.org/10.21105/joss.01098)
+[![NSF-1929730](https://img.shields.io/badge/NSF-1929730-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1929730)
+
+## Overview
+
+The **portalr** package provides collection of basic functions to
+summarize the Portal project data on rodents, plants, ants, and weather
+at our long-term field site in the Chihuahuan Desert. The data begin in
+1977 and are continuously updated today. There are functions to
+summarize rodent abundance, biomass, or energy and by site, plot, or
+treatment type. There are functions to summarize the weather data
+collected from our automated weather stations and plant data that is
+collected each summer and fall.
+
+## Installation
+
+You can install portalr from CRAN with:
+
+``` r
+install.packages("portalr")
+```
+
+OR from github with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("weecology/portalr")
+```
+
+## Examples
+
+1.  Load all data tables from the [PortalData GitHub
+    repo](https://github.com/weecology/portalData):
+
+``` r
+data_tables <- load_rodent_data("repo")
+```
+
+2.  Download and generate summaries of rodent abundance and biomass:
+
+``` r
+download_observations(".")
+
+rodent_data <- abundance(".") # default grouping is by sampling period
+
+rodent_biomass_by_plot <- biomass(".", level = "plot", type = "granivores", 
+shape = "flat", time = "date")
+```
+
+3.  Retrieve weather data:
+
+``` r
+weatherdata <- weather("Monthly", ".")
+```
+
+For more detailed info, checkout the vignettes associated with the
+package:
+
+``` r
+browseVignettes("portalr")
+```
+
+## More Information
+
+#### [Portal Data Repo](https://github.com/weecology/PortalData)
+
+The data repo contains useful details for issues with data collection,
+and background on why we handle them the way we do. Of course, it also
+contains the raw data, if you would like to create more complex data
+summaries than what is provided here.
+
+#### [The Portal Project](https://portal.weecology.org/)
+
+Find a list of previous publications using the Portal data at our
+website.
+
+#### [The Portal Blog](https://portalproject.wordpress.com/)
+
+Follow our blog to get the latest news on what is happening with our
+project and at the site.
+
+## Citation
+
+To cite `portalr`, please refer to either:
+
+- [JOSS publication](https://doi.org/10.21105/joss.01098):
+
+  Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis,
+  Ellen K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White,
+  and S. K. Morgan Ernest. (2019). portalr: an R package for summarizing
+  and using the Portal Project Data. Journal of Open Source Software,
+  4(33), 1098, <https://doi.org/10.21105/joss.01098>
+
+- or use the most recent release on
+  [Zenodo](https://doi.org/10.5281/zenodo.1429290).
+
+### Dataset Citation
+
+To cite the Portal dataset, use:
+
+``` r
+get_dataset_citation()
+#> 
+#> To cite the Portal Data in publications, use:
+#> 
+#>   S. K. Morgan Ernest, Glenda M. Yenni, Ginger Allington, Ellen K.
+#>   Bledsoe, Erica M. Christensen, Renata M. Diaz, Keith Geluso, Jacob R.
+#>   Goheen, Qinfeng Guo, Edward Heske, Douglas Kelt, Joan M. Meiners, Jim
+#>   Munger, Carla Restrepo, Douglas A. Samson, Michele R. Schutzenhofer,
+#>   Marian Skupski, Sarah R. Supp, Kate Thibault, Shawn Taylor, Ethan
+#>   White, Diane W. Davidson, James H. Brown, and Thomas J. Valone.
+#>   (2018). The Portal Project: a long-term study of a Chihuahuan desert
+#>   ecosystem. bioRxiv, https://doi.org/10.1101/332783
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{ernest2018portal,
+#>     title = {The Portal Project: a long-term study of a Chihuahuan desert ecosystem},
+#>     author = {S. K. Morgan Ernest and Glenda M. Yenni and Ginger Allington and Ellen K. Bledsoe and Erica M. Christensen and Renata M. Diaz and Keith Geluso and Jacob R. Goheen and Qinfeng Guo and Edward Heske and Douglas Kelt and Joan M. Meiners and Jim Munger and Carla Restrepo and Douglas A. Samson and Michele R. Schutzenhofer and Marian Skupski and Sarah R. Supp and Kate Thibault and Shawn Taylor and Ethan White and Diane W. Davidson and James H. Brown and Thomas J. Valone},
+#>     year = {2018},
+#>     journal = {bioRxiv},
+#>     doi = {10.1101/332783},
+#>   }
+```
+
+# Package index
+
+## Data Retrieval
+
+Functions to download and update data
+
+- [`download_observations()`](https://weecology.github.io/portalr/reference/download_observations.md)
+  : Download the PortalData repo
+- [`check_for_newer_data()`](https://weecology.github.io/portalr/reference/check_for_newer_data.md)
+  : Check for latest version of data files
+- [`check_default_data_path()`](https://weecology.github.io/portalr/reference/use_default_data_path.md)
+  [`get_default_data_path()`](https://weecology.github.io/portalr/reference/use_default_data_path.md)
+  [`use_default_data_path()`](https://weecology.github.io/portalr/reference/use_default_data_path.md)
+  : Manage the default path for downloading Portal Data into
+- [`get_dataset_citation()`](https://weecology.github.io/portalr/reference/get_dataset_citation.md)
+  : Return Citation for Portal Data
+
+## Data Summaries
+
+Functions to return data summaries
+
+- [`summarize_rodent_data()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  [`abundance()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  [`biomass()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  [`energy()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  [`rates()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  [`summarise_rodent_data()`](https://weecology.github.io/portalr/reference/summarize_rodent_data.md)
+  : Generate summaries of Portal rodent data
+- [`summarize_plant_data()`](https://weecology.github.io/portalr/reference/summarize_plant_data.md)
+  [`plant_abundance()`](https://weecology.github.io/portalr/reference/summarize_plant_data.md)
+  [`summarise_plant_data()`](https://weecology.github.io/portalr/reference/summarize_plant_data.md)
+  : Generate summaries of Portal plant data
+- [`summarize_individual_rodents()`](https://weecology.github.io/portalr/reference/summarize_individual_rodents.md)
+  [`summarise_individual_rodents()`](https://weecology.github.io/portalr/reference/summarize_individual_rodents.md)
+  : Return cleaned Portal rodent individual data
+- [`ndvi()`](https://weecology.github.io/portalr/reference/ndvi.md) :
+  NDVI by calendar month or lunar month
+- [`weather()`](https://weecology.github.io/portalr/reference/weather.md)
+  : Weather by day, calendar month, or lunar month
+- [`bait_presence_absence()`](https://weecology.github.io/portalr/reference/bait_presence_absence.md)
+  : Ant Bait Presence Absence
+- [`colony_presence_absence()`](https://weecology.github.io/portalr/reference/colony_presence_absence.md)
+  : Ant Colony Presence Absence
+- [`shrub_cover()`](https://weecology.github.io/portalr/reference/shrub_cover.md)
+  : Generate percent cover from Portal plant transect data
+- [`fcast_ndvi()`](https://weecology.github.io/portalr/reference/fcast_ndvi.md)
+  : Forecast ndvi using a seasonal auto ARIMA
+- [`get_future_newmoons()`](https://weecology.github.io/portalr/reference/get_future_newmoons.md)
+  : Get future newmoon dates and numbers
+- [`phenocam()`](https://weecology.github.io/portalr/reference/phenocam.md)
+  : Phenocam data products by day, calendar month, or lunar month
+
+## Unprocessed Data
+
+Functions to load in raw or otherwise unprocessed data
+
+- [`load_datafile()`](https://weecology.github.io/portalr/reference/load_datafile.md)
+  : read in a raw datafile from the downloaded data or the GitHub repo
+- [`load_rodent_data()`](https://weecology.github.io/portalr/reference/load_rodent_data.md)
+  [`load_plant_data()`](https://weecology.github.io/portalr/reference/load_rodent_data.md)
+  [`load_ant_data()`](https://weecology.github.io/portalr/reference/load_rodent_data.md)
+  [`load_trapping_data()`](https://weecology.github.io/portalr/reference/load_rodent_data.md)
+  : Read in the Portal data files
+- [`print(`*`<portal_data_list>`*`)`](https://weecology.github.io/portalr/reference/print.md)
+  : Prints a portal_data_list object
+
+## Data Processing
+
+Functions to do various data processing steps
+
+- [`add_seasons()`](https://weecology.github.io/portalr/reference/add_seasons.md)
+  [`yearly()`](https://weecology.github.io/portalr/reference/add_seasons.md)
+  : Add Seasons
+- [`clean_plant_data()`](https://weecology.github.io/portalr/reference/clean_plant_data.md)
+  : Do basic cleaning of Portal plant data
+- [`clean_rodent_data()`](https://weecology.github.io/portalr/reference/clean_rodent_data.md)
+  : Do basic cleaning of Portal rodent data
+- [`fill_missing_ndvi()`](https://weecology.github.io/portalr/reference/fill_missing_ndvi.md)
+  : Fill in historic ndvi data to the complete timeseries being fit
+- [`find_incomplete_censuses()`](https://weecology.github.io/portalr/reference/find_incomplete_censuses.md)
+  : Period code for incomplete censuses
+
+## Utilities
+
+Formatting
+
+- [`na_conformer()`](https://weecology.github.io/portalr/reference/na_conformer.md)
+  : Conform NA entries to "NA" entries
+- [`return_if_null()`](https://weecology.github.io/portalr/reference/return_if_null.md)
+  : If a Value is NULL, Trigger the Parent Function's Return
+- [`rodent_species()`](https://weecology.github.io/portalr/reference/rodent_species.md)
+  [`forecasting_species()`](https://weecology.github.io/portalr/reference/rodent_species.md)
+  : Rodent species abbreviations
+- [`portalr-package`](https://weecology.github.io/portalr/reference/portalr.md)
+  [`portalr`](https://weecology.github.io/portalr/reference/portalr.md)
+  : Creates summaries of the Portal data
+
+# Articles
+
+### All vignettes
+
+- [Examples of How Portal Researchers Are Using the
+  Package](https://weecology.github.io/portalr/articles/portal_researcher_examples.md):
+- [Portal Rodent Abundance
+  Demo](https://weecology.github.io/portalr/articles/rodent-abundance-demo.md):

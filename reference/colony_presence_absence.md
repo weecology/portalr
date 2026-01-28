@@ -1,0 +1,63 @@
+# Ant Colony Presence Absence
+
+Get ant species presence/absence by year/plot/stake from colony census
+data
+
+Anomalies in ant colony census protocol over the years means that it can
+be difficult to discern true absences of all species in all years. This
+function uses information from Portal_ant_species.csv and
+Portal_ant_dataflags.csv to predict true presence/absence of species per
+plot per year. If a more conservative estimate is desired, setting the
+argument 'rare_sp = T' will only include species we are confident were
+censused regularly. Setting 'rare_sp = F' may include some false
+absences, since it is unknown if some rare species were censused in all
+years. Unknowns may also be excluded from output if desired.
+
+## Usage
+
+``` r
+colony_presence_absence(
+  path = get_default_data_path(),
+  level = "Site",
+  rare_sp = FALSE,
+  unknowns = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
+```
+
+## Arguments
+
+- path:
+
+  either the file path that contains the PortalData folder or "repo",
+  which then pulls data from the PortalData GitHub repository
+
+- level:
+
+  level at which to summarize data: 'Site', 'Plot', or 'Stake'
+
+- rare_sp:
+
+  include rare species (T) or not (F). Rare species may or may not have
+  been censused in all years. Setting \`rare_sp = FALSE\` gives a more
+  conservative estimate of presence/absence
+
+- unknowns:
+
+  include unknown species (TRUE) or not (FALSE). Unknowns include those
+  only identified to genus.
+
+- download_if_missing:
+
+  if the specified file path doesn't have the PortalData folder, then
+  download it
+
+- quiet:
+
+  logical, whether to run without version messages
+
+## Value
+
+data frame with year, species, (plot if applicable), and presence \[1,
+0, NA\]

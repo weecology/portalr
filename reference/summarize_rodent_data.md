@@ -1,0 +1,176 @@
+# Generate summaries of Portal rodent data
+
+This function is a generic interface into creating summaries of the
+Portal rodent species data. It contains a number of arguments to specify
+the kind of data to summarize (at what level of aggregation) and various
+choices for dealing with data quality, and output format.
+
+`abundance` generates a table of rodent abundance
+
+\* `biomass()` generates a table of rodent biomass
+
+\* `energy()` generates a table of rodent energy (computed as 5.69 \*
+(biomass ^ 0.75) after White et al 2004)
+
+\* `rates()` generates a table of rodent growth rates (computed as
+r=log(N\[t+1\]/N\[t\])
+
+## Usage
+
+``` r
+summarize_rodent_data(
+  path = get_default_data_path(),
+  clean = TRUE,
+  level = "Site",
+  type = "Rodents",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  shape = "crosstab",
+  time = "period",
+  output = "abundance",
+  fillweight = (output != "abundance"),
+  na_drop = TRUE,
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site = TRUE),
+  min_traps = 1,
+  min_plots = 24,
+  effort = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE,
+  include_unsampled = FALSE
+)
+
+abundance(...)
+
+biomass(...)
+
+energy(...)
+
+rates(...)
+
+summarise_rodent_data(
+  path = get_default_data_path(),
+  clean = TRUE,
+  level = "Site",
+  type = "Rodents",
+  length = "all",
+  plots = length,
+  unknowns = FALSE,
+  shape = "crosstab",
+  time = "period",
+  output = "abundance",
+  fillweight = (output != "abundance"),
+  na_drop = TRUE,
+  zero_drop = switch(tolower(level), plot = FALSE, treatment = TRUE, site = TRUE),
+  min_traps = 1,
+  min_plots = 24,
+  effort = FALSE,
+  download_if_missing = TRUE,
+  quiet = FALSE,
+  include_unsampled = FALSE
+)
+```
+
+## Arguments
+
+- path:
+
+  either the file path that contains the PortalData folder or "repo",
+  which then pulls data from the PortalData GitHub repository
+
+- clean:
+
+  logical, load only QA/QC rodent data (TRUE) or all data (FALSE)
+
+- level:
+
+  summarize by "Plot", "Treatment", or "Site"
+
+- type:
+
+  specify subset of species; either all "Rodents" or only "Granivores"
+
+- length:
+
+  specify subset of plots; use "All" plots or only "Longterm" plots (to
+  be deprecated)
+
+- plots:
+
+  specify subset of plots; can be a vector of plots, or specific sets:
+  "all" plots or "Longterm" plots (plots that have had the same
+  treatment for the entire time series)
+
+- unknowns:
+
+  either removes all individuals not identified to species (unknowns =
+  FALSE) or sums them in an additional column (unknowns = TRUE)
+
+- shape:
+
+  return data as a "crosstab" or "flat" list
+
+- time:
+
+  specify the format of the time index in the output, either "period"
+  (sequential Portal surveys), "newmoon" (lunar cycle numbering), "date"
+  (calendar date), or "all" (for all time indices)
+
+- output:
+
+  specify whether to return "abundance", or "biomass", or "energy", or
+  "rates"
+
+- fillweight:
+
+  specify whether to fill in unknown weights with other records from
+  that individual or species, where possible
+
+- na_drop:
+
+  logical, drop NA values (representing insufficient sampling) filling
+  missing combinations of year-month-treatment/plot-species with NA
+  could represent one of a few slightly different meanings: 1) that
+  combo doesn't exist 2) that combo was skipped that month, or 3) that
+  combo was trapped, but is unusable (a negative period code))
+
+- zero_drop:
+
+  logical, drop 0s (representing sufficient sampling, but no detection)
+
+- min_traps:
+
+  minimum number of traps for a plot to be included
+
+- min_plots:
+
+  minimum number of plots within a period for an observation to be
+  included
+
+- effort:
+
+  logical as to whether or not the effort columns should be included in
+  the output
+
+- download_if_missing:
+
+  if the specified file path doesn't have the PortalData folder, then
+  download it
+
+- quiet:
+
+  logical, whether to run without producing messages
+
+- include_unsampled:
+
+  logical, overrides settings for \`na_drop\` and \`zero_drop\`, setting
+  both to FALSE
+
+- ...:
+
+  arguments passed to `summarize_rodent_data`
+
+## Value
+
+a data.frame in either "long" or "wide" format, depending on the value
+of \`shape\`

@@ -1,0 +1,66 @@
+# Generate percent cover from Portal plant transect data
+
+This function calculates percent cover from transect data. It handles
+the pre-2015 data differently from the current transects, becase they
+are collected differently. But it returns a single time-series with all
+years of transect data available. It also returns mean height beginning
+in 2015.
+
+## Usage
+
+``` r
+shrub_cover(
+  path = get_default_data_path(),
+  type = "Shrubs",
+  plots = "all",
+  unknowns = FALSE,
+  correct_sp = TRUE,
+  download_if_missing = TRUE,
+  quiet = FALSE
+)
+```
+
+## Arguments
+
+- path:
+
+  either the file path that contains the PortalData folder or "repo",
+  which then pulls data from the PortalData GitHub repository
+
+- type:
+
+  specify subset of species; If type=Annuals, removes all non-annual
+  species. If type=Summer Annuals, returns all annual species that can
+  be found in the summer If type=Winter Annuals, returns all annual
+  species that can be found in the winter If type=Non-woody, removes
+  shrub and subshrub species If type=Perennials, returns all perennial
+  species (includes shrubs and subshrubs) If type=Shrubs, returns only
+  shrubs and subshrubs
+
+- plots:
+
+  specify subset of plots; can be a vector of plots, or specific sets:
+  "all" plots or "Longterm" plots (plots that have had the same
+  treatment for the entire time series)
+
+- unknowns:
+
+  either removes all individuals not identified to species (unknowns =
+  FALSE) or sums them in an additional column (unknowns = TRUE)
+
+- correct_sp:
+
+  correct species names suspected to be incorrect in early data (T/F)
+
+- download_if_missing:
+
+  if the specified file path doesn't have the PortalData folder, then
+  download it
+
+- quiet:
+
+  logical, whether to run without version messages
+
+## Value
+
+a data.frame of percent cover and mean height
