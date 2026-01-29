@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">portalr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,16 @@
       <small>Source: <a href="https://github.com/weecology/portalr/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.5" id="portalr-045">portalr 0.4.5<a class="anchor" aria-label="anchor" href="#portalr-045"></a></h2><p class="text-muted">CRAN release: 2026-01-28</p>
+<p><em>2025-01-28</em></p>
+<ul><li>Add option to correct NDVI values to adjust for differences between sensors. <code>corrected=TRUE</code> is the default and replaces the raw ndvi values with the corrected values.</li>
+<li>Update use of Zenodo API, only query latest version by default.</li>
+<li>Correct bug in <code>zero_drop</code> in <code><a href="../reference/summarize_plant_data.html">summarise_plant_data()</a></code>
+</li>
+<li>
+<code>portalr</code> now performs regression testing with snapshots, as hashes are deprecated in testthat</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.4" id="portalr-044"><a href="https://github.com/weecology/portalr/releases/tag/v0.4.4" class="external-link">portalr 0.4.4</a><a class="anchor" aria-label="anchor" href="#portalr-044"></a></h2><p class="text-muted">CRAN release: 2025-06-30</p>
 <p><em>2025-06-25</em></p>

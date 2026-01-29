@@ -9,6 +9,7 @@ ndvi(
   level = "monthly",
   sensor = "landsat",
   fill = FALSE,
+  corrected = TRUE,
   forecast = FALSE,
   path = get_default_data_path(),
   download_if_missing = TRUE
@@ -29,6 +30,11 @@ ndvi(
 
   specify if missing data should be filled, passed to
   `fill_missing_ndvi`
+
+- corrected:
+
+  specify if data should be corrected using calibration between landsat
+  sensors
 
 - forecast:
 

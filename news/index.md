@@ -1,5 +1,20 @@
 # Changelog
 
+## portalr 0.4.5
+
+CRAN release: 2026-01-28
+
+*2025-01-28*
+
+- Add option to correct NDVI values to adjust for differences between
+  sensors. `corrected=TRUE` is the default and replaces the raw ndvi
+  values with the corrected values.
+- Update use of Zenodo API, only query latest version by default.
+- Correct bug in `zero_drop` in
+  [`summarise_plant_data()`](https://weecology.github.io/portalr/reference/summarize_plant_data.md)
+- `portalr` now performs regression testing with snapshots, as hashes
+  are deprecated in testthat
+
 ## [portalr 0.4.4](https://github.com/weecology/portalr/releases/tag/v0.4.4)
 
 CRAN release: 2025-06-30

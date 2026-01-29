@@ -45,9 +45,9 @@ data.
 ``` r
 portal_data_path <- tempdir() # use a temporary folder to store downloaded data
 data_tables <- load_rodent_data(portal_data_path, download_if_missing = TRUE)
-#> Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpRnBwEE
-#> Downloading version `6.47.0` of the data...
-#> Loading in data version 6.47.0
+#> Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpFFPEDl
+#> Downloading version `6.48.0` of the data...
+#> Loading in data version 6.48.0
 ```
 
 The `load_rodent_data` function reads in several tables related to the
@@ -75,7 +75,7 @@ non-rodents.
 ``` r
 # get rodent abundance by plot
 rodent_abundance_by_plot <- abundance(path = portal_data_path, time = "date", level = "plot") 
-#> Loading in data version 6.47.0
+#> Loading in data version 6.48.0
 
 rodent_abundance <- rodent_abundance_by_plot %>%
   gather(species, abundance, -censusdate, -treatment, -plot) %>%
@@ -232,8 +232,8 @@ always_control_plots <- summarise_rodent_data(level = "plot",plots = "Longterm")
   summarize(always_control = all(treatment == "control")) %>% 
   filter(always_control)
 #> Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path~
-#> Downloading version `6.47.0` of the data...
-#> Loading in data version 6.47.0
+#> Downloading version `6.48.0` of the data...
+#> Loading in data version 6.48.0
 
 print(always_control_plots)
 #> # A tibble: 4 × 2
