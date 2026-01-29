@@ -30,7 +30,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/weecology/portalr/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/weecology/portalr/blob/v0.4.5/inst/CITATION)
 
 Erica M. Christensen, Glenda M. Yenni, Hao Ye, Juniper L. Simonis, Ellen
 K. Bledsoe, Renata M. Diaz, Shawn D. Taylor, Ethan P. White, and S. K.
