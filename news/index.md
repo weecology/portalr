@@ -1,10 +1,10 @@
 # Changelog
 
-## portalr 0.4.5
+## [portalr 0.4.5](https://github.com/weecology/portalr/releases/tag/v0.4.5)
 
 CRAN release: 2026-01-28
 
-*2025-01-28*
+*2025-01-29*
 
 - Add option to correct NDVI values to adjust for differences between
   sensors. `corrected=TRUE` is the default and replaces the raw ndvi

@@ -45,7 +45,7 @@ data.
 ``` r
 portal_data_path <- tempdir() # use a temporary folder to store downloaded data
 data_tables <- load_rodent_data(portal_data_path, download_if_missing = TRUE)
-#> Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpxJyubu
+#> Warning in load_datafile(file.path("Rodents", "Portal_rodent.csv"), na.strings = "", : Proceeding to download data into specified path/tmp/RtmpKvdBEx
 #> Downloading version `6.48.0` of the data...
 #> Loading in data version 6.48.0
 ```
