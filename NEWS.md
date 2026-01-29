@@ -2,8 +2,8 @@
 
 Version numbers follow [Semantic Versioning](https://semver.org/).
 
-# portalr 0.4.5
-*2025-01-28*
+# [portalr 0.4.5](https://github.com/weecology/portalr/releases/tag/v0.4.5)
+*2025-01-29*
 
 * Add option to correct NDVI values to adjust for differences between sensors. 
   `corrected=TRUE` is the default and replaces the raw ndvi values with the corrected values.
